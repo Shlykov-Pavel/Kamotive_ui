@@ -1,0 +1,17 @@
+@use "sass:color";
+
+$primary-color: #4CAF50;
+
+.input {
+  font-family: Arial, sans-serif;
+  background-color: $primary-color;
+  color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+
+  &:focus {
+    border-color: color.adjust($primary-color, $lightness: -10%);
+  }
+}
