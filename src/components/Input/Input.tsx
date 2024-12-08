@@ -7,7 +7,7 @@ interface InputProps {
   placeholder?: string;
 }
 
-const Input: FC<InputProps> = ({ value, onChange, placeholder }) => {
+export const Input: FC<InputProps> = ({ value, onChange, placeholder }) => {
   const hanleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
@@ -22,4 +22,4 @@ const Input: FC<InputProps> = ({ value, onChange, placeholder }) => {
   );
 };
 
-export default Input;
+// export default Input;

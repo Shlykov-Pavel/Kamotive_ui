@@ -1,17 +1,20 @@
 {
   "name": "kamotive_ui",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "vite build",
+    "build": "vite build ",
     "storybook": "storybook dev -p 6006 -c ./config/storybook",
     "build-storybook": "storybook build -c ./config/storybook"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Библиотека UI-компонентов для использования в приложении",
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -31,6 +34,7 @@
     "sass": "^1.82.0",
     "storybook": "^8.4.7",
     "typescript": "^5.7.2",
-    "vite": "^6.0.2"
+    "vite": "^6.0.2",
+    "vite-plugin-static-copy": "^2.2.0"
   }
 }
