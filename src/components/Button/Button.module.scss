@@ -1,0 +1,74 @@
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$danger-color: #dc3545;
+$text-color-light: #ffffff;
+$text-color-dark: #000000;
+
+// Базовый стиль кнопки
+.button {
+  display: inline-block;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5em 1.5em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  // Основные цвета
+  &--primary {
+    background-color: $primary-color;
+    color: $text-color-light;
+
+    // &:hover {
+    //   background-color: lighten($primary-color, 10%);
+    // }
+
+    // &:active {
+    //   background-color: lighten($primary-color, 15%);
+    // }
+  }
+
+  &--secondary {
+    background-color: $secondary-color;
+    color: $text-color-light;
+
+    // &:hover {
+    //   background-color: color.scale($secondary-color, $lightness: 10%);
+    // }
+  
+    // &:active {
+    //   background-color: color.scale($secondary-color, $lightness: 15%);
+    // }
+  }
+
+  &--danger {
+    background-color: $danger-color;
+    color: $text-color-light;
+
+    // &:hover {
+    //   background-color: lighten($danger-color, 10%);
+    // }
+
+    // &:active {
+    //   background-color: lighten($danger-color, 15%);
+    // }
+  }
+
+  // Размеры кнопок
+  &--small {
+    font-size: 0.8rem;
+    padding: 0.3em 1em;
+  }
+
+  &--medium {
+    font-size: 1rem;
+    padding: 0.5em 1.5em;
+  }
+
+  &--large {
+    font-size: 1.2rem;
+    padding: 0.7em 2em;
+  }
+}
