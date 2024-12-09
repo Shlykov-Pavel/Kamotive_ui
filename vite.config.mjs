@@ -13,6 +13,10 @@ export default defineConfig({
           dest: 'types', // Папка назначения в dist
         },
         {
+          src: 'src/types/css.d.ts', // Исходный файл scss.d.ts
+          dest: 'types', // Папка назначения в dist
+        },
+        {
           src: 'src/types/index.d.ts', // Исходный файл index.d.ts
           dest: '.', // Копируем в корень dist
         },

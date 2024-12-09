@@ -1,13 +1,13 @@
 import React from 'react';
-import styles from './Button.module.scss'; 
+import clsx from 'clsx'; 
+import styles from './Button.module.css'; 
 
 export interface ButtonProps {
-  label: string; 
+  label: string;
   variant?: 'primary' | 'secondary' | 'danger';
-  size?: 'small' | 'medium' | 'large'; 
-  onClick?: () => void; 
-  backgroundColor?: string; 
-  primary?: boolean; 
+  size?: 'small' | 'medium' | 'large';
+  onClick?: () => void;
+  backgroundColor?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -17,23 +17,15 @@ export const Button: React.FC<ButtonProps> = ({
   onClick,
   backgroundColor,
 }) => {
-  const customStyle = backgroundColor ? { backgroundColor } : {}; 
+  const customStyle = backgroundColor ? { backgroundColor } : {};
 
   return (
     <button
-      // className={`${styles.button}` `${styles[button--${variant}]}` `${styles[button--${size}]}`}
-      className={
-        styles.button +
-        ' ' +
-        styles['button--' + variant] +
-        ' ' +
-        styles['button--' + size]
-      }
+      className={clsx(styles.button, styles[`button--${variant}`], styles[`button--${size}`])}
       onClick={onClick}
-      style={customStyle} 
+      style={customStyle}
     >
       {label}
     </button>
   );
 };
-
