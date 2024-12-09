@@ -16,6 +16,7 @@
   "license": "ISC",
   "description": "Библиотека UI-компонентов для использования в приложении",
   "dependencies": {
+    "clsx": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -31,7 +32,6 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
-    "sass": "^1.82.0",
     "storybook": "^8.4.7",
     "typescript": "^5.7.2",
     "vite": "^6.0.2",
