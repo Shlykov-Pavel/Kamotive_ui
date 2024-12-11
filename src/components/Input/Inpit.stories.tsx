@@ -46,7 +46,8 @@ export const ControlledInput: Story = {
         value={value}
         onChange={(newValue) => {
           setValue(newValue);
-          args.onChange && args.onChange(newValue); // Логируем изменения
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          args.onChange && args.onChange(newValue); 
         }}
       />
     );
