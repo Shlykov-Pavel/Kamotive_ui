@@ -1,0 +1,25 @@
+:root {
+  --blue-main: #0D99FF;
+  --blue-secondary:#0C91F1;
+  --blue-dark: #0685E1;
+  --blue-disabled:#8DC6EF;
+  --white: #FFFFFF;
+  
+
+
+  --grey-medium: #78788014;
+  --grey-light: #E5E5EA;
+
+  --text-light: #3C3C434D;
+  --text-default : #2A3336;
+  --text-grey: #3C3C4399;
+  --text-dark: #2A3336;
+ 
+
+  --error: #FF3B30;
+  --background: #b6b6b6
+  
+
+
+
+}
