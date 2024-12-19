@@ -1,4 +1,4 @@
-.story_wrapper {
+.story--wrapper {
   background-color: var(--white);
   padding: 30px;
   border-radius: 10px;
@@ -11,14 +11,14 @@
   /* font-weight: 400; */
   position: relative;
 }
-.left {
+.wrapper--left {
   display: flex;
   flex-direction: row;
   gap: 20px;
   align-items: center;
 }
 
-.inputWrapper {
+.wrapper--input {
   position: relative;
 }
 .input {
@@ -35,6 +35,20 @@
   outline: none;
   border: 1px solid var(--grey-light);
   border-radius: 10px;
+}
+/* Стили при наведении мыши */
+.input:hover {
+  border: 1px solid #0d9aff00;
+  box-shadow: 0px 0px 2px var(--blue-main);
+}
+
+/* Стили при клике */
+.input:focus,
+.input:active {
+  border-color: var(--blue-main);
+  box-shadow: none;
+  color: var(--text-dark);
+  /* box-shadow: 0 0 2px var(--blue-main);  */
 }
 
 .textarea {
@@ -60,21 +74,6 @@
   height: 15px;
 }
 
-/* Стили при наведении мыши */
-.input:hover {
-  border: 1px solid #0d9aff00;
-  box-shadow: 0px 0px 2px var(--blue-main);
-}
-
-/* Стили при клике */
-.input:focus,
-.input:active {
-  border-color: var(--blue-main);
-  box-shadow: none;
-  color: var(--text-dark);
-  /* box-shadow: 0 0 2px var(--blue-main);  */
-}
-
 .filled {
   border-color: var(--blue-main);
   box-shadow: none;
@@ -97,7 +96,7 @@
   transition: 0.3ms ease-out;
   /* color: var(--text-grey); */
 }
-.label_default {
+.label--default {
   font-size: 12px;
   position: absolute;
   top: -20px;
@@ -108,18 +107,18 @@
   max-width: calc(100% - 32px);
   color: var(--text-grey);
 }
-.label_left {
+.label--left {
   font-size: 13px;
   color: var(--text-dark);
 }
 
 /* Стили для input с ошибкой */
-.input-error {
+.input--error {
   border-color: var(--error);
   color: var(--error);
 }
-.input-error:hover,
-.input-error:focus {
+.input--error:hover,
+.input--error:focus {
   border-color: var(--error);
   box-shadow: none;
   color: var(--error);
@@ -145,25 +144,24 @@
 .input:disabled {
   background-color: var(--grey-medium);
   color: var(--text-grey);
-  /* border-color: #ced4da;  */
-  /* cursor: not-allowed;  */
+  cursor: not-allowed;
   border: none;
   box-shadow: none;
 }
 
 /* Стили для Read Only */
-.read_only {
+.readOnly {
   background-color: var(--grey-medium);
   color: var(--text-dark);
   border: none;
 }
-.read_only:hover {
+.readOnly:hover {
   box-shadow: none;
   border: none;
 }
 
 /* Стили для Иконок */
-.with_icon {
+.input--withIcon {
   padding-left: 35px;
 }
 
@@ -173,6 +171,6 @@
   top: 25%;
   left: 10px;
 }
-.icon_multiline {
+.input--withIcon {
   top: 5%;
 }

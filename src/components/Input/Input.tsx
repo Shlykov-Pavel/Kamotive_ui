@@ -31,29 +31,26 @@ export const Input: FC<InputProps> = ({
   };
 
   const wrapperClassess = classNames(styles.wrapper, {
-    [styles['left']]: isLeftLabel,
+    [styles['wrapper--left']]: isLeftLabel,
   });
 
-  const inputWrapperClassess = classNames(styles.inputWrapper, {
-    [styles['inputWrapper-multiline']]: multiline,
-  });
+  const inputWrapperClassess = classNames(styles[`wrapper--input `]);
 
   const inputClassess = classNames(styles.input, styles[size], className, {
-    [styles['input-error']]: hasError,
-    [styles['read_only']]: readOnly,
-    [styles['with_icon']]: icon,
+    [styles['input--error']]: hasError,
+    [styles['readOnly']]: readOnly,
+    [styles['input--withIcon']]: icon,
     [styles['textarea']]: multiline,
     [styles['resize']]: resize,
   });
 
   const labelClasses = classNames(styles.label, {
-    [styles['label_default']]: !isLeftLabel,
-    [styles['label_left']]: isLeftLabel,
+    [styles['label--default']]: !isLeftLabel,
+    [styles['label--left']]: isLeftLabel,
   });
 
   const iconClassess = classNames(styles.icon, {
-    [styles['disabled']]: disabled,
-    [styles['icon_multiline']]: multiline,
+    [styles['input--withIcon']]: multiline,
   });
 
   return (

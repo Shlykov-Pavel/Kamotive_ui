@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useArgs } from '@storybook/manager-api';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Input } from './Input';
 import styles from './Input.module.css';
@@ -18,7 +17,7 @@ const iconOptions = {
   unset: null,
 };
 
-const withWrapper = (Story: any) => <div className={styles.story_wrapper}>{<Story />}</div>;
+const withWrapper = (Story: any) => <div className={styles[`story--wrapper`]}>{<Story />}</div>;
 
 const meta: Meta<typeof Input> = {
   component: Input,
@@ -26,6 +25,7 @@ const meta: Meta<typeof Input> = {
   parameters: {
     layout: 'centered',
   },
+  // title: 'Input',
   decorators: [withWrapper],
   args: {
     label: labelText,
@@ -48,7 +48,7 @@ const meta: Meta<typeof Input> = {
     placeholder: { description: 'Текст подсказки инпута' },
     size: {
       description: 'Свойство, позволяющее регулировать высоту инпута',
-      control: { type: 'select' },
+      control: { type: 'radio' },
       options: ['sm', 'md', 'lg'],
     },
     // onChange: {
@@ -61,8 +61,8 @@ const meta: Meta<typeof Input> = {
       options: Object.keys(iconOptions),
       mapping: iconOptions,
     },
-    hasError: { description: 'Условие показа ошибки инпута', control: { type: 'boolean' } },
-    helperText: { description: 'Строка для вспомогательно текста под инпутом' },
+    hasError: { description: 'Условие показа ошибки инпута', type: 'boolean', control: { type: 'boolean' } },
+    helperText: { description: 'Строка для вспомогательно текста под инпутом', type: 'string' },
     disabled: { description: 'Заблокированный инпут для изменений', control: { type: 'boolean' } },
     readOnly: { description: 'Инпут только для чтения', control: { type: 'boolean' } },
     isLeftLabel: { description: 'Инпут с левой меткой', control: { type: 'boolean' } },
@@ -110,7 +110,6 @@ export const InputDisabled = (argTypes: InputProps): JSX.Element => <Input {...a
 InputDisabled.storyName = 'Input заблокированный';
 InputDisabled.args = {
   value: 'Заблокированный текст',
-  className: 'disabled',
   disabled: true,
 };
 
@@ -119,7 +118,7 @@ export const InputReadOnly = (argTypes: InputProps): JSX.Element => <Input {...a
 InputReadOnly.storyName = 'Input только чтение';
 InputReadOnly.args = {
   value: 'Только чтение',
-  className: 'read_only',
+  className: 'readOnly',
   readOnly: true,
 };
 
@@ -128,7 +127,7 @@ export const InputWithIconDefault = (argTypes: InputProps): JSX.Element => <Inpu
 InputWithIconDefault.storyName = 'Input с иконкой по умолчанию';
 InputWithIconDefault.args = {
   value: 'Инпут с иконкой',
-  className: 'with_icon',
+  className: 'input--withIcon',
   icon: <IconAccount10 />,
 };
 
@@ -150,7 +149,7 @@ export const InputMultilineNoneResizable = (argTypes: InputProps): JSX.Element =
   };
   useEffect(() => {
     if (argTypes.hasError) setValue('Невалидные значения');
-    if (argTypes.icon) setClassName('with_icon');
+    if (argTypes.icon) setClassName('input--withIcon');
     else {
       setValue('');
       setClassName('');
