@@ -8,7 +8,7 @@
   --text-light: #3c3c434d;
   --text-grey: #3c3c4399;
   --text-dark: #2a3336;
-  --text-btn: #6f6f6f;
+  --text-btn: rgb(111, 111, 111);
   --text-btn-light: #9ca0a7;
   --blue-main: #0d99ff;
   --blue-secondary: #0c91f1;
@@ -19,8 +19,14 @@
   --error-dark: #df2b21;
   --error-disabled: #ff8d87;
   --success-main: #34c759;
-  --warning-main: #ff9500;
+  --success-secondary: #2db04e;
+  --success-dark: #2eb550;
+  --success-disabled: #8ac99a;
+  --warning-main: rgb(255, 149, 0);
+  --warning-secondary: #ed8c05;
+  --warning-dark: #e18504;
+  --warning-disabled:#ffb44a;
   --info-main: #f2f2f7;
   --info-secondary: #e5e5ea;
-  --info-dark: #d1d1d6;
+  --info-dark: rgb(209, 209, 214);
 }

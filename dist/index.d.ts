@@ -6,12 +6,19 @@ declare module 'kamotive_ui' {
 
   // Типы для Button
   export interface ButtonProps {
-    label: string;
-    variant?: 'primary' | 'secondary' | 'danger';
-    size?: 'small' | 'medium' | 'large';
+    // Текст кнопки
+    label?: string;
+    //Вид кнопки (заполненный/обводка/ссылка)
+    variant?: 'fill' | 'outline' | 'link';
+    //Размер кнопки
+    size?: 'sm' | 'md' | 'lg';
+    //Стиль кнопки(текст+иконка, текст, иконка)
+    style?: 'default' | 'text' | 'icon';
+    //Состояние кнопки
+    condition?: 'default' | 'error' | 'success' | 'warning' | 'info';
+    icon?: React.ReactNode;
+    disabled?: boolean;
     onClick?: () => void;
-    backgroundColor?: string;
-    primary?: boolean;
   }
 
   export const Button: React.FC<ButtonProps>;

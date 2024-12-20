@@ -20,6 +20,7 @@ const iconOptions = {
 const withWrapper = (Story: any) => <div className={styles[`story--wrapper`]}>{<Story />}</div>;
 
 const meta: Meta<typeof Input> = {
+  title: 'Components/Input',
   component: Input,
   tags: ['autodocs'],
   parameters: {

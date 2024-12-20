@@ -6,8 +6,6 @@ export const IconBell10: FC<{ color?: string; htmlColor?: string; strokeWidth?: 
   htmlColor,
   strokeWidth,
 }) => {
-  console.log('htmlColor', htmlColor);
-
   return (
     <svg
       width="20"
