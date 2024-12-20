@@ -1,48 +1,176 @@
+.story--wrapper {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 10px;
+  width: 900px;
+}
 
+.wrapper {
+  font-family: 'Raleway';
+  font-style: normal;
+  /* font-weight: 400; */
+  position: relative;
+}
+.wrapper--left {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+}
+
+.wrapper--input {
+  position: relative;
+}
 .input {
-    font-family: Arial, sans-serif; 
-    font-size: 16px; 
-    background-color: #007bff; 
-    color: white; 
-    border: 1px solid #ccc; 
-    padding: 10px; 
-    border-radius: 5px; 
-    outline: none; 
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; 
-  }
-  
-  /* Стили при наведении мыши */
-  .input:hover {
-    border-color: #0056b3; 
-  }
-  
-  /* Стили при клике */
-  .input:focus {
-    border-color: #0056b3; 
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
-  }
-  
-  /* Стили для placeholder */
-  .input::placeholder {
-    color: rgba(255, 255, 255, 0.7); 
-    font-style: italic; 
-  }
-  
-  /* Стили для disabled */
-  .input:disabled {
-    background-color: #e9ecef; 
-    color: #6c757d; 
-    border-color: #ced4da; 
-    cursor: not-allowed; 
-  }
-  
-  /* Стили для input с ошибкой */
-  .input-error {
-    border-color: #dc3545;
-  }
-  
-  .input-error:focus {
-    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5); 
-  }
-  
-  
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  position: relative;
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--text-dark);
+  width: 203px;
+  /* width: 20%; */
+  padding: 10px;
+  outline: none;
+  border: 1px solid var(--grey-light);
+  border-radius: 10px;
+}
+/* Стили при наведении мыши */
+.input:hover {
+  border: 1px solid #0d9aff00;
+  box-shadow: 0px 0px 2px var(--blue-main);
+}
+
+/* Стили при клике */
+.input:focus,
+.input:active {
+  border-color: var(--blue-main);
+  box-shadow: none;
+  color: var(--text-dark);
+  /* box-shadow: 0 0 2px var(--blue-main);  */
+}
+
+.textarea {
+  min-height: 90px;
+  display: inline-block;
+  overflow: auto;
+  resize: none;
+  padding: 8px 16px;
+}
+.resize {
+  resize: both;
+}
+.lg {
+  /* height: 40px; */
+  height: 25px;
+}
+.md {
+  /* height: 35px; */
+  height: 20px;
+}
+.sm {
+  /* height: 30px; */
+  height: 15px;
+}
+
+.filled {
+  border-color: var(--blue-main);
+  box-shadow: none;
+  color: var(--text-dark);
+}
+
+/* Стили для placeholder */
+.input::placeholder {
+  color: var(--text-grey);
+  font-size: 12px;
+  line-height: 14px;
+}
+.input:focus::placeholder {
+  color: var(--text-light);
+}
+
+.label {
+  line-height: 14px;
+  font-weight: 400;
+  transition: 0.3ms ease-out;
+  /* color: var(--text-grey); */
+}
+.label--default {
+  font-size: 12px;
+  position: absolute;
+  top: -20px;
+  cursor: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 32px);
+  color: var(--text-grey);
+}
+.label--left {
+  font-size: 13px;
+  color: var(--text-dark);
+}
+
+/* Стили для input с ошибкой */
+.input--error {
+  border-color: var(--error-main);
+  color: var(--error-main);
+}
+.input--error:hover,
+.input--error:focus {
+  border-color: var(--error-secondary);
+  box-shadow: none;
+  color: var(--error-secondary);
+}
+
+.helperText {
+  font-size: 12px;
+  line-height: 14px;
+  position: absolute;
+  left: 0px;
+  /* top: 110%; */
+  bottom: -20px;
+  cursor: text;
+  transition: 0.3ms ease-out;
+  max-width: calc(100% - 32px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--error-main);
+}
+
+/* Стили для disabled */
+.input:disabled {
+  background-color: rgba(120, 120, 128, 0.08);
+  color: var(--text-grey);
+  cursor: not-allowed;
+  border: none;
+  box-shadow: none;
+}
+
+/* Стили для Read Only */
+.readOnly {
+  background-color: rgba(120, 120, 128, 0.08);
+  color: var(--text-dark);
+  border: none;
+}
+.readOnly:hover {
+  box-shadow: none;
+  border: none;
+}
+
+/* Стили для Иконок */
+.input--withIcon {
+  padding-left: 35px;
+}
+
+.icon {
+  position: absolute;
+  z-index: 1;
+  top: 25%;
+  left: 10px;
+}
+.input--withIcon {
+  top: 5%;
+}

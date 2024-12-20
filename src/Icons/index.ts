@@ -1,0 +1,6 @@
+export { IconAlarm10 } from './IconAlarm/IconAlarm10'
+export { IconAccount10 } from './IconAccount/IconAccount10'
+export { IconBank10 } from './IconBank/IconBank10'
+export { IconBell10 } from './IconBell/IconBell10'
+export { IconBriefcase10 } from './IconBriefcase/IconBriefcase10'
+export { IconCalendar10 } from './IconCalendar/IconCalendar10'
