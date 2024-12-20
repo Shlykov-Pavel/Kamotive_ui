@@ -114,14 +114,14 @@
 
 /* Стили для input с ошибкой */
 .input--error {
-  border-color: var(--error);
-  color: var(--error);
+  border-color: var(--error-main);
+  color: var(--error-main);
 }
 .input--error:hover,
 .input--error:focus {
-  border-color: var(--error);
+  border-color: var(--error-secondary);
   box-shadow: none;
-  color: var(--error);
+  color: var(--error-secondary);
 }
 
 .helperText {
@@ -137,12 +137,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--error);
+  color: var(--error-main);
 }
 
 /* Стили для disabled */
 .input:disabled {
-  background-color: var(--grey-medium);
+  background-color: rgba(120, 120, 128, 0.08);
   color: var(--text-grey);
   cursor: not-allowed;
   border: none;
@@ -151,7 +151,7 @@
 
 /* Стили для Read Only */
 .readOnly {
-  background-color: var(--grey-medium);
+  background-color: rgba(120, 120, 128, 0.08);
   color: var(--text-dark);
   border: none;
 }
