@@ -260,6 +260,62 @@
   background-color: rgba(255, 255, 255, 0);
   cursor: not-allowed;
 }
+.button--link-error {
+  color:var(--error-main);
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+}
+.button--link-error:hover {
+  text-decoration: underline;
+}
+.button--link-error:disabled {
+  color: var(--error-disabled);
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+  cursor: not-allowed;
+}
+.button--link-success {
+  color:var(--success-main);
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+}
+.button--link-success:hover {
+  text-decoration: underline;
+}
+.button--link-success:disabled {
+  color: var(--success-disabled);
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+  cursor: not-allowed;
+}
+.button--link-warning {
+  color:var(--warning-main);
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+}
+.button--link-warning:hover {
+  text-decoration: underline;
+}
+.button--link-warning:disabled {
+  color: var(--warning-disabled);
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+  cursor: not-allowed;
+}
+.button--link-info {
+  color:var(--text-btn);
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+}
+.button--link-info:hover {
+  text-decoration: underline;
+}
+.button--link-info:disabled {
+  color: var(--text-btn-light);
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+  cursor: not-allowed;
+}
 
 /* Размеры кнопок */
 .button--sm {
