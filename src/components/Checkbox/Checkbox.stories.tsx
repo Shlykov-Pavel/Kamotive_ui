@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Checkbox, CheckboxProps } from './Checkbox';
+import { Checkbox } from './Checkbox';
 import styles from './Checkbox.module.css';
+import { CheckboxProps } from 'kamotive_ui';
 
 const meta: Meta<CheckboxProps> = {
   component: Checkbox,
