@@ -35,7 +35,6 @@ declare module 'kamotive_ui' {
   export const Input: React.FC<InputProps>;
 
   //Типы для Checkbox
-
   export interface CheckboxProps {
     value?: boolean;
     onClick?: MouseEventHandler<HTMLInputElement>
@@ -44,4 +43,17 @@ declare module 'kamotive_ui' {
   }
 
   export const Checkbox: React.FC<CheckboxProps>;
+
+  //Типы для Radio
+  export interface RadioProps {
+    value?: string;
+    label?: string;
+    checked?: boolean;
+    onChange?: ChangeEventHandler<HTMLInputElement>;
+    disabled?: boolean;
+    size?: 'sm' | 'md';
+  }
+
+  export const RadioButton: React.FC<RadioProps>;
+
 }
