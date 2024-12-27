@@ -8,7 +8,7 @@
   --text-light: #3c3c434d;
   --text-grey: #3c3c4399;
   --text-dark: #2a3336;
-  --text-btn: rgb(111, 111, 111);
+  --text-btn: #6f6f6f;
   --text-btn-light: #9ca0a7;
   --blue-main: #0d99ff;
   --blue-secondary: #0c91f1;
@@ -28,5 +28,5 @@
   --warning-disabled:#ffb44a;
   --info-main: #f2f2f7;
   --info-secondary: #e5e5ea;
-  --info-dark: rgb(209, 209, 214);
+  --info-dark: #d1d1d6;
 }

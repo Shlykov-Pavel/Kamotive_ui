@@ -40,4 +40,32 @@ export interface ButtonProps {
   }
 
   export const Input: React.FC<InputProps>;
+  
+  
+  //Типы для dropdown 
+export interface DropdownProps {
+  id?: string;
+   name: string;
+   label?: string;
+   size?: 'sm' | 'md' | 'lg';
+   disabled?: boolean;
+   className?: string;
+   defaultValue?: DropdownProps['items'][number] | null;
+   items: Array<{
+     key?: string;
+     value: string;
+     icon?: React.ReactNode;
+     isDivider?: boolean;
+     disabled?: boolean;
+     children?: DropdownProps['items'];
+   }>;
+    isOpened?: boolean;
+    //Стиль dropdown(текст+иконка, текст)
+    style?: 'default' | 'text' ;
+    readOnly?: boolean;
+    isLeftLabel?:boolean;
+    onChange?: (value: DropdownProps['items'][number]) => void;
+    onClose?: () => void;
+}
+export const Dropdown: React.FC<DropdownProps>;
 }
