@@ -40,4 +40,13 @@ export interface ButtonProps {
   }
 
   export const Input: React.FC<InputProps>;
+  export interface ToggleButtonProps {
+    value?: boolean;
+    onChange?: ChangeEventHandler<HTMLInputElement>
+    disabled?: boolean;
+    size?: 'sm' | 'md';
+    label?:string;
+  }
+
+  export const ToggleButton:  React.FC<ToggleButtonProps>;
 }
