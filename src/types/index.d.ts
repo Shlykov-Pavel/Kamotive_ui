@@ -36,10 +36,11 @@ declare module 'kamotive_ui' {
 
   //Типы для Checkbox
   export interface CheckboxProps {
-    value?: boolean;
-    onClick?: MouseEventHandler<HTMLInputElement>
+    checked?: boolean;
+    onChange?: ChangeEventHandler<HTMLInputElement>
     disabled?: boolean;
     size?: 'sm' | 'md';
+    label?: string;
   }
 
   export const Checkbox: React.FC<CheckboxProps>;

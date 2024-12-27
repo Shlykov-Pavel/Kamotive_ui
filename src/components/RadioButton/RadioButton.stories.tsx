@@ -19,7 +19,7 @@ const meta: Meta<RadioProps> = {
     ),
   ],
   args: {
-    size: 'md',
+    size: 'sm',
     disabled: false,
   },
   argTypes: {

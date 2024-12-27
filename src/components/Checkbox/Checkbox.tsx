@@ -4,16 +4,23 @@ import styles from './Checkbox.module.css';
 import classNames from 'classnames';
 import { CheckboxProps } from 'kamotive_ui';
 
-export const Checkbox: FC<CheckboxProps> = ({ value, onClick, disabled = false, size = 'md' }) => {
+export const Checkbox: FC<CheckboxProps> = ({ checked, onChange, disabled = false, size = 'sm', label}) => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (onChange) {
+      onChange(e);
+    }
+  };
   return (
     <label className={styles.checkbox}>
       <input
         type="checkbox"
-        checked={value}
-        onClick={onClick}
+        checked={checked}
+        onChange={handleChange}
         disabled={disabled}
         className={classNames(styles.input, styles[size])}
       />
+      {label}
     </label>
   );
 };

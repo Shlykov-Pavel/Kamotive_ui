@@ -19,7 +19,7 @@ const meta: Meta<CheckboxProps> = {
     ),
   ],
   args: {
-    size: 'md',
+    size: 'sm',
     disabled: false,
   },
   argTypes: {
@@ -29,7 +29,8 @@ const meta: Meta<CheckboxProps> = {
       options: ['sm', 'md'],
     },
     disabled: { description: 'Устанавливает атрибут disabled', control: { type: 'boolean' } },
-    value: { description: 'Задаёт включённое состояние для компонента' },
+    checked: { description: 'Задаёт включённое состояние для компонента' },
+    label: { description: 'Текст лейбла чекбокса', type: 'string' },
   },
 };
 
@@ -46,8 +47,8 @@ export const CheckboxOff = (argTypes: CheckboxProps): JSX.Element => {
 
   return (
       <Checkbox 
-          value={checked} 
-          onClick={handleChange} 
+          checked={checked} 
+          onChange={handleChange} 
           {...argTypes} 
       />
   );
@@ -57,20 +58,20 @@ CheckboxOff.storyName = 'Checkbox по умолчанию';
 export const CheckboxChecked = (argTypes: CheckboxProps): JSX.Element => <Checkbox {...argTypes} />;
 CheckboxChecked.storyName = 'Checkbox выбран';
 CheckboxChecked.args = {
-  value: true,
+  checked: true,
   disabled: false,
 };
 
 export const CheckboxDisabled = (argTypes: CheckboxProps): JSX.Element => <Checkbox {...argTypes} />;
 CheckboxDisabled.storyName = 'Checkbox заблокирован';
 CheckboxDisabled.args = {
-  value: false,
+  checked: false,
   disabled: true,
 };
 
 export const CheckboxCheckedDisabled = (argTypes: CheckboxProps): JSX.Element => <Checkbox {...argTypes} />;
 CheckboxCheckedDisabled.storyName = 'Checkbox выбран и заблокирован';
 CheckboxCheckedDisabled.args = {
-  value: true,
+  checked: true,
   disabled: true,
 };
