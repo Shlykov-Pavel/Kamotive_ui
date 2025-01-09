@@ -68,4 +68,32 @@ export interface DropdownProps {
     onClose?: () => void;
 }
 export const Dropdown: React.FC<DropdownProps>;
+
+export interface TypographyProps {
+  variant?: `${ETypographyVariants}`;
+  children: ReactNode;
+  className?: string;
+  color?: CSSProperties['color'];
+  style?: CSSProperties;
+}
+
+export const Typography: React.FC<TypographyProps>;
+
+export interface ProgressBarProps {
+  value?: number;
+  max?: number;
+  size?: 'sm' | 'md' | 'lg';
+  showValue?: boolean;
+  animated?: boolean;
+}
+ export const ProgressBar: React.FC<ProgressBarProps>;
+
+
+ export interface ProgressLoaderProps {
+   value: number;
+   size?: 'sm' | 'md' | 'lg' | 'xl';
+   showValue?: boolean;
+   animated?: boolean;
+ }
+ export const ProgressLoader: React.FC<ProgressLoaderProps>;
 }

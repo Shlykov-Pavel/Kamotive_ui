@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
-import { ChangeEventHandler } from 'react';
-
+import { CSSProperties, ReactNode, ChangeEventHandler } from 'react';
+import { ETypographyVariants } from '../src/components/Typography/enums';
 
 declare module 'kamotive_ui' {
   import * as React from 'react';
@@ -47,32 +46,53 @@ declare module 'kamotive_ui' {
 
   export interface DropdownProps {
     id?: string;
-     name: string;
-     label?: string;
-     size?: 'sm' | 'md' | 'lg';
-     disabled?: boolean;
-     className?: string;
-     defaultValue?: DropdownProps['items'][number] | null;
-     items: Array<{
-       key?: string;
-       value: string;
-       icon?: React.ReactNode;
-       isDivider?: boolean;
-       disabled?: boolean;
-       children?: DropdownProps['items'];
-     }>;
-      isOpened?: boolean;
-      //Стиль dropdown(текст+иконка, текст)
-      style?: 'default' | 'text' ;
-      readOnly?: boolean;
-      isLeftLabel?:boolean;
-      onChange?: (value: DropdownProps['items'][number]) => void;
-      onClose?: () => void;
+    name: string;
+    label?: string;
+    size?: 'sm' | 'md' | 'lg';
+    disabled?: boolean;
+    className?: string;
+    defaultValue?: DropdownProps['items'][number] | null;
+    items: Array<{
+      key?: string;
+      value: string;
+      icon?: React.ReactNode;
+      isDivider?: boolean;
+      disabled?: boolean;
+      children?: DropdownProps['items'];
+    }>;
+    isOpened?: boolean;
+    //Стиль dropdown(текст+иконка, текст)
+    style?: 'default' | 'text';
+    readOnly?: boolean;
+    isLeftLabel?: boolean;
+    onChange?: (value: DropdownProps['items'][number]) => void;
+    onClose?: () => void;
   }
   export const Dropdown: React.FC<DropdownProps>;
+  export interface TypographyProps {
+    variant?: `${ETypographyVariants}`;
+    children: ReactNode;
+    className?: string;
+    color?: CSSProperties['color'];
+    style?: CSSProperties;
+  }
 
+  export const Typography: React.FC<TypographyProps>;
 
-  // export const ProgressBar: React.FC<ProgressBarProps>;
+  export interface ProgressBarProps {
+    value?: number;
+    max?: number;
+    size?: 'sm' | 'md' | 'lg';
+    showValue?: boolean;
+    animated?: boolean;
+  }
+  export const ProgressBar: React.FC<ProgressBarProps>;
+
+  export interface ProgressLoaderProps {
+    value: number;
+    size?: 'sm' | 'md' | 'lg' | 'xl';
+    showValue?: boolean;
+    animated?: boolean;
+  }
+  export const ProgressLoader: React.FC<ProgressLoaderProps>;
 }
-
-
