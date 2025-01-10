@@ -1,0 +1,52 @@
+.snackbar-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 25px;
+  gap: 20px;
+  box-sizing: border-box;
+  position: relative;
+  min-width: 340px;
+  max-width: 640px;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  min-height: 48px;
+}
+.snackbar-textAndIcon {
+  gap: 10px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+.snackbar-textAndIcon svg {
+  padding-top: 5px;
+}
+.snackbar-text {
+  display: flex;
+  flex-direction: column;
+}
+.snackbar--success {
+  background-color: rgba(52, 199, 89, 0.15);
+}
+.snackbar--error {
+  background-color: rgba(255, 59, 48, 0.15);
+}
+.snackbar--warning {
+  background-color: rgba(255, 204, 0, 0.15);
+}
+.snackbar--info {
+  background-color: var(--white);
+  border: 1px solid #f2f2f7;
+}
+.button {
+  border: none;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  margin-top: 3px;
+}
+.button:hover {
+  background: rgba(130, 130, 134, 0.15);
+  border-radius: 2px;
+}

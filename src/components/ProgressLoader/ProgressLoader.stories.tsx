@@ -51,6 +51,9 @@ export const ProgressLoaderwithValues = (argTypes: ProgressLoaderProps): JSX.Ele
   );
 };
 ProgressLoaderwithValues.storyName = 'ProgressLoader cостояния';
+ProgressLoaderwithValues.parameters = {
+  controls: { disable: true },
+};
 
 export const ProgressLoaderDefault = (argTypes: ProgressLoaderProps): JSX.Element => <ProgressLoader {...argTypes} />;
 
@@ -62,4 +65,7 @@ export const ProgressLoaderAnimated = (argTypes: ProgressLoaderProps): JSX.Eleme
 ProgressLoaderAnimated.storyName = 'ProgressLoader анимированный';
 ProgressLoaderAnimated.args = {
   animated: true,
+};
+ProgressLoaderAnimated.parameters = {
+  controls: { disable: true },
 };

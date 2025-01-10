@@ -58,9 +58,11 @@ export const ProgressBarWithValues = (argTypes: ProgressBarProps): JSX.Element =
 };
 
 ProgressBarWithValues.storyName = 'ProgressBar c состояниями';
+ProgressBarWithValues.parameters = {
+  controls: { disable: true },
+};
 
 export const ProgressBarDefault = (argTypes: ProgressBarProps): JSX.Element => <ProgressBar {...argTypes} />;
-
 ProgressBarDefault.storyName = 'ProgressBar по умолчанию';
 
 export const ProgressBarAnimated = (argTypes: ProgressBarProps): JSX.Element => (
@@ -68,3 +70,6 @@ export const ProgressBarAnimated = (argTypes: ProgressBarProps): JSX.Element => 
 );
 
 ProgressBarAnimated.storyName = 'ProgressBar анимированный';
+ProgressBarAnimated.parameters = {
+  controls: { disable: true },
+};

@@ -8,6 +8,7 @@ import { ProgressLoaderProps } from 'kamotive_ui';
 /**
  * Компонент ProgressLoader отображает прогресс загрузки.
  */
+
 const spinnerSizes: { [key: string]: number } = { xl: 89, lg: 56, md: 40, sm: 34 };
 const animationDuration = 4000; // Длительность анимации в миллисекундах
 const stepTime = 100; // Интервал обновления в миллисекундах
