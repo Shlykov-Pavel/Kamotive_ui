@@ -29,4 +29,41 @@
   --info-main: #f2f2f7;
   --info-secondary: #e5e5ea;
   --info-dark: rgb(209, 209, 214);
+  
+  --green:rgba(52, 199, 89, 1);
+  --greenBackground:rgba(52, 199, 89, 0.2);
+  --greenHover:rgba(52, 199, 89, 0.25);
+
+  --red:rgba(255, 59, 48, 1);
+  --redBackground:rgba(255, 59, 48, 0.2);
+  --redHover:rgba(255, 59, 48, 0.25);
+
+  --orange:rgba(255, 149, 0, 1);
+  --orangeBackground:rgba(255, 149, 0, 0.2);
+  --orangeHover:rgba(255, 149, 0, 0.25);
+
+  --yellow:rgba(255, 204, 0, 1);
+  --yellowText:rgba(200, 160, 0, 1);
+  --yellowBackground:rgba(255, 204, 0, 0.1);
+  --yellowHover:rgba(255, 204, 0, 0.15);
+
+  --purple:rgba(175, 82, 222, 1);
+  --purpleBackground:rgba(175, 82, 222, 0.2);
+  --purpleHover:rgba(175, 82, 222, 0.25);
+
+  --indigo:rgba(88, 86, 214, 1);
+  --indigoBackground:rgba(88, 86, 214, 0.2);
+  --indigoHover:rgba(88, 86, 214, 0.25);
+
+  --blue:rgba(0, 122, 255, 1);
+  --blueBackground:rgba(0, 122, 255, 0.2);
+  --blueHover:rgba(0, 122, 255, 0.25);
+
+  --teal:rgba(48, 176, 199, 1);
+  --tealBackground:rgba(48, 176, 199, 0.2);
+  --tealHover:rgba(48, 176, 199, 0.25);
+
+  --pink:rgba(255, 45, 85, 1);
+  --pinkBackground:rgba(255, 45, 85, 0.2);
+  --pinkHover:rgba(255, 45, 85, 0.25);
 }
