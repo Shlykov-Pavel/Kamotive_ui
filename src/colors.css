@@ -29,4 +29,8 @@
   --info-main: #f2f2f7;
   --info-secondary: #e5e5ea;
   --info-dark: rgb(209, 209, 214);
+
+  --tab-light: #f3f3f3;;
+  --tab-extraLight: #f6f6f6;
+  --tab-medium: rgb(169, 169, 169, 0.2);
 }
