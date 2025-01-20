@@ -1,0 +1,26 @@
+.story--wrapper {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 10px;
+  width: 900px;
+}
+.progress-loader-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.progress-bar--default-story {
+  display: flex;
+  gap: 30px;
+}
+.progress-loader {
+  width: 100px;
+  height: 100px;
+}
+.progress-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

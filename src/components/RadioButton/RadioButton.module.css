@@ -1,0 +1,80 @@
+.story--wrapper {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 5px;
+
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--text-dark);
+}
+
+.sm {
+  width: 12px;
+  height: 12px;
+}
+
+.md {
+  width: 16px;
+  height: 16px;
+}
+
+.input[type="radio"] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: inline-block;
+  padding: 6px;
+
+  border: 1px solid var(--icons-active);
+  border-radius: 50%;
+  background-color: var(--white);
+  background-clip: content-box;
+  position: relative;
+  cursor: pointer;
+  margin: 0px;
+}
+
+.input[type="radio"]:hover,
+.input[type="radio"]:checked:hover {
+  border-color: var(--blue-main);
+}
+
+.input[type="radio"]:checked:hover::after {
+  background-color: var(--blue-main);
+}
+
+.input[type="radio"]:checked {
+  border-color: var(--icons-medium);
+}
+
+/* Круг*/
+.input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); 
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  background-color: var(--icons-medium);
+}
+
+.input[type="radio"]:disabled,
+.input[type="radio"]:disabled:checked {
+  border-color: var(--icons-light);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.input[type="radio"]:disabled:checked:after {
+  background-color: var(--icons-light);
+}

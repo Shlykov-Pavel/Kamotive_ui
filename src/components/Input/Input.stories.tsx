@@ -97,6 +97,9 @@ InputFilled.args = {
   value: 'Заполненный инпут',
   className: 'filled',
 };
+InputFilled.parameters = {
+  controls: { disable: true },
+};
 
 // Инпут с ошибкой
 export const InputWithError = (argTypes: InputProps): JSX.Element => <Input {...argTypes} />;
@@ -105,6 +108,9 @@ InputWithError.args = {
   value: 'Невалидные значения',
   hasError: true,
 };
+InputWithError.parameters = {
+  controls: { disable: true },
+};
 
 // Инпут в состоянии disabled
 export const InputDisabled = (argTypes: InputProps): JSX.Element => <Input {...argTypes} />;
@@ -112,6 +118,9 @@ InputDisabled.storyName = 'Input заблокированный';
 InputDisabled.args = {
   value: 'Заблокированный текст',
   disabled: true,
+};
+InputDisabled.parameters = {
+  controls: { disable: true },
 };
 
 // Инпут в состоянии Read Only
@@ -122,6 +131,9 @@ InputReadOnly.args = {
   className: 'readOnly',
   readOnly: true,
 };
+InputReadOnly.parameters = {
+  controls: { disable: true },
+};
 
 //Инпут с иконкой
 export const InputWithIconDefault = (argTypes: InputProps): JSX.Element => <Input {...argTypes} />;
@@ -131,6 +143,9 @@ InputWithIconDefault.args = {
   className: 'input--withIcon',
   icon: <IconAccount10 />,
 };
+InputWithIconDefault.parameters = {
+  controls: { disable: true },
+};
 
 //Input c боковым лейблом
 export const InputLeftLabelDefault = (argTypes: InputProps): JSX.Element => <Input {...argTypes} />;
@@ -139,6 +154,9 @@ InputLeftLabelDefault.args = {
   value: 'Инпут с боковым лейблом',
   className: 'left_label',
   isLeftLabel: true,
+};
+InputLeftLabelDefault.parameters = {
+  controls: { disable: true },
 };
 
 // Многострочный инпут не расширяемый
@@ -164,6 +182,9 @@ InputMultilineNoneResizable.args = {
   multiline: true,
   resize: false,
 };
+InputMultilineNoneResizable.parameters = {
+  controls: { disable: true },
+};
 
 // Многострочный инпут расширяемый
 export const InputMultilineResizable = (argTypes: InputProps): JSX.Element => {
@@ -181,4 +202,7 @@ InputMultilineResizable.storyName = 'Input многострочный расши
 InputMultilineResizable.args = {
   multiline: true,
   resize: true,
+};
+InputMultilineResizable.parameters = {
+  controls: { disable: true },
 };
