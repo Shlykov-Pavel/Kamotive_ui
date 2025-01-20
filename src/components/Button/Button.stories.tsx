@@ -99,6 +99,9 @@ ButtonWithoutIcon.args = {
   size: 'md',
   style: 'text',
 };
+ButtonWithoutIcon.parameters = {
+  controls: { disable: true },
+};
 
 // Стандартная синияя кнопка только иконка
 export const ButtonFillOnlyIcon = (argTypes: ButtonProps): JSX.Element => <Button {...argTypes} />;
@@ -111,6 +114,9 @@ ButtonFillOnlyIcon.args = {
   icon: <IconAccount10 />,
   // iconColor: '#FFFFFF',
 };
+ButtonFillOnlyIcon.parameters = {
+  controls: { disable: true },
+};
 
 // Outlined Button c иконкой
 export const ButtonOutlinedWithIcon = (argTypes: ButtonProps): JSX.Element => <Button {...argTypes} />;
@@ -122,6 +128,9 @@ ButtonOutlinedWithIcon.args = {
   icon: <IconAccount10 />,
   iconColor: '#0D99FF',
 };
+ButtonOutlinedWithIcon.parameters = {
+  controls: { disable: true },
+};
 
 // Outlined Button
 export const ButtonOutlinedWithoutIcon = (argTypes: ButtonProps): JSX.Element => <Button {...argTypes} />;
@@ -130,6 +139,9 @@ ButtonOutlinedWithoutIcon.args = {
   variant: 'outline',
   style: 'text',
   condition: 'default',
+};
+ButtonOutlinedWithoutIcon.parameters = {
+  controls: { disable: true },
 };
 
 // Outlined Button
@@ -143,6 +155,9 @@ ButtonOutlinedOnlyIcon.args = {
   icon: <IconAccount10 />,
   // iconColor: '#0D99FF',
 };
+ButtonOutlinedOnlyIcon.parameters = {
+  controls: { disable: true },
+};
 
 // Текстовый/ссылка Button
 export const ButtonLink = (argTypes: ButtonProps): JSX.Element => <Button {...argTypes} />;
@@ -152,25 +167,31 @@ ButtonLink.args = {
   disabled: false,
 };
 ButtonLink.storyName = 'Button текстовый/ссылка';
+ButtonOutlinedOnlyIcon.parameters = {
+  controls: { disable: true },
+};
 
 //Состояния
 export const ButtonStates = (argTypes: ButtonProps): JSX.Element => {
   const [state, setState] = useState<'default' | 'error' | 'success' | 'warning' | 'info'>('default');
-  const [label, setLabel] = useState('Button');
+  const [label, setLabel] = useState('Клик дефолтная кнопка');
 
   const handleButtonClick = () => {
-    if (label === 'Button') {
+    if (label === 'Клик дефолтная кнопка') {
       setState('error');
-      setLabel('Error button');
-    } else if (label === 'Error button') {
+      setLabel('Клик error');
+    } else if (label === 'Клик error') {
       setState('success');
-      setLabel('Success button');
-    } else if (label === 'Success button') {
+      setLabel('Клик success');
+    } else if (label === 'Клик success') {
+      setState('warning');
+      setLabel('Клик warning');
+    } else if (label === 'Клик warning') {
       setState('info');
-      setLabel('Info button');
+      setLabel('Клик info');
     } else {
       setState('default');
-      setLabel('Button');
+      setLabel('Клик дефолтная кнопка');
     }
   };
 
@@ -186,30 +207,31 @@ export const ButtonStates = (argTypes: ButtonProps): JSX.Element => {
   );
 };
 ButtonStates.storyName = 'Состояния button';
+ButtonStates.parameters = {
+  controls: { disable: true },
+};
 
 //Состояния
 export const ButtonOutlineStates = (argTypes: ButtonProps): JSX.Element => {
   const [state, setState] = useState<'default' | 'error' | 'success' | 'warning' | 'info'>('default');
-  const [label, setLabel] = useState('Button');
+  const [label, setLabel] = useState('Клик дефолтная кнопка');
 
   const handleButtonClick = () => {
-    if (label === 'Button') {
+    if (label === 'Клик дефолтная кнопка') {
       setState('error');
-      setLabel('Error button');
-    } else if (label === 'Error button') {
+      setLabel('Клик error');
+    } else if (label === 'Клик error') {
       setState('success');
-      setLabel('Success button');
-    } 
-    else if (label === 'Success button'){
+      setLabel('Клик success');
+    } else if (label === 'Клик success') {
       setState('warning');
-      setLabel('Warning button');
-    }
-    else if (label === 'Warning button') {
+      setLabel('Клик warning');
+    } else if (label === 'Клик warning') {
       setState('info');
-      setLabel('Info button');
+      setLabel('Клик info');
     } else {
       setState('default');
-      setLabel('Button');
+      setLabel('Клик дефолтная кнопка');
     }
   };
 
@@ -225,3 +247,6 @@ export const ButtonOutlineStates = (argTypes: ButtonProps): JSX.Element => {
   );
 };
 ButtonOutlineStates.storyName = 'Состояния outlined button';
+ButtonOutlineStates.parameters = {
+  controls: { disable: true },
+};

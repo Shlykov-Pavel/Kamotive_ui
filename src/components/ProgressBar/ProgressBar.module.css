@@ -1,0 +1,49 @@
+.story--wrapper {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 10px;
+  width: 900px;
+}
+.progress-bar--default-story {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.progress-bar--wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.progress-bar {
+  border: none;
+  border-radius: 11px;
+}
+.sm {
+  width: 20vw;
+  height: 1vh;
+}
+.md {
+  width: 25vw;
+  height: 2vh;
+}
+.lg {
+  width: 30vw;
+  height: 3vh;
+}
+
+.progress-bar::-webkit-progress-bar {
+  background-color: var(--grey-light);
+  border-radius: 11px;
+}
+.progress-bar::-webkit-progress-value {
+  background-color: var(--blue-main);
+  border-radius: 11px;
+}
+
+.progress-bar--animated {
+  transition: all 8s ease-in-out;
+}
+.progress-bar--static {
+  transition: none;
+}
