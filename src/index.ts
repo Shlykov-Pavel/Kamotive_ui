@@ -4,4 +4,7 @@ export {Dropdown as Dropdown} from './components/Dropdown/Dropdown'
 export {ProgressBar as ProgressBar} from './components/ProgressBar/ProgressBar'
 export {ProgressLoader as ProgressLoader} from './components/ProgressLoader/ProgressLoader'
 export {Typography as Typography} from './components/Typography/Typography'
+export {Checkbox as Checkbox} from './components/Checkbox/Checkbox'
+export {RadioButton as RadioButton} from './components/RadioButton/RadioButton'
+
 import './fonts.css';

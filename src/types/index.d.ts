@@ -40,8 +40,7 @@ export interface ButtonProps {
   }
 
   export const Input: React.FC<InputProps>;
-  
-  
+    
   //Типы для dropdown 
 export interface DropdownProps {
   id?: string;
@@ -96,4 +95,27 @@ export interface ProgressBarProps {
    animated?: boolean;
  }
  export const ProgressLoader: React.FC<ProgressLoaderProps>;
+
+  //Типы для Checkbox
+  export interface CheckboxProps {
+    checked?: boolean;
+    onChange?: ChangeEventHandler<HTMLInputElement>
+    disabled?: boolean;
+    size?: 'sm' | 'md';
+    label?: string;
+  }
+
+  export const Checkbox: React.FC<CheckboxProps>;
+
+  //Типы для Radio
+  export interface RadioProps {
+    value?: string;
+    label?: string;
+    checked?: boolean;
+    onChange?: ChangeEventHandler<HTMLInputElement>;
+    disabled?: boolean;
+    size?: 'sm' | 'md';
+  }
+
+  export const RadioButton: React.FC<RadioProps>;
 }
