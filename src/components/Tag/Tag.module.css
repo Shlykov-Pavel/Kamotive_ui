@@ -1,0 +1,137 @@
+.story--wrapper {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.tag {
+    padding: 4px 10px;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+button[aria-label="Закрыть"] {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    width: 8px;
+    height: 8px;
+}
+
+button[aria-label="Закрыть"]::before,
+button[aria-label="Закрыть"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    height: 1px;
+    width: 100%;
+    background-color: var(--close-color); 
+}
+
+button[aria-label="Закрыть"]::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.red {
+    color: var(--red);
+    background-color: var(--redBackground);
+    border: 1px solid var(--red)
+}
+
+.red:hover {
+    background-color: var(--redHover);
+}
+
+.orange {
+    color: var(--orange);
+    background-color: var(--orangeBackground);
+    border: 1px solid var(--orange)
+}
+
+.orange:hover {
+    background-color: var(--orangeHover);
+}
+
+.yellow {
+    color: var(--yellowText);
+    background-color: var(--yellowBackground);
+    border: 1px solid var(--yellow)
+}
+
+.yellow:hover {
+    background-color: var(--yellowHover);
+}
+
+.green {
+    color: var(--green);
+    background-color: var(--greenBackground);
+    border: 1px solid var(--green)
+}
+
+.green:hover {
+    background-color: var(--greenHover);
+}
+
+.purple {
+    color: var(--purple);
+    background-color: var(--purpleBackground);
+    border: 1px solid var(--purple)
+}
+
+.purple:hover {
+    background-color: var(--purpleHover);
+}
+
+.indigo {
+    color: var(--indigo);
+    background-color: var(--indigoBackground);
+    border: 1px solid var(--indigo)
+}
+
+.indigo:hover {
+    background-color: var(--indigoHover);
+}
+
+.blue {
+    color: var(--blue);
+    background-color: var(--blueBackground);
+    border: 1px solid var(--blue)
+}
+
+.blue:hover {
+    background-color: var(--blueHover);
+}
+
+.teal {
+    color: var(--teal);
+    background-color: var(--tealBackground);
+    border: 1px solid var(--teal)
+}
+
+.teal:hover {
+    background-color: var(--tealHover);
+}
+
+.pink {
+    color: var(--pink);
+    background-color: var(--pinkBackground);
+    border: 1px solid var(--pink)
+}
+
+.pink:hover {
+    background-color: var(--pinkHover);
+}

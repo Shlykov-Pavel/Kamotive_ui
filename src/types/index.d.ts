@@ -40,6 +40,17 @@ export interface ButtonProps {
   }
 
   export const Input: React.FC<InputProps>;
+
+
+  export interface TagProps {
+    label?: string;
+    color?: 'red', 'orange', 'yellow', 'green', 'purple', 'indigo', 'blue', 'teal', 'pink';
+    closeButton?: boolean;
+    onClick?: () => void;
+  }
+
+  export const Tag: React.FC<TagProps>;
+
   export interface ToggleButtonProps {
     value?: boolean;
     onChange?: ChangeEventHandler<HTMLInputElement>

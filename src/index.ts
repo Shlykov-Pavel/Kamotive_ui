@@ -1,5 +1,9 @@
 export {Button as Button} from './components/Button/Button'
 export {Input as Input} from './components/Input/Input'
+
+import './fonts.css';
+
+export {Tag as Tag} from './components/Tag/Tag'
 export {Dropdown as Dropdown} from './components/Dropdown/Dropdown'
 export {ProgressBar as ProgressBar} from './components/ProgressBar/ProgressBar'
 export {ProgressLoader as ProgressLoader} from './components/ProgressLoader/ProgressLoader'
