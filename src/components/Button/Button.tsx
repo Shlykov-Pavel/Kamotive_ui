@@ -16,45 +16,52 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
   onClick,
 }) => {
-  
   const buttonClassess = classNames(
     styles.button,
     styles[`button--${variant}-${condition}`],
     styles[`button--${size}`],
-    styles[`button--${style}`],
+    styles[`button--${style}`]
     // {
     //   [styles['button--disabled']]: disabled,
     // }
   );
- 
+
   const iconColorFn = () => {
     switch (condition) {
       case 'default':
-        if(variant === 'outline'){
-          return disabled ?  '#8dc6ef' : '#0d99ff'
-        } else return '#FFFFFF'
+        if (variant === 'outline') {
+          return disabled ? '#8dc6ef' : '#0d99ff';
+        }
+        return disabled ? 'var(--blue-disabled)' : '#FFFFFF';
       case 'error':
-        if(variant === 'outline'){
-          return disabled ?  '#ff8d87' : '#ff3b30'
-        } else return '#FFFFFF'
+        if (variant === 'outline') {
+          return disabled ? '#ff8d87' : '#ff3b30';
+        }
+        return disabled ? 'var(--red-disabled)' : '#FFFFFF';
       case 'success':
-        if(variant === 'outline'){
-          return disabled ?  '#8ac99a' : '#34c759'
-        } else return '#FFFFFF'
+        if (variant === 'outline') {
+          return disabled ? '#8ac99a' : '#34c759';
+        }
+        return disabled ? 'var(--green-disabled)' : '#FFFFFF';
       case 'warning':
-        if(variant === 'outline'){
-          return disabled ?  '#ffb44a' : '#ff9500'
-        } else return '#FFFFFF'
+        if (variant === 'outline') {
+          return disabled ? '#ffb44a' : '#ff9500';
+        }
+        return disabled ? 'var(--orange-disabled)' : '#FFFFFF';
       case 'info':
-        return '#6F6F6F';
+        return disabled ? 'var(--gray-disabled)' : '#6F6F6F';
       default:
-        return '#FFFFFF';
+        return disabled ? 'var(--blue-disabled)' : '#FFFFFF';
     }
   };
   const iconColorStyle = iconColorFn();
   return (
     <button className={buttonClassess} onClick={onClick} disabled={disabled}>
-      {icon && React.cloneElement(icon as React.ReactElement, { htmlColor: iconColorStyle,strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0' })}
+      {icon &&
+        React.cloneElement(icon as React.ReactElement, {
+          htmlColor: iconColorStyle,
+          strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
+        })}
       {label}
     </button>
   );

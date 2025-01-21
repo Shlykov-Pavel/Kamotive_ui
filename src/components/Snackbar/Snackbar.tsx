@@ -5,8 +5,16 @@ import styles from './Snackbar.module.css';
 import classNames from 'classnames';
 
 /**
- * Компонент Snackbar для отображения кратковременных сообщений
- */
+* @description Snackbar компонент для отображения всплывающих уведомлений
+* @component
+@param {ReactNode} children - Содержимое уведомления
+@param {'success' | 'error' | 'warning' | 'info'} type - Тип уведомления, определяющий его стиль и иконку
+@param {number} duration - Время в миллисекундах, через которое уведомление исчезнет (по умолчанию 10000)
+@param {boolean} icon - Флаг отображения иконки (по умолчанию true)
+@param {() => void} onClose - Callback функция, вызываемая при закрытии уведомления
+@example
+Операция выполнена успешно
+@returns {JSX.Element | null} Возвращает компонент уведомления или null если оно скрыто */
 
 export const icons = {
   success: <IconSuccess10 htmlColor="#34c759" />,
@@ -47,9 +55,9 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
     onClose?.();
   };
   if (!isVisible) return null;
-  const snackbarClassess = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`]);
+  const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`]);
   return (
-    <div className={snackbarClassess}>
+    <div className={snackbarClasses}>
       <div className={styles[`snackbar-textAndIcon`]}>
         {icon && icons[type]}
         <div className={styles[`snackbar-text`]}>
