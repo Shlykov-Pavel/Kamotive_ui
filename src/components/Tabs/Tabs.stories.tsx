@@ -5,7 +5,6 @@ import styles from './Tabs.module.css';
 import { TabsProps } from 'kamotive_ui';
 import { Tabs } from './Tabs';
 import { Tab } from './Tab/Tab';
-import { TabPanel } from './TabPanel';
 
 const meta: Meta<TabsProps> = {
   component: Tabs,
@@ -23,6 +22,7 @@ const meta: Meta<TabsProps> = {
   argTypes: {
     value: { description: 'Задает выбор активного таба. Выбран по умолчанию первый таб.' },
     onChange: { description: 'Callback функция, вызываемая при изменении значения' },
+    children: { description: 'Содержимое вкладок' },
   },
 };
 
@@ -41,13 +41,14 @@ export const TabsDefault = (argTypes: TabsProps): JSX.Element => {
   return (
     <>
       <Tabs value={selectedTab} onChange={handleChange}>
-        <Tab value="tab1" label="Item 1" />
-        <Tab value="tab2" label="Item 2" />
+        <Tab value="tab1" label="Item 1">
+          <div>Content 1</div>
+        </Tab>
+        <Tab value="tab2" label="Item 2">
+          <div>Content 2</div>
+        </Tab>
         <Tab value="tab3" label="Item 3" disabled />
       </Tabs>
-      <TabPanel value="tab1" selected={selectedTab === "tab1"}> 111</TabPanel>
-      <TabPanel value="tab2" selected={selectedTab === "tab2"}> 222</TabPanel>
-      <TabPanel value="tab3" selected={selectedTab  === "tab3"}> 333'</TabPanel>
     </>
   );
 };

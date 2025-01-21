@@ -43,11 +43,11 @@ export interface ButtonProps {
 
   export interface TabProps {
     onClick?: (value: string ) => void;
-    size?: 'sm' | 'md';
     label?:string;
     selected?: boolean;
     disabled?:boolean;
     value?:string;
+    children?: React.ReactNode;
   }
   
   export interface TabsProps {
@@ -56,14 +56,7 @@ export interface ButtonProps {
     children?: React.ReactElement<TabProps>[];
   }
 
-  export interface TabPanelProps {
-    value?: string ;
-    children?: React.ReactNode;
-    selected?:boolean;
-  }
-
   export const Tab:  React.FC<TabProps>;
   export const Tabs:  React.FC<TabsProps>;
-  export const TabPanel:  React.FC<TabPanelProps>;
 
 }
