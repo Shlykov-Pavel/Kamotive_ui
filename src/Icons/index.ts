@@ -13,3 +13,4 @@ export { IconInfo10 } from './IconInfo/IconInfo10';
 export { IconWarning10 } from './IconWarning/IconWarning10';
 export { IconError10 } from './IconError/IconError10';
 export { IconClose10 } from './IconClose/IconClose10';
+export {IconColorPicker10 } from './IconColorPicker/IconColorPicker10';

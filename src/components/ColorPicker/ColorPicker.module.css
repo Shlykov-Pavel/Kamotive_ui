@@ -1,0 +1,272 @@
+.story--wrapper {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 10px;
+  width: 900px;
+}
+
+
+
+
+.colorPicker {
+  -webkit-appearance: none;
+  border-radius: 50%;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16.5px;
+  font-size: 16px;
+}
+
+.colorPicker:hover{
+  box-shadow: 0px 0px 2.9px rgba(0, 0, 0, 0.1);
+  background-color: var(--white);
+  border-radius: 50%;
+  padding: 0;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16.5px;
+  font-size: 16px;
+
+}
+.colorPicker--defaultColor{
+  background: conic-gradient(
+    rgba(255, 59, 48) 0deg,
+    rgb(255, 59, 48) 35deg,
+    rgb(255, 204, 0) 70deg,
+    rgba(255, 255, 56) 105deg,
+    rgba(52, 199, 89) 140deg,
+    rgb(49, 255, 49) 185deg,
+    rgb(48, 176, 199) 210deg,
+    rgb(0, 122, 255) 245deg,
+    rgb(88, 86, 214) 290deg,
+    rgba(175, 82, 222) 325deg,
+    rgba(255, 59, 48) 360deg
+  );
+}
+/* .colorPicker--default::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(
+    rgba(255, 59, 48) 0deg,
+    rgb(255, 59, 48) 35deg,
+    rgb(255, 204, 0) 70deg,
+    rgba(255, 255, 56) 105deg,
+    rgba(52, 199, 89) 140deg,
+    rgb(49, 255, 49) 185deg,
+    rgb(48, 176, 199) 210deg,
+    rgb(0, 122, 255) 245deg,
+    rgb(88, 86, 214) 290deg,
+    rgba(175, 82, 222) 325deg,
+    rgba(255, 59, 48) 360deg
+  );
+} */
+
+
+
+/* Обертка для всех цветов */
+.colorPickerWrapper {
+  display: flex;
+  gap: 5px;
+  width: fit-content;
+  align-items: center;
+  border-radius: 6px;
+  justify-content: center;
+  box-shadow: 0px 0px 2.9px rgba(0, 0, 0, 0.1);
+  background-color: var(--white);
+  padding: 5px;
+}
+
+
+/* Обертка для каждого цвета */
+.circle {
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  position: relative;
+  /* margin: 3px; */
+}
+
+
+/* Заданный основной цвет */
+.mainColor {
+  position: relative;
+  margin-right: 5px;
+}
+
+.mainColor::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -6px;
+  transform: translateY(-50%);
+  width: 1px; 
+  height: 20px;
+  background-color: var(--grey-light); 
+}
+
+/* Обертка для выбора цветов */
+.colorPicker{
+  position: relative;
+  display: inline-block;
+}
+
+/* Радужный цветовой круг для незаданного цвета */
+.colorCircleDefault {
+  background: conic-gradient(
+    rgba(255, 59, 48) 0deg,
+    rgb(255, 59, 48) 35deg,
+    rgb(255, 204, 0) 70deg,
+    rgba(255, 255, 56) 105deg,
+    rgba(52, 199, 89) 140deg,
+    rgb(49, 255, 49) 185deg,
+    rgb(48, 176, 199) 210deg,
+    rgb(0, 122, 255) 245deg,
+    rgb(88, 86, 214) 290deg,
+    rgba(175, 82, 222) 325deg,
+    rgba(255, 59, 48) 360deg
+  );
+}
+/* Обертка для выпадающего списка цветов */
+.popover {
+  position: absolute;
+  left: 0;
+  z-index: 100;
+}
+
+:global(.w-color-swatch){
+  padding: 10px !important;
+  border-radius: 10px !important;
+  width: fit-content !important;
+  height: fit-content !important;
+  margin: 10px 0 !important;
+  position: relative;
+  box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.2) !important;
+  --github-border: 0px !important;
+}
+
+:global(.w-color-swatch) > div:nth-child(1),
+:global(.w-color-swatch) > div:nth-child(2){
+ display: none !important;
+}
+:global(.w-color-swatch) > div:nth-child(3) {
+  width: 195px !important;
+  height: 195px !important;
+  border-radius: 10px !important;
+}
+
+:global(.w-color-swatch) > div:nth-child(4){
+  gap: 15px !important;
+  padding: 10px 0 !important;
+  /* width: 80%; */
+}
+:global(.w-color-swatch) > div:nth-child(5){
+  padding: 0 !important;
+
+}
+:global(.w-color-swatch) > div:nth-child(5) > div:nth-child(2){
+  display: none !important;
+  /* width: 80%; */
+}
+/* Для всех инпутов в пикере */
+:global(.w-color-chrome) :global(.w-color-editable-input) input {
+  font-family: 'Raleway' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 14px !important;
+  font-size: 12px !important;
+  margin: 0 !important;
+}
+:global(.w-color-editable-input){
+  margin: 0 !important;
+  max-width: 30px !important;
+}
+:global(.w-color-editable-input-rgba){
+  justify-content: end !important;
+}
+:global(.w-color-editable-input){
+  flex-direction: column-reverse !important;
+}
+:global(.w-color-editable-input) > span {
+  padding-top: 0 !important;
+}
+:global(.w-color-editable-input:nth-child(1))> input{
+  border-radius: 10px 0 0 10px !important;
+border: 1px solid var(--grey-light) !important;
+}
+:global(.w-color-editable-input:nth-child(2))> input{
+  border-radius: 0 0 0 0px !important;
+border: 1px solid var(--grey-light) !important;
+border-left: none !important;
+}
+:global(.w-color-editable-input:nth-child(3))> input{
+  border-radius: 0 0 0 0px !important;
+
+  border: 1px solid var(--grey-light) !important;
+  border-left: none !important; 
+}
+:global(.w-color-editable-input:nth-child(4))> input{
+  border-radius: 0px 10px 10px 0px !important;
+  border: 1px solid var(--grey-light) !important;
+  border-left: none !important; 
+}
+/* Для лейблов */
+:global(.w-color-chrome-fields) :global(.w-color-editable-input) label {
+  font-family: 'Raleway' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 16.5px !important;
+  font-size: 16px !important;
+}
+
+:global(.w-color-alpha-horizontal > div.w-color-interactive){
+  border-radius: 8px !important;
+}
+:global(.w-color-alpha-horizontal:first-of-type > div:first-child){
+  border-radius: 50px !important;
+}
+:global(.w-color-alpha-horizontal:nth-of-type(2) > div:first-child){
+  border-radius: 50px !important;
+}
+
+.colorPickerIcon {
+  position: absolute;
+  top: 68%;
+  left: 8px;
+  z-index: 200;
+  padding: 10px;
+}
+
+:global(.w-color-editable-input){
+  --editable-input-box-shadow : none !important;
+}
+
+.hex{
+  position: absolute;
+  bottom: 20px;
+  left: -10px;
+}
+.hex :global(.w-color-editable-input){
+    border-radius: 10px !important; 
+}
+.hex > :global(.w-color-editable-input) > input {
+  /* padding: 0 !important; */
+  font-size: 12px !important;
+  font-family: 'Raleway' !important;
+  padding: 5px !important;
+  width: 70px !important;
+  height: 45px !important;
+  border-radius: 10px !important; 
+  text-align: center !important;
+}
