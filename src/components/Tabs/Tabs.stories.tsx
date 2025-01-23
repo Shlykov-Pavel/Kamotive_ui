@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import styles from './Tabs.module.css';
 import { TabsProps } from 'kamotive_ui';
 import { Tabs } from './Tabs';
-import { Tab } from './Tab/Tab';
+import { Tab } from '../Tab/Tab';
 
 const meta: Meta<TabsProps> = {
   component: Tabs,
@@ -36,7 +36,6 @@ export const TabsDefault = (argTypes: TabsProps): JSX.Element => {
   const handleChange = (newValue: string) => {
     setSelectedTab(newValue);
   };
-  console.log('selectedTab11', selectedTab);
 
   return (
     <>

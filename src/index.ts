@@ -10,7 +10,7 @@ export {ProgressLoader as ProgressLoader} from './components/ProgressLoader/Prog
 export {Typography as Typography} from './components/Typography/Typography'
 export {Checkbox as Checkbox} from './components/Checkbox/Checkbox'
 export {RadioButton as RadioButton} from './components/RadioButton/RadioButton'
-export {Tab as Tab} from './components/Tabs/Tab/Tab'
+export {Tab as Tab} from './components/Tab/Tab'
 export {Tabs as Tabs} from './components/Tabs/Tabs'
 
 import './fonts.css';

@@ -1,6 +1,6 @@
-import React, { FC, MouseEvent, MouseEventHandler } from 'react';
+import React, { FC, MouseEvent } from 'react';
 
-import styles from '../../Tabs/Tabs.module.css';
+import styles from '../Tabs/Tabs.module.css';
 import classNames from 'classnames';
 import { TabProps } from 'kamotive_ui';
 

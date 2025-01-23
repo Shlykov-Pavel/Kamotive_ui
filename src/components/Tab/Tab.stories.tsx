@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import styles from '../../Tabs/Tabs.module.css';
+import styles from '../Tabs/Tabs.module.css';
 import { TabProps } from 'kamotive_ui';
 import { Tab } from './Tab';
 
