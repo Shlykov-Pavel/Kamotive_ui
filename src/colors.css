@@ -71,4 +71,8 @@
   --pinkBackground:rgba(255, 45, 85, 0.2);
   --pinkHover:rgba(255, 45, 85, 0.25);
   --info-dark: #d1d1d6;
+
+  --tab-light: #f3f3f3;;
+  --tab-extraLight: #f6f6f6;
+  --tab-medium: rgb(169, 169, 169, 0.2);
 }

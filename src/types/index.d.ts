@@ -138,4 +138,23 @@ export interface ProgressBarProps {
   }
 
   export const RadioButton: React.FC<RadioProps>;
+
+  export interface TabProps {
+    onClick?: (value: string ) => void;
+    label?:string;
+    selected?: boolean;
+    disabled?:boolean;
+    value?:string;
+    children?: React.ReactNode;
+  }
+  
+  export interface TabsProps {
+    value?: string ;
+    onChange?: (value: string) => void;
+    children?: React.ReactElement<TabProps>[];
+  }
+
+  export const Tab:  React.FC<TabProps>;
+  export const Tabs:  React.FC<TabsProps>;
+
 }
