@@ -17,9 +17,14 @@ export interface ColorPickerProps {
    * @description Основной цвет
    */
    mainColor?: string;
-   /** @description Последние использованные цвета
+   /** 
+    * @description Последние использованные цвета
    */
   recentColors?: string[];
+  /** 
+    * @description Флаг наведения на меню
+   */
+  setIsHovered:(isHover: boolean) => void;
   /**
    * @description Ширина ColorPicker
    */
@@ -41,8 +46,9 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   color = '#ffffff',
   mainColor,
   recentColors,
-  width = 20,
-  height = 20,
+  setIsHovered,
+  width = 10,
+  height = 10,
   autoOpen = false,
   onChange,
 }) => {
@@ -54,7 +60,6 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   const [popoverPosition, setPopoverPosition] = useState<'top' | 'bottom'>('bottom');
   const circleRef = useRef<HTMLDivElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
-  
   useEffect(() => {
     // Обработчик клика вне компонента развертывания выбора цвета
     const handleClickOutside = (event: MouseEvent) => {
@@ -134,12 +139,14 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   },[color])
   
   return (
-  <div className={(mainColor || recentColors) && styles.colorPickerWrapper}>
+  <div className={(mainColor || recentColors) && styles.colorPickerWrapper} onMouseLeave={() => setIsHovered && setIsHovered(false)}>
     {mainColor && <div className={mainColorClasses} style={{ 
           width: `${width}px`,
           height: `${height}px`,
-          backgroundColor: colorValue
-        }} />}
+          backgroundColor: colorValue?.startsWith('#') ? colorValue : `var(--${colorValue})`,
+        }} 
+        onClick={() => setIsHovered && setIsHovered(false)}
+        />}
       {recentColors && recentColors.map((color, index) => (
         <div
           key={index}
@@ -147,20 +154,21 @@ export const ColorPicker: FC<ColorPickerProps> = ({
           style={{  
             width: `${width}px`,
             height: `${height}px`,
-            backgroundColor: color }}
-          onClick={() =>setColorValue(color)}
+            backgroundColor: color.startsWith('#') ? color : `var(--${color})`,
+          }}
+          onClick={() =>colorChangeHandler(color)}
         />
       ))}
      
       <div className={styles.colorPicker}>
       <div 
-      ref={circleRef}
+        ref={circleRef}
         className={colorCircleDefaultClasses}
         onClick={() => setIsOpen(!isOpen)}
         style={{ 
           width:`${width}px`,
           height:`${height}px`,
-          backgroundColor: selectedColor
+          backgroundColor: selectedColor.startsWith('#') ? selectedColor : `var(--${selectedColor})`,
         }}
         
       />

@@ -44,12 +44,20 @@ export interface ButtonProps {
 
   export interface TagProps {
     label?: string;
-    color?: 'red', 'orange', 'yellow', 'green', 'purple', 'indigo', 'blue', 'teal', 'pink';
+    color?: string;
     closeButton?: boolean;
     onClick?: () => void;
   }
 
   export const Tag: React.FC<TagProps>;
+
+  export interface SettingTagProps {
+    label: string;
+    color?: string;
+    onChange?:(color: string) => void;
+  }
+
+  export const SettingTag: React.FC<SettingTagProps>;
 
   export interface ToggleButtonProps {
     value?: boolean;
