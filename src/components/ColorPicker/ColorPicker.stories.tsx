@@ -30,6 +30,9 @@ const meta = {
       options: colorsOptions,
       mapping: colorsOptions,
     },
+    setIsHovered: {
+      description: 'Задает флаг наведения на меню',
+    },
     width: {
       description: 'Ширина ColorPicker',
       control: 'number',
