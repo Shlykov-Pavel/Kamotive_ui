@@ -12,5 +12,6 @@ export {Checkbox as Checkbox} from './components/Checkbox/Checkbox'
 export {RadioButton as RadioButton} from './components/RadioButton/RadioButton'
 export {Tab as Tab} from './components/Tab/Tab'
 export {Tabs as Tabs} from './components/Tabs/Tabs'
+export {SettingTag as SettingTag} from './components/SettingTag/SettingTag'
 
 import './fonts.css';
