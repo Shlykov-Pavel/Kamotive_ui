@@ -1,10 +1,34 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import styles from './Tabs.module.css';
-import { TabsProps } from 'kamotive_ui';
+import './Tabs.css';
+
 import { Tabs } from './Tabs';
 import { Tab } from '../Tab/Tab';
+
+interface TabProps {
+  /**  Лейбл */
+ label?:string;
+ /** Выбрано */
+ selected?: boolean;
+ /** Заблокировано */
+ disabled?:boolean;
+ /** Значение */
+ value?:string;
+ /** Вложенность */
+ children?: React.ReactNode;
+ /** Обработчик клика */
+ onClick?: (value: string ) => void;
+}
+interface TabsProps {
+  /** Табы */
+ children: React.ReactElement<TabProps>[];
+ /** Значение */
+ value?: string;
+ /** Обработчик изменения значения */
+ onChange?: (value: string) => void;
+}
+
 
 const meta: Meta<TabsProps> = {
   component: Tabs,
@@ -14,7 +38,7 @@ const meta: Meta<TabsProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className={styles[`story--wrapper`]}>
+      <div className='story--wrapper'>
         <Story />
       </div>
     ),

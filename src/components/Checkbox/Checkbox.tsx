@@ -1,6 +1,6 @@
 import React, { FC, MouseEventHandler } from 'react';
 
-import styles from './Checkbox.module.css';
+import './Checkbox.css';
 import classNames from 'classnames';
 import { CheckboxProps } from 'kamotive_ui';
 
@@ -12,13 +12,13 @@ export const Checkbox: FC<CheckboxProps> = ({ checked, onChange, disabled = fals
     }
   };
   return (
-    <label className={styles.checkbox}>
+    <label className="checkbox">
       <input
         type="checkbox"
         checked={checked}
         onChange={handleChange}
         disabled={disabled}
-        className={classNames(styles.input, styles[size])}
+        className={classNames('input', size)}
       />
       {label}
     </label>

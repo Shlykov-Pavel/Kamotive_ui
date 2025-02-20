@@ -18,6 +18,7 @@
   padding: 5px 10px;
   cursor: pointer;
   padding: 0.5em 1.5em;
+  width: fit-content;
   /* transition: all 0.3s ease; */
 }
 
@@ -136,7 +137,7 @@
 /* Стили для outline кнопок */
 /* синяя */
 .button--outline-default {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--blue-main);
   border: 1px solid var(--blue-main);
 }
@@ -151,14 +152,14 @@
   border: 1px solid var(--blue-main);
 }
 .button--outline-default:disabled {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--blue-disabled);
   border: 1px solid var(--blue-disabled);
   cursor: not-allowed;
 }
 /* ошибка */
 .button--outline-error {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--error-main);
   border: 1px solid var(--error-main);
 }
@@ -173,14 +174,14 @@
   border: 1px solid var(--error-main);
 }
 .button--outline-error:disabled {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--error-disabled);
   border: 1px solid var(--error-disabled);
   cursor: not-allowed;
 }
 /* success */
 .button--outline-success {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--success-main);
   border: 1px solid var(--success-main);
 }
@@ -195,14 +196,14 @@
   border: 1px solid var(--success-dark);
 }
 .button--outline-success:disabled {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--success-disabled);
   border: 1px solid var(--success-disabled);
   cursor: not-allowed;
 }
 /* warning */
 .button--outline-warning {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--warning-main);
   border: 1px solid var(--warning-main);
 }
@@ -217,14 +218,14 @@
   border: 1px solid var(--warning-dark);
 }
 .button--outline-warning:disabled {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--warning-disabled);
   border: 1px solid var(--warning-disabled);
   cursor: not-allowed;
 }
 /* info */
 .button--outline-info {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--text-btn);
   border: 1px solid var(--text-btn);
 }
@@ -239,7 +240,7 @@
   border: 1px solid var(--text-btn);
 }
 .button--outline-info:disabled {
-  background-color: var(--white);
+  /* background-color: var(--white); */
   color: var(--text-btn-light);
   border: 1px solid var(--text-btn-light);
   cursor: not-allowed;

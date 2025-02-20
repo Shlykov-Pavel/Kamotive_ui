@@ -1,11 +1,21 @@
 import type { Meta } from '@storybook/react';
 import React from 'react';
 
-import styles from './ProgressLoader.module.css';
-import { ProgressLoaderProps } from 'kamotive_ui';
+import './ProgressLoader.css';
 import { ProgressLoader } from './ProgressLoader';
 
-const withWrapper = (Story: any) => <div className={styles['story--wrapper']}>{<Story />}</div>;
+export interface ProgressLoaderProps {
+  /** Значение */
+   value: number;
+  /** Размер */
+   size?: 'sm' | 'md' | 'lg' | 'xl';
+  /** Показывать значение */
+   showValue?: boolean;
+   /** Анимация */
+   animated?: boolean;
+ }
+
+const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
 
 const meta: Meta<typeof ProgressLoader> = {
   title: 'Components/ProgressLoader',
@@ -43,7 +53,7 @@ export default meta;
 
 export const ProgressLoaderwithValues = (argTypes: ProgressLoaderProps): JSX.Element => {
   return (
-    <div className={styles['progress-bar--default-story']}>
+    <div className="progress-loader--default-story">
       <ProgressLoader {...argTypes} value={0} />
       <ProgressLoader {...argTypes} value={50} />
       <ProgressLoader {...argTypes} value={100} />

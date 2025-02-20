@@ -1,11 +1,22 @@
 import type { Meta } from '@storybook/react';
 import React from 'react';
-
-import styles from './ProgressBar.module.css';
-import { ProgressBarProps } from 'kamotive_ui';
+import './ProgressBar.css';
 import { ProgressBar } from './ProgressBar';
 
-const withWrapper = (Story: any) => <div className={styles[`story--wrapper`]}>{<Story />}</div>;
+export interface ProgressBarProps {
+  /** Значение */
+  value?: number;
+  /** Максимальное значение */
+  max?: number;
+  /** Размер */
+  size?: 'sm' | 'md' | 'lg';
+  /** Показывать значение */
+  showValue?: boolean;
+  /** Анимация */
+  animated?: boolean;
+}
+
+const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
 
 const meta: Meta<typeof ProgressBar> = {
   title: 'Components/ProgressBar',
@@ -49,14 +60,13 @@ export default meta;
 
 export const ProgressBarWithValues = (argTypes: ProgressBarProps): JSX.Element => {
   return (
-    <div className={styles['progress-bar--default-story']}>
+    <div className="progress-bar--default-story">
       <ProgressBar value={0} {...argTypes} />
       <ProgressBar value={50} {...argTypes} />
       <ProgressBar value={100} {...argTypes} />
     </div>
   );
 };
-
 ProgressBarWithValues.storyName = 'ProgressBar c состояниями';
 ProgressBarWithValues.parameters = {
   controls: { disable: true },

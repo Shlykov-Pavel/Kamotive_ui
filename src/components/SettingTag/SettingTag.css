@@ -1,0 +1,16 @@
+.story--wrapper {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    height: 300px; 
+}
+
+
+.circle {
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    position: relative;
+  }
+  

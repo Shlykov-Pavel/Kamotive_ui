@@ -4,15 +4,6 @@
   border-radius: 10px;
 }
 
-.tabs {
-  display: flex;
-  flex-direction: row;
-  gap: 3px;
-  padding: 2px;
-  border-radius: 9px;
-  background-color: var(--tab-extraLight);
-}
-
 .tab {
   width: 126px;
   height: 24px;

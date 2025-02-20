@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import styles from './ProgressLoader.module.css';
+import './ProgressLoader.css';
 import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
 import { ProgressLoaderProps } from 'kamotive_ui';
@@ -36,7 +36,7 @@ export const ProgressLoader: FC<ProgressLoaderProps> = ({
 
   const dashOffset = circumference * (1 - fillPercentage);
 
-  const progressLoaderWrapperClasses = classNames(styles['progress-loader-wrapper'], styles[size]);
+  const progressLoaderWrapperClasses = classNames('progress-loader-wrapper', size);
 
   const getTypographySize = () => {
     switch (size) {
@@ -70,7 +70,7 @@ export const ProgressLoader: FC<ProgressLoaderProps> = ({
 
   return (
     <div className={progressLoaderWrapperClasses} style={{ width: spinnerSize, height: spinnerSize }}>
-      <svg id="svg1" viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} className={styles['progress-loader']}>
+      <svg id="svg1" viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} className="progress-loader">
         <circle
           cx={center}
           cy={center}
@@ -107,12 +107,12 @@ export const ProgressLoader: FC<ProgressLoaderProps> = ({
         </circle>
       </svg>
       {showValue && size !== 'sm' && (
-        <div className={styles['progress-percentage']}>
+        <div className="progress-percentage">
           <Typography
             variant="Subheading2"
             color={'#9CA0A7'}
             style={{ fontSize: getTypographySize(), fontWeight: '300' }}
-            className={styles['progress-percentage']}
+            className="progress-percentage"
           >
             {percent}%
           </Typography>

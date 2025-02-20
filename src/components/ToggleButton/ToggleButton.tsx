@@ -1,6 +1,6 @@
 import React, { FC, MouseEventHandler } from 'react';
 
-import styles from './ToggleButton.module.css';
+import './ToggleButton.css';
 import classNames from 'classnames';
 import { ToggleButtonProps } from 'kamotive_ui';
 
@@ -11,13 +11,13 @@ export const ToggleButton: FC<ToggleButtonProps> = ({ value, onChange, disabled 
     }
   };
   return (
-    <label className={styles.toggle}>
+    <label className='toggle'>
       <input
         type="checkbox"
         checked={value}
         onChange={handleChange}
         disabled={disabled}
-        className={classNames(styles.input, styles[size])}
+        className={classNames('toggleInput', `${size}`)}
       />
       {label}
     </label>

@@ -21,7 +21,7 @@
 .wrapper--input {
   position: relative;
 }
-.input {
+.inputText {
   font-family: 'Raleway';
   font-style: normal;
   font-weight: 400;
@@ -35,6 +35,7 @@
   outline: none;
   border: 1px solid var(--grey-light);
   border-radius: 10px;
+  /* width: fit-content; */
 }
 /* Стили при наведении мыши */
 .input:hover {
@@ -61,17 +62,17 @@
 .resize {
   resize: both;
 }
-.lg {
-  /* height: 40px; */
-  height: 25px;
+.inputText.lg {
+  height: 40px;
+  /* height: 25px; */
 }
-.md {
-  /* height: 35px; */
-  height: 20px;
+.inputText.md {
+  height: 35px;
+  /* height: 20px; */
 }
-.sm {
+.inputText.sm {
   /* height: 30px; */
-  height: 15px;
+  height: 25px;
 }
 
 .filled {
@@ -163,14 +164,13 @@
 /* Стили для Иконок */
 .input--withIcon {
   padding-left: 35px;
+  top: 5%;
 }
 
 .icon {
   position: absolute;
   z-index: 1;
-  top: 25%;
+  top: 25%;;
   left: 10px;
 }
-.input--withIcon {
-  top: 5%;
-}
+

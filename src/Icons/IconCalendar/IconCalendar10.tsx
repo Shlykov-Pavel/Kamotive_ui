@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import styles from '../Icons.module.css';
 
 export const IconCalendar10: FC<{ color?: string; htmlColor?: string; strokeWidth?: string }> = ({
   color = 'inherit',
@@ -13,7 +12,7 @@ export const IconCalendar10: FC<{ color?: string; htmlColor?: string; strokeWidt
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${color && styles[color]}`}
+      className={color}
     >
       <path
         fill={htmlColor || 'currentColor'}

@@ -1,10 +1,39 @@
 import React, { useState } from 'react';
 import { Meta } from '@storybook/react';
-import styles from './Dropdown.module.css';
+import './Dropdown.css';
 import { Dropdown, DropdownListItem } from './Dropdown';
 import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
 import { IconEyeOff10 } from '../../Icons/IconEyeOff/IconEyeOff10';
-import { DropdownProps } from 'kamotive_ui';
+export interface DropdownProps {
+  /** Идентификатор */
+  id?: string;
+  /** Имя */
+   name: string;
+   /**  Лейбл */
+   label?: string;
+   /** Размер */
+   size?: 'sm' | 'md' | 'lg';
+   /** Заблокированный */
+   disabled?: boolean;
+   /**Дополнительный класс */
+   className?: string;
+   /** Значение по умолчанию */
+   defaultValue?: DropdownProps['items'][number] | null;
+   /** Массив элементов для выпадающего списка [{key, value - обязательное значение, icon, isDivider, disabled, children}, ...] */
+   items: any[];
+   /** Открытый */
+    isOpened?: boolean;
+    /** Стиль выпадающего списка(текст+иконка, текст) */
+    style?: 'default' | 'text' ;
+    /** Только для чтения */
+    readOnly?: boolean;
+    /** Отображение левой метки */
+    isLeftLabel?:boolean;
+    /** Callback, который будет вызван при изменении значения */
+    onChange?: (value: DropdownProps['items'][number]) => void;
+    /** Callback, который будет вызван при закрытии выпадающего списка */
+    onClose?: () => void;
+}
 
 const dropdownOptions = [
   { value: 'Выбор_1', icon: <IconAccount10 /> },
@@ -15,7 +44,7 @@ const dropdownOptions = [
   { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar10 /> },
 ];
 
-const withWrapper = (Story: any) => <div className={styles[`story--wrapper`]}>{<Story />}</div>;
+const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
 const meta: Meta<typeof Dropdown> = {
   title: 'Components/Dropdown',
   component: Dropdown,

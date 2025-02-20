@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import styles from '../Tag/Tag.module.css';
-
+import './SettingTag.css';
 import { SettingTag } from './SettingTag';
-import { SettingTagProps } from 'kamotive_ui';
+
+
+export interface SettingTagProps {
+  /** Лейбл */
+  label: string;
+  /** Цвет */
+  color?: string;
+  /** Callback при изменении значения */
+  onChange?:(color: string) => void;
+}
 
 const meta: Meta<SettingTagProps> = {
   component: SettingTag,
@@ -14,7 +22,7 @@ const meta: Meta<SettingTagProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className={styles[`story--wrapper`]}>
+      <div className='story--wrapper'>
         <Story />
       </div>
     ),

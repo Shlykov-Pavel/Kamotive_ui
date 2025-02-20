@@ -1,9 +1,28 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
-import styles from './Button.module.css';
+import './Button.css';
 import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
-import { ButtonProps } from 'kamotive_ui';
+
+export interface ButtonProps {
+  /** Тест кнопки */
+ label?: string;
+ /** Вид кнопки (заполненный/обводка/ссылка) */
+ variant?: 'fill' | 'outline' | 'link';
+ /** Размер кнопки */
+ size?: 'sm' | 'md' | 'lg';
+ /** Стиль кнопки(текст+иконка, текст, иконка) */
+ style?: 'default' | 'text' | 'icon';
+ /** Состояние кнопки */
+ condition?: 'default' | 'error' | 'success' | 'warning' | 'info';
+ /** Иконка кнопки */
+ icon?: React.ReactNode;
+ /** Заблокированная кнопка */
+ disabled?: boolean;
+ /** Callback, который будет вызван при клике по кнопке */
+ onClick?: () => void;
+}
+
 
 const iconOptions = {
   IconAlarm10: <IconAlarm10 />,
@@ -15,7 +34,7 @@ const iconOptions = {
   unset: null,
 };
 
-const withWrapper = (Story: any) => <div className={styles[`story--wrapper`]}>{<Story />}</div>;
+const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
   component: Button,

@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import styles from '../Icons.module.css';
 
 export const IconColorPicker10: FC<{ color?: string; htmlColor?: string; strokeWidth?: string; className?: string }> = ({
   color = 'inherit',
@@ -15,7 +14,7 @@ export const IconColorPicker10: FC<{ color?: string; htmlColor?: string; strokeW
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${styles.icon} ${color && styles[color]} ${className}`}
+      className={`${color} ${className}`}
     >
       <path
         fill={htmlColor || 'currentColor'}
@@ -27,4 +26,3 @@ export const IconColorPicker10: FC<{ color?: string; htmlColor?: string; strokeW
     </svg>
   );
 };
-

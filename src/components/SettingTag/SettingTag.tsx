@@ -4,7 +4,7 @@ import { Tag } from '../Tag/Tag';
 import ColorPicker from '../ColorPicker/ColorPicker';
 import { SettingTagProps } from 'kamotive_ui';
 
-import styles from '../Tag/Tag.module.css';
+import './SettingTag.css';
 
 export const SettingTag: React.FC<SettingTagProps> = ({ label, color, onChange }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -15,7 +15,7 @@ export const SettingTag: React.FC<SettingTagProps> = ({ label, color, onChange }
       <Tag label={label} color={color} />
       {!isHovered ? (
         <div
-          className={styles.circle}
+          className='circle'
           onMouseEnter={() => setIsHovered(true)}
           style={{
             width: 10,

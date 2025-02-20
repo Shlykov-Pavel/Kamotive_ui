@@ -10,6 +10,7 @@
 
 .colorPicker {
   -webkit-appearance: none;
+  appearance: none;
   border-radius: 50%;
   border: none;
   position: relative;
