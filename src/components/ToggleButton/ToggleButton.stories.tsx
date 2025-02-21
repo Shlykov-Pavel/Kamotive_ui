@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import { ToggleButton } from './ToggleButton';
 import './ToggleButton.css';
@@ -25,7 +25,7 @@ const meta: Meta<ToggleButtonProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='story--wrapper'>
+      <div className='story--wrapper-toggle'>
         <Story />
       </div>
     ),
@@ -47,8 +47,6 @@ const meta: Meta<ToggleButtonProps> = {
 };
 
 export default meta;
-
-type Story = StoryObj<ToggleButtonProps>;
 
 export const CheckboxOff = (argTypes: ToggleButtonProps): JSX.Element => {
   const [checked, setChecked] = useState(false);

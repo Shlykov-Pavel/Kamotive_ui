@@ -159,7 +159,6 @@ export const ColorPicker: FC<ColorPickerProps> = ({
               style={{ width: 68, alignItems: 'flex-start' }}
               onChange={(e, color) => {
                 const formattedColor = hexaToHex(color.toString());
-                // colorChangeHandler(`#${ formattedColor }`)
                 colorChangeHandler(formattedColor);
               }}            
               />

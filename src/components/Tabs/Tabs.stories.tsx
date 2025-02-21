@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import './Tabs.css';
 
@@ -38,7 +38,7 @@ const meta: Meta<TabsProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='story--wrapper'>
+      <div className='story--wrapper-tabs'>
         <Story />
       </div>
     ),
@@ -52,7 +52,6 @@ const meta: Meta<TabsProps> = {
 
 export default meta;
 
-type Story = StoryObj<TabsProps>;
 
 export const TabsDefault = (argTypes: TabsProps): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<string>('tab1');

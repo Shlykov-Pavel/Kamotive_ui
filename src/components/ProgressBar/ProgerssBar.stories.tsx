@@ -16,7 +16,7 @@ export interface ProgressBarProps {
   animated?: boolean;
 }
 
-const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-progressbar">{<Story />}</div>;
 
 const meta: Meta<typeof ProgressBar> = {
   title: 'Components/ProgressBar',
@@ -47,11 +47,6 @@ const meta: Meta<typeof ProgressBar> = {
       control: { type: 'radio' },
       options: ['sm', 'md', 'lg'],
     },
-    // color: {
-    // description: 'Цвет прогресс-бара',
-    // control: { type: 'radio' },
-    // options: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'],
-    // },
     showValue: { description: 'Показывать значение прогресса' },
     animated: { description: 'Показывать анимацию' },
   },

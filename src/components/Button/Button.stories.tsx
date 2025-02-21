@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 import { Button } from './Button';
 import './Button.css';
 import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
@@ -34,8 +34,7 @@ const iconOptions = {
   unset: null,
 };
 
-const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
-const meta: Meta<typeof Button> = {
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-btn">{<Story />}</div>;const meta: Meta<typeof Button> = {
   title: 'Components/Button',
   component: Button,
   tags: ['autodocs'],
@@ -43,7 +42,6 @@ const meta: Meta<typeof Button> = {
     layout: 'centered',
   },
   decorators: [withWrapper],
-  // title: 'Button',
   args: {
     label: 'Кнопка',
     variant: 'fill',
@@ -52,7 +50,6 @@ const meta: Meta<typeof Button> = {
     condition: 'default',
     icon: 'unset',
     disabled: false,
-    // iconColor: '#FFFFFF',
   },
   argTypes: {
     label: { description: 'Текст кнопки' },
@@ -89,19 +86,12 @@ const meta: Meta<typeof Button> = {
       options: Object.keys(iconOptions),
       mapping: iconOptions,
     },
-    // iconColor: {
-    //   description: 'Цвет иконки',
-    //   control: { type: 'color' },
-    // },
     disabled: { description: 'Заблокированная кнопка', control: { type: 'boolean' } },
-    //onClick: { description: 'Callback, который будет вызван при клике по кнопке', action: 'клик' },
-    // backgroundColor: { control: 'color' },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<ButtonProps>;
 
 // Дефолтный Button
 export const ButtonDefault = (argTypes: ButtonProps): JSX.Element => <Button {...argTypes} />;

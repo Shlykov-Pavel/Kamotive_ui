@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler } from 'react';
+import React, { FC } from 'react';
 
 import './ToggleButton.css';
 import classNames from 'classnames';

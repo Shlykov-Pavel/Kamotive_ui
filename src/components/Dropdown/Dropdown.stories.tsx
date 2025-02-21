@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Meta } from '@storybook/react';
 import './Dropdown.css';
-import { Dropdown, DropdownListItem } from './Dropdown';
-import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
+import { Dropdown } from './Dropdown';
+import { IconAccount10, IconAlarm10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
 import { IconEyeOff10 } from '../../Icons/IconEyeOff/IconEyeOff10';
 export interface DropdownProps {
   /** Идентификатор */
@@ -44,7 +44,7 @@ const dropdownOptions = [
   { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar10 /> },
 ];
 
-const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-dropdown">{<Story />}</div>;
 const meta: Meta<typeof Dropdown> = {
   title: 'Components/Dropdown',
   component: Dropdown,
@@ -56,7 +56,6 @@ const meta: Meta<typeof Dropdown> = {
   args: {
     name: 'Выпадающий список....',
     disabled: false,
-    // className: 'default',
     items: dropdownOptions,
   },
   argTypes: {

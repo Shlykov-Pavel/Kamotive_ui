@@ -61,9 +61,13 @@ export interface ButtonProps {
 
 /** @internal */
   export interface TagProps {
+    /** Лейбл */
     label?: string;
+    /** Цвет */
     color?: string;
+    /**Наличие кнопки закрытия */
     closeButton?: boolean;
+    /** Callback при изменении значения */
     onClick?: () => void;
   }
 

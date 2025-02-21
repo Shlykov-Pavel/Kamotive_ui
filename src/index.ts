@@ -1,8 +1,5 @@
 export { Button as Button } from './components/Button/Button';
 export { Input as Input } from './components/Input/Input';
-
-import './fonts.css';
-
 export { Tag as Tag } from './components/Tag/Tag';
 export { Dropdown as Dropdown } from './components/Dropdown/Dropdown';
 export { ProgressBar as ProgressBar } from './components/ProgressBar/ProgressBar';
@@ -15,6 +12,6 @@ export { Tabs as Tabs } from './components/Tabs/Tabs';
 export { SettingTag as SettingTag } from './components/SettingTag/SettingTag';
 export { ColorPicker as ColorPicker } from './components/ColorPicker/ColorPicker';
 export { Snackbar as Snackbar } from './components/Snackbar/Snackbar';
-export {ToggleButton as ToggleButton } from './components/ToggleButton/ToggleButton'; 
+export { ToggleButton as ToggleButton } from './components/ToggleButton/ToggleButton'; 
 
 import './fonts.css';

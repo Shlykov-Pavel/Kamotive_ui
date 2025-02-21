@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { TagProps } from 'kamotive_ui';
-import styles from './Tag.module.css';
+import './Tag.css';
 import classNames from 'classnames';
 
 export const Tag: FC<TagProps> = ({ label, color = 'red', closeButton = false, onClick }) => {
@@ -20,7 +20,7 @@ export const Tag: FC<TagProps> = ({ label, color = 'red', closeButton = false, o
 
   return (
     <span
-      className={classNames(styles.tag, !color.startsWith('#') && styles[color])}
+      className={classNames('tag', !color.startsWith('#') ? `${color}`:'')}
       style={
         color.startsWith('#')
           ? {

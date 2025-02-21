@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import { Checkbox } from './Checkbox';
 import './Checkbox.css';
@@ -25,7 +25,7 @@ const meta: Meta<CheckboxProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="story--wrapper">
+      <div className="story--wrapper-checkbox">
         <Story />
       </div>
     ),
@@ -47,8 +47,6 @@ const meta: Meta<CheckboxProps> = {
 };
 
 export default meta;
-
-type Story = StoryObj<CheckboxProps>;
 
 export const CheckboxOff = (argTypes: CheckboxProps): JSX.Element => {
   const [checked, setChecked] = useState(false);

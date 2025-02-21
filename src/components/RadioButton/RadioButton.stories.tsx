@@ -1,5 +1,5 @@
 import React, { ChangeEvent, ChangeEventHandler, useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import './RadioButton.css';
 
@@ -27,7 +27,7 @@ const meta: Meta<RadioProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="story--wrapper">
+      <div className="story--wrapper-radio">
         <Story />
       </div>
     ),
@@ -51,7 +51,6 @@ const meta: Meta<RadioProps> = {
 
 export default meta;
 
-type Story = StoryObj<RadioProps>;
 
 export const RadioButtonOff = (argTypes: RadioProps): JSX.Element => {
   const [checked, setChecked] = useState(false);

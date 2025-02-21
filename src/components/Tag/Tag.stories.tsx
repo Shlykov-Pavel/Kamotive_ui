@@ -1,9 +1,19 @@
 import React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
-import styles from './Tag.module.css';
-import { TagProps } from 'kamotive_ui';
+import './Tag.css';
 import { Tag } from './Tag';
+
+export interface TagProps {
+  /** Лейбл */
+  label?: string;
+  /** Цвет */
+  color?: string;
+  /**Наличие кнопки закрытия */
+  closeButton?: boolean;
+  /** Callback при изменении значения */
+  onClick?: () => void;
+}
 
 const meta: Meta<TagProps> = {
   component: Tag,
@@ -13,7 +23,7 @@ const meta: Meta<TagProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className={styles[`story--wrapper`]}>
+      <div className='story--wrapper-tag'>
         <Story />
       </div>
     ),
@@ -36,8 +46,6 @@ const meta: Meta<TagProps> = {
 };
 
 export default meta;
-
-type Story = StoryObj<TagProps>;
 
 export const defaultTag = (argTypes: TagProps): JSX.Element => <Tag {...argTypes} />;
 defaultTag.storyName = 'Tag по умолчанию';

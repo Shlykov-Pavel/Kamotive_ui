@@ -15,7 +15,7 @@ export interface ProgressLoaderProps {
    animated?: boolean;
  }
 
-const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-progress-loader">{<Story />}</div>;
 
 const meta: Meta<typeof ProgressLoader> = {
   title: 'Components/ProgressLoader',

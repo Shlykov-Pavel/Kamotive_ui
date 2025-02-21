@@ -243,7 +243,7 @@ export interface TypographyProps {
   /** Стиль текста */
   style?: CSSProperties;
 }
-const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-typography">{<Story />}</div>;
 
 const meta: Meta<typeof Typography> = {
   title: 'Introduction/Typography',
@@ -283,14 +283,12 @@ const meta: Meta<typeof Typography> = {
 };
 export default meta;
 
-export const TypographyDefault = (argTypes: TypographyProps): JSX.Element => <Typography {...argTypes} />;
-TypographyDefault.storyName = 'Типографика по умолчанию';
 
 export const TypographyVariants = (argTypes: TypographyProps): JSX.Element => {
   return (
     <div>
       {typogrphy.map((item, index) => (
-        <div key={index} className='typography--wrapper'>
+        <div key={index} className='typography--wrapper-typography'>
           <Typography variant={item.title as TypographyProps['variant']}>{item.description}</Typography>
           <Typography variant="Body1" style={{ fontSize: 14, lineHeight: 16, fontWeight: 400, color: '#6b7280' }}>
             {item.title}

@@ -17,7 +17,7 @@ export type SnackbarProps = {
   onClose?: () => void;
 };
 
-const withWrapper = (Story: any) => <div className='story--wrapper'>{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div className='story--wrapper-snackbar'>{<Story />}</div>;
 
 const meta: Meta = {
   title: 'Components/Snackbar',

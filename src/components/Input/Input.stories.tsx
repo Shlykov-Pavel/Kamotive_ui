@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 import React, { ChangeEvent, ChangeEventHandler, ReactNode, useEffect, useState } from 'react';
 import { Input } from './Input';
 import './Input.css';
@@ -47,7 +47,7 @@ const iconOptions = {
   unset: null,
 };
 
-const withWrapper = (Story: any) => <div className="story--wrapper">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-iput">{<Story />}</div>;
 
 const meta: Meta<typeof Input> = {
   title: 'Components/Input',
@@ -56,7 +56,6 @@ const meta: Meta<typeof Input> = {
   parameters: {
     layout: 'centered',
   },
-  // title: 'Input',
   decorators: [withWrapper],
   args: {
     label: 'Наименование поля',
@@ -103,8 +102,6 @@ const meta: Meta<typeof Input> = {
 };
 
 export default meta;
-
-type Story = StoryObj<typeof Input>;
 
 // Дефолтный Input
 export const InputDefault = (argTypes: InputProps): JSX.Element => {

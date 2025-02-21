@@ -1,3 +1,10 @@
+.story--wrapper-snackbar {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 10px;
+  width: 300px;
+  height: 300px; 
+}
 .snackbar-wrapper {
   display: flex;
   justify-content: space-between;

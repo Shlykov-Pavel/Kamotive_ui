@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import './SettingTag.css';
 import { SettingTag } from './SettingTag';
@@ -22,7 +22,7 @@ const meta: Meta<SettingTagProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='story--wrapper'>
+      <div className='story--wrapper-tag'>
         <Story />
       </div>
     ),
@@ -40,8 +40,6 @@ const meta: Meta<SettingTagProps> = {
 };
 
 export default meta;
-
-type Story = StoryObj<SettingTagProps>;
 
 export const defaultTag = (argTypes: SettingTagProps): JSX.Element => {
   const [tagColor, setTagColor] = useState('red');
