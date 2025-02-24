@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import './Snackbar.css';
-import { icons, Snackbar } from './Snackbar';
+import { Snackbar } from './Snackbar';
 import { ESnackbarTypes } from './enums';
 
 export type SnackbarProps = {

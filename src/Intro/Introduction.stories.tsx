@@ -1,10 +1,10 @@
 import React from 'react';
-import { WelcomePage } from './Welcome'; // Путь к вашему компоненту
+import { WelcomePage } from './Welcome';
 
 const withWrapper = (Story: React.ComponentType) => <div>{<Story />}</div>;
 
 export default {
-  title: 'Introduction/Welcome', // Укажите путь в Storybook
+  title: 'Introduction/Welcome',
   component: WelcomePage,
   decorators: [withWrapper],
 };
