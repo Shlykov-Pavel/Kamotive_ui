@@ -1,3 +1,5 @@
+import { Accept } from 'react-dropzone/.';
+
 declare module 'kamotive_ui' {
   import * as React from 'react';
 
@@ -164,5 +166,26 @@ export interface ProgressBarProps {
 
   export const Tab:  React.FC<TabProps>;
   export const Tabs:  React.FC<TabsProps>;
+
+  export interface LoaderProps {
+    name?: string ;
+    size?: number ;
+    loading?: boolean;
+    error?: string;
+    onClick?: () => void;
+  }
+
+  export const Loader:  React.FC<LoaderProps>;
+
+  export interface FileAttachProps {
+    maxFileSize?: number;
+    maxFileCount?: number; 
+    acceptedFormats?: Accept;
+    addedFiles: File[];
+    setAddedFiles:(addedFiles: File[]) => void;
+    disabled?: boolean;
+  }
+
+  export const FileAttach:  React.FC<FileAttachProps>;
 
 }

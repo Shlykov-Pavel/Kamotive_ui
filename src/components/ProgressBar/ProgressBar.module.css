@@ -2,7 +2,7 @@
   background-color: var(--white);
   padding: 30px;
   border-radius: 10px;
-  width: 900px;
+  width: 300px;
 }
 .progress-bar--default-story {
   display: flex;
@@ -13,23 +13,25 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  justify-content: space-between;
 }
 
 .progress-bar {
   border: none;
   border-radius: 11px;
+  width: 100%;
 }
 .sm {
-  width: 20vw;
   height: 1vh;
+  font-size: var(--font-size-14);
 }
 .md {
-  width: 25vw;
   height: 2vh;
+  font-size: var(--font-size-16);
 }
 .lg {
-  width: 30vw;
   height: 3vh;
+  font-size: var(--font-size-18);
 }
 
 .progress-bar::-webkit-progress-bar {
