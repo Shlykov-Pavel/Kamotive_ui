@@ -1,6 +1,6 @@
-import React, { ChangeEventHandler, FC, ReactNode } from 'react';
-import styles from './Input.module.css';
+import React, { FC } from 'react';
 import { InputProps } from 'kamotive_ui';
+import styles from './Input.module.css'
 import classNames from 'classnames';
 
 /**
@@ -30,27 +30,27 @@ export const Input: FC<InputProps> = ({
     }
   };
 
-  const wrapperClassess = classNames(styles.wrapper, {
-    [styles['wrapper--left']]: isLeftLabel,
+  const wrapperClassess = classNames(styles['wrapper'], {
+    'wrapper--left': isLeftLabel,
   });
 
-  const inputWrapperClassess = classNames(styles[`wrapper--input `]);
+  const inputWrapperClassess = classNames(styles['wrapper--input']);
 
-  const inputClassess = classNames(styles.input, styles[size], className, {
-    [styles['input--error']]: hasError,
-    [styles['readOnly']]: readOnly,
-    [styles['input--withIcon']]: icon,
-    [styles['textarea']]: multiline,
-    [styles['resize']]: resize,
+  const inputClassess = classNames(styles['inputText'], size, className, {
+    'input--error': hasError,
+    'readOnly': readOnly,
+    'input--withIcon': icon,
+    'textarea': multiline,
+    'resize': resize,
   });
 
-  const labelClasses = classNames(styles.label, {
-    [styles['label--default']]: !isLeftLabel,
-    [styles['label--left']]: isLeftLabel,
+  const labelClasses = classNames(styles['label'], {
+    'label--default': !isLeftLabel,
+    'label--left': isLeftLabel,
   });
 
-  const iconClassess = classNames(styles.icon, {
-    [styles['input--withIcon']]: multiline,
+  const iconClassess = classNames(styles['icon'], {
+    'input--withIcon': multiline,
   });
 
   return (
@@ -84,7 +84,7 @@ export const Input: FC<InputProps> = ({
         )}
       </div>
 
-      {hasError && helperText && <div className={styles.helperText}>{helperText}</div>}
+      {hasError && helperText && <div className="helperText">{helperText}</div>}
     </div>
   );
 };

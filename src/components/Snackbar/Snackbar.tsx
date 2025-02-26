@@ -1,8 +1,9 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { IconClose10, IconError10, IconInfo10, IconSuccess10, IconWarning10 } from '../../Icons';
 import { Typography } from '../Typography/Typography';
-import styles from './Snackbar.module.css';
+import styles from './Snackbar.module.css'
 import classNames from 'classnames';
+import { SnackbarProps } from 'kamotive_ui';
 
 /**
 * @description Snackbar компонент для отображения всплывающих уведомлений
@@ -30,13 +31,7 @@ export const title = {
   info: 'Информация',
 };
 
-export type SnackbarProps = {
-  children: ReactNode;
-  type: 'success' | 'error' | 'warning' | 'info';
-  icon?: boolean;
-  duration: number;
-  onClose?: () => void;
-};
+
 export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose }) => {
   const [isVisible, setIsVisible] = useState(true);
   useEffect(() => {
@@ -55,12 +50,12 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
     onClose?.();
   };
   if (!isVisible) return null;
-  const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`]);
+  const snackbarClasses = classNames(styles['snackbar-wrapper'], type ?`snackbar--${type}`:'');
   return (
     <div className={snackbarClasses}>
-      <div className={styles[`snackbar-textAndIcon`]}>
+      <div className={styles['snackbar-textAndIcon']}>
         {icon && icons[type]}
-        <div className={styles[`snackbar-text`]}>
+        <div className={styles['snackbar-text']}>
           <Typography variant="Body2-Medium" color={'var(--text-dark)'}>
             {title[type]}
           </Typography>
@@ -69,7 +64,7 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
           </Typography>
         </div>
       </div>
-      <button className={styles.button} onClick={handleClose}>
+      <button className={styles['button']} onClick={handleClose}>
         <IconClose10 htmlColor={'var(--text-btn-light)'} />
       </button>
     </div>

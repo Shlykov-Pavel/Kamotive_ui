@@ -1,11 +1,22 @@
 import type { Meta } from '@storybook/react';
 import React from 'react';
-
-import styles from './ProgressBar.module.css';
-import { ProgressBarProps } from 'kamotive_ui';
+import './ProgressBar.module.css';
 import { ProgressBar } from './ProgressBar';
 
-const withWrapper = (Story: any) => <div className={styles[`story--wrapper`]}>{<Story />}</div>;
+export interface ProgressBarProps {
+  /** Значение */
+  value?: number;
+  /** Максимальное значение */
+  max?: number;
+  /** Размер */
+  size?: 'sm' | 'md' | 'lg';
+  /** Показывать значение */
+  showValue?: boolean;
+  /** Анимация */
+  animated?: boolean;
+}
+
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-progressbar">{<Story />}</div>;
 
 const meta: Meta<typeof ProgressBar> = {
   title: 'Components/ProgressBar',
@@ -36,11 +47,6 @@ const meta: Meta<typeof ProgressBar> = {
       control: { type: 'radio' },
       options: ['sm', 'md', 'lg'],
     },
-    // color: {
-    // description: 'Цвет прогресс-бара',
-    // control: { type: 'radio' },
-    // options: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'],
-    // },
     showValue: { description: 'Показывать значение прогресса' },
     animated: { description: 'Показывать анимацию' },
   },
@@ -49,14 +55,13 @@ export default meta;
 
 export const ProgressBarWithValues = (argTypes: ProgressBarProps): JSX.Element => {
   return (
-    <div className={styles['progress-bar--default-story']}>
+    <div className="progress-bar--default-story">
       <ProgressBar value={0} {...argTypes} />
       <ProgressBar value={50} {...argTypes} />
       <ProgressBar value={100} {...argTypes} />
     </div>
   );
 };
-
 ProgressBarWithValues.storyName = 'ProgressBar c состояниями';
 ProgressBarWithValues.parameters = {
   controls: { disable: true },

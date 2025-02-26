@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import styles from './ProgressBar.module.css';
 import { Typography } from '../Typography/Typography';
+import styles from './ProgressBar.module.css'
 import classNames from 'classnames';
 import { ProgressBarProps } from 'kamotive_ui';
 
@@ -18,9 +18,9 @@ export const ProgressBar: FC<ProgressBarProps> = ({
 }) => {
   const [percent, setPercent] = useState(value);
   const validPercentage = Math.min(Math.max(value, 0), max);
-  const progeressBarClassess = classNames(styles['progress-bar'], styles[size], {
-    [styles['progress-bar--animated']]: animated,
-    [styles['progress-bar--static']]: !animated,
+  const progressBarClasses = classNames(styles['progress-bar'], size, {
+    'progress-bar--animated': animated,
+    'progress-bar--static': !animated,
   });
 
   useEffect(() => {
@@ -44,10 +44,10 @@ export const ProgressBar: FC<ProgressBarProps> = ({
     }
   }, [animated, validPercentage]);
   return (
-    <div className={styles[`progress-bar--wrapper`]}>
+    <div className={styles["progress-bar--wrapper"]}>
       <progress
         id="linear-progress"
-        className={progeressBarClassess}
+        className={progressBarClasses}
         value={percent}
         max={max}
         //style={{ transition: animated ? 'width 0.8s ease-in-out' : 'none' }}

@@ -7,41 +7,11 @@ import EditableInput from '@uiw/react-color-editable-input';
 import { ColorResult } from '@uiw/react-color';
 import { GithubPlacement } from '@uiw/react-color-github';
 import { IconColorPicker10 } from '../../Icons';
+import { ColorPickerProps } from 'kamotive_ui';
 
-export interface ColorPickerProps {
-  /**
-   * @description Цвет выбранный пользователем
-   */
-  color?: string;
-   /**
-   * @description Основной цвет
-   */
-   mainColor?: string;
-   /** 
-    * @description Последние использованные цвета
-   */
-  recentColors?: string[];
-  /** 
-    * @description Флаг наведения на меню
-   */
-  setIsHovered:(isHover: boolean) => void;
-  /**
-   * @description Ширина ColorPicker
-   */
-  width?: number;
-  /**
-   * @description Высота ColorPicker
-   */
-  height?: number;
-  /**
-   * @description Автофокус ColorPicker
-   */
-  autoOpen?: boolean;
-  /**
-   * @description Функция обработки изменения цвета
-   */
-  onChange?: (color: string) => void;
-}
+/**
+ * Компонент ColorPicker представляет собой элемент управления для выбора цвета.
+ */
 export const ColorPicker: FC<ColorPickerProps> = ({
   color = '#ffffff',
   mainColor,
@@ -98,15 +68,15 @@ export const ColorPicker: FC<ColorPickerProps> = ({
       !autoOpen && document.removeEventListener('mousedown', handleClickOutside);}
   }, [isOpen]);
 
-  const mainColorClasses = classNames(styles.circle, {
-    [styles['mainColor']]: mainColor,
+  const mainColorClasses = classNames(styles['circle'], {
+    'mainColor': mainColor,
   });
 
-  const colorCircleDefaultClasses = classNames(styles.circle, {
-    [styles.colorCircleDefault]: color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue});
+  const colorCircleDefaultClasses = classNames(styles['circle'], {
+    'colorCircleDefault': color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue});
 
-  const popoverClassess = classNames(styles.popover, {
-    [styles[`popover--${popoverPosition}`]]: true,
+  const popoverClassess = classNames(styles['popover'], {
+    [`popover--${popoverPosition}`]: true,
   });
   
   // Функция для преобразования HEXA в HEX
@@ -139,7 +109,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   },[color])
   
   return (
-  <div className={(mainColor || recentColors) && styles.colorPickerWrapper} onMouseLeave={() => setIsHovered && setIsHovered(false)}>
+  <div className={(mainColor || recentColors) ? 'colorPickerWrapper' : ''} onMouseLeave={() => setIsHovered && setIsHovered(false)}>
     {mainColor && <div className={mainColorClasses} style={{ 
           width: `${width}px`,
           height: `${height}px`,
@@ -150,7 +120,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
       {recentColors && recentColors.map((color, index) => (
         <div
           key={index}
-          className={styles.circle}
+          className="circle"
           style={{  
             width: `${width}px`,
             height: `${height}px`,
@@ -160,7 +130,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
         />
       ))}
      
-      <div className={styles.colorPicker}>
+      <div className="colorPicker">
       <div 
         ref={circleRef}
         className={colorCircleDefaultClasses}
@@ -174,22 +144,21 @@ export const ColorPicker: FC<ColorPickerProps> = ({
       />
       {isOpen && (
         <div ref={popoverRef} className={popoverClassess}>
-          {isOpen && <IconColorPicker10 className={styles.colorPickerIcon} htmlColor={'var(--white)'}/> } 
+          {isOpen && <IconColorPicker10 className="colorPickerIcon" htmlColor={'var(--white)'}/> } 
           <Chrome
             color={selectedColor}
             placement={GithubPlacement.Right}
             onChange={colorChangeHandler}
-            className={styles.customChrome}
+            className="customChrome"
             showEyeDropper={false}
 
           />
-          <div className={styles.hex} style={{ padding: '0 10px 0 20px' }}>
+          <div className="hex" style={{ padding: '0 10px 0 20px' }}>
             <EditableInput
               value={hexaToHex(selectedColor)}
               style={{ width: 68, alignItems: 'flex-start' }}
               onChange={(e, color) => {
                 const formattedColor = hexaToHex(color.toString());
-                // colorChangeHandler(`#${ formattedColor }`)
                 colorChangeHandler(formattedColor);
               }}            
               />

@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-
-import styles from '../Tabs/Tabs.module.css';
-import { TabProps } from 'kamotive_ui';
+import React from 'react';
+import type { Meta } from '@storybook/react';
+import './Tab.module.css';
 import { Tab } from './Tab';
 
+export interface TabProps {
+  /** Значение */
+  value?:string;
+  /** Обработчик клика */
+  onClick?: (value: string ) => void;
+  /** Текст лейбла */
+  label?:string;
+  /** Размер */
+  selected?: boolean;
+  /** Заблокированный */
+  disabled?:boolean;
+  /** Табы */
+  children?: React.ReactNode;
+}
 const meta: Meta<TabProps> = {
   component: Tab,
   parameters: {
@@ -13,7 +25,7 @@ const meta: Meta<TabProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className={styles[`story--wrapper`]}>
+      <div className='story--wrapper-tab'>
         <Story />
       </div>
     ),
@@ -31,8 +43,6 @@ const meta: Meta<TabProps> = {
 };
 
 export default meta;
-
-type Story = StoryObj<TabProps>;
 
 export const TabSelect = (argTypes: TabProps): JSX.Element => <Tab {...argTypes} />;
 TabSelect.storyName = 'Tab выбран';

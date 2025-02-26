@@ -1,10 +1,23 @@
 import type { Meta } from '@storybook/react';
-import React, { useState } from 'react';
-import styles from './Snackbar.module.css';
-import { icons, Snackbar, SnackbarProps } from './Snackbar';
+import React, { ReactNode } from 'react';
+import './Snackbar.module.css';
+import { Snackbar } from './Snackbar';
 import { ESnackbarTypes } from './enums';
 
-const withWrapper = (Story: any) => <div className={styles['story--wrapper']}>{<Story />}</div>;
+export type SnackbarProps = {
+  /** Сообщение */
+  children: ReactNode;
+  /** Тип сообщения */
+  type: 'success' | 'error' | 'warning' | 'info';
+  /** Иконка */
+  icon?: boolean;
+  /** Длительность показа сообщения */
+  duration: number;
+  /** Функция обработки закрытия сообщения */
+  onClose?: () => void;
+};
+
+const withWrapper = (Story: React.ComponentType) => <div className='story--wrapper-snackbar'>{<Story />}</div>;
 
 const meta: Meta = {
   title: 'Components/Snackbar',

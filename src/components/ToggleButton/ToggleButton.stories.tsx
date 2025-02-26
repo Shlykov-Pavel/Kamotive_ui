@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import React, { ChangeEventHandler, useState } from 'react';
+import type { Meta } from '@storybook/react';
 
 import { ToggleButton } from './ToggleButton';
-import styles from './ToggleButton.module.css';
-import { ToggleButtonProps } from 'kamotive_ui';
+import './ToggleButton.module.css';
+
+interface ToggleButtonProps {
+  /** Знчение */
+   value?: boolean;
+   /** Callback при изменении значения */
+   onChange?: ChangeEventHandler<HTMLInputElement>
+   /** Заблокированная кнопка */
+   disabled?: boolean;
+   /** Размер кнопки */
+   size?: 'sm' | 'md';
+   /** Текст кнопки */
+   label?:string;
+ }
 
 const meta: Meta<ToggleButtonProps> = {
   component: ToggleButton,
@@ -13,7 +25,7 @@ const meta: Meta<ToggleButtonProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className={styles[`story--wrapper`]}>
+      <div className='story--wrapper-toggle'>
         <Story />
       </div>
     ),
@@ -35,8 +47,6 @@ const meta: Meta<ToggleButtonProps> = {
 };
 
 export default meta;
-
-type Story = StoryObj<ToggleButtonProps>;
 
 export const CheckboxOff = (argTypes: ToggleButtonProps): JSX.Element => {
   const [checked, setChecked] = useState(false);

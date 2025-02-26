@@ -20,7 +20,7 @@ export const Tag: FC<TagProps> = ({ label, color = 'red', closeButton = false, o
 
   return (
     <span
-      className={classNames(styles.tag, !color.startsWith('#') && styles[color])}
+      className={classNames(styles['tag'], !color.startsWith('#') ? `${color}`:'')}
       style={
         color.startsWith('#')
           ? {

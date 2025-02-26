@@ -1,4 +1,4 @@
-.story--wrapper {
+.story--wrapper-progressbar {
   background-color: var(--white);
   padding: 30px;
   border-radius: 10px;
@@ -11,27 +11,25 @@
 }
 .progress-bar--wrapper {
   display: flex;
-  align-items: center;
-  gap: 20px;
-  justify-content: space-between;
+  gap: 40px;
 }
 
 .progress-bar {
   border: none;
   border-radius: 11px;
-  width: 100%;
+  width: 330px;
 }
-.sm {
-  height: 1vh;
-  font-size: var(--font-size-14);
+.progress-bar.sm {
+  /* width: 20px; */
+  height: 4px;
 }
-.md {
-  height: 2vh;
-  font-size: var(--font-size-16);
+.progress-bar.md {
+  /* width: 25vw; */
+  height: 6px;
 }
-.lg {
-  height: 3vh;
-  font-size: var(--font-size-18);
+.progress-bar.lg {
+  /* width: 30vw; */
+  height: 8px;
 }
 
 .progress-bar::-webkit-progress-bar {
@@ -49,3 +47,10 @@
 .progress-bar--static {
   transition: none;
 }
+.progress-bar-percentage {
+  /* position: absolute; */
+  /* top: 50%; */
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
