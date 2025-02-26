@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { IconClose10, IconError10, IconInfo10, IconSuccess10, IconWarning10 } from '../../Icons';
 import { Typography } from '../Typography/Typography';
-import './Snackbar.css';
 import styles from './Snackbar.module.css'
 import classNames from 'classnames';
 import { SnackbarProps } from 'kamotive_ui';

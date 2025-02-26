@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import './Input.css';
 import { InputProps } from 'kamotive_ui';
 import styles from './Input.module.css'
 import classNames from 'classnames';

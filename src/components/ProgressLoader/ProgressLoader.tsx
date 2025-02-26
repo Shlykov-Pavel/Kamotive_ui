@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import './ProgressLoader.css';
 import { Typography } from '../Typography/Typography';
 import styles from './ProgressLoader.module.css'
 import classNames from 'classnames';

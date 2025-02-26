@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import './ProgressBar.css';
 import { Typography } from '../Typography/Typography';
 import styles from './ProgressBar.module.css'
 import classNames from 'classnames';

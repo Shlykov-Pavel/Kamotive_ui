@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 
-import './RadioButton.css';
 import styles from './RadioButton.module.css'
 import classNames from 'classnames';
 import { RadioProps } from 'kamotive_ui';

@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import './Dropdown.css';
 import styles from './Dropdown.module.css'
 import classNames from 'classnames';
 import { ChevronDown10 } from '../../Icons/ChevronDown/ChevronDown10';
