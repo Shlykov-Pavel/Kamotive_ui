@@ -10,8 +10,9 @@ export { ToggleButton as ToggleButton} from './src/components/ToggleButton/Toggl
 export { Tabs as Tabs} from './src/components/Tabs/Tabs';
 export { Tab as Tab} from './src/components/Tab/Tab';
 export { Tag as Tag} from './src/components/Tag/Tag';
-export { SettingTag as SettingTag} from './src/components/SettingTag/SettingTag'
-export {Snackbar as Snackbar} from './src/components/Snackbar/Snackbar'
-export {Loader as Loader} from './src/components/Loader/Loader'
-export {FileAttach as FileAttach} from './src/components/FileAttach/FileAttach'
+export { SettingTag as SettingTag} from './src/components/SettingTag/SettingTag';
+export { ColorPicker as ColorPicker } from './src/components/ColorPicker/ColorPicker';
+export { Snackbar as Snackbar} from './src/components/Snackbar/Snackbar';
+export { Loader as Loader} from './src/components/Loader/Loader';
+export { FileAttach as FileAttach} from './src/components/FileAttach/FileAttach';
 import './src/fonts.css';
