@@ -1,0 +1,145 @@
+.story--wrapper-tag {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+}
+
+.tag {
+    padding: 4px 10px;
+    border-radius: 8px;
+
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.tag .circle {
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  position: relative;
+}
+
+.tag button[aria-label="Закрыть"] {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    width: 8px;
+    height: 8px;
+}
+
+.tag button[aria-label="Закрыть"]::before,
+.tag button[aria-label="Закрыть"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    height: 1px;
+    width: 100%;
+    background-color: var(--close-color); 
+}
+
+.tag button[aria-label="Закрыть"]::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.tag.red {
+    color: var(--red);
+    background-color: var(--redBackground);
+    border: 1px solid var(--red)
+}
+
+.tag.red:hover {
+    background-color: var(--redHover);
+}
+
+.tag.orange {
+    color: var(--orange);
+    background-color: var(--orangeBackground);
+    border: 1px solid var(--orange)
+}
+
+.tag.orange:hover {
+    background-color: var(--orangeHover);
+}
+
+.tag.yellow {
+    color: var(--yellowText);
+    background-color: var(--yellowBackground);
+    border: 1px solid var(--yellow)
+}
+
+.tag.yellow:hover {
+    background-color: var(--yellowHover);
+}
+
+.tag.green {
+    color: var(--green);
+    background-color: var(--greenBackground);
+    border: 1px solid var(--green)
+}
+
+.tag.green:hover {
+    background-color: var(--greenHover);
+}
+
+.tag.purple {
+    color: var(--purple);
+    background-color: var(--purpleBackground);
+    border: 1px solid var(--purple)
+}
+
+.tag.purple:hover {
+    background-color: var(--purpleHover);
+}
+
+.tag.indigo {
+    color: var(--indigo);
+    background-color: var(--indigoBackground);
+    border: 1px solid var(--indigo)
+}
+
+.tag.indigo:hover {
+    background-color: var(--indigoHover);
+}
+
+.tag.blue {
+    color: var(--blue);
+    background-color: var(--blueBackground);
+    border: 1px solid var(--blue)
+}
+
+.tag.blue:hover {
+    background-color: var(--blueHover);
+}
+
+.tag.teal {
+    color: var(--teal);
+    background-color: var(--tealBackground);
+    border: 1px solid var(--teal)
+}
+
+.tag.teal:hover {
+    background-color: var(--tealHover);
+}
+
+.tag.pink {
+    color: var(--pink);
+    background-color: var(--pinkBackground);
+    border: 1px solid var(--pink)
+}
+
+.tag.pink:hover {
+    background-color: var(--pinkHover);
+}

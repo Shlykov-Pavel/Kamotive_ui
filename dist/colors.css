@@ -1,0 +1,78 @@
+:root {
+  --white: #ffffff;
+
+  --grey-medium: #d1d1d6;
+  --grey-light: #e5e5ea;
+  --grey-extraLight: #f2f2f7;
+
+  --text-light: #3c3c434d;
+  --text-grey: #3c3c4399;
+  --text-dark: #2a3336;
+  --text-btn: #6f6f6f;
+  --text-btn-light: #9ca0a7;
+  --icons-medium: #5a5d61;
+  --icons-light: #dce4f0;
+  --icons-active: #bfd0eb;
+  --blue-main: #0d99ff;
+  --blue-secondary: #0c91f1;
+  --blue-dark: #0685e1;
+  --blue-disabled: #8dc6ef;
+  --error-main: #ff3b30;
+  --error-secondary: #eb3126;
+  --error-dark: #df2b21;
+  --error-disabled: #ff8d87;
+  --success-main: #34c759;
+  --success-secondary: #2db04e;
+  --success-dark: #2eb550;
+  --success-disabled: #8ac99a;
+  --warning-main: rgb(255, 149, 0);
+  --warning-secondary: #ed8c05;
+  --warning-dark: #e18504;
+  --warning-disabled:#ffb44a;
+  --info-main: #f2f2f7;
+  --info-secondary: #e5e5ea;
+
+  --info-dark: rgb(209, 209, 214);
+  
+  --green:#34c759;
+  --greenBackground:rgba(52, 199, 89, 0.2);
+  --greenHover:rgba(52, 199, 89, 0.25);
+
+  --red: #ff3b30;
+  --redBackground:rgba(255, 59, 48, 0.2);
+  --redHover:rgba(255, 59, 48, 0.25);
+
+  --orange: #ff9500;
+  --orangeBackground:rgba(255, 149, 0, 0.2);
+  --orangeHover:rgba(255, 149, 0, 0.25);
+
+  --yellow:#ffcc00;
+  --yellowText:rgba(200, 160, 0, 1);
+  --yellowBackground:rgba(255, 204, 0, 0.1);
+  --yellowHover:rgba(255, 204, 0, 0.15);
+
+  --purple:#af52de;
+  --purpleBackground:rgba(175, 82, 222, 0.2);
+  --purpleHover:rgba(175, 82, 222, 0.25);
+
+  --indigo:#5856d6;
+  --indigoBackground:rgba(88, 86, 214, 0.2);
+  --indigoHover:rgba(88, 86, 214, 0.25);
+
+  --blue:#007aff;
+  --blueBackground:rgba(0, 122, 255, 0.2);
+  --blueHover:rgba(0, 122, 255, 0.25);
+
+  --teal:#30b0c7;
+  --tealBackground:rgba(48, 176, 199, 0.2);
+  --tealHover:rgba(48, 176, 199, 0.25);
+
+  --pink:#ff2d55;
+  --pinkBackground:rgba(255, 45, 85, 0.2);
+  --pinkHover:rgba(255, 45, 85, 0.25);
+  --info-dark: #d1d1d6;
+
+  --tab-light: #f3f3f3;;
+  --tab-extraLight: #f6f6f6;
+  --tab-medium: rgb(169, 169, 169, 0.2);
+}
