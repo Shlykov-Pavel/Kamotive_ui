@@ -1,8 +1,8 @@
 import type { Meta } from '@storybook/react';
-import React from 'react';
+import React, { CSSProperties, ReactNode } from 'react';
 import { Typography } from './Typography';
-import styles from './Typography.module.css';
-import { TypographyProps } from 'kamotive_ui';
+import './Typography.module.css';
+import { ETypographyVariants } from './enums';
 
 const typogrphy = [
   {
@@ -231,9 +231,22 @@ const typogrphy = [
   },
 ];
 
-const withWrapper = (Story: any) => <div className={styles[`story--wrapper`]}>{<Story />}</div>;
+export interface TypographyProps {
+  /** Вариант шрифта */
+  variant?: `${ETypographyVariants}`;
+  /** Текст */
+  children: ReactNode;
+  /** Дополнительный класс */
+  className?: string;
+  /** Цвет текста */
+  color?: CSSProperties['color'];
+  /** Стиль текста */
+  style?: CSSProperties;
+}
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-typography">{<Story />}</div>;
+
 const meta: Meta<typeof Typography> = {
-  title: 'Components/Typography',
+  title: 'Introduction/Typography',
   component: Typography,
   tags: ['autodocs'],
   decorators: [withWrapper],
@@ -270,14 +283,12 @@ const meta: Meta<typeof Typography> = {
 };
 export default meta;
 
-export const TypographyDefault = (argTypes: TypographyProps): JSX.Element => <Typography {...argTypes} />;
-TypographyDefault.storyName = 'Типографика по умолчанию';
 
 export const TypographyVariants = (argTypes: TypographyProps): JSX.Element => {
   return (
     <div>
       {typogrphy.map((item, index) => (
-        <div key={index} className={styles['typography--wrapper']}>
+        <div key={index} className='typography--wrapper-typography'>
           <Typography variant={item.title as TypographyProps['variant']}>{item.description}</Typography>
           <Typography variant="Body1" style={{ fontSize: 14, lineHeight: 16, fontWeight: 400, color: '#6b7280' }}>
             {item.title}

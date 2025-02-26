@@ -1,15 +1,15 @@
-.story--wrapper {
+
+.story--wrapper-typography{
   background-color: var(--white);
-  padding: 20px;
-  border-radius: 10px;
-  /* width: 900px; */
+  width: 900px;
 }
-.typography--wrapper{
+.typography--wrapper-typography {
   display: grid;
   grid-template-columns: 4fr 170px 80px 150px;
   gap: 20px;
   align-items: center;
   height: 60px;
+  width: 1100px;
 }
 
 .typography--variant-Heading1 {

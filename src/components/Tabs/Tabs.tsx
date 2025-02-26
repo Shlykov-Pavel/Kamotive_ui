@@ -2,7 +2,6 @@ import { TabsProps } from 'kamotive_ui';
 import React, { FC } from 'react';
 
 import styles from './Tabs.module.css';
-import classNames from 'classnames';
 
 export const Tabs: FC<TabsProps> = ({ value, onChange, children }) => {
   const selectedTabContent = children?.find((child) => child.props.value === value)?.props.children;
@@ -15,7 +14,7 @@ export const Tabs: FC<TabsProps> = ({ value, onChange, children }) => {
 
   return (
     <>
-      <div role="tablist" className={classNames(styles.tabs)}>
+      <div role="tablist" className={styles['tabs']}>
         {children?.map((child, index) =>
           React.cloneElement(child, {
             key: index,

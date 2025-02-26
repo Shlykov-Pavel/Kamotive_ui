@@ -1,9 +1,23 @@
-import React, { ChangeEvent, useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import React, { ChangeEvent, ChangeEventHandler, useState } from 'react';
+import type { Meta } from '@storybook/react';
 
-import styles from './RadioButton.module.css';
-import { RadioProps } from 'kamotive_ui';
+import './RadioButton.module.css';
+
 import { RadioButton } from './RadioButton';
+export interface RadioProps {
+  /** Значение */
+  value?: string;
+   /**  Лейбл */
+  label?: string;
+  /** Выбраный */
+  checked?: boolean;
+  /** Обработчик изменения состояния */
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  /** Заблокированный чекбокс */
+  disabled?: boolean;
+  /** Размер чекбокса */
+  size?: 'sm' | 'md';
+}
 
 const meta: Meta<RadioProps> = {
   component: RadioButton,
@@ -13,7 +27,7 @@ const meta: Meta<RadioProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className={styles[`story--wrapper`]}>
+      <div className="story--wrapper-radio">
         <Story />
       </div>
     ),
@@ -37,7 +51,6 @@ const meta: Meta<RadioProps> = {
 
 export default meta;
 
-type Story = StoryObj<RadioProps>;
 
 export const RadioButtonOff = (argTypes: RadioProps): JSX.Element => {
   const [checked, setChecked] = useState(false);

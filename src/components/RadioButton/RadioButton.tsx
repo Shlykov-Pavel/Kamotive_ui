@@ -1,6 +1,6 @@
-import React, { FC, MouseEventHandler } from 'react';
+import React, { FC } from 'react';
 
-import styles from './RadioButton.module.css';
+import styles from './RadioButton.module.css'
 import classNames from 'classnames';
 import { RadioProps } from 'kamotive_ui';
 
@@ -12,14 +12,14 @@ export const RadioButton: FC<RadioProps> = ({ value, label, checked, onChange, d
   };
 
   return (
-    <label className={styles.radio}>
+    <label className={styles["radio"]}>
       <input
         type="radio"
         checked={checked}
         value={value}
         onChange={handleChange}
         disabled={disabled}
-        className={classNames(styles.input, styles[size])}
+        className={classNames(styles['input'], size)}
       />
       {label}
     </label>

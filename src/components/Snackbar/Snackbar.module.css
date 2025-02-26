@@ -1,3 +1,10 @@
+.story--wrapper-snackbar {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 10px;
+  width: 300px;
+  height: 300px; 
+}
 .snackbar-wrapper {
   display: flex;
   justify-content: space-between;
@@ -7,7 +14,8 @@
   box-sizing: border-box;
   position: relative;
   min-width: 340px;
-  max-width: 640px;
+  max-width: 500px;
+
   border-radius: 15px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   min-height: 48px;
@@ -23,6 +31,7 @@
 .snackbar-text {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .snackbar--success {
   background-color: rgba(52, 199, 89, 0.15);
@@ -41,7 +50,7 @@
   border: none;
   background-color: transparent;
   display: flex;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
   padding: 5px;
   margin-top: 3px;

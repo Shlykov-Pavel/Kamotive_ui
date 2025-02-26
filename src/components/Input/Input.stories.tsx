@@ -1,11 +1,41 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import type { Meta } from '@storybook/react';
+import React, { ChangeEvent, ChangeEventHandler, ReactNode, useEffect, useState } from 'react';
 import { Input } from './Input';
-import styles from './Input.module.css';
+import './Input.module.css';
 import { IconAlarm10, IconAccount10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons/index';
-import { InputProps } from 'kamotive_ui';
 
-const labelText = 'Наименование поля';
+export interface InputProps {
+  /** Идентификатор элемента */
+  id?: string;
+  /** Дополнительный класс */
+  className?: string;
+  /** Знчение */
+  value?: string;
+  /** Лейбл */
+  label?: string;
+  /** Подсказка */
+  placeholder?: string;
+  /** Размер */
+  size?: 'sm' | 'md' | 'lg';
+  /** Callback при изменении значения */
+  onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  /** Иконка слева */
+  icon?: ReactNode;
+  /** Ошибка */
+  hasError?: boolean;
+  /** Помощник текста */
+  helperText?: ReactNode;
+   /** Заблокированное поле */
+  disabled?: boolean;
+  /** Только для чтения */
+  readOnly?: boolean;
+  /** Метка слева */
+  isLeftLabel?: boolean;
+  /** Многострочное поле */
+  multiline?: boolean;
+  /** Изменение размера многострочного поля */
+  resize?: boolean;
+}
 
 const iconOptions = {
   IconAlarm10: <IconAlarm10 />,
@@ -17,7 +47,7 @@ const iconOptions = {
   unset: null,
 };
 
-const withWrapper = (Story: any) => <div className={styles[`story--wrapper`]}>{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-iput">{<Story />}</div>;
 
 const meta: Meta<typeof Input> = {
   title: 'Components/Input',
@@ -26,12 +56,11 @@ const meta: Meta<typeof Input> = {
   parameters: {
     layout: 'centered',
   },
-  // title: 'Input',
   decorators: [withWrapper],
   args: {
-    label: labelText,
+    label: 'Наименование поля',
     placeholder: 'Введите текст...',
-    size: 'md',
+    size: 'sm',
     icon: 'unset',
     multiline: false,
     hasError: false,
@@ -73,8 +102,6 @@ const meta: Meta<typeof Input> = {
 };
 
 export default meta;
-
-type Story = StoryObj<typeof Input>;
 
 // Дефолтный Input
 export const InputDefault = (argTypes: InputProps): JSX.Element => {

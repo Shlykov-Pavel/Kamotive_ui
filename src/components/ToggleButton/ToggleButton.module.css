@@ -1,4 +1,4 @@
-.story--wrapper {
+.story--wrapper-toggle {
     background-color: var(--white);
     padding: 30px;
     border-radius: 10px;
@@ -16,15 +16,15 @@
     line-height: 16px;
     color: var(--text-dark);
 }
-.sm {
+.toggleInput.sm {
     width: 22px;
     height: 12px;
 }
-.md {
+.toggleInput.md {
     width: 28px;
     height: 16px;
 }
-.input[type="checkbox"] {
+.toggleInput {
     -webkit-appearance: none;
     appearance: none;
     display: inline-block;
@@ -34,14 +34,14 @@
     position: relative;
     cursor: pointer;
 }
-.input[type="checkbox"]:checked {
+.toggleInput:checked {
     background-color: var(--blue-main);
 }
-.input[type="checkbox"]:disabled:checked {
+.toggleInput:disabled:checked {
     background-color: var(--blue-disabled);
 }
 /* Круг слева */
-.input[type="checkbox"]::after {
+.toggleInput::after {
     content: '';
     position: absolute;
     left: 50%;
@@ -52,16 +52,16 @@
     border-radius: 50%;
     background-color: var(--white);
 }
-.input[type="checkbox"]:hover::after {
+.toggleInput:hover::after {
     box-shadow: 0 0 2px var(--blue-main);
 }
-.input[type="checkbox"]:disabled::after {
+.toggleInput:disabled::after {
     background-color: var(--grey-extraLight);
     cursor: not-allowed;
     box-shadow: none;
 }
 /* Круг справа */
-.input[type="checkbox"]:checked::after {
+.toggleInput:checked::after {
     content: '';
     position: absolute;
     left: 50%;

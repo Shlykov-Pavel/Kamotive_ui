@@ -1,6 +1,6 @@
 import React, { FC, MouseEvent } from 'react';
 
-import styles from '../Tabs/Tabs.module.css';
+import styles from './Tab.module.css';
 import classNames from 'classnames';
 import { TabProps } from 'kamotive_ui';
 
@@ -16,9 +16,9 @@ export const Tab: FC<TabProps> = ({ value, onClick, label, selected, disabled = 
       aria-selected={selected}
       aria-disabled={disabled}
       value={value}
-      className={classNames(styles.tab, {
-        [styles.selected]: selected,
-        [styles.disabled]: disabled,
+      className={classNames(styles['tab'], {
+        'selected': selected,
+        'disabled': disabled,
       })}
       onClick={handleClick}
     >

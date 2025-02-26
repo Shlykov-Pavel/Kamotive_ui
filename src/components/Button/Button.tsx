@@ -16,13 +16,13 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
   onClick,
 }) => {
-  const buttonClassess = classNames(
-    styles.button,
+  const buttonClasses = classNames(
+    styles['button'],
     styles[`button--${variant}-${condition}`],
     styles[`button--${size}`],
     styles[`button--${style}`]
     // {
-    //   [styles['button--disabled']]: disabled,
+    //   ['button--disabled']: disabled,
     // }
   );
 
@@ -56,7 +56,7 @@ export const Button: React.FC<ButtonProps> = ({
   };
   const iconColorStyle = iconColorFn();
   return (
-    <button className={buttonClassess} onClick={onClick} disabled={disabled}>
+    <button className={buttonClasses} onClick={onClick} disabled={disabled}>
       {icon &&
         React.cloneElement(icon as React.ReactElement, {
           htmlColor: iconColorStyle,

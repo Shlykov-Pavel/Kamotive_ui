@@ -1,15 +1,13 @@
-.story--wrapper {
+.story--wrapper-colorpicker {
   background-color: var(--white);
   padding: 30px;
   border-radius: 10px;
   width: 900px;
 }
 
-
-
-
 .colorPicker {
   -webkit-appearance: none;
+  appearance: none;
   border-radius: 50%;
   border: none;
   position: relative;
@@ -145,7 +143,7 @@
   z-index: 100;
 }
 
-:global(.w-color-swatch){
+.w-color-swatch{
   padding: 10px !important;
   border-radius: 10px !important;
   width: fit-content !important;
@@ -156,31 +154,31 @@
   --github-border: 0px !important;
 }
 
-:global(.w-color-swatch) > div:nth-child(1),
-:global(.w-color-swatch) > div:nth-child(2){
+.w-color-swatch > div:nth-child(1),
+.w-color-swatch > div:nth-child(2){
  display: none !important;
 }
-:global(.w-color-swatch) > div:nth-child(3) {
+.w-color-swatch > div:nth-child(3) {
   width: 195px !important;
   height: 195px !important;
   border-radius: 10px !important;
 }
 
-:global(.w-color-swatch) > div:nth-child(4){
+.w-color-swatch > div:nth-child(4){
   gap: 15px !important;
   padding: 10px 0 !important;
   /* width: 80%; */
 }
-:global(.w-color-swatch) > div:nth-child(5){
+.w-color-swatch > div:nth-child(5){
   padding: 0 !important;
 
 }
-:global(.w-color-swatch) > div:nth-child(5) > div:nth-child(2){
+.w-color-swatch > div:nth-child(5) > div:nth-child(2){
   display: none !important;
   /* width: 80%; */
 }
 /* Для всех инпутов в пикере */
-:global(.w-color-chrome) :global(.w-color-editable-input) input {
+.w-color-chrome .w-color-editable-input input {
   font-family: 'Raleway' !important;
   font-style: normal !important;
   font-weight: 400 !important;
@@ -188,41 +186,41 @@
   font-size: 12px !important;
   margin: 0 !important;
 }
-:global(.w-color-editable-input){
+.w-color-editable-input{
   margin: 0 !important;
   max-width: 30px !important;
+  flex-direction: column-reverse !important;
+  --editable-input-box-shadow : none !important;
 }
-:global(.w-color-editable-input-rgba){
+.w-color-editable-input-rgba{
   justify-content: end !important;
 }
-:global(.w-color-editable-input){
-  flex-direction: column-reverse !important;
-}
-:global(.w-color-editable-input) > span {
+
+.w-color-editable-input > span {
   padding-top: 0 !important;
 }
-:global(.w-color-editable-input:nth-child(1))> input{
+.w-color-editable-input:nth-child(1)> input{
   border-radius: 10px 0 0 10px !important;
 border: 1px solid var(--grey-light) !important;
 }
-:global(.w-color-editable-input:nth-child(2))> input{
+.w-color-editable-input:nth-child(2)> input{
   border-radius: 0 0 0 0px !important;
 border: 1px solid var(--grey-light) !important;
 border-left: none !important;
 }
-:global(.w-color-editable-input:nth-child(3))> input{
+.w-color-editable-input:nth-child(3)> input{
   border-radius: 0 0 0 0px !important;
 
   border: 1px solid var(--grey-light) !important;
   border-left: none !important; 
 }
-:global(.w-color-editable-input:nth-child(4))> input{
+.w-color-editable-input:nth-child(4)> input{
   border-radius: 0px 10px 10px 0px !important;
   border: 1px solid var(--grey-light) !important;
   border-left: none !important; 
 }
 /* Для лейблов */
-:global(.w-color-chrome-fields) :global(.w-color-editable-input) label {
+.w-color-chrome-fields.w-color-editable-input label {
   font-family: 'Raleway' !important;
   font-style: normal !important;
   font-weight: 400 !important;
@@ -230,13 +228,13 @@ border-left: none !important;
   font-size: 16px !important;
 }
 
-:global(.w-color-alpha-horizontal > div.w-color-interactive){
+.w-color-alpha-horizontal > div.w-color-interactive{
   border-radius: 8px !important;
 }
-:global(.w-color-alpha-horizontal:first-of-type > div:first-child){
+.w-color-alpha-horizontal:first-of-type > div:first-child{
   border-radius: 50px !important;
 }
-:global(.w-color-alpha-horizontal:nth-of-type(2) > div:first-child){
+.w-color-alpha-horizontal:nth-of-type(2) > div:first-child{
   border-radius: 50px !important;
 }
 
@@ -248,19 +246,15 @@ border-left: none !important;
   padding: 10px;
 }
 
-:global(.w-color-editable-input){
-  --editable-input-box-shadow : none !important;
-}
-
 .hex{
   position: absolute;
   bottom: 20px;
   left: -10px;
 }
-.hex :global(.w-color-editable-input){
+.hex .w-color-editable-input{
     border-radius: 10px !important; 
 }
-.hex > :global(.w-color-editable-input) > input {
+.hex > .w-color-editable-input > input {
   /* padding: 0 !important; */
   font-size: 12px !important;
   font-family: 'Raleway' !important;

@@ -1,17 +1,7 @@
-.story--wrapper-tabs {
+.story--wrapper-tab {
   background-color: var(--white);
   padding: 30px;
   border-radius: 10px;
-}
-
-.tabs {
-  display: flex;
-  flex-direction: row;
-  gap: 3px;
-  padding: 2px;
-  border-radius: 9px;
-  background-color: var(--tab-extraLight);
-  width: fit-content;
 }
 
 .tab {

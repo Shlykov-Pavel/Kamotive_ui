@@ -1,14 +1,49 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 import React from 'react';
-import { ColorPicker, ColorPickerProps } from './ColorPicker';
-import styles from './ColorPicker.module.css';
+import { ColorPicker } from './ColorPicker';
+import './ColorPicker.module.css';
 
-const withWrapper = (Story: any) => <div className={styles[`story--wrapper`]}>{<Story />}</div>;
+export interface ColorPickerProps {
+  /**
+   * @description Цвет выбранный пользователем
+   */
+  color?: string;
+   /**
+   * @description Основной цвет
+   */
+   mainColor?: string;
+   /** 
+    * @description Последние использованные цвета
+   */
+  recentColors?: string[];
+  /** 
+    * @description Флаг наведения на меню
+   */
+  setIsHovered:(isHover: boolean) => void;
+  /**
+   * @description Ширина ColorPicker
+   */
+  width?: number;
+  /**
+   * @description Высота ColorPicker
+   */
+  height?: number;
+  /**
+   * @description Автофокус ColorPicker
+   */
+  autoOpen?: boolean;
+  /**
+   * @description Функция обработки изменения цвета
+   */
+  onChange?: (color: string) => void;
+}
+
+const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-colorpicker">{<Story />}</div>;
 
 
 const colorsOptions = [ '#ff9500', '#ffcc00', '#34c759', '#30b0c7', '#007aff', '#5856d6', '#af52de', '#FF2D55']
 
-const meta = {
+const meta: Meta<typeof ColorPicker> = {
   title: 'Components/ColorPicker',
   component: ColorPicker,
   parameters: {
@@ -67,7 +102,6 @@ ColorPickerDefault.storyName = 'ColorPicker по умолчанию';
 ColorPickerDefault.args = {
   width: 20,
   height: 20,
-  // onChange: (color: string) => console.log('Color changed:', color),
 };
 
 

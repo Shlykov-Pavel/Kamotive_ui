@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import React, { ChangeEventHandler, useState } from 'react';
+import type { Meta } from '@storybook/react';
 
 import { Checkbox } from './Checkbox';
-import styles from './Checkbox.module.css';
-import { CheckboxProps } from 'kamotive_ui';
+import './Checkbox.module.css';
+
+export interface CheckboxProps {
+  /** Идентификатор */
+  checked?: boolean;
+  /** Обработчик изменения состояния */
+  onChange?: ChangeEventHandler<HTMLInputElement>
+  /** Заблокированный чекбокс */
+  disabled?: boolean;
+  /** Размер чекбокса */
+  size?: 'sm' | 'md';
+  /** Текст лейбла */
+  label?: string;
+}
 
 const meta: Meta<CheckboxProps> = {
   component: Checkbox,
@@ -13,7 +25,7 @@ const meta: Meta<CheckboxProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className={styles[`story--wrapper`]}>
+      <div className="story--wrapper-checkbox">
         <Story />
       </div>
     ),
@@ -35,8 +47,6 @@ const meta: Meta<CheckboxProps> = {
 };
 
 export default meta;
-
-type Story = StoryObj<CheckboxProps>;
 
 export const CheckboxOff = (argTypes: CheckboxProps): JSX.Element => {
   const [checked, setChecked] = useState(false);

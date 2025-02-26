@@ -1,9 +1,8 @@
-.story--wrapper {
+.story--wrapper-tag {
     background-color: var(--white);
     padding: 30px;
     border-radius: 10px;
     width: 300px;
-    height: 300px; 
 }
 
 .tag {
@@ -22,14 +21,14 @@
     line-height: 14px;
 }
 
-.circle {
+.tag .circle {
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.2s ease;
   position: relative;
 }
 
-button[aria-label="Закрыть"] {
+.tag button[aria-label="Закрыть"] {
     background: none;
     border: none;
     padding: 0;
@@ -39,8 +38,8 @@ button[aria-label="Закрыть"] {
     height: 8px;
 }
 
-button[aria-label="Закрыть"]::before,
-button[aria-label="Закрыть"]::after {
+.tag button[aria-label="Закрыть"]::before,
+.tag button[aria-label="Закрыть"]::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -51,96 +50,96 @@ button[aria-label="Закрыть"]::after {
     background-color: var(--close-color); 
 }
 
-button[aria-label="Закрыть"]::after {
+.tag button[aria-label="Закрыть"]::after {
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-.red {
+.tag.red {
     color: var(--red);
     background-color: var(--redBackground);
     border: 1px solid var(--red)
 }
 
-.red:hover {
+.tag.red:hover {
     background-color: var(--redHover);
 }
 
-.orange {
+.tag.orange {
     color: var(--orange);
     background-color: var(--orangeBackground);
     border: 1px solid var(--orange)
 }
 
-.orange:hover {
+.tag.orange:hover {
     background-color: var(--orangeHover);
 }
 
-.yellow {
+.tag.yellow {
     color: var(--yellowText);
     background-color: var(--yellowBackground);
     border: 1px solid var(--yellow)
 }
 
-.yellow:hover {
+.tag.yellow:hover {
     background-color: var(--yellowHover);
 }
 
-.green {
+.tag.green {
     color: var(--green);
     background-color: var(--greenBackground);
     border: 1px solid var(--green)
 }
 
-.green:hover {
+.tag.green:hover {
     background-color: var(--greenHover);
 }
 
-.purple {
+.tag.purple {
     color: var(--purple);
     background-color: var(--purpleBackground);
     border: 1px solid var(--purple)
 }
 
-.purple:hover {
+.tag.purple:hover {
     background-color: var(--purpleHover);
 }
 
-.indigo {
+.tag.indigo {
     color: var(--indigo);
     background-color: var(--indigoBackground);
     border: 1px solid var(--indigo)
 }
 
-.indigo:hover {
+.tag.indigo:hover {
     background-color: var(--indigoHover);
 }
 
-.blue {
+.tag.blue {
     color: var(--blue);
     background-color: var(--blueBackground);
     border: 1px solid var(--blue)
 }
 
-.blue:hover {
+.tag.blue:hover {
     background-color: var(--blueHover);
 }
 
-.teal {
+.tag.teal {
     color: var(--teal);
     background-color: var(--tealBackground);
     border: 1px solid var(--teal)
 }
 
-.teal:hover {
+.tag.teal:hover {
     background-color: var(--tealHover);
 }
 
-.pink {
+.tag.pink {
     color: var(--pink);
     background-color: var(--pinkBackground);
     border: 1px solid var(--pink)
 }
 
-.pink:hover {
+.tag.pink:hover {
     background-color: var(--pinkHover);
 }
