@@ -1,6 +1,6 @@
 import type { Meta } from '@storybook/react';
 import React from 'react';
-import './ProgressBar.css';
+import './ProgressBar.module.css';
 import { ProgressBar } from './ProgressBar';
 
 export interface ProgressBarProps {

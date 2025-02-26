@@ -2,7 +2,7 @@ import React, { ChangeEventHandler, useState } from 'react';
 import type { Meta } from '@storybook/react';
 
 import { Checkbox } from './Checkbox';
-import './Checkbox.css';
+import './Checkbox.module.css';
 
 export interface CheckboxProps {
   /** Идентификатор */

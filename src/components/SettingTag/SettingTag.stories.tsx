@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Meta } from '@storybook/react';
 
-import './SettingTag.css';
+import './SettingTag.module.css';
 import { SettingTag } from './SettingTag';
 
 

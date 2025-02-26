@@ -2,7 +2,7 @@ import React, { ChangeEventHandler, useState } from 'react';
 import type { Meta } from '@storybook/react';
 
 import { ToggleButton } from './ToggleButton';
-import './ToggleButton.css';
+import './ToggleButton.module.css';
 
 interface ToggleButtonProps {
   /** Знчение */

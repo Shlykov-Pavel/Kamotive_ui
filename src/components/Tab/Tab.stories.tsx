@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta } from '@storybook/react';
-import './Tab.css';
+import './Tab.module.css';
 import { Tab } from './Tab';
 
 export interface TabProps {

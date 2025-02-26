@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import React from 'react';
 
-import './ProgressLoader.css';
+import './ProgressLoader.module.css';
 import { ProgressLoader } from './ProgressLoader';
 
 export interface ProgressLoaderProps {

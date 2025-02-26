@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import './Dropdown.css';
+import styles from './Dropdown.module.css'
 import classNames from 'classnames';
 import { ChevronDown10 } from '../../Icons/ChevronDown/ChevronDown10';
 import { ChevronUp10 } from '../../Icons/ChevronUp/ChevronUp10';
@@ -34,31 +35,31 @@ export const DropdownListItem:FC<DropdownListItemProps> = (
   }  
  };
  const itemClassess = classNames(
-  `item-block`,
-   `button--${size}`,
+  styles[`item-block`],
+  styles[`button--${size}`],
   { 'item-block--selected': selectedItem?.value === item?.value || (typeof selectedItem === 'string' || typeof selectedItem === 'number') && selectedItem === item},
   { 'item-block--disabled': item?.disabled },
 );
 const itemBlock = classNames(
-  `item-block`,
-  `item-block-${style}`,
+  styles[`item-block`],
+  styles[`item-block-${style}`],
   { [`item-block-${style}--selected`]: selectedItem?.value === item.value },
   { 'item-block--disabled': item.disabled },
 )
 
 return (
-  <div className={`item--container`}>
-    <div className={itemClassess} onClick={() => handleItemClick(item, item.disabled)}>
+  <div className={styles[`item--container`]}>
+    <div className={styles[itemClassess]} onClick={() => handleItemClick(item, item.disabled)}>
       <div className={itemBlock}>
           {style=== 'default' && item.icon && React.cloneElement(item.icon as React.ReactElement, {strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0' })}
-          <div className="item">
+          <div className={styles["item"]}>
           <span>{item?.value || item}</span>
         </div>
       {selectedItem?.value === item.value && <IconCheck10 strokeWidth= {size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0' } htmlColor='#0D99FF'/>}
       </div>
-      {item.isDivider && <div className="divider"></div>}    
+      {item.isDivider && <div className={styles["divider"]}></div>}    
     </div>
-    {item?.children && (<div className="nestedMenu">
+    {item?.children && (<div className={styles["nestedMenu"]}>
       {item.children?.map((child: any, index: number) => (
         <DropdownListItem key={index} item={child} size={size} selectedItem={selectedItem} onChange={onChange} />
       ))}
@@ -103,26 +104,26 @@ export const Dropdown:FC<DropdownProps> = (
     setSelectedItem(null);
    }
   }
-  const wrapperClassess = classNames(`dropdown--container`, {
+  const wrapperClassess = classNames(styles[`dropdown--container`], {
     'wrapper--left': isLeftLabel,
   });
 
   const buttonClassess = classNames(
-    'button',
+    styles['button'],
     className,
-    `button--${size}`,
+    styles[`button--${size}`],
     {'button-item--selected': selectedItem?.value && !disabled},
     {'button--readOnly': readOnly},
     { 'button--disabled': disabled },
   );
   const dropdownClassess = classNames(
-    'dropdown',
+    styles['dropdown'],
     className,
     {
       'dropdown--disabled': disabled,
     }
   );
-  const labelClasses = classNames('label', 
+  const labelClasses = classNames(styles['label'], 
     {'label--default':!isLeftLabel,
       'label--left': isLeftLabel,
     });
@@ -154,7 +155,7 @@ export const Dropdown:FC<DropdownProps> = (
     // const menu = withPortal ? (
     //   ReactDOM.createPortal(<DropdownMenu withPortal >{children}</DropdownMenu>, portalContainer)
     // ) : <DropdownMenu>{children}</DropdownMenu>
-    const menu = isOpen && <div className={dropdownClassess}>
+    const menu = isOpen && <div className={styles[dropdownClassess]}>
            {items?.map((item,index) => {
             const modifiedItem = checkItem(item)
               return (
@@ -182,14 +183,14 @@ export const Dropdown:FC<DropdownProps> = (
   
   
     return(
-    <div className={wrapperClassess} ref={containerRef} style={{ width: containerWidth ? `${containerWidth}px` : 'auto' }}>
+    <div className={styles[wrapperClassess]} ref={containerRef} style={{ width: containerWidth ? `${containerWidth}px` : 'auto' }}>
        {selectedItem && label && (
         <label className={labelClasses} htmlFor={id}>
           {label}
         </label>
       )}
       <button className={buttonClassess} onClick={readOnly ? undefined : handleToggle} disabled={disabled}>
-        <div className={style === 'default' && selectedItem?.icon ? `button--default--item-selected`:''}>
+        <div className={style === 'default' && selectedItem?.icon ? styles[`button--default--item-selected`]:''}>
         {style === 'default' && selectedItem?.icon &&  React.cloneElement(selectedItem.icon as React.ReactElement, {strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0' })}
         {selectedItem ? selectedItem.value : name}
         </div>

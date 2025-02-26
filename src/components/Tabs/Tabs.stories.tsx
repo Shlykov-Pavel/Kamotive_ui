@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Meta } from '@storybook/react';
 
-import './Tabs.css';
+import './Tabs.module.css';
 
 import { Tabs } from './Tabs';
 import { Tab } from '../Tab/Tab';

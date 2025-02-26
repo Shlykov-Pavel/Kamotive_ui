@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import React from 'react';
 import { ColorPicker } from './ColorPicker';
-import './ColorPicker.css';
+import './ColorPicker.module.css';
 
 export interface ColorPickerProps {
   /**

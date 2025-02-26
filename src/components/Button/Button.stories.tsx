@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Meta } from '@storybook/react';
 import { Button } from './Button';
-import './Button.css';
+import './Button.module.css';
 import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
 
 export interface ButtonProps {

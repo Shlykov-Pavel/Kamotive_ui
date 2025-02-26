@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import './Input.css';
 import { InputProps } from 'kamotive_ui';
+import styles from './Input.module.css'
 import classNames from 'classnames';
 
 /**
@@ -30,13 +31,13 @@ export const Input: FC<InputProps> = ({
     }
   };
 
-  const wrapperClassess = classNames('wrapper', {
+  const wrapperClassess = classNames(styles['wrapper'], {
     'wrapper--left': isLeftLabel,
   });
 
-  const inputWrapperClassess = classNames('wrapper--input');
+  const inputWrapperClassess = classNames(styles['wrapper--input']);
 
-  const inputClassess = classNames('inputText', size, className, {
+  const inputClassess = classNames(styles['inputText'], size, className, {
     'input--error': hasError,
     'readOnly': readOnly,
     'input--withIcon': icon,
@@ -44,12 +45,12 @@ export const Input: FC<InputProps> = ({
     'resize': resize,
   });
 
-  const labelClasses = classNames('label', {
+  const labelClasses = classNames(styles['label'], {
     'label--default': !isLeftLabel,
     'label--left': isLeftLabel,
   });
 
-  const iconClassess = classNames('icon', {
+  const iconClassess = classNames(styles['icon'], {
     'input--withIcon': multiline,
   });
 

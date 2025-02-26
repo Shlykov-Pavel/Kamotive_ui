@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import React, { CSSProperties, ReactNode } from 'react';
 import { Typography } from './Typography';
-import './Typography.css';
+import './Typography.module.css';
 import { ETypographyVariants } from './enums';
 
 const typogrphy = [

@@ -1,6 +1,6 @@
 import type { Meta } from '@storybook/react';
 import React, { ReactNode } from 'react';
-import './Snackbar.css';
+import './Snackbar.module.css';
 import { Snackbar } from './Snackbar';
 import { ESnackbarTypes } from './enums';
 

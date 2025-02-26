@@ -2,7 +2,7 @@ import React, { CSSProperties, FC } from 'react';;
 import classNames from 'classnames';
 import { TypographyProps } from 'kamotive_ui';
 import { ETypographyVariants } from './enums';
-import './Typography.css';
+import styles from './Typography.module.css';
 /**
  * Компонент Typography для стилизованного отображения текста.
  */
@@ -23,7 +23,7 @@ export const Typography: FC<TypographyProps> = ({
   };
 
   return (
-    <span className={`${variantClass} ${className}`} style={combinedStyle} {...props}>
+    <span className={styles[`${variantClass} ${className}`]} style={combinedStyle} {...props}>
       {children}
     </span>
   );

@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import React, { ChangeEvent, ChangeEventHandler, ReactNode, useEffect, useState } from 'react';
 import { Input } from './Input';
-import './Input.css';
+import './Input.module.css';
 import { IconAlarm10, IconAccount10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons/index';
 
 export interface InputProps {

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, ChangeEventHandler, useState } from 'react';
 import type { Meta } from '@storybook/react';
 
-import './RadioButton.css';
+import './RadioButton.module.css';
 
 import { RadioButton } from './RadioButton';
 export interface RadioProps {

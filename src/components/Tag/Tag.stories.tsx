@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
 
-import './Tag.css';
+import './Tag.module.css';
 import { Tag } from './Tag';
 
 export interface TagProps {
