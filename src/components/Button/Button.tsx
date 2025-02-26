@@ -1,5 +1,5 @@
 import React from 'react';
-import './Button.css';
+import styles from './Button.module.css';
 import classNames from 'classnames';
 import { ButtonProps } from 'kamotive_ui';
 /**
@@ -17,10 +17,10 @@ export const Button: React.FC<ButtonProps> = ({
   onClick,
 }) => {
   const buttonClasses = classNames(
-    'button',
-    `button--${variant}-${condition}`,
-    `button--${size}`,
-    `button--${style}`
+    styles['button'],
+    styles[`button--${variant}-${condition}`],
+    styles[`button--${size}`],
+    styles[`button--${style}`]
     // {
     //   ['button--disabled']: disabled,
     // }
