@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Loader } from './Loader';
-import styles from './Loader.module.css';
+import './Loader.module.css';
 import { LoaderProps } from 'kamotive_ui';
 
 const meta: Meta<LoaderProps> = {
@@ -13,7 +13,7 @@ const meta: Meta<LoaderProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className={styles[`story--wrapper`]}>
+      <div className="story--wrapper-loader">
         <Story />
       </div>
     ),

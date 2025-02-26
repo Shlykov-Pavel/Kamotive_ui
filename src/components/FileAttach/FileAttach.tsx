@@ -104,8 +104,8 @@ export const FileAttach: FC<FileAttachProps> = ({
   };
 
   return (
-    <section className={styles.fileAttach}>
-      <div {...getRootProps({ className: `${styles.dropzone} ${disabled ? styles.disabled : ''}` })}>
+    <section className={styles['fileAttach']}>
+      <div {...getRootProps({ className: `${styles['dropzone']} ${disabled ? styles['disabled'] : ''}` })}>
         <input {...getInputProps()} />
         <IconUpload htmlColor={disabled ? 'var(--grey-medium)' : 'var(--icons-grey)'} />
         <Typography variant="Body2-Medium" color={disabled ? 'var(--grey-medium)' : 'var(--text-dark)'}>

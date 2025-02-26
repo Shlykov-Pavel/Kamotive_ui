@@ -9,14 +9,14 @@ import { ProgressBar } from '../ProgressBar/ProgressBar';
 
 export const Loader: FC<LoaderProps> = ({ name, size = 0, loading = false, error = '', onClick }) => {
   return (
-    <div className={`${styles.loader} ${error ? styles.error : ''}`}>
-      <div className={styles.loaderFile}>
-        <div className={styles.loaderInfo}>
-          <div className={styles.loaderIcon}>
+    <div className={`${styles['loader']} ${error ? styles['error'] : ''}`}>
+      <div className={styles['loaderFile']}>
+        <div className={styles['loaderInfo']}>
+          <div className={styles['loaderIcon']}>
             <IconFile htmlColor="var(--icons-grey)" />
           </div>
 
-          <div className={styles.loaderName}>
+          <div className={styles['loaderName']}>
             <Typography variant="Body2-Medium" color="var(--text-dark)">
               {name}
             </Typography>

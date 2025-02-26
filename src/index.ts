@@ -12,8 +12,8 @@ export { Tabs as Tabs } from './components/Tabs/Tabs';
 export { SettingTag as SettingTag } from './components/SettingTag/SettingTag';
 export { ColorPicker as ColorPicker } from './components/ColorPicker/ColorPicker';
 export { Snackbar as Snackbar } from './components/Snackbar/Snackbar';
-export { ToggleButton as ToggleButton } from './components/ToggleButton/ToggleButton'; 
-export {Loader as Loader} from './components/Loader/Loader'
-export {FileAttach as FileAttach} from './components/FileAttach/FileAttach'
+export { ToggleButton as ToggleButton } from './components/ToggleButton/ToggleButton';
+export { Loader as Loader } from './components/Loader/Loader';
+export { FileAttach as FileAttach } from './components/FileAttach/FileAttach';
 
 import './fonts.css';

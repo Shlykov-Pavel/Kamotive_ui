@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { FileAttach } from './FileAttach';
-import styles from './FileAttach.module.css';
+import './FileAttach.module.css';
 import { FileAttachProps } from 'kamotive_ui';
 
 const meta: Meta<FileAttachProps> = {
@@ -13,7 +13,7 @@ const meta: Meta<FileAttachProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className={styles[`story--wrapper`]}>
+      <div className="story--wrapper-fileAttach">
         <Story />
       </div>
     ),
