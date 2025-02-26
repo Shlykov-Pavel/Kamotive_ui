@@ -63,10 +63,8 @@ export const ColorPicker: FC<ColorPickerProps> = ({
       }
     }
  
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     !autoOpen && document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       !autoOpen && document.removeEventListener('mousedown', handleClickOutside);}
   }, [isOpen]);
 
