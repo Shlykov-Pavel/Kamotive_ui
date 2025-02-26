@@ -1,0 +1,25 @@
+export var ETypographyVariants;
+(function (ETypographyVariants) {
+    ETypographyVariants["Heading1"] = "Heading1";
+    ETypographyVariants["Heading2"] = "Heading2";
+    ETypographyVariants["Heading3"] = "Heading3";
+    ETypographyVariants["Heading4"] = "Heading4";
+    ETypographyVariants["Subheading1"] = "Subheading1";
+    ETypographyVariants["Subheading2"] = "Subheading2";
+    ETypographyVariants["Subheading3"] = "Subheading3";
+    ETypographyVariants["Body"] = "Body";
+    ETypographyVariants["Body-Medium"] = "Body-Medium";
+    ETypographyVariants["Body-Bold"] = "Body-Bold";
+    ETypographyVariants["Body1"] = "Body1";
+    ETypographyVariants["Body1-Medium"] = "Body1-Medium";
+    ETypographyVariants["Body1-Bold"] = "Body1-Bold";
+    ETypographyVariants["Body2"] = "Body2";
+    ETypographyVariants["Body2-Medium"] = "Body2-Medium";
+    ETypographyVariants["Body2-Bold"] = "Body2-Bold";
+    ETypographyVariants["Caption"] = "Caption";
+    ETypographyVariants["Caption-Medium"] = "Caption-Medium";
+    ETypographyVariants["Caption-Bold"] = "Caption-Bold";
+    ETypographyVariants["Caption1"] = "Caption1";
+    ETypographyVariants["Caption1-Medium"] = "Caption1-Medium";
+    ETypographyVariants["Caption1-Bold"] = "Caption1-Bold";
+})(ETypographyVariants || (ETypographyVariants = {}));

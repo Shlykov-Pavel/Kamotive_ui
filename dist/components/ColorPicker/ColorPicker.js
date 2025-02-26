@@ -1,0 +1,115 @@
+import React, { useEffect, useRef, useState } from 'react';
+import styles from './ColorPicker.module.css';
+import classNames from 'classnames';
+import { Chrome } from '@uiw/react-color';
+import EditableInput from '@uiw/react-color-editable-input';
+import { GithubPlacement } from '@uiw/react-color-github';
+import { IconColorPicker10 } from '../../Icons';
+/**
+ * Компонент ColorPicker представляет собой элемент управления для выбора цвета.
+ */
+export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsHovered, width = 10, height = 10, autoOpen = false, onChange, }) => {
+    const [colorValue, setColorValue] = useState(mainColor);
+    const [selectedColor, setSelectedColor] = useState(color);
+    const [isColorChanged, setIsColorChanged] = useState(false);
+    const [isOpen, setIsOpen] = useState(autoOpen);
+    const [popoverPosition, setPopoverPosition] = useState('bottom');
+    const circleRef = useRef(null);
+    const popoverRef = useRef(null);
+    useEffect(() => {
+        // Обработчик клика вне компонента развертывания выбора цвета
+        const handleClickOutside = (event) => {
+            if (isOpen &&
+                popoverRef.current &&
+                circleRef.current &&
+                !popoverRef.current.contains(event.target) &&
+                !circleRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        if (isOpen && circleRef.current && popoverRef.current) {
+            const circle = circleRef.current.getBoundingClientRect();
+            const popover = popoverRef.current.getBoundingClientRect();
+            const viewport = {
+                top: 0,
+                bottom: window.innerHeight
+            };
+            // Проверяем, достаточно ли места снизу
+            const bottomSpace = viewport.bottom - circle.bottom;
+            const topSpace = circle.top - viewport.top;
+            // Если снизу недостаточно места и сверху места больше, размещаем сверху
+            if (bottomSpace < popover.height && topSpace > bottomSpace) {
+                setPopoverPosition('top');
+            }
+            else {
+                setPopoverPosition('bottom');
+            }
+        }
+        !autoOpen && document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            !autoOpen && document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
+    const mainColorClasses = classNames(styles['circle'], {
+        'mainColor': mainColor,
+    });
+    const colorCircleDefaultClasses = classNames(styles['circle'], {
+        'colorCircleDefault': color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue
+    });
+    const popoverClassess = classNames(styles['popover'], {
+        [`popover--${popoverPosition}`]: true,
+    });
+    // Функция для преобразования HEXA в HEX
+    const hexaToHex = (hexa = 'fff') => {
+        const cleanHex = hexa.replace('#', '');
+        if (cleanHex.length >= 8) {
+            return `#${cleanHex.slice(0, 6)}`;
+        }
+        if (cleanHex.length === 6) {
+            return `#${cleanHex}`;
+        }
+        if (cleanHex.length === 3) {
+            return `#${cleanHex[0]}${cleanHex[0]}${cleanHex[1]}${cleanHex[1]}${cleanHex[2]}${cleanHex[2]}`;
+        }
+        if (cleanHex.length < 6) {
+            return `#${cleanHex + '0'.repeat(6 - cleanHex.length)}`;
+        }
+        return '#ffffff';
+    };
+    const colorChangeHandler = (color) => {
+        const newColor = typeof color === 'string' ? color : color.hexa;
+        setIsColorChanged(true);
+        setColorValue(newColor);
+        setSelectedColor(newColor);
+        onChange === null || onChange === void 0 ? void 0 : onChange(newColor);
+    };
+    useEffect(() => {
+        setSelectedColor(color);
+    }, [color]);
+    return (React.createElement("div", { className: (mainColor || recentColors) ? 'colorPickerWrapper' : '', onMouseLeave: () => setIsHovered && setIsHovered(false) },
+        mainColor && React.createElement("div", { className: mainColorClasses, style: {
+                width: `${width}px`,
+                height: `${height}px`,
+                backgroundColor: (colorValue === null || colorValue === void 0 ? void 0 : colorValue.startsWith('#')) ? colorValue : `var(--${colorValue})`,
+            }, onClick: () => setIsHovered && setIsHovered(false) }),
+        recentColors && recentColors.map((color, index) => (React.createElement("div", { key: index, className: "circle", style: {
+                width: `${width}px`,
+                height: `${height}px`,
+                backgroundColor: color.startsWith('#') ? color : `var(--${color})`,
+            }, onClick: () => colorChangeHandler(color) }))),
+        React.createElement("div", { className: "colorPicker" },
+            React.createElement("div", { ref: circleRef, className: colorCircleDefaultClasses, onClick: () => setIsOpen(!isOpen), style: {
+                    width: `${width}px`,
+                    height: `${height}px`,
+                    backgroundColor: selectedColor.startsWith('#') ? selectedColor : `var(--${selectedColor})`,
+                } }),
+            isOpen && (React.createElement("div", { ref: popoverRef, className: popoverClassess },
+                isOpen && React.createElement(IconColorPicker10, { className: "colorPickerIcon", htmlColor: 'var(--white)' }),
+                React.createElement(Chrome, { color: selectedColor, placement: GithubPlacement.Right, onChange: colorChangeHandler, className: "customChrome", showEyeDropper: false }),
+                React.createElement("div", { className: "hex", style: { padding: '0 10px 0 20px' } },
+                    React.createElement(EditableInput, { value: hexaToHex(selectedColor), style: { width: 68, alignItems: 'flex-start' }, onChange: (e, color) => {
+                            const formattedColor = hexaToHex(color.toString());
+                            colorChangeHandler(formattedColor);
+                        } })))))));
+};
+export default ColorPicker;
