@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import './ColorPicker.css';
+import styles from './ColorPicker.module.css';
 import classNames from 'classnames';
 
 import { Chrome } from '@uiw/react-color';
@@ -63,19 +63,21 @@ export const ColorPicker: FC<ColorPickerProps> = ({
       }
     }
  
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     !autoOpen && document.addEventListener('mousedown', handleClickOutside);
     return () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       !autoOpen && document.removeEventListener('mousedown', handleClickOutside);}
   }, [isOpen]);
 
-  const mainColorClasses = classNames('circle', {
+  const mainColorClasses = classNames(styles['circle'], {
     'mainColor': mainColor,
   });
 
-  const colorCircleDefaultClasses = classNames('circle', {
+  const colorCircleDefaultClasses = classNames(styles['circle'], {
     'colorCircleDefault': color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue});
 
-  const popoverClassess = classNames('popover', {
+  const popoverClassess = classNames(styles['popover'], {
     [`popover--${popoverPosition}`]: true,
   });
   
