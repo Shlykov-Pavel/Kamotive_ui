@@ -1,8 +1,7 @@
 import React, { ChangeEventHandler, useState } from 'react';
 import type { Meta } from '@storybook/react';
-
 import { Checkbox } from './Checkbox';
-import './Checkbox.module.css';
+
 
 export interface CheckboxProps {
   /** Идентификатор */
@@ -25,7 +24,11 @@ const meta: Meta<CheckboxProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="story--wrapper-checkbox">
+      <div style={{
+        backgroundColor: 'var(--white)',
+        padding: '30px',
+        borderRadius: '10px',
+        width: '900px'}}>
         <Story />
       </div>
     ),
@@ -64,6 +67,12 @@ export const CheckboxOff = (argTypes: CheckboxProps): JSX.Element => {
   );
 }
 CheckboxOff.storyName = 'Checkbox по умолчанию'; 
+
+export const CheckboxLabel = (argTypes: CheckboxProps): JSX.Element => <Checkbox {...argTypes} />;
+CheckboxLabel.storyName = 'Checkbox c label';
+CheckboxLabel.args = {
+  label: 'Чекбокс',
+};
 
 export const CheckboxChecked = (argTypes: CheckboxProps): JSX.Element => <Checkbox {...argTypes} />;
 CheckboxChecked.storyName = 'Checkbox выбран';

@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import styles from './RadioButton.module.css'
 import classNames from 'classnames';
 import { RadioProps } from 'kamotive_ui';
+import { Typography } from '../Typography/Typography';
 
 export const RadioButton: FC<RadioProps> = ({ value, label, checked, onChange, disabled = false, size = 'sm' }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,16 +13,16 @@ export const RadioButton: FC<RadioProps> = ({ value, label, checked, onChange, d
   };
 
   return (
-    <label className={styles["radio"]}>
+    <label className={styles.radio}>
       <input
         type="radio"
         checked={checked}
         value={value}
         onChange={handleChange}
         disabled={disabled}
-        className={classNames(styles['input'], size)}
+        className={classNames(styles.input, styles[size])}
       />
-      {label}
+      <Typography variant='Body2'>{label}</Typography>
     </label>
   );
 };

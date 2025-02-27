@@ -1,14 +1,4 @@
-.story--wrapper-iput {
-  background-color: var(--white);
-  padding: 30px;
-  border-radius: 10px;
-  width: 900px;
-}
-
 .wrapper {
-  font-family: 'Raleway';
-  font-style: normal;
-  /* font-weight: 400; */
   position: relative;
 }
 .wrapper--left {
@@ -21,12 +11,11 @@
 .wrapper--input {
   position: relative;
 }
-.inputText {
+.input{
   font-family: 'Raleway';
   font-style: normal;
   font-weight: 400;
   position: relative;
-  font-size: 12px;
   line-height: 14px;
   color: var(--text-dark);
   width: 203px;
@@ -36,6 +25,20 @@
   border: 1px solid var(--grey-light);
   border-radius: 10px;
   /* width: fit-content; */
+}
+.input.lg {
+  font-size: 14px;
+  /* height: 40px; */
+  height: 25px;
+}
+.input.md {
+  /* height: 35px; */
+  height: 20px;
+}
+.input.sm {
+  font-size: 10px;
+  /* height: 30px; */
+  height: 20px;
 }
 /* Стили при наведении мыши */
 .input:hover {
@@ -62,18 +65,7 @@
 .resize {
   resize: both;
 }
-.inputText.lg {
-  height: 40px;
-  /* height: 25px; */
-}
-.inputText.md {
-  height: 35px;
-  /* height: 20px; */
-}
-.inputText.sm {
-  /* height: 30px; */
-  height: 25px;
-}
+
 
 .filled {
   border-color: var(--blue-main);
@@ -84,8 +76,17 @@
 /* Стили для placeholder */
 .input::placeholder {
   color: var(--text-grey);
-  font-size: 12px;
+  /* font-size: 12px; */
   line-height: 14px;
+}
+.input::placeholder.sm{
+  font-size: 10px;
+}
+.input::placeholder.md{
+  font-size: 12px;
+}
+.input::placeholder.lg{
+  font-size: 14px;
 }
 .input:focus::placeholder {
   color: var(--text-light);
@@ -98,7 +99,6 @@
   /* color: var(--text-grey); */
 }
 .label--default {
-  font-size: 12px;
   position: absolute;
   top: -20px;
   cursor: text;
@@ -125,9 +125,16 @@
   color: var(--error-secondary);
 }
 
-.helperText {
+.helperText.md{
   font-size: 12px;
-  line-height: 14px;
+}
+.helperText.sm{
+  font-size: 10px;
+}
+.helperText.lg{
+  font-size: 14px;
+}
+.helperText {
   position: absolute;
   left: 0px;
   /* top: 110%; */

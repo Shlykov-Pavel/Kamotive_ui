@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Button.module.css';
 import classNames from 'classnames';
 import { ButtonProps } from 'kamotive_ui';
+import { Typography } from '../Typography/Typography';
 /**
  * Компонент Button представляет собой кнопку, которую можно настроить с помощью различных параметров (размер, иконки, стили, состояние).
  */
@@ -21,9 +22,6 @@ export const Button: React.FC<ButtonProps> = ({
     styles[`button--${variant}-${condition}`],
     styles[`button--${size}`],
     styles[`button--${style}`]
-    // {
-    //   ['button--disabled']: disabled,
-    // }
   );
 
   const iconColorFn = () => {
@@ -62,7 +60,7 @@ export const Button: React.FC<ButtonProps> = ({
           htmlColor: iconColorStyle,
           strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
         })}
-      {label}
+      <Typography variant='Body2'>{label}</Typography>
     </button>
   );
 };

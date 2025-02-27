@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Meta } from '@storybook/react';
-
-import './SettingTag.module.css';
 import { SettingTag } from './SettingTag';
 
 
@@ -22,7 +20,11 @@ const meta: Meta<SettingTagProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='story--wrapper-tag'>
+      <div style={{
+        backgroundColor: 'var(--white)',
+        padding: '30px',
+        borderRadius: '10px',
+        width: '900px'}}>
         <Story />
       </div>
     ),

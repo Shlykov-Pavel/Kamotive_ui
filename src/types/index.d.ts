@@ -108,7 +108,7 @@ export interface DropdownProps {
    /**  Лейбл */
    label?: string;
    /** Размер */
-   size?: 'sm' | 'md' | 'lg';
+   size?: 'md' | 'lg';
    /** Заблокированный */
    disabled?: boolean;
    /**Дополнительный класс */

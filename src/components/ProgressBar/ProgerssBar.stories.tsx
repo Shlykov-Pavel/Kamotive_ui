@@ -1,6 +1,5 @@
 import type { Meta } from '@storybook/react';
 import React from 'react';
-import './ProgressBar.module.css';
 import { ProgressBar } from './ProgressBar';
 
 export interface ProgressBarProps {
@@ -16,7 +15,11 @@ export interface ProgressBarProps {
   animated?: boolean;
 }
 
-const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-progressbar">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div style={{
+  backgroundColor: 'var(--white)',
+  padding: '30px',
+  borderRadius: '10px',
+  width: '900px'}}>{<Story />}</div>;
 
 const meta: Meta<typeof ProgressBar> = {
   title: 'Components/ProgressBar',
@@ -55,7 +58,10 @@ export default meta;
 
 export const ProgressBarWithValues = (argTypes: ProgressBarProps): JSX.Element => {
   return (
-    <div className="progress-bar--default-story">
+    <div style={{ 
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '30px'}}>
       <ProgressBar value={0} {...argTypes} />
       <ProgressBar value={50} {...argTypes} />
       <ProgressBar value={100} {...argTypes} />

@@ -5,6 +5,7 @@ import { ChevronDown10 } from '../../Icons/ChevronDown/ChevronDown10';
 import { ChevronUp10 } from '../../Icons/ChevronUp/ChevronUp10';
 import { IconCheck10 } from '../../Icons/IconCheck/IconCheck10';
 import { DropdownProps } from 'kamotive_ui';
+import { Typography } from '../Typography/Typography';
 
 
 /**
@@ -13,7 +14,7 @@ import { DropdownProps } from 'kamotive_ui';
 
 export interface DropdownListItemProps {
   item: DropdownProps['items'][number];
-  size: 'sm' | 'md' | 'lg';
+  size: 'md' | 'lg';
   selectedItem:  DropdownProps['items'][number] | null | string | number;
   style?: 'default' | 'text' ;
   onChange: (value: DropdownProps['items'][number]) => void;
@@ -36,29 +37,29 @@ export const DropdownListItem:FC<DropdownListItemProps> = (
  const itemClassess = classNames(
   styles[`item-block`],
   styles[`button--${size}`],
-  { 'item-block--selected': selectedItem?.value === item?.value || (typeof selectedItem === 'string' || typeof selectedItem === 'number') && selectedItem === item},
-  { 'item-block--disabled': item?.disabled },
+  {[styles['item-block--selected']]: selectedItem?.value === item.value },
+  {[styles['item-block--disabled']]: item.disabled },
 );
 const itemBlock = classNames(
   styles[`item-block`],
   styles[`item-block-${style}`],
-  { [`item-block-${style}--selected`]: selectedItem?.value === item.value },
-  { 'item-block--disabled': item.disabled },
+  {[styles[`item-block-${style}--selected`]]: selectedItem?.value === item.value },
+  {[styles['item-block--disabled']]: item.disabled },
 )
 
 return (
   <div className={styles[`item--container`]}>
-    <div className={styles[itemClassess]} onClick={() => handleItemClick(item, item.disabled)}>
+    <div className={itemClassess} onClick={() => handleItemClick(item, item.disabled)}>
       <div className={itemBlock}>
           {style=== 'default' && item.icon && React.cloneElement(item.icon as React.ReactElement, {strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0' })}
-          <div className={styles["item"]}>
+          <div className={styles.item}>
           <span>{item?.value || item}</span>
         </div>
       {selectedItem?.value === item.value && <IconCheck10 strokeWidth= {size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0' } htmlColor='#0D99FF'/>}
       </div>
-      {item.isDivider && <div className={styles["divider"]}></div>}    
+      {item.isDivider && <div className={styles.divider}></div>}    
     </div>
-    {item?.children && (<div className={styles["nestedMenu"]}>
+    {item?.children && (<div className={styles.nestedMenu}>
       {item.children?.map((child: any, index: number) => (
         <DropdownListItem key={index} item={child} size={size} selectedItem={selectedItem} onChange={onChange} />
       ))}
@@ -72,7 +73,7 @@ export const Dropdown:FC<DropdownProps> = (
     id,
     name,
     label,
-    size = 'md',
+    size = 'lg',
     disabled,
     className,
     defaultValue,
@@ -104,27 +105,27 @@ export const Dropdown:FC<DropdownProps> = (
    }
   }
   const wrapperClassess = classNames(styles[`dropdown--container`], {
-    'wrapper--left': isLeftLabel,
+    [styles['wrapper--left']]: isLeftLabel,
   });
 
   const buttonClassess = classNames(
-    styles['button'],
+    styles.button,
     className,
     styles[`button--${size}`],
-    {'button-item--selected': selectedItem?.value && !disabled},
-    {'button--readOnly': readOnly},
-    { 'button--disabled': disabled },
+    {[styles['button-item--selected']]: selectedItem?.value && !disabled},
+    {[styles['button--readOnly']]: readOnly},
+    { [styles['button--disabled']]: disabled },
   );
   const dropdownClassess = classNames(
-    styles['dropdown'],
+    styles.dropdown,
     className,
     {
-      'dropdown--disabled': disabled,
+      [styles['dropdown--disabled']]: disabled,
     }
   );
-  const labelClasses = classNames(styles['label'], 
-    {'label--default':!isLeftLabel,
-      'label--left': isLeftLabel,
+  const labelClasses = classNames(styles.label, 
+      {[styles['label--default']]:!isLeftLabel,
+      [styles['label--left']]: isLeftLabel,
     });
 
 
@@ -154,7 +155,7 @@ export const Dropdown:FC<DropdownProps> = (
     // const menu = withPortal ? (
     //   ReactDOM.createPortal(<DropdownMenu withPortal >{children}</DropdownMenu>, portalContainer)
     // ) : <DropdownMenu>{children}</DropdownMenu>
-    const menu = isOpen && <div className={styles[dropdownClassess]}>
+    const menu = isOpen && <div className={dropdownClassess}>
            {items?.map((item,index) => {
             const modifiedItem = checkItem(item)
               return (
@@ -170,32 +171,34 @@ export const Dropdown:FC<DropdownProps> = (
         const textWidth = Math.max(name?.length, selectedItem?.value.length || 0); 
         let newWidth;
         if (textWidth === name?.length) {    
-          const inPixel = size === 'sm' ? 11 : size === 'md' ? 12 : 14
+          const inPixel = size === 'md' ? 12 : 14
           newWidth = selectedItem ? textWidth * inPixel : textWidth * inPixel; 
         } else {
-          const inPixel = size === 'sm'? 9 : size === 'md' ? 10 : 12
+          const inPixel = size === 'md' ? 10 : 12
           newWidth = textWidth * inPixel;
         }
       setContainerWidth(newWidth);
       }
     }, [selectedItem, name, isOpen, size]);
-  
-  
+
+
     return(
-    <div className={styles[wrapperClassess]} ref={containerRef} style={{ width: containerWidth ? `${containerWidth}px` : 'auto' }}>
+    <div className={wrapperClassess} ref={containerRef} style={{ width: containerWidth ? `${containerWidth}px` : 'auto' }}>
        {selectedItem && label && (
-        <label className={labelClasses} htmlFor={id}>
+        <Typography variant="Caption" className={labelClasses} style={{ fontSize: size === 'lg' ? '14px' : '12px'}}>
           {label}
-        </label>
-      )}
+        </Typography>
+      )} 
       <button className={buttonClassess} onClick={readOnly ? undefined : handleToggle} disabled={disabled}>
         <div className={style === 'default' && selectedItem?.icon ? styles[`button--default--item-selected`]:''}>
         {style === 'default' && selectedItem?.icon &&  React.cloneElement(selectedItem.icon as React.ReactElement, {strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0' })}
         {selectedItem ? selectedItem.value : name}
         </div>
             {icon && React.cloneElement(icon as React.ReactElement, {strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0' })}
+
+            {getDropdownMenu()}
       </button>
-      {getDropdownMenu()}
+   
     </div>
 
   )
