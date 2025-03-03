@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { InputProps } from 'kamotive_ui';
-import styles from './Input.module.css'
+import styles from './Input.module.css';
 import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
 
@@ -31,11 +31,9 @@ export const Input: FC<InputProps> = ({
     }
   };
 
-  const wrapperClassess = classNames(styles.wrapper, {
+  const wrapperClassess = classNames(styles['wrapper--input'], {
     [styles['wrapper--left']]: isLeftLabel,
   });
-
-  const inputWrapperClassess = classNames(styles['wrapper--input']);
 
   const inputClassess = classNames(styles.input, styles[size], className, {
     [styles['input--error']]: hasError,
@@ -43,6 +41,7 @@ export const Input: FC<InputProps> = ({
     [styles['input--withIcon']]: icon,
     [styles['textarea']]: multiline,
     [styles['resize']]: resize,
+    [styles['input--left']]: isLeftLabel,
   });
 
   const labelClasses = classNames(styles.label, {
@@ -50,37 +49,43 @@ export const Input: FC<InputProps> = ({
     [styles['label--left']]: isLeftLabel,
   });
 
-
   return (
     <div className={wrapperClassess}>
       {((value && !isLeftLabel) || isLeftLabel) && (
-        <Typography variant='Caption' className={labelClasses} style={{ fontSize: size === 'lg' || isLeftLabel ? '14px' : size === 'md' ? '12px' : '10px'}}>{label}</Typography>
+        <Typography
+          variant="Caption"
+          className={labelClasses}
+          style={{ fontSize: size === 'lg' || isLeftLabel ? '14px' : size === 'md' ? '12px' : '10px' }}
+        >
+          {label}
+        </Typography>
       )}
-      <div className={inputWrapperClassess}>
-        {icon && <div className={styles.icon}>{icon}</div>}
-        {multiline ? (
-          <textarea
-            id={id}
-            className={inputClassess}
-            value={value}
-            placeholder={placeholder}
-            onChange={handleChange}
-            disabled={disabled}
-          />
-        ) : (
-          <input
-            id={id}
-            className={inputClassess}
-            value={value}
-            placeholder={placeholder}
-            onChange={handleChange}
-            disabled={disabled}
-            readOnly={readOnly}
-          />
-        )}
-      </div>
-
-      {hasError && helperText && <Typography variant='Caption' className={classNames(styles.helperText, styles[size])}>{helperText}</Typography>}
+      {icon && <div className={styles.icon}>{icon}</div>}
+      {multiline ? (
+        <textarea
+          id={id}
+          className={inputClassess}
+          value={value}
+          placeholder={placeholder}
+          onChange={handleChange}
+          disabled={disabled}
+        />
+      ) : (
+        <input
+          id={id}
+          className={inputClassess}
+          value={value}
+          placeholder={placeholder}
+          onChange={handleChange}
+          disabled={disabled}
+          readOnly={readOnly}
+        />
+      )}
+      {hasError && helperText && (
+        <Typography variant="Caption" className={classNames(styles.helperText, styles[size])}>
+          {helperText}
+        </Typography>
+      )}
     </div>
   );
 };

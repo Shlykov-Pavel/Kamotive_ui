@@ -1,44 +1,48 @@
-.wrapper {
+.wrapper--input {
   position: relative;
+  width: fit-content;
+  max-width: 260px;
 }
 .wrapper--left {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   gap: 20px;
   align-items: center;
+  width: fit-content;
+  max-width: none;
 }
 
-.wrapper--input {
-  position: relative;
-}
-.input{
-  font-family: 'Raleway';
+.input {
+  font-family: var(--font-family-main);
   font-style: normal;
   font-weight: 400;
   position: relative;
-  line-height: 14px;
+
   color: var(--text-dark);
-  width: 203px;
-  /* width: 20%; */
-  padding: 10px;
+  background-color: transparent;
+  padding: 10px 15px;
   outline: none;
   border: 1px solid var(--grey-light);
+  mix-blend-mode: multiply;
   border-radius: 10px;
-  /* width: fit-content; */
+  display: inline-flex;
+  width: 100%;
+}
+
+.input--left {
+  min-width: 260px;
 }
 .input.lg {
   font-size: 14px;
-  /* height: 40px; */
-  height: 25px;
+  line-height: 20px;
 }
 .input.md {
-  /* height: 35px; */
-  height: 20px;
+  font-size: 12px;
+  line-height: 16px;
 }
 .input.sm {
   font-size: 10px;
-  /* height: 30px; */
-  height: 20px;
+  line-height: 14px;
 }
 /* Стили при наведении мыши */
 .input:hover {
@@ -66,7 +70,6 @@
   resize: both;
 }
 
-
 .filled {
   border-color: var(--blue-main);
   box-shadow: none;
@@ -79,13 +82,13 @@
   /* font-size: 12px; */
   line-height: 14px;
 }
-.input::placeholder.sm{
+.input::placeholder.sm {
   font-size: 10px;
 }
-.input::placeholder.md{
+.input::placeholder.md {
   font-size: 12px;
 }
-.input::placeholder.lg{
+.input::placeholder.lg {
   font-size: 14px;
 }
 .input:focus::placeholder {
@@ -111,6 +114,7 @@
 .label--left {
   font-size: 13px;
   color: var(--text-dark);
+  text-wrap-mode: nowrap;
 }
 
 /* Стили для input с ошибкой */
@@ -125,23 +129,22 @@
   color: var(--error-secondary);
 }
 
-.helperText.md{
+.helperText.md {
   font-size: 12px;
 }
-.helperText.sm{
+.helperText.sm {
   font-size: 10px;
 }
-.helperText.lg{
+.helperText.lg {
   font-size: 14px;
 }
 .helperText {
   position: absolute;
   left: 0px;
-  /* top: 110%; */
   bottom: -20px;
   cursor: text;
   transition: 0.3ms ease-out;
-  max-width: calc(100% - 32px);
+  /* max-width: calc(100% - 32px); */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -177,7 +180,6 @@
 .icon {
   position: absolute;
   z-index: 1;
-  top: 25%;;
+  top: 25%;
   left: 10px;
 }
-
