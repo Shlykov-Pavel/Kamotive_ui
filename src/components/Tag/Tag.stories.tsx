@@ -1,7 +1,5 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-
-import './Tag.module.css';
 import { Tag } from './Tag';
 
 export interface TagProps {
@@ -23,7 +21,11 @@ const meta: Meta<TagProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='story--wrapper-tag'>
+      <div style={{
+        backgroundColor: 'var(--white)',
+        padding: '30px',
+        borderRadius: '10px',
+        width: '900px'}}>
         <Story />
       </div>
     ),

@@ -68,15 +68,15 @@ export const ColorPicker: FC<ColorPickerProps> = ({
       !autoOpen && document.removeEventListener('mousedown', handleClickOutside);}
   }, [isOpen]);
 
-  const mainColorClasses = classNames(styles['circle'], {
-    'mainColor': mainColor,
+  const mainColorClasses = classNames(styles.circle, {
+    [styles['mainColor']]: mainColor,
   });
 
-  const colorCircleDefaultClasses = classNames(styles['circle'], {
-    'colorCircleDefault': color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue});
+  const colorCircleDefaultClasses = classNames(styles.circle, {
+    [styles.colorCircleDefault]: color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue});
 
   const popoverClassess = classNames(styles['popover'], {
-    [`popover--${popoverPosition}`]: true,
+    [styles[`popover--${popoverPosition}`]]: true,
   });
   
   // Функция для преобразования HEXA в HEX
@@ -109,7 +109,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   },[color])
   
   return (
-  <div className={(mainColor || recentColors) ? 'colorPickerWrapper' : ''} onMouseLeave={() => setIsHovered && setIsHovered(false)}>
+  <div className={(mainColor || recentColors) && styles.colorPickerWrapper} onMouseLeave={() => setIsHovered && setIsHovered(false)}>
     {mainColor && <div className={mainColorClasses} style={{ 
           width: `${width}px`,
           height: `${height}px`,
@@ -120,7 +120,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
       {recentColors && recentColors.map((color, index) => (
         <div
           key={index}
-          className="circle"
+          className={styles.circle}
           style={{  
             width: `${width}px`,
             height: `${height}px`,
@@ -130,7 +130,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
         />
       ))}
      
-      <div className="colorPicker">
+      <div className={styles.colorPicker}>
       <div 
         ref={circleRef}
         className={colorCircleDefaultClasses}
@@ -144,16 +144,16 @@ export const ColorPicker: FC<ColorPickerProps> = ({
       />
       {isOpen && (
         <div ref={popoverRef} className={popoverClassess}>
-          {isOpen && <IconColorPicker10 className="colorPickerIcon" htmlColor={'var(--white)'}/> } 
+          {isOpen && <IconColorPicker10 className={styles.colorPickerIcon} htmlColor={'var(--white)'}/> } 
           <Chrome
             color={selectedColor}
             placement={GithubPlacement.Right}
             onChange={colorChangeHandler}
-            className="customChrome"
+            className={styles.customChrome}
             showEyeDropper={false}
 
           />
-          <div className="hex" style={{ padding: '0 10px 0 20px' }}>
+          <div className={styles.hex} style={{ padding: '0 10px 0 20px' }}>
             <EditableInput
               value={hexaToHex(selectedColor)}
               style={{ width: 68, alignItems: 'flex-start' }}

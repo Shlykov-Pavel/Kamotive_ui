@@ -50,7 +50,7 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
     onClose?.();
   };
   if (!isVisible) return null;
-  const snackbarClasses = classNames(styles['snackbar-wrapper'], type ?`snackbar--${type}`:'');
+  const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`]);
   return (
     <div className={snackbarClasses}>
       <div className={styles['snackbar-textAndIcon']}>
@@ -64,7 +64,7 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
           </Typography>
         </div>
       </div>
-      <button className={styles['button']} onClick={handleClose}>
+      <button className={styles.button} onClick={handleClose}>
         <IconClose10 htmlColor={'var(--text-btn-light)'} />
       </button>
     </div>

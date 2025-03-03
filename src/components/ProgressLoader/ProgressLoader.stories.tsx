@@ -1,7 +1,5 @@
 import type { Meta } from '@storybook/react';
 import React from 'react';
-
-import './ProgressLoader.module.css';
 import { ProgressLoader } from './ProgressLoader';
 
 export interface ProgressLoaderProps {
@@ -15,7 +13,11 @@ export interface ProgressLoaderProps {
    animated?: boolean;
  }
 
-const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-progress-loader">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div style={{
+  backgroundColor: 'var(--white)',
+  padding: '30px',
+  borderRadius: '10px',
+  width: '900px'}}>{<Story />}</div>;
 
 const meta: Meta<typeof ProgressLoader> = {
   title: 'Components/ProgressLoader',
@@ -53,7 +55,8 @@ export default meta;
 
 export const ProgressLoaderwithValues = (argTypes: ProgressLoaderProps): JSX.Element => {
   return (
-    <div className="progress-loader--default-story">
+    <div style={{display: 'flex',
+      gap: '30px'}}>
       <ProgressLoader {...argTypes} value={0} />
       <ProgressLoader {...argTypes} value={50} />
       <ProgressLoader {...argTypes} value={100} />

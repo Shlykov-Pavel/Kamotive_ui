@@ -15,7 +15,7 @@ export const SettingTag: React.FC<SettingTagProps> = ({ label, color, onChange }
       <Tag label={label} color={color} />
       {!isHovered ? (
         <div
-          className={styles['circle']}
+          className={styles.circle}
           onMouseEnter={() => setIsHovered(true)}
           style={{
             width: 10,

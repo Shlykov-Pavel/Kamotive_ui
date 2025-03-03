@@ -1,8 +1,7 @@
 import React, { ChangeEventHandler, useState } from 'react';
 import type { Meta } from '@storybook/react';
-
 import { ToggleButton } from './ToggleButton';
-import './ToggleButton.module.css';
+
 
 interface ToggleButtonProps {
   /** Знчение */
@@ -25,13 +24,17 @@ const meta: Meta<ToggleButtonProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='story--wrapper-toggle'>
+      <div style={{
+        backgroundColor: 'var(--white)',
+        padding: '30px',
+        borderRadius: '10px',
+        width: '900px'}}>
         <Story />
       </div>
     ),
   ],
   args: {
-    size: 'sm',
+    size: 'md',
     disabled: false,
   },
   argTypes: {
@@ -48,7 +51,7 @@ const meta: Meta<ToggleButtonProps> = {
 
 export default meta;
 
-export const CheckboxOff = (argTypes: ToggleButtonProps): JSX.Element => {
+export const ToggleButtonOff = (argTypes: ToggleButtonProps): JSX.Element => {
   const [checked, setChecked] = useState(false);
 
   const handleChange = () => {
@@ -63,25 +66,32 @@ export const CheckboxOff = (argTypes: ToggleButtonProps): JSX.Element => {
       />
   );
 }
-CheckboxOff.storyName = 'ToggleButton по умолчанию'; 
+ToggleButtonOff.storyName = 'ToggleButton по умолчанию'; 
 
-export const CheckboxChecked = (argTypes: ToggleButtonProps): JSX.Element => <ToggleButton {...argTypes} />;
-CheckboxChecked.storyName = 'ToggleButton выбран';
-CheckboxChecked.args = {
+export const ToggleButtonLabel = (argTypes: ToggleButtonProps): JSX.Element => <ToggleButton {...argTypes} />;
+ToggleButtonLabel.storyName = 'ToggleButton с лейблом';
+ToggleButtonLabel.args = {
+  label: 'Toggle Button',
+};
+
+
+export const ToggleButtonChecked = (argTypes: ToggleButtonProps): JSX.Element => <ToggleButton {...argTypes} />;
+ToggleButtonChecked.storyName = 'ToggleButton выбран';
+ToggleButtonChecked.args = {
   value: true,
   disabled: false,
 };
 
-export const CheckboxDisabled = (argTypes: ToggleButtonProps): JSX.Element => <ToggleButton {...argTypes} />;
-CheckboxDisabled.storyName = 'ToggleButton заблокирован';
-CheckboxDisabled.args = {
+export const ToggleButtonDisabled = (argTypes: ToggleButtonProps): JSX.Element => <ToggleButton {...argTypes} />;
+ToggleButtonDisabled.storyName = 'ToggleButton заблокирован';
+ToggleButtonDisabled.args = {
   value: false,
   disabled: true,
 };
 
-export const CheckboxCheckedDisabled = (argTypes: ToggleButtonProps): JSX.Element => <ToggleButton {...argTypes} />;
-CheckboxCheckedDisabled.storyName = 'ToggleButton выбран и заблокирован';
-CheckboxCheckedDisabled.args = {
+export const ToggleButtonCheckedDisabled = (argTypes: ToggleButtonProps): JSX.Element => <ToggleButton {...argTypes} />;
+ToggleButtonCheckedDisabled.storyName = 'ToggleButton выбран и заблокирован';
+ToggleButtonCheckedDisabled.args = {
   value: true,
   disabled: true,
 };

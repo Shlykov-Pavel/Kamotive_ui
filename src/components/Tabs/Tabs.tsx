@@ -14,7 +14,7 @@ export const Tabs: FC<TabsProps> = ({ value, onChange, children }) => {
 
   return (
     <>
-      <div role="tablist" className={styles['tabs']}>
+      <div role="tablist" className={styles.tabs}>
         {children?.map((child, index) =>
           React.cloneElement(child, {
             key: index,

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import './Dropdown.module.css';
 import { Dropdown } from './Dropdown';
 import { IconAccount10, IconAlarm10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
 import { IconEyeOff10 } from '../../Icons/IconEyeOff/IconEyeOff10';
@@ -12,7 +11,7 @@ export interface DropdownProps {
    /**  Лейбл */
    label?: string;
    /** Размер */
-   size?: 'sm' | 'md' | 'lg';
+   size?: 'md' | 'lg';
    /** Заблокированный */
    disabled?: boolean;
    /**Дополнительный класс */
@@ -44,7 +43,12 @@ const dropdownOptions = [
   { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar10 /> },
 ];
 
-const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-dropdown">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div style={{
+  backgroundColor: 'var(--white)',
+  padding: '30px',
+  borderRadius: '10px',
+  width: '900px'}}>{<Story />}</div>;
+
 const meta: Meta<typeof Dropdown> = {
   title: 'Components/Dropdown',
   component: Dropdown,
@@ -73,7 +77,7 @@ const meta: Meta<typeof Dropdown> = {
     size: {
       description: 'Размер селекта',
       control: { type: 'radio' },
-      options: ['sm', 'md', 'lg'],
+      options: ['md', 'lg'],
     },
 
     disabled: {

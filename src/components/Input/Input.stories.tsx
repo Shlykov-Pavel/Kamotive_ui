@@ -1,7 +1,6 @@
 import type { Meta } from '@storybook/react';
 import React, { ChangeEvent, ChangeEventHandler, ReactNode, useEffect, useState } from 'react';
 import { Input } from './Input';
-import './Input.module.css';
 import { IconAlarm10, IconAccount10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons/index';
 
 export interface InputProps {
@@ -47,7 +46,11 @@ const iconOptions = {
   unset: null,
 };
 
-const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-iput">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div style={{
+  backgroundColor: 'var(--white)',
+  padding: '30px',
+  borderRadius: '10px',
+  width: '900px'}}>{<Story />}</div>;
 
 const meta: Meta<typeof Input> = {
   title: 'Components/Input',
@@ -60,7 +63,7 @@ const meta: Meta<typeof Input> = {
   args: {
     label: 'Наименование поля',
     placeholder: 'Введите текст...',
-    size: 'sm',
+    size: 'lg',
     icon: 'unset',
     multiline: false,
     hasError: false,

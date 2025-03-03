@@ -36,7 +36,7 @@ export const ProgressLoader: FC<ProgressLoaderProps> = ({
 
   const dashOffset = circumference * (1 - fillPercentage);
 
-  const progressLoaderWrapperClasses = classNames(styles['progress-loader-wrapper'], size);
+  const progressLoaderWrapperClasses = classNames(styles['progress-loader-wrapper'], styles[size]);
 
   const getTypographySize = () => {
     switch (size) {
@@ -112,7 +112,6 @@ export const ProgressLoader: FC<ProgressLoaderProps> = ({
             variant="Subheading2"
             color={'#9CA0A7'}
             style={{ fontSize: getTypographySize(), fontWeight: '300' }}
-            className={styles["progress-percentage"]}
           >
             {percent}%
           </Typography>

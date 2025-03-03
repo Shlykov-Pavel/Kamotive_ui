@@ -1,8 +1,5 @@
 import React, { ChangeEvent, ChangeEventHandler, useState } from 'react';
 import type { Meta } from '@storybook/react';
-
-import './RadioButton.module.css';
-
 import { RadioButton } from './RadioButton';
 export interface RadioProps {
   /** Значение */
@@ -27,7 +24,11 @@ const meta: Meta<RadioProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="story--wrapper-radio">
+      <div style={{
+        backgroundColor: 'var(--white)',
+        padding: '30px',
+        borderRadius: '10px',
+        width: '900px'}}>
         <Story />
       </div>
     ),
@@ -68,6 +69,12 @@ export const RadioButtonOff = (argTypes: RadioProps): JSX.Element => {
   );
 }
 RadioButtonOff.storyName = 'RadioButton по умолчанию'; 
+
+export const RadioButtonLabel = (argTypes: RadioProps): JSX.Element => <RadioButton {...argTypes} />;
+RadioButtonLabel.storyName = 'RadioButton c лейблом';
+RadioButtonLabel.args = {
+  label: 'Радио кнопка',
+};
 
 export const RadioButtonChecked = (argTypes: RadioProps): JSX.Element => <RadioButton {...argTypes} />;
 RadioButtonChecked.storyName = 'RadioButton выбран';
