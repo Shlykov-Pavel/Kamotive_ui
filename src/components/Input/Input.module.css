@@ -2,6 +2,13 @@
   position: relative;
   width: fit-content;
   max-width: 260px;
+  width: 100%;
+}
+.wrapper--input-label {
+  margin-top: 15px;
+}
+.wrapper--input-helperText {
+  margin-bottom: 15px;
 }
 .wrapper--left {
   display: inline-flex;
@@ -103,7 +110,7 @@
 }
 .label--default {
   position: absolute;
-  top: -20px;
+  top: -18px;
   cursor: text;
   white-space: nowrap;
   overflow: hidden;
@@ -111,10 +118,28 @@
   max-width: calc(100% - 32px);
   color: var(--text-grey);
 }
+.label--default .lg {
+  font-size: 12px;
+}
+.label--default.md {
+  font-size: 10px;
+}
+.label--default .sm {
+  font-size: 16px;
+}
 .label--left {
   font-size: 13px;
   color: var(--text-dark);
   text-wrap-mode: nowrap;
+}
+.label--left.lg {
+  font-size: 14px;
+}
+.label--left .md {
+  font-size: 12px;
+}
+.label--left .sm {
+  font-size: 10px;
 }
 
 /* Стили для input с ошибкой */
@@ -130,18 +155,18 @@
 }
 
 .helperText.md {
-  font-size: 12px;
-}
-.helperText.sm {
   font-size: 10px;
 }
+.helperText.sm {
+  font-size: 8px;
+}
 .helperText.lg {
-  font-size: 14px;
+  font-size: 12px;
 }
 .helperText {
   position: absolute;
   left: 0px;
-  bottom: -20px;
+  bottom: -15px;
   cursor: text;
   transition: 0.3ms ease-out;
   /* max-width: calc(100% - 32px); */

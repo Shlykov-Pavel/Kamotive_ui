@@ -12,14 +12,14 @@ import { Typography } from '../Typography/Typography';
  */
 
 export interface DropdownListItemProps {
-  item: DropdownProps['items'][number];
+  item: DropdownProps['options'][number];
   size: 'md' | 'lg';
-  selectedItem: DropdownProps['items'][number] | null | string | number;
-  style?: 'default' | 'text';
-  onChange: (value: DropdownProps['items'][number]) => void;
+  selectedItem: DropdownProps['options'][number] | null | string | number;
+  style?: 'icons' | 'text';
+  onChange: (value: DropdownProps['options'][number]) => void;
 }
 export const DropdownListItem: FC<DropdownListItemProps> = ({ item, size = 'md', selectedItem, style, onChange }) => {
-  const handleItemClick = (item: DropdownProps['items'][number], disabled: boolean | undefined) => {
+  const handleItemClick = (item: DropdownProps['options'][number], disabled: boolean | undefined) => {
     if (!disabled) {
       onChange(item);
     }
@@ -41,7 +41,7 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({ item, size = 'md',
     <div className={styles[`item--container`]}>
       <div className={itemClassess} onClick={() => handleItemClick(item, item.disabled)}>
         <div className={itemBlock}>
-          {style === 'default' &&
+          {style === 'icons' &&
             item.icon &&
             React.cloneElement(item.icon as React.ReactElement, {
               strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
@@ -67,20 +67,26 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({ item, size = 'md',
 };
 export const Dropdown: FC<DropdownProps> = ({
   id,
-  name,
+  placeholder,
   label,
   size = 'lg',
   disabled,
   className,
   defaultValue,
-  items,
+  options,
   isOpened = false,
-  style = 'default',
+  noOptionsText,
+  style = 'text',
   readOnly = false,
   isLeftLabel = false,
+  error = false,
+  helperText,
 }) => {
+  console.log('label', label);
+
   const [isOpen, setIsOpen] = useState(isOpened);
-  const [selectedItem, setSelectedItem] = useState<DropdownProps['items'][number] | null>(defaultValue ?? null);
+  const [selectedItem, setSelectedItem] = useState<DropdownProps['options'][number] | null>(defaultValue ?? null);
+  console.log('selectedItem', selectedItem);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number | undefined>(undefined);
@@ -91,7 +97,7 @@ export const Dropdown: FC<DropdownProps> = ({
     setIsOpen((prev) => !prev);
   };
 
-  const onChange = (item: DropdownProps['items'][number]) => {
+  const onChange = (item: DropdownProps['options'][number]) => {
     if (selectedItem?.value !== item.value) {
       setSelectedItem(item);
       setIsOpen(false);
@@ -99,8 +105,11 @@ export const Dropdown: FC<DropdownProps> = ({
       setSelectedItem(null);
     }
   };
-  const wrapperClassess = classNames(styles[`dropdown--container`], {
-    [styles['wrapper--left']]: isLeftLabel,
+  const wrapperClassess = classNames({
+    [styles['dropdown--container']]: !isLeftLabel,
+    [styles['dropdown--container-left']]: isLeftLabel,
+    [styles['dropdown--container-label']]: label,
+    [styles['dropdown--container-helperText']]: error,
   });
 
   const buttonClassess = classNames(
@@ -114,17 +123,23 @@ export const Dropdown: FC<DropdownProps> = ({
   const dropdownClassess = classNames(styles.dropdown, className, {
     [styles['dropdown--disabled']]: disabled,
   });
-  const labelClasses = classNames(styles.label, {
+  const labelClasses = classNames(styles.label, styles[size], {
     [styles['label--default']]: !isLeftLabel,
     [styles['label--left']]: isLeftLabel,
   });
+
+  const selectedItemClassess = classNames({
+    [styles['item-selected']]: selectedItem,
+    [styles['button--icons--item-selected']]: style === 'icons' && selectedItem?.icon,
+  });
+  console.log('selectedItemClassess', selectedItemClassess);
 
   const checkItem = (item: any) => {
     if (typeof item === 'object') {
       if (item.value) {
         return item;
       } else if (item.name && !item.value) {
-        return { ...item, value: name };
+        return { ...item, value: item.name };
       } else if (item.description && !item.value) {
         return { ...item, value: item.description };
       } else {
@@ -146,19 +161,23 @@ export const Dropdown: FC<DropdownProps> = ({
     // ) : <DropdownMenu>{children}</DropdownMenu>
     const menu = isOpen && (
       <div className={dropdownClassess}>
-        {items?.map((item, index) => {
-          const modifiedItem = checkItem(item);
-          return (
-            <DropdownListItem
-              key={item?.key ?? index}
-              item={modifiedItem}
-              size={size}
-              selectedItem={selectedItem}
-              style={style}
-              onChange={onChange}
-            />
-          );
-        })}
+        {options.length > 0 ? (
+          options.map((option, index) => {
+            const modifiedItem = checkItem(option);
+            return (
+              <DropdownListItem
+                key={option?.key ?? index}
+                item={modifiedItem}
+                size={size}
+                selectedItem={selectedItem}
+                style={style}
+                onChange={onChange}
+              />
+            );
+          })
+        ) : (
+          <div className={styles['no-options']}>{noOptionsText}</div>
+        )}
       </div>
     );
     return isOpen ? menu : null;
@@ -170,23 +189,24 @@ export const Dropdown: FC<DropdownProps> = ({
         setIsOpen(false);
       }
     };
-    if (containerRef.current) {
-      const textWidth = Math.max(name?.length, selectedItem?.value.length || 0);
-      let newWidth;
-      if (textWidth === name?.length) {
-        const inPixel = size === 'md' ? 12 : 14;
-        newWidth = selectedItem ? textWidth * inPixel : textWidth * inPixel;
-      } else {
-        const inPixel = size === 'md' ? 10 : 12;
-        newWidth = textWidth * inPixel;
-      }
-      setContainerWidth(newWidth);
-    }
+    // if (containerRef.current) {
+    //   const text = placeholder ?? label ?? '';
+    //   const textWidth = Math.max(text.length, selectedItem?.value.length || 0);
+    //   let newWidth;
+    //   if (textWidth === text?.length) {
+    //     const inPixel = size === 'md' ? 12 : 14;
+    //     newWidth = selectedItem ? textWidth * inPixel : textWidth * inPixel;
+    //   } else {
+    //     const inPixel = size === 'md' ? 10 : 12;
+    //     newWidth = textWidth * inPixel;
+    //   }
+    //   setContainerWidth(newWidth);
+    // }
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [selectedItem, name, isOpen, size]);
+  }, [selectedItem, placeholder, label, isOpen, size]);
 
   return (
     <div
@@ -194,28 +214,32 @@ export const Dropdown: FC<DropdownProps> = ({
       ref={containerRef}
       style={{ width: containerWidth ? `${containerWidth}px` : 'auto' }}
     >
-      {selectedItem && label && (
-        <Typography variant="Caption" className={labelClasses} style={{ fontSize: size === 'lg' ? '14px' : '12px' }}>
+      {label && (
+        <Typography variant="Caption" className={labelClasses}>
           {label}
         </Typography>
       )}
       <button className={buttonClassess} onClick={readOnly ? undefined : handleToggle} disabled={disabled}>
-        {/* <div className={styles['button__content']}> */}
-        <div className={style === 'default' && selectedItem?.icon ? styles[`button--default--item-selected`] : ''}>
-          {style === 'default' &&
+        {/* <div className={style === 'icons' && selectedItem?.icon ? styles[`button--icons--item-selected`] : ''}> */}
+        <div className={selectedItemClassess}>
+          {style === 'icons' &&
             selectedItem?.icon &&
             React.cloneElement(selectedItem.icon as React.ReactElement, {
               strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
             })}
-          {selectedItem ? selectedItem.value : name}
+          {selectedItem ? selectedItem.value : (placeholder ?? label)}
         </div>
         {icon &&
           React.cloneElement(icon as React.ReactElement, {
             strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
           })}
-        {/* </div> */}
         {getDropdownMenu()}
       </button>
+      {error && helperText && (
+        <Typography variant="Caption" className={classNames(styles.helperText, styles[size])}>
+          {helperText}
+        </Typography>
+      )}
     </div>
   );
 };

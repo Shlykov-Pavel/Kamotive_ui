@@ -21,10 +21,10 @@ export interface InputProps {
   /** Иконка слева */
   icon?: ReactNode;
   /** Ошибка */
-  hasError?: boolean;
+  error?: boolean;
   /** Помощник текста */
   helperText?: ReactNode;
-   /** Заблокированное поле */
+  /** Заблокированное поле */
   disabled?: boolean;
   /** Только для чтения */
   readOnly?: boolean;
@@ -46,11 +46,18 @@ const iconOptions = {
   unset: null,
 };
 
-const withWrapper = (Story: React.ComponentType) => <div style={{
-  backgroundColor: 'var(--white)',
-  padding: '30px',
-  borderRadius: '10px',
-  width: '900px'}}>{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => (
+  <div
+    style={{
+      backgroundColor: 'var(--white)',
+      padding: '30px',
+      borderRadius: '10px',
+      width: '900px',
+    }}
+  >
+    {<Story />}
+  </div>
+);
 
 const meta: Meta<typeof Input> = {
   title: 'Components/Input',
@@ -66,7 +73,7 @@ const meta: Meta<typeof Input> = {
     size: 'lg',
     icon: 'unset',
     multiline: false,
-    hasError: false,
+    error: false,
     helperText: 'Поле обязательно для заполнения',
     disabled: false,
     isLeftLabel: false,
@@ -94,7 +101,7 @@ const meta: Meta<typeof Input> = {
       options: Object.keys(iconOptions),
       mapping: iconOptions,
     },
-    hasError: { description: 'Условие показа ошибки инпута', type: 'boolean', control: { type: 'boolean' } },
+    error: { description: 'Условие показа ошибки инпута', type: 'boolean', control: { type: 'boolean' } },
     helperText: { description: 'Строка для вспомогательно текста под инпутом', type: 'string' },
     disabled: { description: 'Заблокированный инпут для изменений', control: { type: 'boolean' } },
     readOnly: { description: 'Инпут только для чтения', control: { type: 'boolean' } },
@@ -113,9 +120,9 @@ export const InputDefault = (argTypes: InputProps): JSX.Element => {
     setValue(e.target.value);
   };
   useEffect(() => {
-    if (argTypes.hasError) setValue('Невалидные значения');
+    if (argTypes.error) setValue('Невалидные значения');
     else setValue('');
-  }, [argTypes.hasError]);
+  }, [argTypes.error]);
   return <Input value={value} onChange={handleChange} {...argTypes} />;
 };
 InputDefault.storyName = 'Input по умолчанию';
@@ -136,7 +143,7 @@ export const InputWithError = (argTypes: InputProps): JSX.Element => <Input {...
 InputWithError.storyName = 'Input с ошибкой';
 InputWithError.args = {
   value: 'Невалидные значения',
-  hasError: true,
+  error: true,
 };
 InputWithError.parameters = {
   controls: { disable: true },
@@ -197,7 +204,7 @@ export const InputMultilineNoneResizable = (argTypes: InputProps): JSX.Element =
     setValue(e.target.value);
   };
   useEffect(() => {
-    if (argTypes.hasError) setValue('Невалидные значения');
+    if (argTypes.error) setValue('Невалидные значения');
     if (argTypes.icon) setClassName('input--withIcon');
     else {
       setValue('');
@@ -223,9 +230,9 @@ export const InputMultilineResizable = (argTypes: InputProps): JSX.Element => {
     setValue(e.target.value);
   };
   useEffect(() => {
-    if (argTypes.hasError) setValue('Невалидные значения');
+    if (argTypes.error) setValue('Невалидные значения');
     else setValue('');
-  }, [argTypes.hasError]);
+  }, [argTypes.error]);
   return <Input value={value} onChange={handleChange} {...argTypes} />;
 };
 InputMultilineResizable.storyName = 'Input многострочный расширяемый';

@@ -17,7 +17,7 @@ export const Input: FC<InputProps> = ({
   size = 'lg',
   onChange,
   icon,
-  hasError = false,
+  error = false,
   helperText,
   disabled = false,
   readOnly = false,
@@ -33,10 +33,12 @@ export const Input: FC<InputProps> = ({
 
   const wrapperClassess = classNames(styles['wrapper--input'], {
     [styles['wrapper--left']]: isLeftLabel,
+    [styles['wrapper--input-label']]: label && !isLeftLabel,
+    [styles['wrapper--input-helperText']]: error,
   });
 
   const inputClassess = classNames(styles.input, styles[size], className, {
-    [styles['input--error']]: hasError,
+    [styles['input--error']]: error,
     [styles['readOnly']]: readOnly,
     [styles['input--withIcon']]: icon,
     [styles['textarea']]: multiline,
@@ -44,19 +46,15 @@ export const Input: FC<InputProps> = ({
     [styles['input--left']]: isLeftLabel,
   });
 
-  const labelClasses = classNames(styles.label, {
+  const labelClasses = classNames(styles.label, styles[size], {
     [styles['label--default']]: !isLeftLabel,
     [styles['label--left']]: isLeftLabel,
   });
 
   return (
     <div className={wrapperClassess}>
-      {((value && !isLeftLabel) || isLeftLabel) && (
-        <Typography
-          variant="Caption"
-          className={labelClasses}
-          style={{ fontSize: size === 'lg' || isLeftLabel ? '14px' : size === 'md' ? '12px' : '10px' }}
-        >
+      {label && (
+        <Typography variant="Caption" className={labelClasses}>
           {label}
         </Typography>
       )}
@@ -81,7 +79,7 @@ export const Input: FC<InputProps> = ({
           readOnly={readOnly}
         />
       )}
-      {hasError && helperText && (
+      {error && helperText && (
         <Typography variant="Caption" className={classNames(styles.helperText, styles[size])}>
           {helperText}
         </Typography>

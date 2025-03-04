@@ -2,20 +2,33 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* width: 100%;
+  max-width: 260px; */
 }
+
 .option--icon {
   margin-left: 8px;
 }
 .dropdown--container {
   display: inline-block;
   position: relative;
+  width: 100%;
+  max-width: 260px;
 }
-.wrapper--left {
-  display: flex;
+.dropdown--container-left {
+  display: inline-flex;
+  width: fit-content;
   flex-direction: row;
   gap: 20px;
   align-items: center;
   flex-wrap: nowrap;
+}
+
+.dropdown--container-label {
+  margin-top: 15px;
+}
+.dropdown--container-helperText {
+  margin-bottom: 15px;
 }
 
 .button {
@@ -35,8 +48,9 @@
   align-items: center;
   gap: 10px;
   justify-content: space-between;
-  min-width: fit-content;
+  /* min-width: fit-content; */
   position: relative;
+  width: 100%;
 }
 .button:hover {
   border: 1px solid #0d9aff00;
@@ -66,7 +80,7 @@
   box-shadow: none;
   border: 1px solid #0d9aff00;
 }
-.button--default--item-selected {
+.button--icons--item-selected {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -124,7 +138,7 @@
   color: var(--text-light);
   cursor: not-allowed;
 }
-.item-block-default,
+.item-block-icons,
 .item-block-text {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -132,7 +146,7 @@
   align-items: center;
   gap: 10px;
 }
-.item-block-default--selected {
+.item-block-icons--selected {
   display: grid;
   grid-template-columns: auto 1fr 20px;
   justify-content: space-between;
@@ -169,7 +183,7 @@
 }
 .label--default {
   position: absolute;
-  top: -20px;
+  top: -18px;
   cursor: text;
   white-space: nowrap;
   overflow: hidden;
@@ -177,7 +191,46 @@
   max-width: calc(100% - 32px);
   color: var(--text-grey);
 }
+.label--default.lg {
+  font-size: 12px;
+}
+.label--default.md {
+  font-size: 10px;
+}
+
 .label--left {
   color: var(--text-dark);
   min-width: fit-content;
+}
+.label--left.lg {
+  font-size: 14px;
+}
+.label--left.md {
+  font-size: 12px;
+}
+
+.item-selected {
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.helperText.md {
+  font-size: 10px;
+}
+
+.helperText.lg {
+  font-size: 12px;
+}
+.helperText {
+  position: absolute;
+  left: 0px;
+  bottom: -15px;
+  cursor: text;
+  transition: 0.3ms ease-out;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--error-main);
 }
