@@ -1,34 +1,31 @@
-.option--wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* width: 100%;
-  max-width: 260px; */
-}
-
-.option--icon {
-  margin-left: 8px;
-}
 .dropdown--container {
-  display: inline-block;
   position: relative;
   width: 100%;
   max-width: 260px;
 }
 .dropdown--container-left {
-  display: inline-flex;
-  width: fit-content;
-  flex-direction: row;
+  display: flex;
   gap: 20px;
   align-items: center;
   flex-wrap: nowrap;
+  width: fit-content;
+  max-width: none;
 }
-
 .dropdown--container-label {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 .dropdown--container-helperText {
   margin-bottom: 15px;
+}
+
+.option--wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.option--icon {
+  margin-left: 8px;
 }
 
 .button {
@@ -46,7 +43,7 @@
   /* mix-blend-mode: multiply; */
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   justify-content: space-between;
   /* min-width: fit-content; */
   position: relative;
@@ -80,6 +77,10 @@
   box-shadow: none;
   border: 1px solid #0d9aff00;
 }
+.button--error {
+  border-color: var(--error-main);
+  color: var(--error-main);
+}
 .button--icons--item-selected {
   display: flex;
   align-items: center;
@@ -95,6 +96,22 @@
 }
 .button--lg {
   font-size: 14px;
+}
+.button:focus-visible {
+  outline: none;
+}
+
+.resetButton {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
 }
 
 .dropdown {
@@ -122,10 +139,10 @@
   margin: auto;
 }
 
-.item--container:hover {
+.item--container:hover,
+.item--container--active {
   background-color: rgba(120, 120, 128, 0.08);
   border-radius: 5px;
-  width: 87%;
   margin: auto;
 }
 
@@ -149,17 +166,6 @@
 .item-block-icons--selected {
   display: grid;
   grid-template-columns: auto 1fr 20px;
-  justify-content: space-between;
-  align-items: center;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  gap: 10px;
-  color: var(--text-dark);
-}
-.item-block-text--selected {
-  display: grid;
-  grid-template-columns: auto auto;
   justify-content: space-between;
   align-items: center;
   overflow-x: hidden;
@@ -208,12 +214,30 @@
 .label--left.md {
   font-size: 12px;
 }
+/* Стили для обязательного поля */
+.label--default.label--required {
+  position: relative;
+  top: 0;
+}
+.label--required::after {
+  content: '*';
+  color: var(--error-main);
+  position: absolute;
+  margin-left: 2px;
+  top: 2px;
+  font-size: 22px;
+}
 
 .item-selected {
   color: var(--text-dark);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.item-placeholder {
+  color: var(--text-grey);
+  transition: 0.3ms ease-out;
 }
 
 .helperText.md {
@@ -226,7 +250,7 @@
 .helperText {
   position: absolute;
   left: 0px;
-  bottom: -15px;
+  bottom: -17px;
   cursor: text;
   transition: 0.3ms ease-out;
   white-space: nowrap;

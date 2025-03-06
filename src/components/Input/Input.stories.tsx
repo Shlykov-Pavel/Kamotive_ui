@@ -6,34 +6,36 @@ import { IconAlarm10, IconAccount10, IconBank10, IconBell10, IconBriefcase10, Ic
 export interface InputProps {
   /** Идентификатор элемента */
   id?: string;
-  /** Дополнительный класс */
-  className?: string;
-  /** Знчение */
-  value?: string;
   /** Лейбл */
   label?: string;
   /** Подсказка */
   placeholder?: string;
   /** Размер */
   size?: 'sm' | 'md' | 'lg';
-  /** Callback при изменении значения */
-  onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-  /** Иконка слева */
-  icon?: ReactNode;
-  /** Ошибка */
-  error?: boolean;
-  /** Помощник текста */
-  helperText?: ReactNode;
+  /** Знчение */
+  value?: string;
+  /** Дополнительный класс */
+  className?: string;
+  /** Многострочное поле */
+  multiline?: boolean;
+  /** Изменение размера многострочного поля */
+  resize?: boolean;
   /** Заблокированное поле */
   disabled?: boolean;
   /** Только для чтения */
   readOnly?: boolean;
   /** Метка слева */
   isLeftLabel?: boolean;
-  /** Многострочное поле */
-  multiline?: boolean;
-  /** Изменение размера многострочного поля */
-  resize?: boolean;
+  /** Иконка слева */
+  icon?: ReactNode;
+  /** Ошибка */
+  error?: boolean;
+  /** Текст ошибки */
+  helperText?: string;
+  /** Callback при изменении значения */
+  onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  /** Обязательное поле */
+  required?: boolean;
 }
 
 const iconOptions = {
@@ -82,8 +84,6 @@ const meta: Meta<typeof Input> = {
   },
   argTypes: {
     id: { description: 'Идентификатор компонента' },
-    className: { description: 'Дополнительный CSS класс для обертки инпута' },
-    value: { description: 'Значение поля инпут' },
     label: { description: 'Текст метки инпута' },
     placeholder: { description: 'Текст подсказки инпута' },
     size: {
@@ -91,10 +91,13 @@ const meta: Meta<typeof Input> = {
       control: { type: 'radio' },
       options: ['sm', 'md', 'lg'],
     },
-    // onChange: {
-    //   description: 'Callback, который будет вызван при изменении значения внутри инпута',
-    //   action: 'изменено value',
-    // },
+    value: { description: 'Значение поля инпут' },
+    className: { description: 'Дополнительный CSS класс для обертки инпута' },
+    multiline: { description: 'Свойство, для многострочного инпута', control: { type: 'boolean' } },
+    resize: { description: 'Свойство, для изменения размера многострочного инпута', control: { type: 'boolean' } },
+    disabled: { description: 'Заблокированный инпут для изменений', control: { type: 'boolean' } },
+    readOnly: { description: 'Инпут только для чтения', control: { type: 'boolean' } },
+    isLeftLabel: { description: 'Инпут с левой меткой', control: { type: 'boolean' } },
     icon: {
       description: 'Элемент с иконкой, который располагается с правой стороны инпута',
       control: { type: 'select' },
@@ -103,11 +106,11 @@ const meta: Meta<typeof Input> = {
     },
     error: { description: 'Условие показа ошибки инпута', type: 'boolean', control: { type: 'boolean' } },
     helperText: { description: 'Строка для вспомогательно текста под инпутом', type: 'string' },
-    disabled: { description: 'Заблокированный инпут для изменений', control: { type: 'boolean' } },
-    readOnly: { description: 'Инпут только для чтения', control: { type: 'boolean' } },
-    isLeftLabel: { description: 'Инпут с левой меткой', control: { type: 'boolean' } },
-    multiline: { description: 'Свойство, для многострочного инпута', control: { type: 'boolean' } },
-    resize: { description: 'Свойство, для изменения размера многострочного инпута', control: { type: 'boolean' } },
+    onChange: {
+      description: 'Callback, который будет вызван при изменении значения внутри инпута',
+      action: 'изменено value',
+    },
+    required: { description: 'Обязательное поле инпута', control: { type: 'boolean' } },
   },
 };
 
@@ -133,6 +136,7 @@ InputFilled.storyName = 'Input заполненный';
 InputFilled.args = {
   value: 'Заполненный инпут',
   className: 'filled',
+  required: true,
 };
 InputFilled.parameters = {
   controls: { disable: true },

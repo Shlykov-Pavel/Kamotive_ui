@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Meta } from '@storybook/react';
 import { Dropdown } from './Dropdown';
 import { IconAccount10, IconAlarm10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
@@ -6,38 +6,44 @@ import { IconEyeOff10 } from '../../Icons/IconEyeOff/IconEyeOff10';
 export interface DropdownProps {
   /** Идентификатор */
   id?: string;
-  /** Подсказка */
-  placeholder?: string;
   /**  Лейбл */
   label?: string;
+  /** Подсказик заполнения */
+  placeholder?: string;
   /** Размер */
   size?: 'md' | 'lg';
-  /** Заблокированный */
-  disabled?: boolean;
-  /**Дополнительный класс */
-  className?: string;
-  /** Значение по умолчанию */
-  defaultValue?: DropdownProps['options'][number] | null;
-  /** Массив элементов для выпадающего списка [{key, value - обязательное значение, icon, isDivider, disabled, children}, ...] */
+  /** Массив элементов для выпадающего списка */
   options: any[];
-  /** Открытый */
-  isOpened?: boolean;
-  /** Текст, показываемый при отсутствии опций */
-  noOptionsText: string;
+  /** Значение */
+  value?: DropdownProps['options'][number] | null | string | number;
+  /** Значение по умолчанию */
+  defaultValue?: DropdownProps['options'][number] | null | string | number;
   /** Стиль выпадающего списка(текст+иконка, текст) */
   style?: 'icons' | 'text';
+  /**Дополнительный класс */
+  className?: string;
+  /** Заблокированный */
+  disabled?: boolean;
   /** Только для чтения */
   readOnly?: boolean;
+  /** Открытый */
+  isOpened?: boolean;
+  /** Текст при отсутствии опций */
+  noOptionsText: string;
   /** Отображение левой метки */
   isLeftLabel?: boolean;
-  /** Callback, который будет вызван при изменении значения */
-  onChange?: (value: DropdownProps['options'][number]) => void;
-  /** Callback, который будет вызван при закрытии выпадающего списка */
-  onClose?: () => void;
   /** Ошибка */
   error?: boolean;
   /** Текст ошибки */
   helperText?: string;
+  /** Callback, который будет вызван при изменении значения */
+  onChange?: (event: ChangeEvent<HTMLInputElement>, value: DropdownProps['options'][number]) => void;
+  /** Callback, который будет вызван при закрытии выпадающего списка */
+  onClose?: () => void;
+  /** Возможность сброса значения до первоначального */
+  clearable?: boolean;
+  /** Обязательное поле */
+  required?: boolean;
 }
 
 const dropdownOptions = [
@@ -81,12 +87,12 @@ const meta: Meta<typeof Dropdown> = {
     id: {
       description: 'Уникальный идетифиактор',
     },
-    placeholder: {
-      description: 'Подсказка',
-      control: { type: 'text' },
-    },
     label: {
       description: 'Лейбл селекта',
+      control: { type: 'text' },
+    },
+    placeholder: {
+      description: 'Подсказка',
       control: { type: 'text' },
     },
     size: {
@@ -94,18 +100,28 @@ const meta: Meta<typeof Dropdown> = {
       control: { type: 'radio' },
       options: ['md', 'lg'],
     },
-
+    options: {
+      description: 'Список элементов',
+    },
+    value: {
+      description: 'Значение',
+    },
+    defaultValue: {
+      description: 'Значение по умолчанию',
+    },
+    style: {
+      description: 'Стили выпадающего списка',
+      control: { type: 'select' },
+      options: ['icons', 'text'],
+    },
+    className: { description: 'Дополнительный CSS класс для обертки dropdown' },
     disabled: {
       description: 'Заблокированный инпут для изменений',
       control: { type: 'boolean' },
     },
-    className: { description: 'Дополнительный CSS класс для обертки dropdown' },
-
-    defaultValue: {
-      description: 'Значение по умолчанию',
-    },
-    options: {
-      description: 'Список элементов',
+    readOnly: {
+      description: 'Только чтение',
+      control: { type: 'boolean' },
     },
     isOpened: {
       description: 'Открытый по умолчанию',
@@ -114,15 +130,6 @@ const meta: Meta<typeof Dropdown> = {
     noOptionsText: {
       description: 'Текст, показываемый при отсутствии опций',
       control: { type: 'text' },
-    },
-    style: {
-      description: 'Стили выпадающего списка',
-      control: { type: 'select' },
-      options: ['icons', 'text'],
-    },
-    readOnly: {
-      description: 'Только чтение',
-      control: { type: 'boolean' },
     },
     isLeftLabel: {
       description: 'Левый лейбл',
@@ -136,6 +143,22 @@ const meta: Meta<typeof Dropdown> = {
       description: 'Текст ошибки',
       control: { type: 'text' },
     },
+    onChange: {
+      description: 'Callback, который будет вызван при изменении значения',
+      action: 'changed',
+    },
+    onClose: {
+      description: 'Callback, который будет вызван при закрытии выпадающего списка',
+      action: 'closed',
+    },
+    clearable: {
+      description: 'Возможность сброса значения до первоначального',
+      control: { type: 'boolean' },
+    },
+    required: {
+      description: 'Обязательное поле',
+      control: { type: 'boolean' },
+    },
   },
 };
 
@@ -144,13 +167,31 @@ export default meta;
 // Дефолтный Dropdown
 export const DropdownDefault = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownDefault.storyName = 'Dropdown по умолчанию';
-
 DropdownDefault.args = {
   isOpened: false,
   options: dropdownOptions,
 };
 
-//
+// Dropdown с выбором опций
+export const DropdownChange = (argTypes: DropdownProps): JSX.Element => {
+  const [value, setValue] = useState('');
+  const [isOpened, setIsOpened] = useState(false);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, value: DropdownProps['options'][number]) => {
+    setValue(value);
+    setIsOpened(false);
+  };
+  useEffect(() => {
+    if (argTypes.error) setValue('Невалидные значения');
+    else setValue('');
+  }, [argTypes.error]);
+  return <Dropdown value={value} onChange={handleChange} isOpened={isOpened} required={true} {...argTypes} />;
+};
+DropdownChange.storyName = 'Dropdown изменяемый';
+DropdownChange.parameters = {
+  controls: { disable: true },
+};
+
+// Dropdown с ошибкой
 export const DropdownWithError = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownWithError.storyName = 'Dropdown c ошибкой';
 DropdownWithError.args = {
@@ -159,7 +200,11 @@ DropdownWithError.args = {
   error: true,
   helperText: 'Необходимо выбрать значение',
 };
+DropdownWithError.parameters = {
+  controls: { disable: true },
+};
 
+// Dropdown с иконкой открытый
 export const DropdownOpenedDefault = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedDefault.storyName = 'Dropdown открытый с иконками по умолчанию';
 DropdownOpenedDefault.args = {
@@ -167,7 +212,11 @@ DropdownOpenedDefault.args = {
   style: 'icons',
   options: dropdownOptions,
 };
+DropdownOpenedDefault.parameters = {
+  controls: { disable: true },
+};
 
+// Dropdown c выбранным значением
 export const DropdownOpenedDefaultSelected = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedDefaultSelected.storyName = 'Dropdown открытый с иконками по умолчанию c выбранным значением';
 DropdownOpenedDefaultSelected.args = {
@@ -180,6 +229,7 @@ DropdownOpenedDefaultSelected.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown без иконок по умолчанию
 export const DropdownOpenedText = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedText.storyName = 'Dropdown открытый без иконок по умолчанию';
 DropdownOpenedText.args = {
@@ -195,6 +245,7 @@ DropdownOpenedText.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown без иконок с выбранным значением
 export const DropdownOpenedTextSelected = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedTextSelected.storyName = 'Dropdown открытый без иконок по умолчанию c выбранным значением';
 DropdownOpenedTextSelected.args = {
@@ -207,6 +258,7 @@ DropdownOpenedTextSelected.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown заблокированный
 export const DropdownDisabled = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownDisabled.storyName = 'Dropdown заблокированный';
 DropdownDisabled.args = {
@@ -219,6 +271,7 @@ DropdownDisabled.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown только чтение
 export const DropdownReadOnly = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownReadOnly.storyName = 'Dropdown только чтение';
 DropdownReadOnly.args = {
@@ -231,6 +284,7 @@ DropdownReadOnly.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown с лейблом
 export const DropdownSelectVariantSelect = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownSelectVariantSelect.storyName = 'Dropdown селект c лейблом';
 DropdownSelectVariantSelect.args = {
@@ -243,6 +297,7 @@ DropdownSelectVariantSelect.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown с боковым лейблом
 export const DropdownSelectVariantSelectLeftLabel = (argTypes: DropdownProps): JSX.Element => (
   <Dropdown {...argTypes} />
 );

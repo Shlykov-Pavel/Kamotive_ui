@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { InputProps } from 'kamotive_ui';
 import styles from './Input.module.css';
 import classNames from 'classnames';
@@ -10,25 +10,25 @@ import { Typography } from '../Typography/Typography';
 
 export const Input: FC<InputProps> = ({
   id,
-  className,
-  value,
   label,
   placeholder,
   size = 'lg',
-  onChange,
-  icon,
-  error = false,
-  helperText,
+  value,
+  className,
+  multiline = false,
+  resize = false,
   disabled = false,
   readOnly = false,
   isLeftLabel = false,
-  multiline = false,
-  resize = false,
+  icon,
+  error = false,
+  helperText,
+  onChange,
+  required = false,
 }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (onChange) {
-      onChange(e);
-    }
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    event.stopPropagation();
+    onChange?.(event);
   };
 
   const wrapperClassess = classNames(styles['wrapper--input'], {
@@ -49,6 +49,7 @@ export const Input: FC<InputProps> = ({
   const labelClasses = classNames(styles.label, styles[size], {
     [styles['label--default']]: !isLeftLabel,
     [styles['label--left']]: isLeftLabel,
+    [styles['label--required']]: required,
   });
 
   return (

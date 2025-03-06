@@ -1,11 +1,10 @@
 .wrapper--input {
   position: relative;
-  width: fit-content;
   max-width: 260px;
   width: 100%;
 }
 .wrapper--input-label {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 .wrapper--input-helperText {
   margin-bottom: 15px;
@@ -140,6 +139,20 @@
 }
 .label--left .sm {
   font-size: 10px;
+}
+
+/* Стили для обязательного input */
+.label--default.label--required {
+  position: relative;
+  top: 0;
+}
+.label--required::after {
+  content: '*';
+  color: var(--error-main);
+  position: absolute;
+  margin-left: 2px;
+  top: 2px;
+  font-size: 22px;
 }
 
 /* Стили для input с ошибкой */

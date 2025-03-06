@@ -27,34 +27,36 @@ declare module 'kamotive_ui' {
   export interface InputProps {
     /** Идентификатор элемента */
     id?: string;
-    /** Дополнительный класс */
-    className?: string;
-    /** Знчение */
-    value?: string;
     /** Лейбл */
     label?: string;
     /** Подсказка */
     placeholder?: string;
     /** Размер */
     size?: 'sm' | 'md' | 'lg';
-    /** Callback при изменении значения */
-    onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-    /** Иконка слева */
-    icon?: ReactNode;
-    /** Ошибка */
-    error?: boolean;
-    /** Текст ошибки */
-    helperText?: string;
+    /** Знчение */
+    value?: string;
+    /** Дополнительный класс */
+    className?: string;
+    /** Многострочное поле */
+    multiline?: boolean;
+    /** Изменение размера многострочного поля */
+    resize?: boolean;
     /** Заблокированное поле */
     disabled?: boolean;
     /** Только для чтения */
     readOnly?: boolean;
     /** Метка слева */
     isLeftLabel?: boolean;
-    /** Многострочное поле */
-    multiline?: boolean;
-    /** Изменение размера многострочного поля */
-    resize?: boolean;
+    /** Иконка слева */
+    icon?: ReactNode;
+    /** Ошибка */
+    error?: boolean;
+    /** Текст ошибки */
+    helperText?: string;
+    /** Callback при изменении значения */
+    onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    /** Обязательное поле */
+    required?: boolean;
   }
 
   export const Input: React.FC<InputProps>;
@@ -103,38 +105,44 @@ declare module 'kamotive_ui' {
   export interface DropdownProps {
     /** Идентификатор */
     id?: string;
-    /** Подсказик заполнения */
-    placeholder?: string;
     /**  Лейбл */
     label?: string;
+    /** Подсказик заполнения */
+    placeholder?: string;
     /** Размер */
     size?: 'md' | 'lg';
-    /** Заблокированный */
-    disabled?: boolean;
-    /**Дополнительный класс */
-    className?: string;
-    /** Значение по умолчанию */
-    defaultValue?: DropdownProps['options'][number] | null | string | number;
     /** Массив элементов для выпадающего списка */
     options: any[];
+    /** Значение */
+    value?: DropdownProps['options'][number] | null | string | number;
+    /** Значение по умолчанию */
+    defaultValue?: DropdownProps['options'][number] | null | string | number;
+    /** Стиль выпадающего списка(текст+иконка, текст) */
+    style?: 'icons' | 'text';
+    /**Дополнительный класс */
+    className?: string;
+    /** Заблокированный */
+    disabled?: boolean;
+    /** Только для чтения */
+    readOnly?: boolean;
     /** Открытый */
     isOpened?: boolean;
     /** Текст при отсутствии опций */
     noOptionsText: string;
-    /** Стиль выпадающего списка(текст+иконка, текст) */
-    style?: 'icons' | 'text';
-    /** Только для чтения */
-    readOnly?: boolean;
     /** Отображение левой метки */
     isLeftLabel?: boolean;
-    /** Callback, который будет вызван при изменении значения */
-    onChange?: (value: DropdownProps['items'][number]) => void;
-    /** Callback, который будет вызван при закрытии выпадающего списка */
-    onClose?: () => void;
     /** Ошибка */
     error?: boolean;
     /** Текст ошибки */
     helperText?: string;
+    /** Callback, который будет вызван при изменении значения */
+    onChange?: (event: ChangeEvent<HTMLInputElement>, value: DropdownProps['options'][number]) => void;
+    /** Callback, который будет вызван при закрытии выпадающего списка */
+    onClose?: (event: ChangeEvent<HTMLInputElement>) => void;
+    /** Возможность сброса значения до первоначального */
+    clearable?: boolean;
+    /** Обязательное поле */
+    required?: boolean;
   }
   export const Dropdown: React.FC<DropdownProps>;
 
