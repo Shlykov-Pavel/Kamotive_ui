@@ -33,7 +33,7 @@ export const Input: FC<InputProps> = ({
 
   const wrapperClassess = classNames(styles['wrapper--input'], {
     [styles['wrapper--left']]: isLeftLabel,
-    [styles['wrapper--input-label']]: label && !isLeftLabel,
+    [styles['wrapper--input-label']]: label && !isLeftLabel && !required,
     [styles['wrapper--input-helperText']]: error,
   });
 

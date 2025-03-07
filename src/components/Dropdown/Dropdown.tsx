@@ -207,7 +207,7 @@ export const Dropdown: FC<DropdownProps> = ({
   const wrapperClassess = classNames({
     [styles['dropdown--container']]: !isLeftLabel,
     [styles['dropdown--container-left']]: isLeftLabel,
-    [styles['dropdown--container-label']]: label && !isLeftLabel,
+    [styles['dropdown--container-label']]: label && !isLeftLabel && !required,
     [styles['dropdown--container-helperText']]: errorInput,
   });
 
