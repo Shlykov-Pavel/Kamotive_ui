@@ -6,34 +6,36 @@ import { IconAlarm10, IconAccount10, IconBank10, IconBell10, IconBriefcase10, Ic
 export interface InputProps {
   /** Идентификатор элемента */
   id?: string;
-  /** Дополнительный класс */
-  className?: string;
-  /** Знчение */
-  value?: string;
   /** Лейбл */
   label?: string;
   /** Подсказка */
   placeholder?: string;
   /** Размер */
   size?: 'sm' | 'md' | 'lg';
-  /** Callback при изменении значения */
-  onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-  /** Иконка слева */
-  icon?: ReactNode;
-  /** Ошибка */
-  hasError?: boolean;
-  /** Помощник текста */
-  helperText?: ReactNode;
-   /** Заблокированное поле */
+  /** Знчение */
+  value?: string;
+  /** Дополнительный класс */
+  className?: string;
+  /** Многострочное поле */
+  multiline?: boolean;
+  /** Изменение размера многострочного поля */
+  resize?: boolean;
+  /** Заблокированное поле */
   disabled?: boolean;
   /** Только для чтения */
   readOnly?: boolean;
   /** Метка слева */
   isLeftLabel?: boolean;
-  /** Многострочное поле */
-  multiline?: boolean;
-  /** Изменение размера многострочного поля */
-  resize?: boolean;
+  /** Иконка слева */
+  icon?: ReactNode;
+  /** Ошибка */
+  error?: boolean;
+  /** Текст ошибки */
+  helperText?: string;
+  /** Callback при изменении значения */
+  onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  /** Обязательное поле */
+  required?: boolean;
 }
 
 const iconOptions = {
@@ -46,11 +48,18 @@ const iconOptions = {
   unset: null,
 };
 
-const withWrapper = (Story: React.ComponentType) => <div style={{
-  backgroundColor: 'var(--white)',
-  padding: '30px',
-  borderRadius: '10px',
-  width: '900px'}}>{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => (
+  <div
+    style={{
+      backgroundColor: 'var(--white)',
+      padding: '30px',
+      borderRadius: '10px',
+      width: '900px',
+    }}
+  >
+    {<Story />}
+  </div>
+);
 
 const meta: Meta<typeof Input> = {
   title: 'Components/Input',
@@ -66,7 +75,7 @@ const meta: Meta<typeof Input> = {
     size: 'lg',
     icon: 'unset',
     multiline: false,
-    hasError: false,
+    error: false,
     helperText: 'Поле обязательно для заполнения',
     disabled: false,
     isLeftLabel: false,
@@ -75,8 +84,6 @@ const meta: Meta<typeof Input> = {
   },
   argTypes: {
     id: { description: 'Идентификатор компонента' },
-    className: { description: 'Дополнительный CSS класс для обертки инпута' },
-    value: { description: 'Значение поля инпут' },
     label: { description: 'Текст метки инпута' },
     placeholder: { description: 'Текст подсказки инпута' },
     size: {
@@ -84,23 +91,26 @@ const meta: Meta<typeof Input> = {
       control: { type: 'radio' },
       options: ['sm', 'md', 'lg'],
     },
-    // onChange: {
-    //   description: 'Callback, который будет вызван при изменении значения внутри инпута',
-    //   action: 'изменено value',
-    // },
+    value: { description: 'Значение поля инпут' },
+    className: { description: 'Дополнительный CSS класс для обертки инпута' },
+    multiline: { description: 'Свойство, для многострочного инпута', control: { type: 'boolean' } },
+    resize: { description: 'Свойство, для изменения размера многострочного инпута', control: { type: 'boolean' } },
+    disabled: { description: 'Заблокированный инпут для изменений', control: { type: 'boolean' } },
+    readOnly: { description: 'Инпут только для чтения', control: { type: 'boolean' } },
+    isLeftLabel: { description: 'Инпут с левой меткой', control: { type: 'boolean' } },
     icon: {
       description: 'Элемент с иконкой, который располагается с правой стороны инпута',
       control: { type: 'select' },
       options: Object.keys(iconOptions),
       mapping: iconOptions,
     },
-    hasError: { description: 'Условие показа ошибки инпута', type: 'boolean', control: { type: 'boolean' } },
+    error: { description: 'Условие показа ошибки инпута', type: 'boolean', control: { type: 'boolean' } },
     helperText: { description: 'Строка для вспомогательно текста под инпутом', type: 'string' },
-    disabled: { description: 'Заблокированный инпут для изменений', control: { type: 'boolean' } },
-    readOnly: { description: 'Инпут только для чтения', control: { type: 'boolean' } },
-    isLeftLabel: { description: 'Инпут с левой меткой', control: { type: 'boolean' } },
-    multiline: { description: 'Свойство, для многострочного инпута', control: { type: 'boolean' } },
-    resize: { description: 'Свойство, для изменения размера многострочного инпута', control: { type: 'boolean' } },
+    onChange: {
+      description: 'Callback, который будет вызван при изменении значения внутри инпута',
+      action: 'изменено value',
+    },
+    required: { description: 'Обязательное поле инпута', control: { type: 'boolean' } },
   },
 };
 
@@ -113,9 +123,9 @@ export const InputDefault = (argTypes: InputProps): JSX.Element => {
     setValue(e.target.value);
   };
   useEffect(() => {
-    if (argTypes.hasError) setValue('Невалидные значения');
+    if (argTypes.error) setValue('Невалидные значения');
     else setValue('');
-  }, [argTypes.hasError]);
+  }, [argTypes.error]);
   return <Input value={value} onChange={handleChange} {...argTypes} />;
 };
 InputDefault.storyName = 'Input по умолчанию';
@@ -126,6 +136,7 @@ InputFilled.storyName = 'Input заполненный';
 InputFilled.args = {
   value: 'Заполненный инпут',
   className: 'filled',
+  required: true,
 };
 InputFilled.parameters = {
   controls: { disable: true },
@@ -136,7 +147,7 @@ export const InputWithError = (argTypes: InputProps): JSX.Element => <Input {...
 InputWithError.storyName = 'Input с ошибкой';
 InputWithError.args = {
   value: 'Невалидные значения',
-  hasError: true,
+  error: true,
 };
 InputWithError.parameters = {
   controls: { disable: true },
@@ -197,7 +208,7 @@ export const InputMultilineNoneResizable = (argTypes: InputProps): JSX.Element =
     setValue(e.target.value);
   };
   useEffect(() => {
-    if (argTypes.hasError) setValue('Невалидные значения');
+    if (argTypes.error) setValue('Невалидные значения');
     if (argTypes.icon) setClassName('input--withIcon');
     else {
       setValue('');
@@ -223,9 +234,9 @@ export const InputMultilineResizable = (argTypes: InputProps): JSX.Element => {
     setValue(e.target.value);
   };
   useEffect(() => {
-    if (argTypes.hasError) setValue('Невалидные значения');
+    if (argTypes.error) setValue('Невалидные значения');
     else setValue('');
-  }, [argTypes.hasError]);
+  }, [argTypes.error]);
   return <Input value={value} onChange={handleChange} {...argTypes} />;
 };
 InputMultilineResizable.storyName = 'Input многострочный расширяемый';

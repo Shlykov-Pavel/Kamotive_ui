@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 
-export const IconClose10: FC<{ color?: string; htmlColor?: string; strokeWidth?: string }> = ({
-  color = 'inherit',
-  htmlColor,
-  strokeWidth,
-}) => {
+export const IconClose10: FC<{
+  color?: string;
+  htmlColor?: string;
+  strokeWidth?: string;
+  onClick?: (event: React.MouseEvent<SVGSVGElement>) => void;
+}> = ({ color = 'inherit', htmlColor, strokeWidth, onClick }) => {
   return (
     <svg
       width="15"
@@ -13,6 +14,7 @@ export const IconClose10: FC<{ color?: string; htmlColor?: string; strokeWidth?:
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={color}
+      onClick={onClick}
     >
       <path
         fill={htmlColor || 'currentColor'}
