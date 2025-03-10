@@ -39,6 +39,8 @@ declare module 'kamotive_ui' {
     className?: string;
     /** Многострочное поле */
     multiline?: boolean;
+    /** Количество строк в многострочном поле */
+    rows?: number;
     /** Изменение размера многострочного поля */
     resize?: boolean;
     /** Заблокированное поле */
@@ -101,6 +103,20 @@ declare module 'kamotive_ui' {
 
   export const ToggleButton: React.FC<ToggleButtonProps>;
 
+  export type BaseOptions = {
+    id?: string;
+    key?: string | number;
+    name?: string;
+    description?: string;
+    value?: string | number;
+    icon?: React.JSX.Element;
+    disabled?: boolean;
+    isDivider?: boolean;
+    children?: TOptions[];
+  };
+
+  export type TOptions<T = {}> = BaseOptions & T;
+
   //Типы для dropdown
   export interface DropdownProps {
     /** Идентификатор */
@@ -112,11 +128,13 @@ declare module 'kamotive_ui' {
     /** Размер */
     size?: 'md' | 'lg';
     /** Массив элементов для выпадающего списка */
-    options: any[];
+    options: Array<string | number | TOptions>;
+    /** Функция для получения текста опции */
+    getOptionLabel?: (option: TOptions) =>  keyof TOptions;
     /** Значение */
-    value?: DropdownProps['options'][number] | null | string | number;
+    value?: string | number | TOptions | null;
     /** Значение по умолчанию */
-    defaultValue?: DropdownProps['options'][number] | null | string | number;
+    defaultValue?: string | number | TOptions | null;
     /** Стиль выпадающего списка(текст+иконка, текст) */
     style?: 'icons' | 'text';
     /**Дополнительный класс */
@@ -136,13 +154,15 @@ declare module 'kamotive_ui' {
     /** Текст ошибки */
     helperText?: string;
     /** Callback, который будет вызван при изменении значения */
-    onChange?: (event: ChangeEvent<HTMLInputElement>, value: DropdownProps['options'][number]) => void;
+    onChange?: (event: ChangeEvent<HTMLInputElement>, value: string | number | TOptions | null) => void;
     /** Callback, который будет вызван при закрытии выпадающего списка */
     onClose?: (event: ChangeEvent<HTMLInputElement>) => void;
     /** Возможность сброса значения до первоначального */
     clearable?: boolean;
     /** Обязательное поле */
     required?: boolean;
+    /** Отображение разделителя */
+    isDivider?: boolean;
   }
   export const Dropdown: React.FC<DropdownProps>;
 

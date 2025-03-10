@@ -101,17 +101,27 @@
   outline: none;
 }
 
-.resetButton {
+.resetButton,
+.dropdownIcon {
   position: absolute;
-  right: 32px;
-  top: 50%;
-  transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
   padding: 4px;
   display: flex;
   align-items: center;
+}
+
+.resetButton{
+  right: 35px;
+}
+.dropdownIcon{
+  right: 5px;
+}
+.resetButton:hover,
+.dropdownIcon:hover {
+  background-color: rgba(120, 120, 128, 0.08);
+  border-radius: 50%;
 }
 
 .dropdown {

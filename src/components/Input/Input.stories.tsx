@@ -18,6 +18,8 @@ export interface InputProps {
   className?: string;
   /** Многострочное поле */
   multiline?: boolean;
+  /** Количество строк в многострочном поле */
+  rows?: number;
   /** Изменение размера многострочного поля */
   resize?: boolean;
   /** Заблокированное поле */
@@ -94,6 +96,7 @@ const meta: Meta<typeof Input> = {
     value: { description: 'Значение поля инпут' },
     className: { description: 'Дополнительный CSS класс для обертки инпута' },
     multiline: { description: 'Свойство, для многострочного инпута', control: { type: 'boolean' } },
+    rows: { description: 'Количество строк в многострочном инпуте', control: { type: 'number' } },
     resize: { description: 'Свойство, для изменения размера многострочного инпута', control: { type: 'boolean' } },
     disabled: { description: 'Заблокированный инпут для изменений', control: { type: 'boolean' } },
     readOnly: { description: 'Инпут только для чтения', control: { type: 'boolean' } },

@@ -3,6 +3,19 @@ import { Meta } from '@storybook/react';
 import { Dropdown } from './Dropdown';
 import { IconAccount10, IconAlarm10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
 import { IconEyeOff10 } from '../../Icons/IconEyeOff/IconEyeOff10';
+
+export type TOptions = {
+  id?: string;
+  kew?: string | number;
+  name?: string;
+  description?: string;
+  value?: string | number;
+  icon?: React.JSX.Element;
+  disabled?: boolean;
+  isDivider?: boolean;
+  children?: TOptions[];
+};
+
 export interface DropdownProps {
   /** Идентификатор */
   id?: string;
@@ -13,11 +26,13 @@ export interface DropdownProps {
   /** Размер */
   size?: 'md' | 'lg';
   /** Массив элементов для выпадающего списка */
-  options: any[];
+  options: Array<string | number | TOptions> | null;
+  /** Функция для получения текста опции */
+  getOptionLabel?: (option: string | number | TOptions) => string;
   /** Значение */
-  value?: DropdownProps['options'][number] | null | string | number;
+  value?: string | number | TOptions | null;
   /** Значение по умолчанию */
-  defaultValue?: DropdownProps['options'][number] | null | string | number;
+  defaultValue?: string | number | TOptions | null;
   /** Стиль выпадающего списка(текст+иконка, текст) */
   style?: 'icons' | 'text';
   /**Дополнительный класс */
@@ -37,15 +52,16 @@ export interface DropdownProps {
   /** Текст ошибки */
   helperText?: string;
   /** Callback, который будет вызван при изменении значения */
-  onChange?: (event: ChangeEvent<HTMLInputElement>, value: DropdownProps['options'][number]) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>, value: string | number | TOptions | null) => void;
   /** Callback, который будет вызван при закрытии выпадающего списка */
   onClose?: () => void;
   /** Возможность сброса значения до первоначального */
   clearable?: boolean;
   /** Обязательное поле */
   required?: boolean;
+  /** Отображение разделителя */
+  isDivider?: boolean;
 }
-
 const dropdownOptions = [
   { value: 'Выбор_1', icon: <IconAccount10 /> },
   { value: 'Выбор_2', icon: <IconAlarm10 /> },
@@ -174,17 +190,28 @@ DropdownDefault.args = {
 
 // Dropdown с выбором опций
 export const DropdownChange = (argTypes: DropdownProps): JSX.Element => {
-  const [value, setValue] = useState('');
+  const defaultOptions = [
+    { id: '1', name: 'name 1', description: 'описание 1'},
+    { id: '2', name: 'name 2', description: 'описание 2'},
+    { id: '3', name: 'name 3', description: 'описание 3'},
+  ]
+  const [value, setValue] = useState<TOptions | null>(null);
   const [isOpened, setIsOpened] = useState(false);
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, value: DropdownProps['options'][number]) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, value: TOptions | null) => {
     setValue(value);
     setIsOpened(false);
   };
   useEffect(() => {
-    if (argTypes.error) setValue('Невалидные значения');
-    else setValue('');
+    if (argTypes.error) setValue(null);
   }, [argTypes.error]);
-  return <Dropdown value={value} onChange={handleChange} isOpened={isOpened} required={true} {...argTypes} />;
+  return <Dropdown
+      {...argTypes}
+      options={defaultOptions}
+      getOptionLabel={(option: TOptions) => option.description}
+      value={value} 
+      onChange={handleChange} 
+      isOpened={isOpened} 
+      required={true} />;
 };
 DropdownChange.storyName = 'Dropdown изменяемый';
 DropdownChange.parameters = {
@@ -233,14 +260,7 @@ DropdownOpenedDefaultSelected.parameters = {
 export const DropdownOpenedText = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedText.storyName = 'Dropdown открытый без иконок по умолчанию';
 DropdownOpenedText.args = {
-  isOpened: true,
-  style: 'text',
-  options: [
-    { id: '1111', name: '1111' },
-    { id: '2222', name: '22222' },
-    { id: '3333', name: '333333' },
-  ],
-};
+  isOpened: true};
 DropdownOpenedText.parameters = {
   controls: { disable: true },
 };
