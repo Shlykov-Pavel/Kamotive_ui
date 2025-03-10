@@ -1,7 +1,6 @@
 import type { Meta } from '@storybook/react';
 import React from 'react';
 import { ColorPicker } from './ColorPicker';
-import './ColorPicker.module.css';
 
 export interface ColorPickerProps {
   /**
@@ -38,7 +37,11 @@ export interface ColorPickerProps {
   onChange?: (color: string) => void;
 }
 
-const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-colorpicker">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div style={{
+  backgroundColor: 'var(--white)',
+  padding: '30px',
+  borderRadius: '10px',
+  width: '900px'}}>{<Story />}</div>;
 
 
 const colorsOptions = [ '#ff9500', '#ffcc00', '#34c759', '#30b0c7', '#007aff', '#5856d6', '#af52de', '#FF2D55']

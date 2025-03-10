@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { InputProps } from 'kamotive_ui';
-import styles from './Input.module.css'
+import styles from './Input.module.css';
 import classNames from 'classnames';
+import { Typography } from '../Typography/Typography';
 
 /**
  * Компонент Input для создания текстовых полей ввода различных стилей и размеров.
@@ -9,82 +10,81 @@ import classNames from 'classnames';
 
 export const Input: FC<InputProps> = ({
   id,
-  className,
-  value,
   label,
   placeholder,
-  size = 'md',
-  onChange,
-  icon,
-  hasError = false,
-  helperText,
+  size = 'lg',
+  value,
+  className,
+  multiline = false,
+  resize = false,
   disabled = false,
   readOnly = false,
   isLeftLabel = false,
-  multiline = false,
-  resize = false,
+  icon,
+  error = false,
+  helperText,
+  onChange,
+  required = false,
 }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (onChange) {
-      onChange(e);
-    }
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    event.stopPropagation();
+    onChange?.(event);
   };
 
-  const wrapperClassess = classNames(styles['wrapper'], {
-    'wrapper--left': isLeftLabel,
+  const wrapperClassess = classNames(styles['wrapper--input'], {
+    [styles['wrapper--left']]: isLeftLabel,
+    [styles['wrapper--input-label']]: label && !isLeftLabel && !required,
+    [styles['wrapper--input-helperText']]: error,
   });
 
-  const inputWrapperClassess = classNames(styles['wrapper--input']);
-
-  const inputClassess = classNames(styles['inputText'], size, className, {
-    'input--error': hasError,
-    'readOnly': readOnly,
-    'input--withIcon': icon,
-    'textarea': multiline,
-    'resize': resize,
+  const inputClassess = classNames(styles.input, styles[size], className, {
+    [styles['input--error']]: error,
+    [styles['readOnly']]: readOnly,
+    [styles['input--withIcon']]: icon,
+    [styles['textarea']]: multiline,
+    [styles['resize']]: resize,
+    [styles['input--left']]: isLeftLabel,
   });
 
-  const labelClasses = classNames(styles['label'], {
-    'label--default': !isLeftLabel,
-    'label--left': isLeftLabel,
-  });
-
-  const iconClassess = classNames(styles['icon'], {
-    'input--withIcon': multiline,
+  const labelClasses = classNames(styles.label, styles[size], {
+    [styles['label--default']]: !isLeftLabel,
+    [styles['label--left']]: isLeftLabel,
+    [styles['label--required']]: required,
   });
 
   return (
     <div className={wrapperClassess}>
-      {((value && !isLeftLabel) || isLeftLabel) && (
-        <label className={labelClasses} htmlFor={id}>
+      {label && (
+        <Typography variant="Caption" className={labelClasses}>
           {label}
-        </label>
+        </Typography>
       )}
-      <div className={inputWrapperClassess}>
-        {icon && <div className={iconClassess}>{icon}</div>}
-        {multiline ? (
-          <textarea
-            id={id}
-            className={inputClassess}
-            value={value}
-            placeholder={placeholder}
-            onChange={handleChange}
-            disabled={disabled}
-          />
-        ) : (
-          <input
-            id={id}
-            className={inputClassess}
-            value={value}
-            placeholder={placeholder}
-            onChange={handleChange}
-            disabled={disabled}
-            readOnly={readOnly}
-          />
-        )}
-      </div>
-
-      {hasError && helperText && <div className="helperText">{helperText}</div>}
+      {icon && <div className={styles.icon}>{icon}</div>}
+      {multiline ? (
+        <textarea
+          id={id}
+          className={inputClassess}
+          value={value}
+          placeholder={placeholder}
+          onChange={handleChange}
+          disabled={disabled}
+        />
+      ) : (
+        <input
+          id={id}
+          className={inputClassess}
+          value={value}
+          placeholder={placeholder}
+          onChange={handleChange}
+          disabled={disabled}
+          readOnly={readOnly}
+        />
+      )}
+      {error && helperText && (
+        <Typography variant="Caption" className={classNames(styles.helperText, styles[size])}>
+          {helperText}
+        </Typography>
+      )}
     </div>
   );
 };

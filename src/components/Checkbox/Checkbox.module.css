@@ -1,20 +1,9 @@
-.story--wrapper-checkbox {
-  background-color: var(--white);
-  padding: 30px;
-  border-radius: 10px;
-}
 
 .checkbox {
   display: flex;
   align-items: center;
   justify-content: left;
   gap: 5px;
-
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 16px;
   color: var(--text-dark);
 }
 

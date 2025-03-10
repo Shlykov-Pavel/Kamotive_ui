@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import React, { CSSProperties, ReactNode } from 'react';
 import { Typography } from './Typography';
-import './Typography.module.css';
+
 import { ETypographyVariants } from './enums';
 
 const typogrphy = [
@@ -162,6 +162,13 @@ const typogrphy = [
     description: 'Текст контента 2 уровня средний (активные элементы)',
   },
   {
+    title: 'Body2-SemiBold',
+    fontSize: 14,
+    lineHeight: 18,
+    fontWeight: 600,
+    description: 'Текст контента 2 уровня акцентный',
+  },
+  {
     title: 'Body2-Bold',
     fontSize: 14,
     lineHeight: 18,
@@ -243,7 +250,8 @@ export interface TypographyProps {
   /** Стиль текста */
   style?: CSSProperties;
 }
-const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-typography">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div style={{backgroundColor: 'var(--white)',
+  width: '900px'}}>{<Story />}</div>;
 
 const meta: Meta<typeof Typography> = {
   title: 'Introduction/Typography',
@@ -288,7 +296,14 @@ export const TypographyVariants = (argTypes: TypographyProps): JSX.Element => {
   return (
     <div>
       {typogrphy.map((item, index) => (
-        <div key={index} className='typography--wrapper-typography'>
+        <div key={index} style={{
+          display: 'grid',
+          gridTemplateColumns: '4fr 170px 80px 150px',
+          gap: '20px',
+          alignItems: 'center',
+          height: '60px',
+          width: '1100px'
+        }}>
           <Typography variant={item.title as TypographyProps['variant']}>{item.description}</Typography>
           <Typography variant="Body1" style={{ fontSize: 14, lineHeight: 16, fontWeight: 400, color: '#6b7280' }}>
             {item.title}

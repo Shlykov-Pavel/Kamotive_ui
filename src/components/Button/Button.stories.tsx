@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta } from '@storybook/react';
 import { Button } from './Button';
-import './Button.module.css';
 import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
 
 export interface ButtonProps {
@@ -34,7 +33,18 @@ const iconOptions = {
   unset: null,
 };
 
-const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-btn">{<Story />}</div>;const meta: Meta<typeof Button> = {
+const withWrapper = (Story: React.ComponentType) => (
+  <div style={{
+    backgroundColor: 'var(--white)',
+    padding: '30px',
+    borderRadius: '10px',
+    width: '900px'
+  }}>
+    <Story />
+  </div>
+);
+
+const meta: Meta<typeof Button> = {
   title: 'Components/Button',
   component: Button,
   tags: ['autodocs'],

@@ -1,38 +1,49 @@
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Meta } from '@storybook/react';
-import './Dropdown.module.css';
 import { Dropdown } from './Dropdown';
 import { IconAccount10, IconAlarm10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
 import { IconEyeOff10 } from '../../Icons/IconEyeOff/IconEyeOff10';
 export interface DropdownProps {
   /** Идентификатор */
   id?: string;
-  /** Имя */
-   name: string;
-   /**  Лейбл */
-   label?: string;
-   /** Размер */
-   size?: 'sm' | 'md' | 'lg';
-   /** Заблокированный */
-   disabled?: boolean;
-   /**Дополнительный класс */
-   className?: string;
-   /** Значение по умолчанию */
-   defaultValue?: DropdownProps['items'][number] | null;
-   /** Массив элементов для выпадающего списка [{key, value - обязательное значение, icon, isDivider, disabled, children}, ...] */
-   items: any[];
-   /** Открытый */
-    isOpened?: boolean;
-    /** Стиль выпадающего списка(текст+иконка, текст) */
-    style?: 'default' | 'text' ;
-    /** Только для чтения */
-    readOnly?: boolean;
-    /** Отображение левой метки */
-    isLeftLabel?:boolean;
-    /** Callback, который будет вызван при изменении значения */
-    onChange?: (value: DropdownProps['items'][number]) => void;
-    /** Callback, который будет вызван при закрытии выпадающего списка */
-    onClose?: () => void;
+  /**  Лейбл */
+  label?: string;
+  /** Подсказик заполнения */
+  placeholder?: string;
+  /** Размер */
+  size?: 'md' | 'lg';
+  /** Массив элементов для выпадающего списка */
+  options: any[];
+  /** Значение */
+  value?: DropdownProps['options'][number] | null | string | number;
+  /** Значение по умолчанию */
+  defaultValue?: DropdownProps['options'][number] | null | string | number;
+  /** Стиль выпадающего списка(текст+иконка, текст) */
+  style?: 'icons' | 'text';
+  /**Дополнительный класс */
+  className?: string;
+  /** Заблокированный */
+  disabled?: boolean;
+  /** Только для чтения */
+  readOnly?: boolean;
+  /** Открытый */
+  isOpened?: boolean;
+  /** Текст при отсутствии опций */
+  noOptionsText: string;
+  /** Отображение левой метки */
+  isLeftLabel?: boolean;
+  /** Ошибка */
+  error?: boolean;
+  /** Текст ошибки */
+  helperText?: string;
+  /** Callback, который будет вызван при изменении значения */
+  onChange?: (event: ChangeEvent<HTMLInputElement>, value: DropdownProps['options'][number]) => void;
+  /** Callback, который будет вызван при закрытии выпадающего списка */
+  onClose?: () => void;
+  /** Возможность сброса значения до первоначального */
+  clearable?: boolean;
+  /** Обязательное поле */
+  required?: boolean;
 }
 
 const dropdownOptions = [
@@ -44,7 +55,19 @@ const dropdownOptions = [
   { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar10 /> },
 ];
 
-const withWrapper = (Story: React.ComponentType) => <div className="story--wrapper-dropdown">{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => (
+  <div
+    style={{
+      backgroundColor: 'var(--white)',
+      padding: '30px',
+      borderRadius: '10px',
+      width: '900px',
+    }}
+  >
+    {<Story />}
+  </div>
+);
+
 const meta: Meta<typeof Dropdown> = {
   title: 'Components/Dropdown',
   component: Dropdown,
@@ -54,55 +77,86 @@ const meta: Meta<typeof Dropdown> = {
   },
   decorators: [withWrapper],
   args: {
-    name: 'Выпадающий список....',
+    placeholder: 'Выберите опции',
     disabled: false,
-    items: dropdownOptions,
+    options: dropdownOptions,
+    noOptionsText: 'Нет опций для выбора',
+    label: 'Выпадающий список',
   },
   argTypes: {
     id: {
       description: 'Уникальный идетифиактор',
     },
-    name: {
-      description: 'Имя селекта',
-      control: { type: 'text' },
-    },
     label: {
       description: 'Лейбл селекта',
+      control: { type: 'text' },
+    },
+    placeholder: {
+      description: 'Подсказка',
       control: { type: 'text' },
     },
     size: {
       description: 'Размер селекта',
       control: { type: 'radio' },
-      options: ['sm', 'md', 'lg'],
+      options: ['md', 'lg'],
     },
-
-    disabled: {
-      description: 'Заблокированный инпут для изменений',
-      control: { type: 'boolean' },
-    },
-    className: { description: 'Дополнительный CSS класс для обертки dropdown' },
-
-    defaultValue: {
-      description: 'Значение по умолчанию',
-    },
-    items: {
+    options: {
       description: 'Список элементов',
     },
-    isOpened: {
-      description: 'Открытый по умолчанию',
-      control: { type: 'boolean' },
+    value: {
+      description: 'Значение',
+    },
+    defaultValue: {
+      description: 'Значение по умолчанию',
     },
     style: {
       description: 'Стили выпадающего списка',
       control: { type: 'select' },
-      options: ['default', 'text'],
+      options: ['icons', 'text'],
+    },
+    className: { description: 'Дополнительный CSS класс для обертки dropdown' },
+    disabled: {
+      description: 'Заблокированный инпут для изменений',
+      control: { type: 'boolean' },
     },
     readOnly: {
       description: 'Только чтение',
       control: { type: 'boolean' },
     },
+    isOpened: {
+      description: 'Открытый по умолчанию',
+      control: { type: 'boolean' },
+    },
+    noOptionsText: {
+      description: 'Текст, показываемый при отсутствии опций',
+      control: { type: 'text' },
+    },
     isLeftLabel: {
       description: 'Левый лейбл',
+      control: { type: 'boolean' },
+    },
+    error: {
+      description: 'Ошибка',
+      control: { type: 'boolean' },
+    },
+    helperText: {
+      description: 'Текст ошибки',
+      control: { type: 'text' },
+    },
+    onChange: {
+      description: 'Callback, который будет вызван при изменении значения',
+      action: 'changed',
+    },
+    onClose: {
+      description: 'Callback, который будет вызван при закрытии выпадающего списка',
+      action: 'closed',
+    },
+    clearable: {
+      description: 'Возможность сброса значения до первоначального',
+      control: { type: 'boolean' },
+    },
+    required: {
+      description: 'Обязательное поле',
       control: { type: 'boolean' },
     },
   },
@@ -113,91 +167,137 @@ export default meta;
 // Дефолтный Dropdown
 export const DropdownDefault = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownDefault.storyName = 'Dropdown по умолчанию';
-
 DropdownDefault.args = {
   isOpened: false,
-  items: dropdownOptions,
+  options: dropdownOptions,
 };
 
+// Dropdown с выбором опций
+export const DropdownChange = (argTypes: DropdownProps): JSX.Element => {
+  const [value, setValue] = useState('');
+  const [isOpened, setIsOpened] = useState(false);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, value: DropdownProps['options'][number]) => {
+    setValue(value);
+    setIsOpened(false);
+  };
+  useEffect(() => {
+    if (argTypes.error) setValue('Невалидные значения');
+    else setValue('');
+  }, [argTypes.error]);
+  return <Dropdown value={value} onChange={handleChange} isOpened={isOpened} required={true} {...argTypes} />;
+};
+DropdownChange.storyName = 'Dropdown изменяемый';
+DropdownChange.parameters = {
+  controls: { disable: true },
+};
+
+// Dropdown с ошибкой
+export const DropdownWithError = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+DropdownWithError.storyName = 'Dropdown c ошибкой';
+DropdownWithError.args = {
+  isOpened: false,
+  options: dropdownOptions,
+  error: true,
+  helperText: 'Необходимо выбрать значение',
+};
+DropdownWithError.parameters = {
+  controls: { disable: true },
+};
+
+// Dropdown с иконкой открытый
 export const DropdownOpenedDefault = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedDefault.storyName = 'Dropdown открытый с иконками по умолчанию';
 DropdownOpenedDefault.args = {
   isOpened: true,
-  style: 'default',
-  items: dropdownOptions,
+  style: 'icons',
+  options: dropdownOptions,
+};
+DropdownOpenedDefault.parameters = {
+  controls: { disable: true },
 };
 
+// Dropdown c выбранным значением
 export const DropdownOpenedDefaultSelected = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedDefaultSelected.storyName = 'Dropdown открытый с иконками по умолчанию c выбранным значением';
 DropdownOpenedDefaultSelected.args = {
   defaultValue: { value: 'Выбор_2', icon: <IconAlarm10 /> },
   isOpened: true,
-  style: 'default',
-  items: dropdownOptions,
+  style: 'icons',
+  options: dropdownOptions,
 };
 DropdownOpenedDefaultSelected.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown без иконок по умолчанию
 export const DropdownOpenedText = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedText.storyName = 'Dropdown открытый без иконок по умолчанию';
 DropdownOpenedText.args = {
   isOpened: true,
   style: 'text',
-  items: dropdownOptions,
+  options: [
+    { id: '1111', name: '1111' },
+    { id: '2222', name: '22222' },
+    { id: '3333', name: '333333' },
+  ],
 };
 DropdownOpenedText.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown без иконок с выбранным значением
 export const DropdownOpenedTextSelected = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedTextSelected.storyName = 'Dropdown открытый без иконок по умолчанию c выбранным значением';
 DropdownOpenedTextSelected.args = {
   defaultValue: { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar10 /> },
   isOpened: true,
   style: 'text',
-  items: dropdownOptions,
+  options: dropdownOptions,
 };
 DropdownOpenedTextSelected.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown заблокированный
 export const DropdownDisabled = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownDisabled.storyName = 'Dropdown заблокированный';
 DropdownDisabled.args = {
   disabled: true,
   defaultValue: dropdownOptions.find((el) => el.value === 'Задизейбленный выбор'),
   isOpened: false,
-  items: dropdownOptions,
+  options: dropdownOptions,
 };
 DropdownDisabled.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown только чтение
 export const DropdownReadOnly = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownReadOnly.storyName = 'Dropdown только чтение';
 DropdownReadOnly.args = {
   readOnly: true,
   defaultValue: { value: 'Только чтение' },
   isOpened: false,
-  items: dropdownOptions,
+  options: dropdownOptions,
 };
 DropdownReadOnly.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown с лейблом
 export const DropdownSelectVariantSelect = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownSelectVariantSelect.storyName = 'Dropdown селект c лейблом';
 DropdownSelectVariantSelect.args = {
   label: 'Лейбл селекта',
   defaultValue: { value: 'Выбор_1', icon: <IconAccount10 /> },
   isOpened: false,
-  items: dropdownOptions,
+  options: dropdownOptions,
 };
 DropdownSelectVariantSelect.parameters = {
   controls: { disable: true },
 };
 
+// Dropdown с боковым лейблом
 export const DropdownSelectVariantSelectLeftLabel = (argTypes: DropdownProps): JSX.Element => (
   <Dropdown {...argTypes} />
 );
@@ -205,10 +305,10 @@ DropdownSelectVariantSelectLeftLabel.storyName = 'Dropdown селект c бок
 DropdownSelectVariantSelectLeftLabel.args = {
   defaultValue: { value: 'Выбор_1', icon: <IconAccount10 /> },
   isOpened: false,
-  items: dropdownOptions,
+  options: dropdownOptions,
   label: 'Лейбл селекта',
   isLeftLabel: true,
-  name: 'Лейбл селекта',
+  placeholder: 'Боковой лейбл',
 };
 DropdownSelectVariantSelectLeftLabel.parameters = {
   controls: { disable: true },

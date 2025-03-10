@@ -3,25 +3,25 @@ import { Accept } from 'react-dropzone/.';
 declare module 'kamotive_ui' {
   import * as React from 'react';
 
-/** @internal */
-export interface ButtonProps {
-   /** Тест кнопки */
-  label?: string;
-  /** Вид кнопки (заполненный/обводка/ссылка) */
-  variant?: 'fill' | 'outline' | 'link';
-  /** Размер кнопки */
-  size?: 'sm' | 'md' | 'lg';
-  /** Стиль кнопки(текст+иконка, текст, иконка) */
-  style?: 'default' | 'text' | 'icon';
-  /** Состояние кнопки */
-  condition?: 'default' | 'error' | 'success' | 'warning' | 'info';
-  /** Иконка кнопки */
-  icon?: React.ReactNode;
-  /** Заблокированная кнопка */
-  disabled?: boolean;
-  /** Callback, который будет вызван при клике по кнопке */
-  onClick?: () => void;
-}
+  /** @internal */
+  export interface ButtonProps {
+    /** Тест кнопки */
+    label?: string;
+    /** Вид кнопки (заполненный/обводка/ссылка) */
+    variant?: 'fill' | 'outline' | 'link';
+    /** Размер кнопки */
+    size?: 'sm' | 'md' | 'lg';
+    /** Стиль кнопки(текст+иконка, текст, иконка) */
+    style?: 'default' | 'text' | 'icon';
+    /** Состояние кнопки */
+    condition?: 'default' | 'error' | 'success' | 'warning' | 'info';
+    /** Иконка кнопки */
+    icon?: React.ReactNode;
+    /** Заблокированная кнопка */
+    disabled?: boolean;
+    /** Callback, который будет вызван при клике по кнопке */
+    onClick?: () => void;
+  }
 
   export const Button: React.FC<ButtonProps>;
 
@@ -29,39 +29,41 @@ export interface ButtonProps {
   export interface InputProps {
     /** Идентификатор элемента */
     id?: string;
-    /** Дополнительный класс */
-    className?: string;
-    /** Знчение */
-    value?: string;
     /** Лейбл */
     label?: string;
     /** Подсказка */
     placeholder?: string;
     /** Размер */
     size?: 'sm' | 'md' | 'lg';
-    /** Callback при изменении значения */
-    onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-    /** Иконка слева */
-    icon?: ReactNode;
-    /** Ошибка */
-    hasError?: boolean;
-    /** Помощник текста */
-    helperText?: ReactNode;
-     /** Заблокированное поле */
+    /** Знчение */
+    value?: string;
+    /** Дополнительный класс */
+    className?: string;
+    /** Многострочное поле */
+    multiline?: boolean;
+    /** Изменение размера многострочного поля */
+    resize?: boolean;
+    /** Заблокированное поле */
     disabled?: boolean;
     /** Только для чтения */
     readOnly?: boolean;
     /** Метка слева */
     isLeftLabel?: boolean;
-    /** Многострочное поле */
-    multiline?: boolean;
-    /** Изменение размера многострочного поля */
-    resize?: boolean;
+    /** Иконка слева */
+    icon?: ReactNode;
+    /** Ошибка */
+    error?: boolean;
+    /** Текст ошибки */
+    helperText?: string;
+    /** Callback при изменении значения */
+    onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    /** Обязательное поле */
+    required?: boolean;
   }
 
   export const Input: React.FC<InputProps>;
 
-/** @internal */
+  /** @internal */
   export interface TagProps {
     /** Лейбл */
     label?: string;
@@ -81,116 +83,118 @@ export interface ButtonProps {
     /** Цвет */
     color?: string;
     /** Callback при изменении значения */
-    onChange?:(color: string) => void;
+    onChange?: (color: string) => void;
   }
 
   export const SettingTag: React.FC<SettingTagProps>;
 
   export interface ToggleButtonProps {
-   /** Знчение */
+    /** Знчение */
     value?: boolean;
     /** Callback при изменении значения */
-    onChange?: ChangeEventHandler<HTMLInputElement>
+    onChange?: ChangeEventHandler<HTMLInputElement>;
     /** Заблокированная кнопка */
     disabled?: boolean;
     /** Размер кнопки */
     size?: 'sm' | 'md';
     /** Текст кнопки */
-    label?:string;
+    label?: string;
   }
 
-  export const ToggleButton:  React.FC<ToggleButtonProps>;
-    
-  //Типы для dropdown 
-export interface DropdownProps {
-  /** Идентификатор */
-  id?: string;
-  /** Имя */
-   name: string;
-   /**  Лейбл */
-   label?: string;
-   /** Размер */
-   size?: 'sm' | 'md' | 'lg';
-   /** Заблокированный */
-   disabled?: boolean;
-   /**Дополнительный класс */
-   className?: string;
-   /** Значение по умолчанию */
-   defaultValue?: DropdownProps['items'][number] | null | string | number;
-   /** Массив элементов для выпадающего списка */
-  //  items: Array<{
-  //    key?: string;
-  //    value: string;
-  //    icon?: React.ReactNode;
-  //    isDivider?: boolean;
-  //    disabled?: boolean;
-  //    children?: DropdownProps['items'];
-  //  }> | string[] | number[];
-    items: any[];
-   /** Открытый */
-    isOpened?: boolean;
+  export const ToggleButton: React.FC<ToggleButtonProps>;
+
+  //Типы для dropdown
+  export interface DropdownProps {
+    /** Идентификатор */
+    id?: string;
+    /**  Лейбл */
+    label?: string;
+    /** Подсказик заполнения */
+    placeholder?: string;
+    /** Размер */
+    size?: 'md' | 'lg';
+    /** Массив элементов для выпадающего списка */
+    options: any[];
+    /** Значение */
+    value?: DropdownProps['options'][number] | null | string | number;
+    /** Значение по умолчанию */
+    defaultValue?: DropdownProps['options'][number] | null | string | number;
     /** Стиль выпадающего списка(текст+иконка, текст) */
-    style?: 'default' | 'text' ;
+    style?: 'icons' | 'text';
+    /**Дополнительный класс */
+    className?: string;
+    /** Заблокированный */
+    disabled?: boolean;
     /** Только для чтения */
     readOnly?: boolean;
+    /** Открытый */
+    isOpened?: boolean;
+    /** Текст при отсутствии опций */
+    noOptionsText: string;
     /** Отображение левой метки */
-    isLeftLabel?:boolean;
+    isLeftLabel?: boolean;
+    /** Ошибка */
+    error?: boolean;
+    /** Текст ошибки */
+    helperText?: string;
     /** Callback, который будет вызван при изменении значения */
-    onChange?: (value: DropdownProps['items'][number]) => void;
+    onChange?: (event: ChangeEvent<HTMLInputElement>, value: DropdownProps['options'][number]) => void;
     /** Callback, который будет вызван при закрытии выпадающего списка */
-    onClose?: () => void;
-}
-export const Dropdown: React.FC<DropdownProps>;
+    onClose?: (event: ChangeEvent<HTMLInputElement>) => void;
+    /** Возможность сброса значения до первоначального */
+    clearable?: boolean;
+    /** Обязательное поле */
+    required?: boolean;
+  }
+  export const Dropdown: React.FC<DropdownProps>;
 
-/** @internal */
-export interface TypographyProps {
-  /** Вариант шрифта */
-  variant?: `${ETypographyVariants}`;
-  /** Текст */
-  children: ReactNode;
-  /** Дополнительный класс */
-  className?: string;
-  /** Цвет текста */
-  color?: CSSProperties['color'];
-  /** Стиль текста */
-  style?: CSSProperties;
-}
+  /** @internal */
+  export interface TypographyProps {
+    /** Вариант шрифта */
+    variant?: `${ETypographyVariants}`;
+    /** Текст */
+    children: ReactNode;
+    /** Дополнительный класс */
+    className?: string;
+    /** Цвет текста */
+    color?: CSSProperties['color'];
+    /** Стиль текста */
+    style?: CSSProperties;
+  }
 
-export const Typography: React.FC<TypographyProps>;
+  export const Typography: React.FC<TypographyProps>;
 
-export interface ProgressBarProps {
-  /** Значение */
-  value?: number;
-  /** Максимальное значение */
-  max?: number;
-  /** Размер */
-  size?: 'sm' | 'md' | 'lg';
-  /** Показывать значение */
-  showValue?: boolean;
-  /** Анимация */
-  animated?: boolean;
-}
- export const ProgressBar: React.FC<ProgressBarProps>;
+  export interface ProgressBarProps {
+    /** Значение */
+    value?: number;
+    /** Максимальное значение */
+    max?: number;
+    /** Размер */
+    size?: 'sm' | 'md' | 'lg';
+    /** Показывать значение */
+    showValue?: boolean;
+    /** Анимация */
+    animated?: boolean;
+  }
+  export const ProgressBar: React.FC<ProgressBarProps>;
 
-
- export interface ProgressLoaderProps {
-  /** Значение */
-   value: number;
-  /** Размер */
-   size?: 'sm' | 'md' | 'lg' | 'xl';
-  /** Показывать значение */
-   showValue?: boolean;
-   /** Анимация */
-   animated?: boolean;
- }
- export const ProgressLoader: React.FC<ProgressLoaderProps>;
-
+  export interface ProgressLoaderProps {
+    /** Значение */
+    value: number;
+    /** Размер */
+    size?: 'sm' | 'md' | 'lg' | 'xl';
+    /** Показывать значение */
+    showValue?: boolean;
+    /** Анимация */
+    animated?: boolean;
+  }
+  export const ProgressLoader: React.FC<ProgressLoaderProps>;
 
   export interface CheckboxProps {
     /** Идентификатор */
     checked?: boolean;
     /** Обработчик изменения состояния */
-    onChange?: ChangeEventHandler<HTMLInputElement>
+    onChange?: ChangeEventHandler<HTMLInputElement>;
     /** Заблокированный чекбокс */
     disabled?: boolean;
     /** Размер чекбокса */
@@ -204,7 +208,7 @@ export interface ProgressBarProps {
   export interface RadioProps {
     /** Значение */
     value?: string;
-     /**  Лейбл */
+    /**  Лейбл */
     label?: string;
     /** Выбраный */
     checked?: boolean;
@@ -220,21 +224,21 @@ export interface ProgressBarProps {
 
   export interface TabProps {
     /** Значение */
-    value?:string;
+    value?: string;
     /** Обработчик клика */
-    onClick?: (value: string ) => void;
+    onClick?: (value: string) => void;
     /** Текст лейбла */
-    label?:string;
+    label?: string;
     /** Размер */
     selected?: boolean;
     /** Заблокированный */
-    disabled?:boolean;
+    disabled?: boolean;
     /** Табы */
     children?: React.ReactNode;
   }
-  
-export interface TabsProps {
-     /** Табы */
+
+  export interface TabsProps {
+    /** Табы */
     children: React.ReactElement<TabProps>[];
     /** Значение */
     value?: string;
@@ -242,18 +246,18 @@ export interface TabsProps {
     onChange?: (value: string) => void;
   }
 
-  export const Tab:  React.FC<TabProps>;
-  export const Tabs:  React.FC<TabsProps>;
+  export const Tab: React.FC<TabProps>;
+  export const Tabs: React.FC<TabsProps>;
 
   export interface ColorPickerProps {
     /** Цвет выбранный пользователем */
     color?: string;
-     /** Основной цвет */
-     mainColor?: string;
-     /** Последние использованные цвета*/
+    /** Основной цвет */
+    mainColor?: string;
+    /** Последние использованные цвета*/
     recentColors?: string[];
     /** Флаг наведения на меню*/
-    setIsHovered:(isHover: boolean) => void;
+    setIsHovered: (isHover: boolean) => void;
     /** Ширина ColorPicker */
     width?: number;
     /** Высота ColorPicker*/

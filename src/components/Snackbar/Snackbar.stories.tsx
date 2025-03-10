@@ -1,6 +1,5 @@
 import type { Meta } from '@storybook/react';
 import React, { ReactNode } from 'react';
-import './Snackbar.module.css';
 import { Snackbar } from './Snackbar';
 import { ESnackbarTypes } from './enums';
 
@@ -17,7 +16,11 @@ export type SnackbarProps = {
   onClose?: () => void;
 };
 
-const withWrapper = (Story: React.ComponentType) => <div className='story--wrapper-snackbar'>{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => <div style={{
+  backgroundColor: 'var(--white)',
+  padding: '30px',
+  borderRadius: '10px',
+  width: '900px'}}>{<Story />}</div>;
 
 const meta: Meta = {
   title: 'Components/Snackbar',

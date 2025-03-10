@@ -15,7 +15,7 @@ export const Typography: FC<TypographyProps> = ({
   style,
   ...props
 }: TypographyProps): JSX.Element => {
-  const variantClass = classNames([`typography--variant-${variant}`], className);
+  const variantClass = classNames(styles[`typography--variant-${variant}`], className);
 
   const combinedStyle: CSSProperties = {
     color,
@@ -23,7 +23,7 @@ export const Typography: FC<TypographyProps> = ({
   };
 
   return (
-    <span className={styles[`${variantClass} ${className}`]} style={combinedStyle} {...props}>
+    <span className={variantClass} style={combinedStyle} {...props}>
       {children}
     </span>
   );

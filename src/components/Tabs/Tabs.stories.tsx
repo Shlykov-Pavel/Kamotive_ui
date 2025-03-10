@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import type { Meta } from '@storybook/react';
-
-import './Tabs.module.css';
-
 import { Tabs } from './Tabs';
 import { Tab } from '../Tab/Tab';
 
@@ -38,7 +35,11 @@ const meta: Meta<TabsProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='story--wrapper-tabs'>
+      <div style={{
+        backgroundColor: 'var(--white)',
+        padding: '30px',
+        borderRadius: '10px',
+        width: '900px'}}>
         <Story />
       </div>
     ),
