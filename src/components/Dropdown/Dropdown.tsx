@@ -197,6 +197,7 @@ export const Dropdown: FC<DropdownProps> = ({
   const [modifiedOptions, setModifiedOptions] = useState<TOptions[] | null>([]);
   const [selectedItem, setSelectedItem] = useState<TOptions | null>(null);
   const [errorInput, setErrorInput] = useState(error);
+  const [errorInputHelperText, setErrorInputHelperText] = useState(helperText);
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -280,6 +281,10 @@ export const Dropdown: FC<DropdownProps> = ({
     onChange?.(event, startValue ?? null);
     onClose?.(event);
     setActiveIndex(-1);
+    if(required) {
+      setErrorInput(true);
+      setErrorInputHelperText(helperText ?? 'Поле обязательно для заполнения');
+    }
   };
 
   const wrapperClassess = classNames({
@@ -288,8 +293,6 @@ export const Dropdown: FC<DropdownProps> = ({
     [styles['dropdown--container-label']]: label && !isLeftLabel && !required,
     [styles['dropdown--container-helperText']]: errorInput,
   });
-  console.log('wrapperClassess',wrapperClassess);
-  
 
   const buttonClassess = classNames(styles.button, className, styles[`button--${size}`], {
     [styles['button-item--selected']]: selectedItem?.value && !disabled,
@@ -391,7 +394,6 @@ export const Dropdown: FC<DropdownProps> = ({
     }
   }, [value, defaultValue, checkItem]);
   
-  
   return (
     <div
       id={id}
@@ -434,9 +436,9 @@ export const Dropdown: FC<DropdownProps> = ({
         </div>
         {getDropdownMenu()}
       </button>
-      {errorInput && helperText && (
+      {errorInput && errorInputHelperText && (
         <Typography variant="Caption" className={classNames(styles.helperText, styles[size])}>
-          {helperText}
+          {helperText ?? errorInputHelperText}
         </Typography>
       )}
     </div>
