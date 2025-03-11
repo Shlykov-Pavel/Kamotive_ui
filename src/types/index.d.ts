@@ -284,23 +284,34 @@ declare module 'kamotive_ui' {
   export const Snackbar: React.FC<SnackbarProps>;
 
   export interface LoaderProps {
+     /** Название файла */
     name?: string ;
+     /** Размер файла */
     size?: number ;
+    /** Флаг загрузки файла */
     loading?: boolean;
+    /** Текст ошибки загрузки файла */
     error?: string;
+    /** Функция обработки */
     onClick?: () => void;
   }
 
   export const Loader:  React.FC<LoaderProps>;
 
   export interface FileAttachProps {
-    maxFileSize?: number;
-    maxFileCount?: number; 
-    acceptedFormats?: Accept;
-    addedFiles: File[];
-    setAddedFiles:(addedFiles: File[]) => void;
-    disabled?: boolean;
-  }
+    /** Максимальный размер файла */
+   maxFileSize?: number;
+   /** Максимальное количество файлов */
+   maxFileCount?: number; 
+    /**Поддерживаемые форматы файлов */
+   acceptedFormats?: Accept;
+   /**Добавленные файлы */
+   addedFiles: File[];
+   /**Сосотояние для добавления файлов */
+   setAddedFiles:(addedFiles: File[]) => void;
+   /**Заблокировано добавление файлов*/
+   disabled?: boolean;
+ }
 
   export const FileAttach:  React.FC<FileAttachProps>;
 

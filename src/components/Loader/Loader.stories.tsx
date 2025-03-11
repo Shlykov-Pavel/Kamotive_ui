@@ -2,8 +2,19 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Loader } from './Loader';
-import './Loader.module.css';
-import { LoaderProps } from 'kamotive_ui';
+
+export interface LoaderProps {
+  /** Название файла */
+ name?: string ;
+  /** Размер файла */
+ size?: number ;
+ /** Флаг загрузки файла */
+ loading?: boolean;
+ /** Текст ошибки загрузки файла */
+ error?: string;
+ /** Функция обработки */
+ onClick?: () => void;
+}
 
 const meta: Meta<LoaderProps> = {
   component: Loader,
@@ -13,7 +24,13 @@ const meta: Meta<LoaderProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="story--wrapper-loader">
+      <div style={{
+        backgroundColor: 'var(--white)',
+        padding: '30px',
+        borderRadius: '10px',
+        width: '300px',
+        height: '300px', 
+      }}>
         <Story />
       </div>
     ),

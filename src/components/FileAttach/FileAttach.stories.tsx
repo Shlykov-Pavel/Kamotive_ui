@@ -2,8 +2,22 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { FileAttach } from './FileAttach';
-import './FileAttach.module.css';
-import { FileAttachProps } from 'kamotive_ui';
+import { Accept } from 'react-dropzone/.';
+
+export interface FileAttachProps {
+   /** Максимальный размер файла */
+  maxFileSize?: number;
+  /** Максимальное количество файлов */
+  maxFileCount?: number; 
+   /**Поддерживаемые форматы файлов */
+  acceptedFormats?: Accept;
+  /**Добавленные файлы */
+  addedFiles: File[];
+  /**Сосотояние для добавления файлов */
+  setAddedFiles:(addedFiles: File[]) => void;
+  /**Заблокировано добавление файлов*/
+  disabled?: boolean;
+}
 
 const meta: Meta<FileAttachProps> = {
   component: FileAttach,
@@ -13,7 +27,11 @@ const meta: Meta<FileAttachProps> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="story--wrapper-fileAttach">
+      <div style={{
+        backgroundColor: 'var(--white)',
+        padding: '30px',
+        borderRadius: '10px',
+        height: '300px'}}>
         <Story />
       </div>
     ),
