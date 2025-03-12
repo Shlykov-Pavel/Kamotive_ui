@@ -1,15 +1,7 @@
-.story--wrapper-fileAttach {
-    background-color: var(--white);
-    padding: 30px;
-    border-radius: 10px;
-    /* width: 500px;  */
-    height: 300px; 
-}
-
 .fileAttach {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    height: inherit;
     gap: 10px; 
 }
 
@@ -34,4 +26,11 @@
     background-color: var(--fills-disabled);
     border-color: var(--grey-medium);
     cursor: not-allowed;
+  }
+
+  .addedFiles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+    overflow-y: auto;
   }

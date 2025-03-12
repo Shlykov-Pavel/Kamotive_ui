@@ -130,17 +130,16 @@ export const FileAttach: FC<FileAttachProps> = ({
           {`Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`}
         </Typography>
       )}
-
-      {addedFiles?.length > 0 || errorFiles?.length > 0 ? (
-        <>
-          {acceptedFileItems}
-          {fileRejectionItems}
-        </>
-      ) : (
-        <Typography variant="Body2-Medium" color="var(--text-dark)">
-          Файлы не добавлены
-        </Typography>
-      )}
+        {addedFiles?.length > 0 || errorFiles?.length > 0 ? (
+           <div className={styles['addedFiles']}>
+              {acceptedFileItems}
+              {fileRejectionItems}
+            </div>
+        ) : (
+          <Typography variant="Body2-Medium" color="var(--text-dark)">
+            Файлы не добавлены
+          </Typography>
+        )}
     </section>
   );
 };
