@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { LoaderProps } from 'kamotive_ui';
+import { LoaderProps } from '../../types';
 import styles from './Loader.module.css';
 import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';

@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Accept, FileRejection, useDropzone } from 'react-dropzone';
 
-import { FileAttachProps } from 'kamotive_ui';
+import { FileAttachProps } from '../../types';
 import styles from './FileAttach.module.css';
 import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';

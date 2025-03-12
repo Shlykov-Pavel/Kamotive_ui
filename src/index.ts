@@ -31,6 +31,8 @@ export type {
   RadioProps,
   TabsProps,
   ColorPickerProps,
-  SnackbarProps
+  SnackbarProps,
+  LoaderProps,
+  FileAttachProps,
 } from './types';
 import './fonts.css';
