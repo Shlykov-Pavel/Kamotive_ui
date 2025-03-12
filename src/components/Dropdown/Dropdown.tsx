@@ -193,12 +193,14 @@ export const Dropdown: FC<DropdownProps> = ({
   required = false,
   isDivider = false,
 }) => {
+  
   const [isOpen, setIsOpen] = useState(isOpened);
   const [modifiedOptions, setModifiedOptions] = useState<TOptions[] | null>([]);
   const [selectedItem, setSelectedItem] = useState<TOptions | null>(null);
-  const [errorInput, setErrorInput] = useState(error);
+  const [errorInput, setErrorInput] = useState(false);
   const [errorInputHelperText, setErrorInputHelperText] = useState(helperText);
   const [activeIndex, setActiveIndex] = useState(-1);
+  
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number | undefined>(undefined);
@@ -271,6 +273,8 @@ export const Dropdown: FC<DropdownProps> = ({
   };
   //для сброса выбранного значения
   const handleReset = (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    event.preventDefault();
+    event.stopPropagation();
     const startValue = defaultValue 
       ? (checkItem(defaultValue) as TOptions) 
       : null;
@@ -388,8 +392,14 @@ export const Dropdown: FC<DropdownProps> = ({
           ? (checkItem(defaultValue) as TOptions) 
           : null;
       setSelectedItem(startValue ?? null);
+    } else {
+      setSelectedItem(null);
     }
   }, [value, defaultValue, checkItem]);
+
+  useEffect(()=>{
+    setErrorInput(error);
+  }, [error])
   
   return (
     <div
