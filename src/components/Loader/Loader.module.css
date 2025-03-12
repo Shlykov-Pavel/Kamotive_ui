@@ -46,7 +46,7 @@
     left: 50%;
 }
 
-button[aria-label="Закрыть"] {
+.loader button[aria-label="Закрыть"] {
     background: none;
     border: none;
     padding: 0;
@@ -57,8 +57,8 @@ button[aria-label="Закрыть"] {
     flex-shrink: 0
 }
 
-button[aria-label="Закрыть"]::before,
-button[aria-label="Закрыть"]::after {
+.loader button[aria-label="Закрыть"]::before,
+.loader button[aria-label="Закрыть"]::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -69,7 +69,7 @@ button[aria-label="Закрыть"]::after {
     background-color: var(--icons-grey); 
 }
 
-button[aria-label="Закрыть"]::after {
+.loader button[aria-label="Закрыть"]::after {
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 

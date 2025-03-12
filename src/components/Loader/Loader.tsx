@@ -13,7 +13,7 @@ export const Loader: FC<LoaderProps> = ({ name, size = 0, loading = false, error
       <div className={styles['loaderFile']}>
         <div className={styles['loaderInfo']}>
           <div className={styles['loaderIcon']}>
-            <IconFile htmlColor="var(--icons-grey)" />
+            <IconFile htmlColor={"var(--icons-grey)"} />
           </div>
 
           <div className={styles['loaderName']}>
