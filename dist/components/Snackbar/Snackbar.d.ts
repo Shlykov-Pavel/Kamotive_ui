@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { SnackbarProps } from 'kamotive_ui';
+import { SnackbarProps } from '../../types';
 /**
 * @description Snackbar компонент для отображения всплывающих уведомлений
 * @component

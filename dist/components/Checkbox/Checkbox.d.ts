@@ -1,3 +1,3 @@
 import { FC } from 'react';
-import { CheckboxProps } from 'kamotive_ui';
+import { CheckboxProps } from '../../types';
 export declare const Checkbox: FC<CheckboxProps>;

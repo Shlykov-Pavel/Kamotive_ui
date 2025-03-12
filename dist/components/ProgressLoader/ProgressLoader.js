@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Typography } from '../Typography/Typography';
 import styles from './ProgressLoader.module.css';
 import classNames from 'classnames';
+;
 /**
  * Компонент ProgressLoader отображает прогресс загрузки.
  */
@@ -23,7 +24,7 @@ export const ProgressLoader = ({ value = 0, size = 'xl', showValue = true, anima
     const circumference = 2 * Math.PI * radius;
     const dashArray = circumference;
     const dashOffset = circumference * (1 - fillPercentage);
-    const progressLoaderWrapperClasses = classNames(styles['progress-loader-wrapper'], size);
+    const progressLoaderWrapperClasses = classNames(styles['progress-loader-wrapper'], styles[size]);
     const getTypographySize = () => {
         switch (size) {
             case 'md':
@@ -65,7 +66,7 @@ export const ProgressLoader = ({ value = 0, size = 'xl', showValue = true, anima
                     //transition: animated ? 'stroke-dashoffset 0.5s ease-in-out' : 'none',
                 } }, animated && (React.createElement("animate", { attributeName: "stroke-dashoffset", dur: `${animationDuration / 1000}`, values: `${circumference}; ${percent / 100}`, fill: "freeze" })))),
         showValue && size !== 'sm' && (React.createElement("div", { className: styles["progress-percentage"] },
-            React.createElement(Typography, { variant: "Subheading2", color: '#9CA0A7', style: { fontSize: getTypographySize(), fontWeight: '300' }, className: styles["progress-percentage"] },
+            React.createElement(Typography, { variant: "Subheading2", color: '#9CA0A7', style: { fontSize: getTypographySize(), fontWeight: '300' } },
                 percent,
                 "%")))));
 };

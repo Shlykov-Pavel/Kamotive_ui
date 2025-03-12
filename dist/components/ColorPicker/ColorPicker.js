@@ -5,6 +5,7 @@ import { Chrome } from '@uiw/react-color';
 import EditableInput from '@uiw/react-color-editable-input';
 import { GithubPlacement } from '@uiw/react-color-github';
 import { IconColorPicker10 } from '../../Icons';
+;
 /**
  * Компонент ColorPicker представляет собой элемент управления для выбора цвета.
  */
@@ -50,14 +51,14 @@ export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsH
             !autoOpen && document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isOpen]);
-    const mainColorClasses = classNames(styles['circle'], {
-        'mainColor': mainColor,
+    const mainColorClasses = classNames(styles.circle, {
+        [styles['mainColor']]: mainColor,
     });
-    const colorCircleDefaultClasses = classNames(styles['circle'], {
-        'colorCircleDefault': color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue
+    const colorCircleDefaultClasses = classNames(styles.circle, {
+        [styles.colorCircleDefault]: color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue
     });
     const popoverClassess = classNames(styles['popover'], {
-        [`popover--${popoverPosition}`]: true,
+        [styles[`popover--${popoverPosition}`]]: true,
     });
     // Функция для преобразования HEXA в HEX
     const hexaToHex = (hexa = 'fff') => {
@@ -86,27 +87,27 @@ export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsH
     useEffect(() => {
         setSelectedColor(color);
     }, [color]);
-    return (React.createElement("div", { className: (mainColor || recentColors) ? 'colorPickerWrapper' : '', onMouseLeave: () => setIsHovered && setIsHovered(false) },
+    return (React.createElement("div", { className: (mainColor || recentColors) && styles.colorPickerWrapper, onMouseLeave: () => setIsHovered && setIsHovered(false) },
         mainColor && React.createElement("div", { className: mainColorClasses, style: {
                 width: `${width}px`,
                 height: `${height}px`,
                 backgroundColor: (colorValue === null || colorValue === void 0 ? void 0 : colorValue.startsWith('#')) ? colorValue : `var(--${colorValue})`,
             }, onClick: () => setIsHovered && setIsHovered(false) }),
-        recentColors && recentColors.map((color, index) => (React.createElement("div", { key: index, className: "circle", style: {
+        recentColors && recentColors.map((color, index) => (React.createElement("div", { key: index, className: styles.circle, style: {
                 width: `${width}px`,
                 height: `${height}px`,
                 backgroundColor: color.startsWith('#') ? color : `var(--${color})`,
             }, onClick: () => colorChangeHandler(color) }))),
-        React.createElement("div", { className: "colorPicker" },
+        React.createElement("div", { className: styles.colorPicker },
             React.createElement("div", { ref: circleRef, className: colorCircleDefaultClasses, onClick: () => setIsOpen(!isOpen), style: {
                     width: `${width}px`,
                     height: `${height}px`,
                     backgroundColor: selectedColor.startsWith('#') ? selectedColor : `var(--${selectedColor})`,
                 } }),
             isOpen && (React.createElement("div", { ref: popoverRef, className: popoverClassess },
-                isOpen && React.createElement(IconColorPicker10, { className: "colorPickerIcon", htmlColor: 'var(--white)' }),
-                React.createElement(Chrome, { color: selectedColor, placement: GithubPlacement.Right, onChange: colorChangeHandler, className: "customChrome", showEyeDropper: false }),
-                React.createElement("div", { className: "hex", style: { padding: '0 10px 0 20px' } },
+                isOpen && React.createElement(IconColorPicker10, { className: styles.colorPickerIcon, htmlColor: 'var(--white)' }),
+                React.createElement(Chrome, { color: selectedColor, placement: GithubPlacement.Right, onChange: colorChangeHandler, className: styles.customChrome, showEyeDropper: false }),
+                React.createElement("div", { className: styles.hex, style: { padding: '0 10px 0 20px' } },
                     React.createElement(EditableInput, { value: hexaToHex(selectedColor), style: { width: 68, alignItems: 'flex-start' }, onChange: (e, color) => {
                             const formattedColor = hexaToHex(color.toString());
                             colorChangeHandler(formattedColor);

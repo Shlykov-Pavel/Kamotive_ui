@@ -1,3 +1,3 @@
 import { FC } from 'react';
-import { TagProps } from 'kamotive_ui';
+import { TagProps } from '../../types';
 export declare const Tag: FC<TagProps>;
