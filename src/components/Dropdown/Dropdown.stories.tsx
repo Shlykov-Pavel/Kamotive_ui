@@ -205,19 +205,7 @@ export const DropdownChange = (argTypes: DropdownProps): JSX.Element => {
   const handleChange = (e: any, value: string | number | TOptions | null) => {
     setValue(value);
     setIsOpened(false);
-    if (!value) {
-      setInputError(true);
-    }
   };
-  const [inputError, setInputError] = useState(false);
-  const handleReset = () => {
-    setValue(null);
-    setInputError(false);
-  };
-
-  console.log('inputError', inputError);
-  
-  
   useEffect(() => {
     if (argTypes.error) setValue(null);
   }, [argTypes.error]);
@@ -226,12 +214,10 @@ export const DropdownChange = (argTypes: DropdownProps): JSX.Element => {
       {...argTypes}
       options={defaultOptions}
       getOptionLabel={(option: TOptions) => option.description as keyof TOptions}
-      error={inputError}
       value={value} 
       onChange={handleChange} 
-      // isOpened={isOpened} 
+      isOpened={isOpened} 
       required={true} />
-      <Button label='Сброс' variant='fill' style='text' onClick={handleReset} />
   </div>
 };
 DropdownChange.storyName = 'Dropdown изменяемый';
