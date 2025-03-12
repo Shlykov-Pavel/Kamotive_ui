@@ -16,4 +16,21 @@ export { Typography as Typography } from './components/Typography/Typography';
 export { Loader as Loader } from './components/Loader/Loader';
 export { FileAttach as FileAttach } from './components/FileAttach/FileAttach';
 
+export type {
+  ButtonProps,
+  InputProps,
+  TagProps,
+  SettingTagProps,
+  ToggleButtonProps,
+  BaseOptions,
+  TOptions,
+  DropdownProps,
+  TypographyProps,
+  ProgressBarProps,
+  ProgressLoaderProps,
+  RadioProps,
+  TabsProps,
+  ColorPickerProps,
+  SnackbarProps
+} from './types';
 import './fonts.css';

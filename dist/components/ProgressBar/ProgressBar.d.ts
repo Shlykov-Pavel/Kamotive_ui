@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ProgressBarProps } from 'kamotive_ui';
+import { ProgressBarProps } from '../../types';
 /**
  * Компонент ProgressBar отображает прогресс в виде заполненной полосы.
  */

@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC } from 'react';;
 import classNames from 'classnames';
-import { TypographyProps } from 'kamotive_ui';
+import { TypographyProps } from '../../types';;
 import { ETypographyVariants } from './enums';
 import styles from './Typography.module.css';
 /**

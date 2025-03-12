@@ -3,7 +3,7 @@ import { IconClose10, IconError10, IconInfo10, IconSuccess10, IconWarning10 } fr
 import { Typography } from '../Typography/Typography';
 import styles from './Snackbar.module.css'
 import classNames from 'classnames';
-import { SnackbarProps } from 'kamotive_ui';
+import { SnackbarProps } from '../../types';;
 
 /**
 * @description Snackbar компонент для отображения всплывающих уведомлений

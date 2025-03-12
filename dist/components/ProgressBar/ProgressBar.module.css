@@ -1,14 +1,3 @@
-.story--wrapper-progressbar {
-  background-color: var(--white);
-  padding: 30px;
-  border-radius: 10px;
-  width: 900px;
-}
-.progress-bar--default-story {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
 .progress-bar--wrapper {
   display: flex;
   gap: 40px;
@@ -50,6 +39,10 @@
 .progress-bar-percentage {
   /* position: absolute; */
   /* top: 50%; */
+  /* font-family: var(--font-family-main);
+  font-weight: 300;
+  font-size: 11px;
+  line-height: 13; */
   left: 50%;
   transform: translate(-50%, -50%);
 }

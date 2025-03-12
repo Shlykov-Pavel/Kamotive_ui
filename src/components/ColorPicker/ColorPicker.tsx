@@ -7,7 +7,7 @@ import EditableInput from '@uiw/react-color-editable-input';
 import { ColorResult } from '@uiw/react-color';
 import { GithubPlacement } from '@uiw/react-color-github';
 import { IconColorPicker10 } from '../../Icons';
-import { ColorPickerProps } from 'kamotive_ui';
+import { ColorPickerProps } from '../../types';;
 
 /**
  * Компонент ColorPicker представляет собой элемент управления для выбора цвета.

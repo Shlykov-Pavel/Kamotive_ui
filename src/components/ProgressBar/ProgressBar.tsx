@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Typography } from '../Typography/Typography';
 import styles from './ProgressBar.module.css'
 import classNames from 'classnames';
-import { ProgressBarProps } from 'kamotive_ui';
+import { ProgressBarProps } from '../../types';;
 
 /**
  * Компонент ProgressBar отображает прогресс в виде заполненной полосы.

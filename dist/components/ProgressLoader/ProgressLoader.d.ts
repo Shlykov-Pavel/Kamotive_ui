@@ -1,3 +1,3 @@
 import { FC } from 'react';
-import { ProgressLoaderProps } from 'kamotive_ui';
+import { ProgressLoaderProps } from '../../types';
 export declare const ProgressLoader: FC<ProgressLoaderProps>;

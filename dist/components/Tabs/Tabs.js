@@ -1,3 +1,4 @@
+;
 import React from 'react';
 import styles from './Tabs.module.css';
 export const Tabs = ({ value, onChange, children }) => {
@@ -9,7 +10,7 @@ export const Tabs = ({ value, onChange, children }) => {
         }
     };
     return (React.createElement(React.Fragment, null,
-        React.createElement("div", { role: "tablist", className: styles['tabs'] }, children === null || children === void 0 ? void 0 : children.map((child, index) => React.cloneElement(child, {
+        React.createElement("div", { role: "tablist", className: styles.tabs }, children === null || children === void 0 ? void 0 : children.map((child, index) => React.cloneElement(child, {
             key: index,
             selected: child.props.value === value,
             disabled: child.props.disabled,

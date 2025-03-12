@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonProps } from 'kamotive_ui';
+import { ButtonProps } from '../../types';
 /**
  * Компонент Button представляет собой кнопку, которую можно настроить с помощью различных параметров (размер, иконки, стили, состояние).
  */

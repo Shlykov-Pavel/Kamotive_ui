@@ -1,3 +1,3 @@
 import { FC } from 'react';
-import { ToggleButtonProps } from 'kamotive_ui';
+import { ToggleButtonProps } from '../../types';
 export declare const ToggleButton: FC<ToggleButtonProps>;
