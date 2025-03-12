@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import styles from './Checkbox.module.css';
 import classNames from 'classnames';
-import { CheckboxProps } from 'kamotive_ui';
+import { CheckboxProps } from '../../types';;
 import { Typography } from '../Typography/Typography';
 
 export const Checkbox: FC<CheckboxProps> = ({ checked, onChange, disabled = false, size = 'sm', label}) => {

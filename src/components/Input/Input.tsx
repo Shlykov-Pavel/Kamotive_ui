@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { InputProps } from 'kamotive_ui';
+import { InputProps } from '../../types';;
 import styles from './Input.module.css';
 import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
@@ -16,6 +16,7 @@ export const Input: FC<InputProps> = ({
   value,
   className,
   multiline = false,
+  rows = 4,
   resize = false,
   disabled = false,
   readOnly = false,
@@ -42,6 +43,7 @@ export const Input: FC<InputProps> = ({
     [styles['readOnly']]: readOnly,
     [styles['input--withIcon']]: icon,
     [styles['textarea']]: multiline,
+    // [styles['textarea-rows-&{rows}']]: multiline && rows,
     [styles['resize']]: resize,
     [styles['input--left']]: isLeftLabel,
   });
@@ -68,6 +70,7 @@ export const Input: FC<InputProps> = ({
           placeholder={placeholder}
           onChange={handleChange}
           disabled={disabled}
+          style={{ height: `${rows * 20}px` }}
         />
       ) : (
         <input

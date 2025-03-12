@@ -2,7 +2,7 @@ import React, { FC, MouseEvent } from 'react';
 
 import styles from './Tab.module.css';
 import classNames from 'classnames';
-import { TabProps } from 'kamotive_ui';
+import { TabProps } from '../../types';;
 import { Typography } from '../Typography/Typography';
 
 export const Tab: FC<TabProps> = ({ value, onClick, label, selected, disabled = false }) => {

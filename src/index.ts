@@ -14,4 +14,21 @@ export { Tag as Tag } from './components/Tag/Tag';
 export { ToggleButton as ToggleButton } from './components/ToggleButton/ToggleButton';
 export { Typography as Typography } from './components/Typography/Typography';
 
+export type {
+  ButtonProps,
+  InputProps,
+  TagProps,
+  SettingTagProps,
+  ToggleButtonProps,
+  BaseOptions,
+  TOptions,
+  DropdownProps,
+  TypographyProps,
+  ProgressBarProps,
+  ProgressLoaderProps,
+  RadioProps,
+  TabsProps,
+  ColorPickerProps,
+  SnackbarProps
+} from './types';
 import './fonts.css';

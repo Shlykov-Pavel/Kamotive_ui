@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import styles from './ToggleButton.module.css';
 import classNames from 'classnames';
-import { ToggleButtonProps } from 'kamotive_ui';
+import { ToggleButtonProps } from '../../types';;
 import { Typography } from '../Typography/Typography';
 
 export const ToggleButton: FC<ToggleButtonProps> = ({ value, onChange, disabled = false, size = 'md', label }) => {

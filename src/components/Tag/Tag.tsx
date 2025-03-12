@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { TagProps } from 'kamotive_ui';
+import { TagProps } from '../../types';;
 import styles from './Tag.module.css';
 import classNames from 'classnames';
 
