@@ -1,14 +1,18 @@
-import { FC } from 'react';
-import { DropdownProps } from 'kamotive_ui';
+import React, { FC } from 'react';
+import { DropdownProps, TOptions } from '../../types';
 /**
  * Компонент Dropdown позволяет пользователям выбирать однин вариант из выпадающего меню
-*/
+ */
 export interface DropdownListItemProps {
-    item: DropdownProps['items'][number];
-    size: 'sm' | 'md' | 'lg';
-    selectedItem: DropdownProps['items'][number] | null | string | number;
-    style?: 'default' | 'text';
-    onChange: (value: DropdownProps['items'][number]) => void;
+    item: TOptions | null;
+    getOptionLabel?: ((option: TOptions) => string);
+    size: 'md' | 'lg';
+    selectedItem: TOptions | null;
+    style?: 'icons' | 'text';
+    onChange: (event: React.MouseEvent<HTMLElement>, item: TOptions | null) => void;
+    isActive?: boolean;
+    activeIndex?: number;
+    index?: number;
 }
 export declare const DropdownListItem: FC<DropdownListItemProps>;
 export declare const Dropdown: FC<DropdownProps>;

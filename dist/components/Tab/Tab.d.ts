@@ -1,3 +1,3 @@
 import { FC } from 'react';
-import { TabProps } from 'kamotive_ui';
+import { TabProps } from '../../types';
 export declare const Tab: FC<TabProps>;

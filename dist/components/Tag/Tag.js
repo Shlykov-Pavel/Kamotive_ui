@@ -1,4 +1,5 @@
 import React from 'react';
+;
 import styles from './Tag.module.css';
 import classNames from 'classnames';
 export const Tag = ({ label, color = 'red', closeButton = false, onClick }) => {
@@ -9,7 +10,7 @@ export const Tag = ({ label, color = 'red', closeButton = false, onClick }) => {
         const b = parseInt(hex.slice(5, 7), 16);
         return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     };
-    return (React.createElement("span", { className: classNames(styles['tag'], !color.startsWith('#') ? `${color}` : ''), style: color.startsWith('#')
+    return (React.createElement("span", { className: classNames(styles.tag, !color.startsWith('#') && styles[color]), style: color.startsWith('#')
             ? {
                 color: color,
                 border: `1px solid ${color}`,

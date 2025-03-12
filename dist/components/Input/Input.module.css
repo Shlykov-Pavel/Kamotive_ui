@@ -1,41 +1,54 @@
-.story--wrapper-iput {
-  background-color: var(--white);
-  padding: 30px;
-  border-radius: 10px;
-  width: 900px;
-}
-
-.wrapper {
-  font-family: 'Raleway';
-  font-style: normal;
-  /* font-weight: 400; */
+.wrapper--input {
   position: relative;
+  max-width: 260px;
+  width: 100%;
+}
+.wrapper--input-label {
+  margin-top: 20px;
+}
+.wrapper--input-helperText {
+  margin-bottom: 15px;
 }
 .wrapper--left {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   gap: 20px;
   align-items: center;
+  width: fit-content;
+  max-width: none;
 }
 
-.wrapper--input {
-  position: relative;
-}
-.inputText {
-  font-family: 'Raleway';
+.input {
+  font-family: var(--font-family-main);
   font-style: normal;
   font-weight: 400;
   position: relative;
-  font-size: 12px;
-  line-height: 14px;
+
   color: var(--text-dark);
-  width: 203px;
-  /* width: 20%; */
-  padding: 10px;
+  background-color: transparent;
+  padding: 10px 15px;
   outline: none;
   border: 1px solid var(--grey-light);
+  mix-blend-mode: multiply;
   border-radius: 10px;
-  /* width: fit-content; */
+  display: inline-flex;
+  width: 100%;
+}
+
+.input--left {
+  min-width: 260px;
+}
+.input.lg {
+  font-size: 14px;
+  line-height: 20px;
+}
+.input.md {
+  font-size: 12px;
+  line-height: 16px;
+}
+.input.sm {
+  font-size: 10px;
+  line-height: 14px;
 }
 /* Стили при наведении мыши */
 .input:hover {
@@ -62,18 +75,6 @@
 .resize {
   resize: both;
 }
-.inputText.lg {
-  height: 40px;
-  /* height: 25px; */
-}
-.inputText.md {
-  height: 35px;
-  /* height: 20px; */
-}
-.inputText.sm {
-  /* height: 30px; */
-  height: 25px;
-}
 
 .filled {
   border-color: var(--blue-main);
@@ -84,8 +85,17 @@
 /* Стили для placeholder */
 .input::placeholder {
   color: var(--text-grey);
-  font-size: 12px;
+  /* font-size: 12px; */
   line-height: 14px;
+}
+.input::placeholder.sm {
+  font-size: 10px;
+}
+.input::placeholder.md {
+  font-size: 12px;
+}
+.input::placeholder.lg {
+  font-size: 14px;
 }
 .input:focus::placeholder {
   color: var(--text-light);
@@ -98,9 +108,8 @@
   /* color: var(--text-grey); */
 }
 .label--default {
-  font-size: 12px;
   position: absolute;
-  top: -20px;
+  top: -18px;
   cursor: text;
   white-space: nowrap;
   overflow: hidden;
@@ -108,9 +117,42 @@
   max-width: calc(100% - 32px);
   color: var(--text-grey);
 }
+.label--default .lg {
+  font-size: 12px;
+}
+.label--default.md {
+  font-size: 10px;
+}
+.label--default .sm {
+  font-size: 16px;
+}
 .label--left {
   font-size: 13px;
   color: var(--text-dark);
+  text-wrap-mode: nowrap;
+}
+.label--left.lg {
+  font-size: 14px;
+}
+.label--left .md {
+  font-size: 12px;
+}
+.label--left .sm {
+  font-size: 10px;
+}
+
+/* Стили для обязательного input */
+.label--default.label--required {
+  position: relative;
+  top: 0;
+}
+.label--required::after {
+  content: '*';
+  color: var(--error-main);
+  position: absolute;
+  margin-left: 2px;
+  top: 2px;
+  font-size: 22px;
 }
 
 /* Стили для input с ошибкой */
@@ -125,16 +167,22 @@
   color: var(--error-secondary);
 }
 
-.helperText {
+.helperText.md {
+  font-size: 10px;
+}
+.helperText.sm {
+  font-size: 8px;
+}
+.helperText.lg {
   font-size: 12px;
-  line-height: 14px;
+}
+.helperText {
   position: absolute;
   left: 0px;
-  /* top: 110%; */
-  bottom: -20px;
+  bottom: -15px;
   cursor: text;
   transition: 0.3ms ease-out;
-  max-width: calc(100% - 32px);
+  /* max-width: calc(100% - 32px); */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -170,7 +218,6 @@
 .icon {
   position: absolute;
   z-index: 1;
-  top: 25%;;
+  top: 25%;
   left: 10px;
 }
-

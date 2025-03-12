@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Typography } from '../Typography/Typography';
 import styles from './ProgressBar.module.css';
 import classNames from 'classnames';
+;
 /**
  * Компонент ProgressBar отображает прогресс в виде заполненной полосы.
  */
 export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = true, animated = false, }) => {
     const [percent, setPercent] = useState(value);
     const validPercentage = Math.min(Math.max(value, 0), max);
-    const progressBarClasses = classNames(styles['progress-bar'], size, {
-        'progress-bar--animated': animated,
-        'progress-bar--static': !animated,
+    const progressBarClasses = classNames(styles['progress-bar'], styles[size], {
+        [styles['progress-bar--animated']]: animated,
+        [styles['progress-bar--static']]: !animated,
     });
     useEffect(() => {
         if (animated) {

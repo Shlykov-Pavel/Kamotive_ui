@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { InputProps } from 'kamotive_ui';
+import { InputProps } from '../../types';
 /**
  * Компонент Input для создания текстовых полей ввода различных стилей и размеров.
  */

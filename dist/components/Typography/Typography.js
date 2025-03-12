@@ -12,6 +12,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 import React from 'react';
 ;
 import classNames from 'classnames';
+;
 import { ETypographyVariants } from './enums';
 import styles from './Typography.module.css';
 /**
@@ -19,7 +20,7 @@ import styles from './Typography.module.css';
  */
 export const Typography = (_a) => {
     var { variant = ETypographyVariants.Body1, children, className, color, style } = _a, props = __rest(_a, ["variant", "children", "className", "color", "style"]);
-    const variantClass = classNames([`typography--variant-${variant}`], className);
+    const variantClass = classNames(styles[`typography--variant-${variant}`], className);
     const combinedStyle = Object.assign({ color }, style);
-    return (React.createElement("span", Object.assign({ className: styles[`${variantClass} ${className}`], style: combinedStyle }, props), children));
+    return (React.createElement("span", Object.assign({ className: variantClass, style: combinedStyle }, props), children));
 };
