@@ -1,5 +1,7 @@
-declare module 'kamotive_ui' {
-  import * as React from 'react';
+import * as React from 'react';
+import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
+import { ETypographyVariants } from '../components/Typography/enums';
+
 
   /** @internal */
   export interface ButtonProps {
@@ -21,7 +23,6 @@ declare module 'kamotive_ui' {
     onClick?: () => void;
   }
 
-  export const Button: React.FC<ButtonProps>;
 
   /** @internal */
   export interface InputProps {
@@ -50,18 +51,17 @@ declare module 'kamotive_ui' {
     /** Метка слева */
     isLeftLabel?: boolean;
     /** Иконка слева */
-    icon?: ReactNode;
+    icon?: React.ReactNode;
     /** Ошибка */
     error?: boolean;
     /** Текст ошибки */
     helperText?: string;
     /** Callback при изменении значения */
-    onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     /** Обязательное поле */
     required?: boolean;
   }
 
-  export const Input: React.FC<InputProps>;
 
   /** @internal */
   export interface TagProps {
@@ -75,7 +75,6 @@ declare module 'kamotive_ui' {
     onClick?: () => void;
   }
 
-  export const Tag: React.FC<TagProps>;
 
   export interface SettingTagProps {
     /** Лейбл */
@@ -86,13 +85,12 @@ declare module 'kamotive_ui' {
     onChange?: (color: string) => void;
   }
 
-  export const SettingTag: React.FC<SettingTagProps>;
 
   export interface ToggleButtonProps {
     /** Знчение */
     value?: boolean;
     /** Callback при изменении значения */
-    onChange?: ChangeEventHandler<HTMLInputElement>;
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
     /** Заблокированная кнопка */
     disabled?: boolean;
     /** Размер кнопки */
@@ -101,7 +99,6 @@ declare module 'kamotive_ui' {
     label?: string;
   }
 
-  export const ToggleButton: React.FC<ToggleButtonProps>;
 
   export type BaseOptions = {
     id?: string;
@@ -154,9 +151,9 @@ declare module 'kamotive_ui' {
     /** Текст ошибки */
     helperText?: string;
     /** Callback, который будет вызван при изменении значения */
-    onChange?: (event: ChangeEvent<HTMLInputElement>, value: string | number | TOptions | null) => void;
+    onChange?: (event:any, value: string | number | TOptions | null) => void;
     /** Callback, который будет вызван при закрытии выпадающего списка */
-    onClose?: (event: ChangeEvent<HTMLInputElement>) => void;
+    onClose?: (event: any) => void;
     /** Возможность сброса значения до первоначального */
     clearable?: boolean;
     /** Обязательное поле */
@@ -164,7 +161,7 @@ declare module 'kamotive_ui' {
     /** Отображение разделителя */
     isDivider?: boolean;
   }
-  export const Dropdown: React.FC<DropdownProps>;
+
 
   /** @internal */
   export interface TypographyProps {
@@ -180,7 +177,7 @@ declare module 'kamotive_ui' {
     style?: CSSProperties;
   }
 
-  export const Typography: React.FC<TypographyProps>;
+
 
   export interface ProgressBarProps {
     /** Значение */
@@ -194,7 +191,6 @@ declare module 'kamotive_ui' {
     /** Анимация */
     animated?: boolean;
   }
-  export const ProgressBar: React.FC<ProgressBarProps>;
 
   export interface ProgressLoaderProps {
     /** Значение */
@@ -206,7 +202,6 @@ declare module 'kamotive_ui' {
     /** Анимация */
     animated?: boolean;
   }
-  export const ProgressLoader: React.FC<ProgressLoaderProps>;
 
   export interface CheckboxProps {
     /** Идентификатор */
@@ -220,8 +215,6 @@ declare module 'kamotive_ui' {
     /** Текст лейбла */
     label?: string;
   }
-
-  export const Checkbox: React.FC<CheckboxProps>;
 
   export interface RadioProps {
     /** Значение */
@@ -238,7 +231,6 @@ declare module 'kamotive_ui' {
     size?: 'sm' | 'md';
   }
 
-  export const RadioButton: React.FC<RadioProps>;
 
   export interface TabProps {
     /** Значение */
@@ -264,8 +256,6 @@ declare module 'kamotive_ui' {
     onChange?: (value: string) => void;
   }
 
-  export const Tab: React.FC<TabProps>;
-  export const Tabs: React.FC<TabsProps>;
 
   export interface ColorPickerProps {
     /** Цвет выбранный пользователем */
@@ -285,7 +275,6 @@ declare module 'kamotive_ui' {
     /** Функция обработки изменения цвета */
     onChange?: (color: string) => void;
   }
-  export const ColorPicker: React.FC<ColorPickerProps>;
 
   export type SnackbarProps = {
     /** Сообщение */
@@ -299,5 +288,3 @@ declare module 'kamotive_ui' {
     /** Функция обработки закрытия сообщения */
     onClose?: () => void;
   };
-  export const Snackbar: React.FC<SnackbarProps>;
-}

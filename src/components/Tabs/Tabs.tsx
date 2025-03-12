@@ -1,4 +1,4 @@
-import { TabsProps } from 'kamotive_ui';
+import { TabsProps } from '../../types';;
 import React, { FC } from 'react';
 
 import styles from './Tabs.module.css';

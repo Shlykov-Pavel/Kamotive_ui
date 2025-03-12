@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Typography } from '../Typography/Typography';
 import styles from './ProgressLoader.module.css'
 import classNames from 'classnames';
-import { ProgressLoaderProps } from 'kamotive_ui';
+import { ProgressLoaderProps } from '../../types';;
 
 /**
  * Компонент ProgressLoader отображает прогресс загрузки.

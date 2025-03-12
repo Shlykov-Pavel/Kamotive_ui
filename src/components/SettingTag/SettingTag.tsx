@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Tag } from '../Tag/Tag';
 import ColorPicker from '../ColorPicker/ColorPicker';
-import { SettingTagProps } from 'kamotive_ui';
+import { SettingTagProps } from '../../types';;
 
 import styles from './SettingTag.module.css';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Button.module.css';
 import classNames from 'classnames';
-import { ButtonProps } from 'kamotive_ui';
+import { ButtonProps } from '../../types';
 import { Typography } from '../Typography/Typography';
 /**
  * Компонент Button представляет собой кнопку, которую можно настроить с помощью различных параметров (размер, иконки, стили, состояние).

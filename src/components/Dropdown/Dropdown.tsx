@@ -1,11 +1,11 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './Dropdown.module.css';
 import classNames from 'classnames';
 import { ChevronDown10 } from '../../Icons/ChevronDown/ChevronDown10';
 import { ChevronUp10 } from '../../Icons/ChevronUp/ChevronUp10';
 import { IconClose10 } from '../../Icons/IconClose/IconClose10';
 import { IconCheck10 } from '../../Icons/IconCheck/IconCheck10';
-import { DropdownProps, TOptions } from 'kamotive_ui';
+import { DropdownProps, TOptions } from '../../types';;
 import { Typography } from '../Typography/Typography';
 
 /**
@@ -232,7 +232,6 @@ export const Dropdown: FC<DropdownProps> = ({
       setErrorInput(true);
     }
   };
-
   //для выбора опции из списка с клавиатуры
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (!isOpen) {
@@ -259,18 +258,17 @@ export const Dropdown: FC<DropdownProps> = ({
           const selectedOption = modifiedOptions && modifiedOptions[activeIndex];
           onChangeHandler(event as any, selectedOption);
           setIsOpen(false);
-          onClose?.(event);
+          onClose?.(event as any);
           setActiveIndex(-1);
         }
         break;
       case 'Escape':
         setIsOpen(false);
-        onClose?.(event);
+        onClose?.(event as any);
         setActiveIndex(-1);
         break;
     }
   };
-
   //для сброса выбранного значения
   const handleReset = (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     const startValue = defaultValue 
@@ -286,7 +284,6 @@ export const Dropdown: FC<DropdownProps> = ({
       setErrorInputHelperText(helperText ?? 'Поле обязательно для заполнения');
     }
   };
-
   const wrapperClassess = classNames({
     [styles['dropdown--container']]: !isLeftLabel,
     [styles['dropdown--container-left']]: isLeftLabel,
@@ -347,7 +344,7 @@ export const Dropdown: FC<DropdownProps> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
-        onClose?.(event);
+        onClose?.(event as any);
       }
     };
     if (containerRef.current) {

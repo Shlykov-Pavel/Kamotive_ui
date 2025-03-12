@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { InputProps } from 'kamotive_ui';
+import { InputProps } from '../../types';;
 import styles from './Input.module.css';
 import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';

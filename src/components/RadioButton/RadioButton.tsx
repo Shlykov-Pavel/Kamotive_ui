@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import styles from './RadioButton.module.css'
 import classNames from 'classnames';
-import { RadioProps } from 'kamotive_ui';
+import { RadioProps } from '../../types';;
 import { Typography } from '../Typography/Typography';
 
 export const RadioButton: FC<RadioProps> = ({ value, label, checked, onChange, disabled = false, size = 'sm' }) => {
