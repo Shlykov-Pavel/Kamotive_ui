@@ -48,6 +48,27 @@
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
+.tag input {
+  background: none;
+  border: none;
+}
+
+.tag input:hover {
+  background: none;
+  border: none;
+}
+
+.tag input:focus {
+  outline: none;
+  border: none;
+  background-color: none; 
+}
+
+.tag input::placeholder {
+  color: var(--placeholder-color);
+  opacity: 0.5;
+}
+
 .tag.red {
   color: var(--red);
   background-color: var(--redBackground);

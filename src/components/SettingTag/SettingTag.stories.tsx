@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Meta } from '@storybook/react';
 import { SettingTag } from './SettingTag';
 
@@ -9,7 +9,7 @@ export interface SettingTagProps {
   /** Цвет */
   color?: string;
   /** Callback при изменении значения */
-  onChange?:(color: string) => void;
+  onChange?:(label: string) => void;
 }
 
 const meta: Meta<SettingTagProps> = {
@@ -36,7 +36,7 @@ const meta: Meta<SettingTagProps> = {
       description: 'Задает цвет тега',
     },
     onChange: {
-      description: 'Callback, который будет вызван при выборе цвета',
+      description: 'Callback, который будет вызван при изменении значения',
     },
   },
 };
@@ -44,15 +44,11 @@ const meta: Meta<SettingTagProps> = {
 export default meta;
 
 export const defaultTag = (argTypes: SettingTagProps): JSX.Element => {
-  const [tagColor, setTagColor] = useState('red');
 
-  const handleColorChange = (newColor: string) => {
-    setTagColor(newColor);
-  };
-  
-  return <SettingTag color={tagColor} onChange={handleColorChange} {...argTypes} />;
+  return <SettingTag label={'Item'} color={argTypes.color} />;
 };
 defaultTag.storyName = 'Tag c color picker для настроек';
 defaultTag.args = {
   label: 'Item',
+  color: 'red'
 };
