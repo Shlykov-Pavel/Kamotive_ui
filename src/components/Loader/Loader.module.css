@@ -1,0 +1,75 @@
+
+.loader {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: space-between;
+    
+    padding: 10px 15px;
+    border: 1px solid var(--info-secondary);
+    border-radius: 10px;
+
+  }
+  .error {
+    border-color: var(--error-main);
+  }
+
+  .loaderFile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+  }
+  .loaderInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex-grow: 1; 
+    align-items: flex-start;
+    overflow: hidden;
+}
+
+.loaderIcon {
+    flex-shrink: 0
+}
+
+.loaderName {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+    align-items: flex-start;
+    overflow: auto;
+}
+
+.loaderButton{
+    position: absolute;
+    left: 50%;
+}
+
+.loader button[aria-label="Закрыть"] {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0
+}
+
+.loader button[aria-label="Закрыть"]::before,
+.loader button[aria-label="Закрыть"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    height: 1px;
+    width: 100%;
+    background-color: var(--icons-grey); 
+}
+
+.loader button[aria-label="Закрыть"]::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+

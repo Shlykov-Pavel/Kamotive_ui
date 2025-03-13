@@ -52,10 +52,10 @@ export const ProgressBar: FC<ProgressBarProps> = ({
         max={max}
         //style={{ transition: animated ? 'width 0.8s ease-in-out' : 'none' }}
       />
-      <label htmlFor="progress" className={styles["progress-bar-percentage"]}>
+      <label htmlFor="progress" className={styles['progress-bar-percentage']}>
         {showValue && (
           <Typography
-            variant="Subheading3"
+            variant="Caption"
             color={'#9CA0A7'}
             style={{ fontWeight: '300' }}
             className={styles["progress-bar-percentage"]}

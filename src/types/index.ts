@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
+import { Accept } from 'react-dropzone/.';
 
 
   /** @internal */
@@ -288,3 +289,31 @@ import { ETypographyVariants } from '../components/Typography/enums';
     /** Функция обработки закрытия сообщения */
     onClose?: () => void;
   };
+
+  export interface LoaderProps {
+    /** Название файла */
+   name?: string ;
+    /** Размер файла */
+   size?: number ;
+   /** Флаг загрузки файла */
+   loading?: boolean;
+   /** Текст ошибки загрузки файла */
+   error?: string;
+   /** Функция обработки */
+   onClick?: () => void;
+  }
+
+  export interface FileAttachProps {
+    /** Максимальный размер файла */
+   maxFileSize?: number;
+   /** Максимальное количество файлов */
+   maxFileCount?: number; 
+    /**Поддерживаемые форматы файлов */
+   acceptedFormats?: Accept;
+   /**Добавленные файлы */
+   addedFiles: File[];
+   /**Сосотояние для добавления файлов */
+   setAddedFiles:(addedFiles: File[]) => void;
+   /**Заблокировано добавление файлов*/
+   disabled?: boolean;
+ }
