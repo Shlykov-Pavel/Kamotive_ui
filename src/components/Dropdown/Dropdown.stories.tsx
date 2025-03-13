@@ -3,65 +3,69 @@ import { Meta } from '@storybook/react';
 import { Dropdown } from './Dropdown';
 import { IconAccount10, IconAlarm10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
 import { IconEyeOff10 } from '../../Icons/IconEyeOff/IconEyeOff10';
+import { Button } from '../Button/Button';
 
-export type TOptions = {
-  id?: string;
-  kew?: string | number;
-  name?: string;
-  description?: string;
-  value?: string | number;
-  icon?: React.JSX.Element;
-  disabled?: boolean;
-  isDivider?: boolean;
-  children?: TOptions[];
-};
+  export type BaseOptions = {
+    id?: string;
+    key?: string | number;
+    name?: string;
+    description?: string;
+    value?: string | number;
+    icon?: React.JSX.Element;
+    disabled?: boolean;
+    isDivider?: boolean;
+    children?: TOptions[];
+  };
+
+  export type TOptions<T = {}> = BaseOptions & T;
 
 export interface DropdownProps {
-  /** Идентификатор */
-  id?: string;
-  /**  Лейбл */
-  label?: string;
-  /** Подсказик заполнения */
-  placeholder?: string;
-  /** Размер */
-  size?: 'md' | 'lg';
-  /** Массив элементов для выпадающего списка */
-  options: Array<string | number | TOptions> | null;
-  /** Функция для получения текста опции */
-  getOptionLabel?: (option: string | number | TOptions) => string;
-  /** Значение */
-  value?: string | number | TOptions | null;
-  /** Значение по умолчанию */
-  defaultValue?: string | number | TOptions | null;
-  /** Стиль выпадающего списка(текст+иконка, текст) */
-  style?: 'icons' | 'text';
-  /**Дополнительный класс */
-  className?: string;
-  /** Заблокированный */
-  disabled?: boolean;
-  /** Только для чтения */
-  readOnly?: boolean;
-  /** Открытый */
-  isOpened?: boolean;
-  /** Текст при отсутствии опций */
-  noOptionsText: string;
-  /** Отображение левой метки */
-  isLeftLabel?: boolean;
-  /** Ошибка */
-  error?: boolean;
-  /** Текст ошибки */
-  helperText?: string;
-  /** Callback, который будет вызван при изменении значения */
-  onChange?: (event: ChangeEvent<HTMLInputElement>, value: string | number | TOptions | null) => void;
-  /** Callback, который будет вызван при закрытии выпадающего списка */
-  onClose?: () => void;
-  /** Возможность сброса значения до первоначального */
-  clearable?: boolean;
-  /** Обязательное поле */
-  required?: boolean;
-  /** Отображение разделителя */
-  isDivider?: boolean;
-}
+    /** Идентификатор */
+    id?: string;
+    /**  Лейбл */
+    label?: string;
+    /** Подсказик заполнения */
+    placeholder?: string;
+    /** Размер */
+    size?: 'md' | 'lg';
+    /** Массив элементов для выпадающего списка */
+    options: Array<string | number | TOptions>;
+    /** Функция для получения текста опции */
+    getOptionLabel?: (option: TOptions) =>  keyof TOptions;
+    /** Значение */
+    value?: string | number | TOptions | null;
+    /** Значение по умолчанию */
+    defaultValue?: string | number | TOptions | null;
+    /** Стиль выпадающего списка(текст+иконка, текст) */
+    style?: 'icons' | 'text';
+    /**Дополнительный класс */
+    className?: string;
+    /** Заблокированный */
+    disabled?: boolean;
+    /** Только для чтения */
+    readOnly?: boolean;
+    /** Открытый */
+    isOpened?: boolean;
+    /** Текст при отсутствии опций */
+    noOptionsText: string;
+    /** Отображение левой метки */
+    isLeftLabel?: boolean;
+    /** Ошибка */
+    error?: boolean;
+    /** Текст ошибки */
+    helperText?: string;
+    /** Callback, который будет вызван при изменении значения */
+    onChange?: (event:any, value: string | number | TOptions | null) => void;
+    /** Callback, который будет вызван при закрытии выпадающего списка */
+    onClose?: (event: any) => void;
+    /** Возможность сброса значения до первоначального */
+    clearable?: boolean;
+    /** Обязательное поле */
+    required?: boolean;
+    /** Отображение разделителя */
+    isDivider?: boolean;
+  }
+
 const dropdownOptions = [
   { value: 'Выбор_1', icon: <IconAccount10 /> },
   { value: 'Выбор_2', icon: <IconAlarm10 /> },
@@ -69,7 +73,7 @@ const dropdownOptions = [
   { value: 'Выбор_4', icon: <IconBell10 /> },
   { value: 'Выбор_5', icon: <IconBriefcase10 /> },
   { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar10 /> },
-];
+] ;
 
 const withWrapper = (Story: React.ComponentType) => (
   <div
@@ -195,28 +199,32 @@ export const DropdownChange = (argTypes: DropdownProps): JSX.Element => {
     { id: '2', name: 'name 2', description: 'описание 2'},
     { id: '3', name: 'name 3', description: 'описание 3'},
   ]
-  const [value, setValue] = useState<TOptions | null>(null);
+  const [value, setValue] = useState<string | number | TOptions | null>(null);
   const [isOpened, setIsOpened] = useState(false);
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, value: TOptions | null) => {
+  
+  const handleChange = (e: any, value: string | number | TOptions | null) => {
     setValue(value);
     setIsOpened(false);
   };
   useEffect(() => {
     if (argTypes.error) setValue(null);
   }, [argTypes.error]);
-  return <Dropdown
+  return <div style={{ display: 'flex', gap: '30px' }}>
+  <Dropdown
       {...argTypes}
       options={defaultOptions}
-      getOptionLabel={(option: TOptions) => option.description}
+      getOptionLabel={(option: TOptions) => option.description as keyof TOptions}
       value={value} 
       onChange={handleChange} 
       isOpened={isOpened} 
-      required={true} />;
+      required={true} />
+  </div>
 };
 DropdownChange.storyName = 'Dropdown изменяемый';
 DropdownChange.parameters = {
   controls: { disable: true },
 };
+
 
 // Dropdown с ошибкой
 export const DropdownWithError = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
