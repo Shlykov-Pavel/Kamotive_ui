@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { InputProps } from '../../types';;
 import styles from './Input.module.css';
 import classNames from 'classnames';
@@ -27,9 +27,21 @@ export const Input: FC<InputProps> = ({
   onChange,
   required = false,
 }) => {
+
+
+  const [inputLabel, setInputLabel] = useState(label);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     event.stopPropagation();
     onChange?.(event);
+    if (label) {
+      setInputLabel(label);
+    } else if (placeholder && event.target.value) {
+      setInputLabel(placeholder);
+    } else {
+      setInputLabel('');
+    }
+    
   };
 
   const wrapperClassess = classNames(styles['wrapper--input'], {
@@ -53,12 +65,12 @@ export const Input: FC<InputProps> = ({
     [styles['label--left']]: isLeftLabel,
     [styles['label--required']]: required,
   });
-
+  
   return (
     <div className={wrapperClassess}>
-      {label && (
+      {inputLabel && (
         <Typography variant="Caption" className={labelClasses}>
-          {label}
+          {inputLabel}
         </Typography>
       )}
       {icon && <div className={styles.icon}>{icon}</div>}

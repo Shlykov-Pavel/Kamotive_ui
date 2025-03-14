@@ -22,6 +22,18 @@ import { Accept } from 'react-dropzone/.';
     disabled?: boolean;
     /** Callback, который будет вызван при клике по кнопке */
     onClick?: () => void;
+    /** Дочерние элементы */
+    children?: ReactNode;
+    /** Указатель на ошибку для установки condition */
+    error?: boolean;
+    /** Дополнительный цвет кнопки*/
+    color?: string;
+    /** Имя поля */
+    name?: string;
+    /** Тип кнопки */
+    type?: 'button' | 'submit' | 'reset';
+    /** Указатель на форму */
+    form?: string;
   }
 
 
@@ -144,7 +156,7 @@ import { Accept } from 'react-dropzone/.';
     /** Открытый */
     isOpened?: boolean;
     /** Текст при отсутствии опций */
-    noOptionsText: string;
+    noOptionsText?: string;
     /** Отображение левой метки */
     isLeftLabel?: boolean;
     /** Ошибка */
@@ -202,6 +214,11 @@ import { Accept } from 'react-dropzone/.';
     showValue?: boolean;
     /** Анимация */
     animated?: boolean;
+  }
+
+  export interface SpinnerProps {
+    /** Размер */
+    size?: 'xs' | 'sm' | 'md' | 'lg';
   }
 
   export interface CheckboxProps {
@@ -311,7 +328,7 @@ import { Accept } from 'react-dropzone/.';
     /**Поддерживаемые форматы файлов */
    acceptedFormats?: Accept;
    /**Добавленные файлы */
-   addedFiles: File[];
+   addedFiles: any[];
    /**Сосотояние для добавления файлов */
    setAddedFiles:(addedFiles: File[]) => void;
    /**Заблокировано добавление файлов*/

@@ -312,7 +312,7 @@ export const Dropdown: FC<DropdownProps> = ({
 
   const selectedItemClassess = classNames({
     [styles['item-selected']]: selectedItem,
-    [styles['item-placeholder']]: !selectedItem && (placeholder ?? label),
+    [styles['item-placeholder']]: !selectedItem && ((placeholder ?? label) || (!placeholder && !label)),
     [styles['button--icons--item-selected']]: style === 'icons' && selectedItem?.icon,
   });
 
@@ -426,7 +426,7 @@ export const Dropdown: FC<DropdownProps> = ({
             React.cloneElement(selectedItem.icon as React.ReactElement, {
               strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
             })}
-          {selectedItem ? selectedItem.value : (placeholder ?? label)}
+          {selectedItem ? selectedItem.value : (placeholder ?? label ?? 'Выберите значение')}
         </div>
 
         {clearable && !readOnly && !disabled && selectedItem && (
