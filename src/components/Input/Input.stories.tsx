@@ -145,6 +145,13 @@ InputFilled.parameters = {
   controls: { disable: true },
 };
 
+// Input без лейбла
+export const InputWithoutLabel = (argTypes: InputProps): JSX.Element => <Input placeholder='Название поля'/>;
+InputWithoutLabel.storyName = 'Input без лейбла';
+InputWithoutLabel.parameters = {
+  controls: { disable: true },
+};
+
 // Инпут с ошибкой
 export const InputWithError = (argTypes: InputProps): JSX.Element => <Input {...argTypes} />;
 InputWithError.storyName = 'Input с ошибкой';

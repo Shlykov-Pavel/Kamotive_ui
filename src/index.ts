@@ -15,6 +15,7 @@ export { ToggleButton as ToggleButton } from './components/ToggleButton/ToggleBu
 export { Typography as Typography } from './components/Typography/Typography';
 export { Loader as Loader } from './components/Loader/Loader';
 export { FileAttach as FileAttach } from './components/FileAttach/FileAttach';
+export { Spinner as Spinner } from './components/Spinner/Spinner';
 
 export type {
   ButtonProps,
@@ -34,5 +35,6 @@ export type {
   SnackbarProps,
   LoaderProps,
   FileAttachProps,
+  SpinnerProps
 } from './types';
 import './fonts.css';

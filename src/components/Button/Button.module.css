@@ -1,122 +1,198 @@
 .button {
   border-radius: 10px;
-  padding: 5px 10px;
   cursor: pointer;
-  padding: 0.5em 1.5em;
   width: fit-content;
- 
+  box-sizing: border-box;
 }
+
+/* Стили кнопок иконка/без иконки/ссылка */
+.button--default {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: calc(0.5em - 1px) calc(0.7em - 1px) calc(0.5em - 1px) calc(0.7em - 1px);
+}
+.button--text {
+  display: inline-flex;
+  padding: calc(0.5em - 1px) calc(0.7em - 1px);
+}
+.button--icon {
+  padding: calc(0.5em - 1px) calc(0.7em - 1px);
+}
+
+/* Специфические стили для fill кнопок */
+.button--fill-default,
+.button--fill-error,
+.button--fill-success,
+.button--fill-warning,
+.button--fill-info,
+.button--fill-custom {
+  border: 1px solid transparent; /* Добавляем прозрачную границу */
+}
+
 
 /* Стили для дефолтных кнопок */
 /* синяя */
 .button--fill-default {
   background-color: var(--blue-main);
   color: var(--white);
-  border: none;
 }
 .button--fill-default:hover {
   background-color: var(--blue-secondary);
   color: var(--white);
-  border: none;
 }
 .button--fill-default:active {
   background-color: var(--blue-dark);
   color: var(--white);
-  border: none;
 }
 .button--fill-default:disabled {
   background-color: var(--blue-disabled);
   color: var(--white);
-  border: none;
   cursor: not-allowed;
 }
 /* ошибка */
 .button--fill-error {
   background-color: var(--error-main);
   color: var(--white);
-  border: none;
+
 }
 .button--fill-error:hover {
   background-color: var(--error-secondary);
   color: var(--white);
-  border: none;
 }
 .button--fill-error:active {
   background-color: var(--error-dark);
   color: var(--white);
-  border: none;
 }
 .button--fill-error:disabled {
   background-color: var(--error-disabled);
   color: var(--white);
-  border: none;
   cursor: not-allowed;
 }
 /* success */
 .button--fill-success {
   background-color: var(--success-main);
   color: var(--white);
-  border: none;
 }
 .button--fill-success:hover {
   background-color: var(--success-secondary);
   color: var(--white);
-  border: none;
 }
 .button--fill-success:active {
   background-color: var(--success-dark);
   color: var(--white);
-  border: none;
 }
 .button--fill-success:disabled {
   background-color: var(--success-disabled);
   color: var(--white);
-  border: none;
   cursor: not-allowed;
 }
 /* warning */
 .button--fill-warning {
   background-color: var(--warning-main);
   color: var(--white);
-  border: none;
 }
 .button--fill-warning:hover {
   background-color: var(--warning-secondary);
   color: var(--white);
-  border: none;
 }
 .button--fill-warning:active {
   background-color: var(--warning-dark);
   color: var(--white);
-  border: none;
 }
 .button--fill-warning:disabled {
   background-color: var(--warning-disabled);
   color: var(--white);
-  border: none;
   cursor: not-allowed;
 }
 /* info */
 .button--fill-info {
   background-color: var(--info-main);
   color: var(--text-btn);
-  border: none;
 }
 .button--fill-info:hover {
   background-color: var(--info-secondary);
   color: var(--text-btn);
-  border: none;
 }
 .button--fill-info:active {
   background-color: var(--info-dark);
   color: var(--text-btn);
-  border: none;
 }
 .button--fill-info:disabled {
   background-color: var(--info-main);
   color: var(--text-btn-light);
+  cursor: not-allowed;
+}
+
+/*--Для пользовательского цвета--*/
+.button--fill-custom {
+  background-color: var(--button-color);
+  color: var(--white);
+}
+
+.button--fill-custom:hover {
+  background-color: var(--button-hover-color);
+}
+
+.button--fill-custom:active {
+  background-color: var(--button-active-color);
+}
+
+.button--fill-custom:disabled {
+  background-color: var(--button-disabled-color);
+  cursor: not-allowed;
+}
+
+.button--outline-custom {
+  background-color: transparent;
+  color: var(--button-color);
+  border: 1px solid var(--button-color);
+}
+
+.button--outline-custom:hover {
+  background-color: var(--button-hover-color);
+  color: var(--button-color);
+  border: 1px solid var(--button-color);
+}
+
+.button--outline-custom:active {
+  background-color: var(--button-active-color);
+  color: var(--button-color);
+  border: 1px solid var(--button-color);
+}
+
+.button--outline-custom:disabled {
+  background-color: var(--button-disabled-color);
+  color: var(--button-disabled-textColor);
+  border: 1px solid var(--button-disabled-textColor);
+  cursor: not-allowed;
+}
+
+.button--link-custom {
+  background-color: rgba(255, 255, 255, 0);
+  color: var(--button-color);
+  border: none;
+}
+
+.button--link-custom:hover {
+  background-color: rgba(255, 255, 255, 0);
+  color: var(--button-hover-color);
+  border: none;
+  text-decoration: underline;
+}
+
+.button--link-custom:active {
+  background-color: rgba(255, 255, 255, 0);
+  color: var(--button-active-color);
+  border: none;
+}
+
+.button--link-custom:disabled {
+  background-color: rgba(255, 255, 255, 0);
+  color: var(--button-disabled-color);
   border: none;
   cursor: not-allowed;
+  text-decoration: none;
 }
 
 /* Стили для outline кнопок */
@@ -245,6 +321,7 @@
   border: none;
   background-color: rgba(255, 255, 255, 0);
   cursor: not-allowed;
+  text-decoration: none;
 }
 .button--link-error {
   color: var(--error-main);
@@ -273,6 +350,7 @@
   border: none;
   background-color: rgba(255, 255, 255, 0);
   cursor: not-allowed;
+  text-decoration: none;
 }
 .button--link-warning {
   color: var(--warning-main);
@@ -287,6 +365,7 @@
   border: none;
   background-color: rgba(255, 255, 255, 0);
   cursor: not-allowed;
+  text-decoration: none;
 }
 .button--link-info {
   color: var(--text-btn);
@@ -301,32 +380,18 @@
   border: none;
   background-color: rgba(255, 255, 255, 0);
   cursor: not-allowed;
+  text-decoration: none;
 }
 
 /* Размеры кнопок */
 .button--sm {
-  /* font-size: 0.8rem; */
   font-size: 12px;
 }
 .button--md {
-  /* font-size: 1rem; */
   font-size: 14px;
 }
 .button--lg {
-  /* font-size: 1.2rem; */
   font-size: 16px;
 }
 
-/* Стили кнопок иконка/без иконки/ссылка */
-.button--default {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0.5em 1em 0.5em 0.7em;
-}
-.button--text {
-  padding: 0.5em 1em;
-}
-.button--icon {
-  padding: 0.5em 0.7em;
-}
+

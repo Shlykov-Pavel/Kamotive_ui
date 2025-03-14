@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import type { Meta } from '@storybook/react';
 import { Button } from './Button';
 import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
@@ -20,6 +20,18 @@ export interface ButtonProps {
  disabled?: boolean;
  /** Callback, который будет вызван при клике по кнопке */
  onClick?: () => void;
+ /** Дочерние элементы */
+  children?: ReactNode;
+  /** Указатель на ошибку для установки condition */
+  error?: boolean;
+  /** Дополнительный цвет кнопки*/
+  color?: string;
+  /** Имя поля */
+  name?: string;
+  /** Тип кнопки */
+  type?: 'button' | 'submit' | 'reset';
+  /** Указатель на форму */
+  form?: string;
 }
 
 
@@ -56,10 +68,8 @@ const meta: Meta<typeof Button> = {
     label: 'Кнопка',
     variant: 'fill',
     size: 'md',
-    style: 'default',
-    condition: 'default',
-    icon: 'unset',
     disabled: false,
+    error: false,
   },
   argTypes: {
     label: { description: 'Текст кнопки' },
@@ -97,6 +107,17 @@ const meta: Meta<typeof Button> = {
       mapping: iconOptions,
     },
     disabled: { description: 'Заблокированная кнопка', control: { type: 'boolean' } },
+    onClick: { description: 'Callback, который будет вызван при клике по кнопке', action: 'clicked' },
+    children: { description: 'Дочерние элементы', control: { type: 'text' } },
+    error: { description: 'Указатель на ошибку для установки condition', control: { type: 'boolean' } },
+    color: { description: 'Дополнительный цвет кнопки', control: { type: 'color' } },
+    name: { description: 'Имя поля', control: { type: 'text' } },
+    type: {
+      description: 'Тип кнопки',
+      control: { type: 'select' },
+      options: ['button', 'submit', 'reset'],
+    },
+
   },
 };
 
@@ -116,22 +137,32 @@ ButtonWithoutIcon.storyName = 'Button без иконки';
 ButtonWithoutIcon.args = {
   variant: 'fill',
   size: 'md',
-  style: 'text',
 };
 ButtonWithoutIcon.parameters = {
   controls: { disable: true },
 };
 
-// Стандартная синияя кнопка только иконка
-export const ButtonFillOnlyIcon = (argTypes: ButtonProps): JSX.Element => <Button {...argTypes} />;
+// Button c внутренним лейблом и кастомным цветом
+export const ButtonWithLabelChild = (argTypes: ButtonProps): JSX.Element => <Button color='#2c2487' disabled={true} {...argTypes}>Кнопка</Button>;
+ButtonWithLabelChild.storyName = 'Button c внутренним лейблом и кастомным цветом';
+ButtonWithLabelChild.args = {
+  variant: 'fill',
+  size: 'md',
+  icon: <IconAccount10 />,
+  
+};
+ButtonWithLabelChild.parameters = {
+  controls: { disable: true },
+};
+
+
+// Стандартная синияя кнопка только иконка проброс через children
+export const ButtonFillOnlyIcon = (argTypes: ButtonProps): JSX.Element => <Button icon={<IconAlarm10 />}/>;
 ButtonFillOnlyIcon.storyName = 'Button только иконка';
 ButtonFillOnlyIcon.args = {
   label: '',
   variant: 'fill',
   size: 'md',
-  style: 'icon',
-  icon: <IconAccount10 />,
-  // iconColor: '#FFFFFF',
 };
 ButtonFillOnlyIcon.parameters = {
   controls: { disable: true },
@@ -142,8 +173,6 @@ export const ButtonOutlinedWithIcon = (argTypes: ButtonProps): JSX.Element => <B
 ButtonOutlinedWithIcon.storyName = 'Button outlined по умолчанию';
 ButtonOutlinedWithIcon.args = {
   variant: 'outline',
-  style: 'default',
-  condition: 'default',
   icon: <IconAccount10 />,
   iconColor: '#0D99FF',
 };
@@ -156,8 +185,6 @@ export const ButtonOutlinedWithoutIcon = (argTypes: ButtonProps): JSX.Element =>
 ButtonOutlinedWithoutIcon.storyName = 'Button outlined без иконки';
 ButtonOutlinedWithoutIcon.args = {
   variant: 'outline',
-  style: 'text',
-  condition: 'default',
 };
 ButtonOutlinedWithoutIcon.parameters = {
   controls: { disable: true },
@@ -169,10 +196,8 @@ ButtonOutlinedOnlyIcon.storyName = 'Button outlined только иконка';
 ButtonOutlinedOnlyIcon.args = {
   label: '',
   variant: 'outline',
-  style: 'icon',
   condition: 'default',
   icon: <IconAccount10 />,
-  // iconColor: '#0D99FF',
 };
 ButtonOutlinedOnlyIcon.parameters = {
   controls: { disable: true },
@@ -195,7 +220,7 @@ export const ButtonStates = (argTypes: ButtonProps): JSX.Element => {
   const [state, setState] = useState<'default' | 'error' | 'success' | 'warning' | 'info'>('default');
   const [label, setLabel] = useState('Клик дефолтная кнопка');
 
-  const handleButtonClick = () => {
+  const handleButtonClick = () => { 
     if (label === 'Клик дефолтная кнопка') {
       setState('error');
       setLabel('Клик error');
@@ -218,7 +243,6 @@ export const ButtonStates = (argTypes: ButtonProps): JSX.Element => {
     <Button
       label={label}
       variant="fill"
-      style={'default'}
       icon={<IconAccount10 />}
       condition={state}
       onClick={handleButtonClick}
@@ -258,7 +282,6 @@ export const ButtonOutlineStates = (argTypes: ButtonProps): JSX.Element => {
     <Button
       label={label}
       variant="outline"
-      style={'default'}
       condition={state}
       onClick={handleButtonClick}
       icon={<IconAccount10 />}
