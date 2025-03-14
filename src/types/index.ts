@@ -328,7 +328,7 @@ import { Accept } from 'react-dropzone/.';
     /**Поддерживаемые форматы файлов */
    acceptedFormats?: Accept;
    /**Добавленные файлы */
-   addedFiles: any[];
+   addedFiles: File[];
    /**Сосотояние для добавления файлов */
    setAddedFiles:(addedFiles: File[]) => void;
    /**Заблокировано добавление файлов*/
