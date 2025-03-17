@@ -9,6 +9,63 @@ import { GithubPlacement } from '@uiw/react-color-github';
 import { IconColorPicker10 } from '../../Icons';
 import { ColorPickerProps } from '../../types';;
 
+// Функция для преобразования HEXA в HEX
+const hexaToHex = (hexa: string = 'fff'): string => {
+  const cleanHex = hexa.replace('#', '');
+  if (cleanHex.length >= 8) {
+    return `#${cleanHex.slice(0, 6)}`;
+  }
+  if (cleanHex.length === 6) {
+    return `#${cleanHex}`;
+  }
+  if (cleanHex.length === 3) {
+    return `#${cleanHex[0]}${cleanHex[0]}${cleanHex[1]}${cleanHex[1]}${cleanHex[2]}${cleanHex[2]}`;
+  }
+  if (cleanHex.length < 6) {
+    return `#${cleanHex + '0'.repeat(6 - cleanHex.length)}`;
+  }
+  return '#ffffff';
+};
+
+/**
+ * Функция-обертка. Вызывает функцию-колбэк через заданный промежуток времени после того, как мышь покинет область
+ * @param callback функция-колбэк
+ * @param delay время в мс, через которое будет вызвана функция
+ */
+const mouseLeaveTimer = (callback: any, delay: number) => {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+
+  function wrapper(element: HTMLElement) {
+    const handleMouseLeave = () => {
+      timer = setTimeout(() => {
+        callback();
+        timer = null;
+      }, delay);
+    }
+
+    const handleMouseEnter = () => {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    }
+
+    element.addEventListener('mouseleave', handleMouseLeave);
+    element.addEventListener('mouseenter', handleMouseEnter);
+
+    // функция очистки
+    return function cleanup() {
+      element.removeEventListener('mouseleave', handleMouseLeave);
+      element.removeEventListener('mouseenter', handleMouseEnter);
+      if (timer) {
+        clearTimeout(timer);
+      }
+    }
+  }
+
+  return wrapper;
+}
+
 /**
  * Компонент ColorPicker представляет собой элемент управления для выбора цвета.
  */
@@ -21,6 +78,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   height = 10,
   autoOpen = false,
   onChange,
+  onColorChange,
 }) => {
  
   const [colorValue, setColorValue] = useState(mainColor);
@@ -30,6 +88,32 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   const [popoverPosition, setPopoverPosition] = useState<'top' | 'bottom'>('bottom');
   const circleRef = useRef<HTMLDivElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const mainColorClasses = classNames(styles.circle, {
+    [styles['mainColor']]: mainColor,
+  });
+
+  const colorCircleDefaultClasses = classNames(styles.circle, styles.colorCircleDefault);
+
+  const popoverClassess = classNames(styles['popover'], {
+    [styles[`popover--${popoverPosition}`]]: true,
+  });
+
+  useEffect(() => {
+    if (!divRef.current) return;
+
+    const setTimer = mouseLeaveTimer(() => {
+      setIsHovered(false);
+      if (onChange) {
+        onChange(colorValue || color);
+      }
+    }, 800);
+    const cleanup = setTimer(divRef.current);
+
+    return cleanup;
+  }, [])
+
   useEffect(() => {
     // Обработчик клика вне компонента развертывания выбора цвета
     const handleClickOutside = (event: MouseEvent) => {
@@ -68,105 +152,80 @@ export const ColorPicker: FC<ColorPickerProps> = ({
       !autoOpen && document.removeEventListener('mousedown', handleClickOutside);}
   }, [isOpen]);
 
-  const mainColorClasses = classNames(styles.circle, {
-    [styles['mainColor']]: mainColor,
-  });
+  useEffect(()=>{
+    setSelectedColor(colorValue || color);
+  },[colorValue])
 
-  const colorCircleDefaultClasses = classNames(styles.circle, {
-    [styles.colorCircleDefault]: color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue});
-
-  const popoverClassess = classNames(styles['popover'], {
-    [styles[`popover--${popoverPosition}`]]: true,
-  });
-  
-  // Функция для преобразования HEXA в HEX
-  const hexaToHex = (hexa: string = 'fff'): string => {
-    const cleanHex = hexa.replace('#', '');
-    if (cleanHex.length >= 8) {
-      return `#${cleanHex.slice(0, 6)}`;
-    }
-    if (cleanHex.length === 6) {
-      return `#${cleanHex}`;
-    }
-    if (cleanHex.length === 3) {
-      return `#${cleanHex[0]}${cleanHex[0]}${cleanHex[1]}${cleanHex[1]}${cleanHex[2]}${cleanHex[2]}`;
-    }
-    if (cleanHex.length < 6) {
-      return `#${cleanHex + '0'.repeat(6 - cleanHex.length)}`;
-    }
-    return '#ffffff';
-  };
   const colorChangeHandler = (color: ColorResult | string) => {
     const newColor = typeof color === 'string' ? color : color.hexa;
     setIsColorChanged(true);
     setColorValue(newColor);
     setSelectedColor(newColor);
-    onChange?.(newColor);
+    onColorChange(newColor);
   };
-
-  useEffect(()=>{
-    setSelectedColor(color);
-  },[color])
   
   return (
-  <div className={(mainColor || recentColors) && styles.colorPickerWrapper} onMouseLeave={() => setIsHovered && setIsHovered(false)}>
-    {mainColor && <div className={mainColorClasses} style={{ 
-          width: `${width}px`,
-          height: `${height}px`,
-          backgroundColor: colorValue?.startsWith('#') ? colorValue : `var(--${colorValue})`,
-        }} 
-        onClick={() => setIsHovered && setIsHovered(false)}
-        />}
-      {recentColors && recentColors.map((color, index) => (
+    <div
+      className={(mainColor || recentColors) && styles.colorPickerWrapper}
+      ref={divRef}
+    >
+      {mainColor && (
         <div
-          key={index}
-          className={styles.circle}
-          style={{  
+          className={mainColorClasses}
+          style={{
             width: `${width}px`,
             height: `${height}px`,
-            backgroundColor: color.startsWith('#') ? color : `var(--${color})`,
+            backgroundColor: colorValue?.startsWith('#') ? colorValue : `var(--${colorValue})`,
           }}
-          onClick={() =>colorChangeHandler(color)}
         />
-      ))}
-     
-      <div className={styles.colorPicker}>
-      <div 
-        ref={circleRef}
-        className={colorCircleDefaultClasses}
-        onClick={() => setIsOpen(!isOpen)}
-        style={{ 
-          width:`${width}px`,
-          height:`${height}px`,
-          backgroundColor: selectedColor.startsWith('#') ? selectedColor : `var(--${selectedColor})`,
-        }}
-        
-      />
-      {isOpen && (
-        <div ref={popoverRef} className={popoverClassess}>
-          {isOpen && <IconColorPicker10 className={styles.colorPickerIcon} htmlColor={'var(--white)'}/> } 
-          <Chrome
-            color={selectedColor}
-            placement={GithubPlacement.Right}
-            onChange={colorChangeHandler}
-            className={styles.customChrome}
-            showEyeDropper={false}
-
-          />
-          <div className={styles.hex} style={{ padding: '0 10px 0 20px' }}>
-            <EditableInput
-              value={hexaToHex(selectedColor)}
-              style={{ width: 68, alignItems: 'flex-start' }}
-              onChange={(e, color) => {
-                const formattedColor = hexaToHex(color.toString());
-                colorChangeHandler(formattedColor);
-              }}            
-              />
-          </div>
-        </div>
       )}
-      </div>
+      {recentColors &&
+        recentColors.map((color, index) => (
+          <div
+            key={index}
+            className={styles.circle}
+            style={{
+              width: `${width}px`,
+              height: `${height}px`,
+              backgroundColor: color.startsWith('#') ? color : `var(--${color})`,
+            }}
+            onClick={() => colorChangeHandler(color)}
+          />
+        ))}
 
+      <div className={styles.colorPicker}>
+        <div
+          ref={circleRef}
+          className={colorCircleDefaultClasses}
+          onClick={() => setIsOpen(!isOpen)}
+          style={{
+            width: `${width}px`,
+            height: `${height}px`,
+          }}
+        />
+        {isOpen && (
+          <div ref={popoverRef} className={popoverClassess}>
+            {isOpen && <IconColorPicker10 className={styles.colorPickerIcon} htmlColor={'var(--white)'} />}
+            <Chrome
+              color={selectedColor}
+              placement={GithubPlacement.Right}
+              onChange={colorChangeHandler}
+              className={styles.customChrome}
+              showEyeDropper={false}
+            />
+            <div className={styles.hex} style={{ padding: '0 10px 0 20px' }}>
+              <EditableInput
+                value={hexaToHex(selectedColor)}
+                style={{ width: 68, alignItems: 'flex-start' }}
+                onChange={(e, color) => {
+                  const formattedColor = hexaToHex(color.toString());
+                  colorChangeHandler(formattedColor);
+                }}
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

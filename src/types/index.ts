@@ -67,12 +67,16 @@ import { Accept } from 'react-dropzone/.';
   /** @internal */
   export interface TagProps {
     /** Лейбл */
-    label?: string;
+    label: string;
     /** Цвет */
     color?: string;
     /**Наличие кнопки закрытия */
     closeButton?: boolean;
+    /** Возможность изменить лейбл */
+    editable?: boolean;
     /** Callback при изменении значения */
+    onChange?: (label: string) => void;
+    /** Callback при нажатии на кнопку закрытия */
     onClick?: () => void;
   }
 
@@ -82,8 +86,8 @@ import { Accept } from 'react-dropzone/.';
     label: string;
     /** Цвет */
     color?: string;
-    /** Callback при изменении значения */
-    onChange?: (color: string) => void;
+    /** Callback при изменении значения/цвета */
+    onChange?: (data: string) => void;
   }
 
 
@@ -273,8 +277,10 @@ import { Accept } from 'react-dropzone/.';
     height?: number;
     /** Автофокус ColorPicker*/
     autoOpen?: boolean;
-    /** Функция обработки изменения цвета */
+    /** Callback функция при изменении цвета */
     onChange?: (color: string) => void;
+    /** Функция обработки изменения цвета */
+    onColorChange: (color: string) => void;
   }
 
   export type SnackbarProps = {
