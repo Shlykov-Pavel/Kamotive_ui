@@ -13,4 +13,7 @@ export { Tabs as Tabs } from './components/Tabs/Tabs';
 export { Tag as Tag } from './components/Tag/Tag';
 export { ToggleButton as ToggleButton } from './components/ToggleButton/ToggleButton';
 export { Typography as Typography } from './components/Typography/Typography';
+export { Loader as Loader } from './components/Loader/Loader';
+export { FileAttach as FileAttach } from './components/FileAttach/FileAttach';
+export { Spinner as Spinner } from './components/Spinner/Spinner';
 import './fonts.css';

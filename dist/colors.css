@@ -1,7 +1,7 @@
 :root {
   --white: #ffffff;
 
-  --grey-medium: #d1d1d6;
+  --grey-medium: #aeaeb2;
   --grey-light: #e5e5ea;
   --grey-extraLight: #f2f2f7;
 
@@ -10,6 +10,7 @@
   --text-dark: #2a3336;
   --text-btn: #6f6f6f;
   --text-btn-light: #9ca0a7;
+  --icons-grey: #828286;
   --icons-medium: #5a5d61;
   --icons-light: #dce4f0;
   --icons-active: #bfd0eb;
@@ -31,6 +32,9 @@
   --warning-disabled:#ffb44a;
   --info-main: #f2f2f7;
   --info-secondary: #e5e5ea;
+
+  --fills-active: #eef8ff;
+  --fills-disabled: #f5f5f5;
 
   --info-dark: rgb(209, 209, 214);
   
