@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './Dropdown.module.css';
 import classNames from 'classnames';
 import { ChevronDown10 } from '../../Icons/ChevronDown/ChevronDown10';
@@ -17,7 +17,7 @@ export interface DropdownListItemProps {
   getOptionLabel?: ((option: TOptions) => string);
   size: 'md' | 'lg';
   selectedItem: TOptions | null;
-  style?: 'icons' | 'text';
+  variant?: 'icons' | 'text';
   onChange: (event: React.MouseEvent<HTMLElement>, item: TOptions | null) => void;
   isActive?: boolean;
   activeIndex?: number;
@@ -100,7 +100,7 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
   getOptionLabel,
   size = 'md',
   selectedItem,
-  style,
+  variant,
   onChange,
   isActive,
   activeIndex,
@@ -124,8 +124,8 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
   });
   const itemBlock = classNames(
     styles[`item-block`],
-    styles[`item-block-${style}`],
-    { [styles[`item-block-${style}--selected`]]: selectedItem?.value === item?.value },
+    styles[`item-block-${variant}`],
+    { [styles[`item-block-${variant}--selected`]]: selectedItem?.value === item?.value },
     { [styles['item-block--disabled']]: item?.disabled }
   );
 
@@ -133,7 +133,7 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
     <div className={itemContainerClasses} onClick={handleItemClick}>
       <div className={itemClassess}>
         <div className={itemBlock}>
-          {style === 'icons' &&
+          {variant === 'icons' &&
             item?.icon &&
             React.cloneElement(item.icon as React.ReactElement, {
               strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
@@ -178,7 +178,8 @@ export const Dropdown: FC<DropdownProps> = ({
   getOptionLabel,
   value,
   defaultValue,
-  style = 'text',
+  variant = 'text',
+  style,
   className,
   disabled = false,
   readOnly = false,
@@ -288,14 +289,14 @@ export const Dropdown: FC<DropdownProps> = ({
       setErrorInputHelperText(helperText ?? 'Поле обязательно для заполнения');
     }
   };
-  const wrapperClassess = classNames({
+  const wrapperClassess = classNames(className,{
     [styles['dropdown--container']]: !isLeftLabel,
     [styles['dropdown--container-left']]: isLeftLabel,
     [styles['dropdown--container-label']]: label && !isLeftLabel && !required,
     [styles['dropdown--container-helperText']]: errorInput,
   });
 
-  const buttonClassess = classNames(styles.button, className, styles[`button--${size}`], {
+  const buttonClassess = classNames(styles.button, styles[`button--${size}`], {
     [styles['button-item--selected']]: selectedItem?.value && !disabled,
     [styles['button--readOnly']]: readOnly,
     [styles['button--disabled']]: disabled,
@@ -313,7 +314,7 @@ export const Dropdown: FC<DropdownProps> = ({
   const selectedItemClassess = classNames({
     [styles['item-selected']]: selectedItem,
     [styles['item-placeholder']]: !selectedItem && ((placeholder ?? label) || (!placeholder && !label)),
-    [styles['button--icons--item-selected']]: style === 'icons' && selectedItem?.icon,
+    [styles['button--icons--item-selected']]: variant === 'icons' && selectedItem?.icon,
   });
 
   const getDropdownMenu = () => {
@@ -328,7 +329,7 @@ export const Dropdown: FC<DropdownProps> = ({
                 getOptionLabel={getOptionLabel}
                 size={size}
                 selectedItem={selectedItem}
-                style={style}
+                variant={variant}
                 onChange={onChangeHandler}
                 isActive={activeIndex === index}
                 activeIndex={activeIndex}
@@ -406,7 +407,7 @@ export const Dropdown: FC<DropdownProps> = ({
       id={id}
       className={wrapperClassess}
       ref={containerRef}
-      style={{ width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' }}
+      style={style? style : { width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' }}
     >
       {label && (
         <Typography variant="Caption" className={labelClasses}>
@@ -421,7 +422,7 @@ export const Dropdown: FC<DropdownProps> = ({
         onKeyDown={handleKeyDown}
       >
         <div className={selectedItemClassess}>
-          {style === 'icons' &&
+          {variant === 'icons' &&
             selectedItem?.icon &&
             React.cloneElement(selectedItem.icon as React.ReactElement, {
               strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',

@@ -36,8 +36,10 @@ export interface DropdownProps {
     value?: string | number | TOptions | null;
     /** Значение по умолчанию */
     defaultValue?: string | number | TOptions | null;
-    /** Стиль выпадающего списка(текст+иконка, текст) */
-    style?: 'icons' | 'text';
+    /** Вариaнты выпадающего списка(текст+иконка, текст) */
+    variant?: 'icons' | 'text';
+    /** Стиль выпадающего */
+    style?: React.CSSProperties;
     /**Дополнительный класс */
     className?: string;
     /** Заблокированный */
@@ -129,8 +131,8 @@ const meta: Meta<typeof Dropdown> = {
     defaultValue: {
       description: 'Значение по умолчанию',
     },
-    style: {
-      description: 'Стили выпадающего списка',
+    variant: {
+      description: 'Вариaнты выпадающего списка(текст + иконка, текст)',
       control: { type: 'select' },
       options: ['icons', 'text'],
     },
@@ -243,7 +245,7 @@ export const DropdownOpenedDefault = (argTypes: DropdownProps): JSX.Element => <
 DropdownOpenedDefault.storyName = 'Dropdown открытый с иконками по умолчанию';
 DropdownOpenedDefault.args = {
   isOpened: true,
-  style: 'icons',
+  variant: 'icons',
   options: dropdownOptions,
 };
 DropdownOpenedDefault.parameters = {
@@ -256,7 +258,7 @@ DropdownOpenedDefaultSelected.storyName = 'Dropdown открытый с икон
 DropdownOpenedDefaultSelected.args = {
   defaultValue: { value: 'Выбор_2', icon: <IconAlarm10 /> },
   isOpened: true,
-  style: 'icons',
+  variant: 'icons',
   options: dropdownOptions,
 };
 DropdownOpenedDefaultSelected.parameters = {
@@ -278,7 +280,7 @@ DropdownOpenedTextSelected.storyName = 'Dropdown открытый без ико�
 DropdownOpenedTextSelected.args = {
   defaultValue: { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar10 /> },
   isOpened: true,
-  style: 'text',
+  variant: 'text',
   options: dropdownOptions,
 };
 DropdownOpenedTextSelected.parameters = {

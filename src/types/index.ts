@@ -49,6 +49,8 @@ import { Accept } from 'react-dropzone/.';
     size?: 'sm' | 'md' | 'lg';
     /** Знчение */
     value?: string;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
     /** Дополнительный класс */
     className?: string;
     /** Многострочное поле */
@@ -149,8 +151,10 @@ import { Accept } from 'react-dropzone/.';
     value?: string | number | TOptions | null;
     /** Значение по умолчанию */
     defaultValue?: string | number | TOptions | null;
-    /** Стиль выпадающего списка(текст+иконка, текст) */
-    style?: 'icons' | 'text';
+    /** Вариaнты выпадающего списка(текст + иконка, текст)' */
+    variant?: 'icons' | 'text';
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
     /**Дополнительный класс */
     className?: string;
     /** Заблокированный */
@@ -339,4 +343,8 @@ import { Accept } from 'react-dropzone/.';
    setAddedFiles:(addedFiles: File[]) => void;
    /**Заблокировано добавление файлов*/
    disabled?: boolean;
+   /** Дополнительный класс */
+   className?: string;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
  }
