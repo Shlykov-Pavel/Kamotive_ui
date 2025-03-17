@@ -5,37 +5,30 @@
   box-sizing: border-box;
 }
 
-/* Стили кнопок иконка/без иконки/ссылка */
-.button--default {
+
+/* Общие стили для всех типов кнопок */
+.button--default,
+.button--text,
+.button--icon {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  padding: calc(0.5em - 1px) calc(0.7em - 1px);
+  height: 2.5em; 
+  box-sizing: border-box;
+  vertical-align: middle; 
+}
+
+.button--default {
   gap: 5px;
-  padding: calc(0.5em - 1px) calc(0.7em - 1px) calc(0.5em - 1px) calc(0.7em - 1px);
 }
-.button--text {
-  display: inline-flex;
-  padding: calc(0.5em - 1px) calc(0.7em - 1px);
-}
-.button--icon {
-  padding: calc(0.5em - 1px) calc(0.7em - 1px);
-}
-
-/* Специфические стили для fill кнопок */
-.button--fill-default,
-.button--fill-error,
-.button--fill-success,
-.button--fill-warning,
-.button--fill-info,
-.button--fill-custom {
-  border: 1px solid transparent; /* Добавляем прозрачную границу */
-}
-
 
 /* Стили для дефолтных кнопок */
 /* синяя */
 .button--fill-default {
   background-color: var(--blue-main);
   color: var(--white);
+  border: 1px solid transparent;
 }
 .button--fill-default:hover {
   background-color: var(--blue-secondary);
@@ -54,6 +47,7 @@
 .button--fill-error {
   background-color: var(--error-main);
   color: var(--white);
+  border: 1px solid transparent; 
 
 }
 .button--fill-error:hover {
@@ -73,6 +67,7 @@
 .button--fill-success {
   background-color: var(--success-main);
   color: var(--white);
+  border: 1px solid transparent; 
 }
 .button--fill-success:hover {
   background-color: var(--success-secondary);
@@ -91,6 +86,7 @@
 .button--fill-warning {
   background-color: var(--warning-main);
   color: var(--white);
+  border: 1px solid transparent; 
 }
 .button--fill-warning:hover {
   background-color: var(--warning-secondary);
@@ -109,6 +105,7 @@
 .button--fill-info {
   background-color: var(--info-main);
   color: var(--text-btn);
+  border: 1px solid transparent; 
 }
 .button--fill-info:hover {
   background-color: var(--info-secondary);
@@ -128,6 +125,7 @@
 .button--fill-custom {
   background-color: var(--button-color);
   color: var(--white);
+  border: 1px solid transparent; 
 }
 
 .button--fill-custom:hover {
