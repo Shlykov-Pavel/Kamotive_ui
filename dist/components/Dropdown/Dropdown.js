@@ -84,10 +84,11 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
         })))));
 };
 export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOptionLabel, value, defaultValue, style = 'text', className, disabled = false, readOnly = false, isOpened = false, noOptionsText = 'Нет вариатов для выбора', isLeftLabel = false, error = false, helperText, onChange, onClose, clearable = true, required = false, isDivider = false, }) => {
+    var _a;
     const [isOpen, setIsOpen] = useState(isOpened);
     const [modifiedOptions, setModifiedOptions] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
-    const [errorInput, setErrorInput] = useState(error);
+    const [errorInput, setErrorInput] = useState(false);
     const [errorInputHelperText, setErrorInputHelperText] = useState(helperText);
     const [activeIndex, setActiveIndex] = useState(-1);
     const containerRef = useRef(null);
@@ -154,6 +155,8 @@ export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOpti
     };
     //для сброса выбранного значения
     const handleReset = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         const startValue = defaultValue
             ? checkItem(defaultValue)
             : null;
@@ -189,7 +192,7 @@ export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOpti
     });
     const selectedItemClassess = classNames({
         [styles['item-selected']]: selectedItem,
-        [styles['item-placeholder']]: !selectedItem && (placeholder !== null && placeholder !== void 0 ? placeholder : label),
+        [styles['item-placeholder']]: !selectedItem && ((placeholder !== null && placeholder !== void 0 ? placeholder : label) || (!placeholder && !label)),
         [styles['button--icons--item-selected']]: style === 'icons' && (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.icon),
     });
     const getDropdownMenu = () => {
@@ -248,7 +251,13 @@ export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOpti
                     : null;
             setSelectedItem(startValue !== null && startValue !== void 0 ? startValue : null);
         }
+        else {
+            setSelectedItem(null);
+        }
     }, [value, defaultValue, checkItem]);
+    useEffect(() => {
+        setErrorInput(error);
+    }, [error]);
     return (React.createElement("div", { id: id, className: wrapperClassess, ref: containerRef, style: { width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' } },
         label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
         React.createElement("button", { className: buttonClassess, onClick: readOnly ? undefined : handleToggle, disabled: disabled, tabIndex: 0, onKeyDown: handleKeyDown },
@@ -258,7 +267,7 @@ export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOpti
                     React.cloneElement(selectedItem.icon, {
                         strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
                     }),
-                selectedItem ? selectedItem.value : (placeholder !== null && placeholder !== void 0 ? placeholder : label)),
+                selectedItem ? selectedItem.value : ((_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : 'Выберите значение')),
             clearable && !readOnly && !disabled && selectedItem && (React.createElement("div", { className: styles.resetButton },
                 React.createElement(IconClose10, { strokeWidth: "0.2", htmlColor: "var(--text-light)", onClick: handleReset }))),
             React.createElement("div", { className: styles.dropdownIcon }, !isOpen ? (React.createElement(ChevronDown10, { strokeWidth: size === 'lg' ? '0.5' : '0.3' })) : (React.createElement(ChevronUp10, { strokeWidth: size === 'lg' ? '0.5' : '0.3' }))),

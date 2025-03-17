@@ -36,7 +36,7 @@ export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = tru
     }, [animated, validPercentage]);
     return (React.createElement("div", { className: styles["progress-bar--wrapper"] },
         React.createElement("progress", { id: "linear-progress", className: progressBarClasses, value: percent, max: max }),
-        React.createElement("label", { htmlFor: "progress", className: styles["progress-bar-percentage"] }, showValue && (React.createElement(Typography, { variant: "Subheading3", color: '#9CA0A7', style: { fontWeight: '300' }, className: styles["progress-bar-percentage"] },
+        React.createElement("label", { htmlFor: "progress", className: styles['progress-bar-percentage'] }, showValue && (React.createElement(Typography, { variant: "Caption", color: '#9CA0A7', style: { fontWeight: '300' }, className: styles["progress-bar-percentage"] },
             percent,
             "%")))));
 };

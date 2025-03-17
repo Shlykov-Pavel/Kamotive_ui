@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
+import { Accept } from 'react-dropzone/.';
 /** @internal */
 export interface ButtonProps {
     /** Тест кнопки */
@@ -19,6 +20,18 @@ export interface ButtonProps {
     disabled?: boolean;
     /** Callback, который будет вызван при клике по кнопке */
     onClick?: () => void;
+    /** Дочерние элементы */
+    children?: ReactNode;
+    /** Указатель на ошибку для установки condition */
+    error?: boolean;
+    /** Дополнительный цвет кнопки*/
+    color?: string;
+    /** Имя поля */
+    name?: string;
+    /** Тип кнопки */
+    type?: 'button' | 'submit' | 'reset';
+    /** Указатель на форму */
+    form?: string;
 }
 /** @internal */
 export interface InputProps {
@@ -132,7 +145,7 @@ export interface DropdownProps {
     /** Открытый */
     isOpened?: boolean;
     /** Текст при отсутствии опций */
-    noOptionsText: string;
+    noOptionsText?: string;
     /** Отображение левой метки */
     isLeftLabel?: boolean;
     /** Ошибка */
@@ -184,6 +197,10 @@ export interface ProgressLoaderProps {
     showValue?: boolean;
     /** Анимация */
     animated?: boolean;
+}
+export interface SpinnerProps {
+    /** Размер */
+    size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 export interface CheckboxProps {
     /** Идентификатор */
@@ -265,3 +282,29 @@ export type SnackbarProps = {
     /** Функция обработки закрытия сообщения */
     onClose?: () => void;
 };
+export interface LoaderProps {
+    /** Название файла */
+    name?: string;
+    /** Размер файла */
+    size?: number;
+    /** Флаг загрузки файла */
+    loading?: boolean;
+    /** Текст ошибки загрузки файла */
+    error?: string;
+    /** Функция обработки */
+    onClick?: () => void;
+}
+export interface FileAttachProps {
+    /** Максимальный размер файла */
+    maxFileSize?: number;
+    /** Максимальное количество файлов */
+    maxFileCount?: number;
+    /**Поддерживаемые форматы файлов */
+    acceptedFormats?: Accept;
+    /**Добавленные файлы */
+    addedFiles: File[];
+    /**Сосотояние для добавления файлов */
+    setAddedFiles: (addedFiles: File[]) => void;
+    /**Заблокировано добавление файлов*/
+    disabled?: boolean;
+}

@@ -1,0 +1,20 @@
+.spinner-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+  /* background-color: #f5f5f5; */
+}
+.spinnerRotate {
+  transform-origin: center;
+  animation: rotate 1300ms linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -6,10 +6,60 @@ import EditableInput from '@uiw/react-color-editable-input';
 import { GithubPlacement } from '@uiw/react-color-github';
 import { IconColorPicker10 } from '../../Icons';
 ;
+// Функция для преобразования HEXA в HEX
+const hexaToHex = (hexa = 'fff') => {
+    const cleanHex = hexa.replace('#', '');
+    if (cleanHex.length >= 8) {
+        return `#${cleanHex.slice(0, 6)}`;
+    }
+    if (cleanHex.length === 6) {
+        return `#${cleanHex}`;
+    }
+    if (cleanHex.length === 3) {
+        return `#${cleanHex[0]}${cleanHex[0]}${cleanHex[1]}${cleanHex[1]}${cleanHex[2]}${cleanHex[2]}`;
+    }
+    if (cleanHex.length < 6) {
+        return `#${cleanHex + '0'.repeat(6 - cleanHex.length)}`;
+    }
+    return '#ffffff';
+};
+/**
+ * Функция-обертка. Вызывает функцию-колбэк через заданный промежуток времени после того, как мышь покинет область
+ * @param callback функция-колбэк
+ * @param delay время в мс, через которое будет вызвана функция
+ */
+const mouseLeaveTimer = (callback, delay) => {
+    let timer = null;
+    function wrapper(element) {
+        const handleMouseLeave = () => {
+            timer = setTimeout(() => {
+                callback();
+                timer = null;
+            }, delay);
+        };
+        const handleMouseEnter = () => {
+            if (timer) {
+                clearTimeout(timer);
+                timer = null;
+            }
+        };
+        element.addEventListener('mouseleave', handleMouseLeave);
+        element.addEventListener('mouseenter', handleMouseEnter);
+        // функция очистки
+        return function cleanup() {
+            element.removeEventListener('mouseleave', handleMouseLeave);
+            element.removeEventListener('mouseenter', handleMouseEnter);
+            if (timer) {
+                clearTimeout(timer);
+            }
+        };
+    }
+    return wrapper;
+};
 /**
  * Компонент ColorPicker представляет собой элемент управления для выбора цвета.
  */
-export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsHovered, width = 10, height = 10, autoOpen = false, onChange, }) => {
+export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsHovered, width = 10, height = 10, autoOpen = false, onChange, onColorChange, }) => {
     const [colorValue, setColorValue] = useState(mainColor);
     const [selectedColor, setSelectedColor] = useState(color);
     const [isColorChanged, setIsColorChanged] = useState(false);
@@ -17,6 +67,26 @@ export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsH
     const [popoverPosition, setPopoverPosition] = useState('bottom');
     const circleRef = useRef(null);
     const popoverRef = useRef(null);
+    const divRef = useRef(null);
+    const mainColorClasses = classNames(styles.circle, {
+        [styles['mainColor']]: mainColor,
+    });
+    const colorCircleDefaultClasses = classNames(styles.circle, styles.colorCircleDefault);
+    const popoverClassess = classNames(styles['popover'], {
+        [styles[`popover--${popoverPosition}`]]: true,
+    });
+    useEffect(() => {
+        if (!divRef.current)
+            return;
+        const setTimer = mouseLeaveTimer(() => {
+            setIsHovered(false);
+            if (onChange) {
+                onChange(colorValue || color);
+            }
+        }, 800);
+        const cleanup = setTimer(divRef.current);
+        return cleanup;
+    }, []);
     useEffect(() => {
         // Обработчик клика вне компонента развертывания выбора цвета
         const handleClickOutside = (event) => {
@@ -51,58 +121,32 @@ export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsH
             !autoOpen && document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isOpen]);
-    const mainColorClasses = classNames(styles.circle, {
-        [styles['mainColor']]: mainColor,
-    });
-    const colorCircleDefaultClasses = classNames(styles.circle, {
-        [styles.colorCircleDefault]: color === '#ffffff' && !isColorChanged || isColorChanged && selectedColor !== colorValue
-    });
-    const popoverClassess = classNames(styles['popover'], {
-        [styles[`popover--${popoverPosition}`]]: true,
-    });
-    // Функция для преобразования HEXA в HEX
-    const hexaToHex = (hexa = 'fff') => {
-        const cleanHex = hexa.replace('#', '');
-        if (cleanHex.length >= 8) {
-            return `#${cleanHex.slice(0, 6)}`;
-        }
-        if (cleanHex.length === 6) {
-            return `#${cleanHex}`;
-        }
-        if (cleanHex.length === 3) {
-            return `#${cleanHex[0]}${cleanHex[0]}${cleanHex[1]}${cleanHex[1]}${cleanHex[2]}${cleanHex[2]}`;
-        }
-        if (cleanHex.length < 6) {
-            return `#${cleanHex + '0'.repeat(6 - cleanHex.length)}`;
-        }
-        return '#ffffff';
-    };
+    useEffect(() => {
+        setSelectedColor(colorValue || color);
+    }, [colorValue]);
     const colorChangeHandler = (color) => {
         const newColor = typeof color === 'string' ? color : color.hexa;
         setIsColorChanged(true);
         setColorValue(newColor);
         setSelectedColor(newColor);
-        onChange === null || onChange === void 0 ? void 0 : onChange(newColor);
+        onColorChange(newColor);
     };
-    useEffect(() => {
-        setSelectedColor(color);
-    }, [color]);
-    return (React.createElement("div", { className: (mainColor || recentColors) && styles.colorPickerWrapper, onMouseLeave: () => setIsHovered && setIsHovered(false) },
-        mainColor && React.createElement("div", { className: mainColorClasses, style: {
+    return (React.createElement("div", { className: (mainColor || recentColors) && styles.colorPickerWrapper, ref: divRef },
+        mainColor && (React.createElement("div", { className: mainColorClasses, style: {
                 width: `${width}px`,
                 height: `${height}px`,
                 backgroundColor: (colorValue === null || colorValue === void 0 ? void 0 : colorValue.startsWith('#')) ? colorValue : `var(--${colorValue})`,
-            }, onClick: () => setIsHovered && setIsHovered(false) }),
-        recentColors && recentColors.map((color, index) => (React.createElement("div", { key: index, className: styles.circle, style: {
-                width: `${width}px`,
-                height: `${height}px`,
-                backgroundColor: color.startsWith('#') ? color : `var(--${color})`,
-            }, onClick: () => colorChangeHandler(color) }))),
+            } })),
+        recentColors &&
+            recentColors.map((color, index) => (React.createElement("div", { key: index, className: styles.circle, style: {
+                    width: `${width}px`,
+                    height: `${height}px`,
+                    backgroundColor: color.startsWith('#') ? color : `var(--${color})`,
+                }, onClick: () => colorChangeHandler(color) }))),
         React.createElement("div", { className: styles.colorPicker },
             React.createElement("div", { ref: circleRef, className: colorCircleDefaultClasses, onClick: () => setIsOpen(!isOpen), style: {
                     width: `${width}px`,
                     height: `${height}px`,
-                    backgroundColor: selectedColor.startsWith('#') ? selectedColor : `var(--${selectedColor})`,
                 } }),
             isOpen && (React.createElement("div", { ref: popoverRef, className: popoverClassess },
                 isOpen && React.createElement(IconColorPicker10, { className: styles.colorPickerIcon, htmlColor: 'var(--white)' }),
