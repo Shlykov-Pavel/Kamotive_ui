@@ -1,5 +1,5 @@
 import type { Meta } from '@storybook/react';
-import React, { ChangeEvent, ChangeEventHandler, CSSProperties, ReactNode, useEffect, useState } from 'react';
+import React, { ChangeEvent, ChangeEventHandler, ReactNode, useEffect, useState } from 'react';
 import { Input } from './Input';
 import { IconAlarm10, IconAccount10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons/index';
 
@@ -38,8 +38,6 @@ export interface InputProps {
   onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   /** Обязательное поле */
   required?: boolean;
-  /** Стили передаваемые напрямую в input */
-  style?: CSSProperties;
 }
 
 const iconOptions = {

@@ -6,7 +6,6 @@ import styles from './FileAttach.module.css';
 import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';
 import { Loader } from '../Loader/Loader';
-import classNames from 'classnames';
 
 export const FileAttach: FC<FileAttachProps> = ({
   maxFileSize = 2,
@@ -19,8 +18,6 @@ export const FileAttach: FC<FileAttachProps> = ({
   addedFiles,
   setAddedFiles,
   disabled = false,
-  className,
-  style,
 }) => {
   const [errorFiles, setErrorFiles] = useState<FileRejection[]>([]);
 
@@ -107,7 +104,7 @@ export const FileAttach: FC<FileAttachProps> = ({
   };
 
   return (
-    <section className={classNames(styles['fileAttach'], className)} style={style}>
+    <section className={styles['fileAttach']}>
       <div {...getRootProps({ className: `${styles['dropzone']} ${disabled ? styles['disabled'] : ''}` })}>
         <input {...getInputProps()} />
         <IconUpload htmlColor={disabled ? 'var(--grey-medium)' : 'var(--icons-grey)'} />

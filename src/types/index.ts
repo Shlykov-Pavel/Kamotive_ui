@@ -73,8 +73,6 @@ import { Accept } from 'react-dropzone/.';
     onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     /** Обязательное поле */
     required?: boolean;
-    /** Стили передаваемые напрямую в input */
-    style?: CSSProperties;
   }
 
 
@@ -152,9 +150,7 @@ import { Accept } from 'react-dropzone/.';
     /** Значение по умолчанию */
     defaultValue?: string | number | TOptions | null;
     /** Стиль выпадающего списка(текст+иконка, текст) */
-    variant?: 'icons' | 'text';
-    /** Стиль выпадающего */
-    style?: CSSProperties;
+    style?: 'icons' | 'text';
     /**Дополнительный класс */
     className?: string;
     /** Заблокированный */
@@ -343,8 +339,4 @@ import { Accept } from 'react-dropzone/.';
    setAddedFiles:(addedFiles: File[]) => void;
    /**Заблокировано добавление файлов*/
    disabled?: boolean;
-   /** Дополнительный класс */
-   className?: string;
-   /** Стили передаваемые напрямую в input */
-   style?: CSSProperties;
  }

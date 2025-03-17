@@ -26,7 +26,6 @@ export const Input: FC<InputProps> = ({
   helperText,
   onChange,
   required = false,
-  style,
 }) => {
 
 
@@ -45,13 +44,13 @@ export const Input: FC<InputProps> = ({
     
   };
 
-  const wrapperClassess = classNames(styles['wrapper--input'], className,{
+  const wrapperClassess = classNames(styles['wrapper--input'], {
     [styles['wrapper--left']]: isLeftLabel,
     [styles['wrapper--input-label']]: label && !isLeftLabel && !required,
     [styles['wrapper--input-helperText']]: error,
   });
 
-  const inputClassess = classNames(styles.input, styles[size], {
+  const inputClassess = classNames(styles.input, styles[size], className, {
     [styles['input--error']]: error,
     [styles['readOnly']]: readOnly,
     [styles['input--withIcon']]: icon,
@@ -68,7 +67,7 @@ export const Input: FC<InputProps> = ({
   });
   
   return (
-    <div className={wrapperClassess} style={style}>
+    <div className={wrapperClassess}>
       {inputLabel && (
         <Typography variant="Caption" className={labelClasses}>
           {inputLabel}
