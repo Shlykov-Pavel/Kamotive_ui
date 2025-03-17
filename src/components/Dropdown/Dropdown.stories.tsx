@@ -47,7 +47,7 @@ export interface DropdownProps {
     /** Открытый */
     isOpened?: boolean;
     /** Текст при отсутствии опций */
-    noOptionsText: string;
+    noOptionsText?: string;
     /** Отображение левой метки */
     isLeftLabel?: boolean;
     /** Ошибка */
@@ -224,7 +224,6 @@ DropdownChange.storyName = 'Dropdown изменяемый';
 DropdownChange.parameters = {
   controls: { disable: true },
 };
-
 
 // Dropdown с ошибкой
 export const DropdownWithError = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
