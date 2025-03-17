@@ -14,6 +14,8 @@ export interface InputProps {
   size?: 'sm' | 'md' | 'lg';
   /** Знчение */
   value?: string;
+  /** Стили передаваемые напрямую */
+  style?: React.CSSProperties;
   /** Дополнительный класс */
   className?: string;
   /** Многострочное поле */

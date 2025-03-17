@@ -14,6 +14,7 @@ export const Input: FC<InputProps> = ({
   placeholder,
   size = 'lg',
   value,
+  style,
   className,
   multiline = false,
   rows = 4,
@@ -44,13 +45,13 @@ export const Input: FC<InputProps> = ({
     
   };
 
-  const wrapperClassess = classNames(styles['wrapper--input'], {
+  const wrapperClassess = classNames(styles['wrapper--input'], className,{
     [styles['wrapper--left']]: isLeftLabel,
     [styles['wrapper--input-label']]: label && !isLeftLabel && !required,
     [styles['wrapper--input-helperText']]: error,
   });
 
-  const inputClassess = classNames(styles.input, styles[size], className, {
+  const inputClassess = classNames(styles.input, styles[size], {
     [styles['input--error']]: error,
     [styles['readOnly']]: readOnly,
     [styles['input--withIcon']]: icon,
@@ -67,7 +68,7 @@ export const Input: FC<InputProps> = ({
   });
   
   return (
-    <div className={wrapperClassess}>
+    <div className={wrapperClassess} style={style}>
       {inputLabel && (
         <Typography variant="Caption" className={labelClasses}>
           {inputLabel}

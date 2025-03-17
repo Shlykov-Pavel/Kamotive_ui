@@ -17,6 +17,10 @@ export interface FileAttachProps {
   setAddedFiles:(addedFiles: File[]) => void;
   /**Заблокировано добавление файлов*/
   disabled?: boolean;
+  /** Дополнительный класс */
+  className?: string;
+  /** Стили передаваемые напрямую */
+  style?: React.CSSProperties;
 }
 
 const meta: Meta<FileAttachProps> = {
