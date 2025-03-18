@@ -19,7 +19,7 @@
 }
 
 .input {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-style: normal;
   font-weight: 400;
   position: relative;

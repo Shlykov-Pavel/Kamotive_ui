@@ -163,7 +163,7 @@
 }
 /* Для всех инпутов в пикере */
 :global(.w-color-chrome) :global(.w-color-editable-input) input {
-  font-family: 'Raleway' !important;
+  font-family: var(--font-family) !important;
   font-style: normal !important;
   font-weight: 400 !important;
   line-height: 14px !important;
@@ -204,7 +204,7 @@ border-left: none !important;
 }
 /* Для лейблов */
 :global(.w-color-chrome-fields) :global(.w-color-editable-input) label {
-  font-family: 'Raleway' !important;
+  font-family: var(--font-family) !important;
   font-style: normal !important;
   font-weight: 400 !important;
   line-height: 16.5px !important;
@@ -240,7 +240,7 @@ border-left: none !important;
 .hex > :global(.w-color-editable-input) > input {
   /* padding: 0 !important; */
   font-size: 12px !important;
-  font-family: 'Raleway' !important;
+  font-family: var(--font-family) !important;
   padding: 5px !important;
   width: 70px !important;
   height: 45px !important;
