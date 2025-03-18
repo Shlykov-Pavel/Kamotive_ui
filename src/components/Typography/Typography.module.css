@@ -1,6 +1,6 @@
 
 .typography--variant-Heading1 {
-    font-family: var(--font-family-main);
+    font-family: var(--font-family);
     font-size: var(--font-size-48);
     font-weight: var(--font-weight-bold);
     line-height: var(--lineHeight-48);
@@ -8,7 +8,7 @@
     text-decoration: none;
 }
 .typography--variant-Heading2 {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-36);
   font-weight: var(--font-weight-bold);
   line-height: var(--lineHeight-36);
@@ -16,7 +16,7 @@
   text-decoration: none;
 }
 .typography--variant-Heading3 {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-24);
   font-weight: var(--font-weight-bold);
   line-height: var(--lineHeight-24);
@@ -24,7 +24,7 @@
   text-decoration: none;
 }
 .typography--variant-Heading4 {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-20);
   font-weight: var(--font-weight-bold);
   line-height: var(--lineHeight-20);
@@ -32,7 +32,7 @@
   text-decoration: none;
 }
 .typography--variant-Subheading1 {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-36);
   font-weight: var(--font-weight-medium);
   line-height: var(--lineHeight-36);
@@ -40,7 +40,7 @@
   text-decoration: none;
 }
 .typography--variant-Subheading2 {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-24);
   font-weight: var(--font-weight-regular);
   line-height: var(--lineHeight-24);
@@ -48,7 +48,7 @@
   text-decoration: none;
 }
 .typography--variant-Subheading2-Medium {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-24);
   font-weight: var(--font-weight-medium);
   line-height: var(--lineHeight-24);
@@ -56,7 +56,7 @@
   text-decoration: none;
 }
 .typography--variant-Subheading3 {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-20);
   font-weight: var(--font-weight-regular);
   line-height: var(--lineHeight-20);
@@ -64,7 +64,7 @@
   text-decoration: none;
 }
 .typography--variant-Subheading3-Medium {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-20);
   font-weight: var(--font-weight-medium);
   line-height: var(--lineHeight-20);
@@ -72,7 +72,7 @@
   text-decoration: none;
 }
 .typography--variant-Body {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-18);
   font-weight: var(--font-weight-regular);
   line-height: var(--lineHeight-18);
@@ -80,7 +80,7 @@
   text-decoration: none;
 }
 .typography--variant-Body-Medium {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-18);
   font-weight: var(--font-weight-meduim);
   line-height: var(--lineHeight-18);
@@ -88,7 +88,7 @@
   text-decoration: none;
 }
 .typography--variant-Body-Bold{
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-18);
   font-weight: var(--font-weight-bold);
   line-height: var(--lineHeight-18);
@@ -96,7 +96,7 @@
   text-decoration: none;
 }
 .typography--variant-Body1-Light {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-light);
   line-height: var(--lineHeight-16);
@@ -104,7 +104,7 @@
   text-decoration: none;
 }
 .typography--variant-Body1 {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-regular);
   line-height: var(--lineHeight-16);
@@ -112,7 +112,7 @@
   text-decoration: none;
 }
 .typography--variant-Body1-Medium {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-medium);
   line-height: var(--lineHeight-16);
@@ -120,7 +120,7 @@
   text-decoration: none;
 }
 .typography--variant-Body1-SemiBold{
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-semiBold);
   line-height: var(--lineHeight-16);
@@ -128,31 +128,15 @@
   text-decoration: none;
 }
 .typography--variant-Body1-Bold{
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-bold);
   line-height: var(--lineHeight-16);
   letter-spacing: var(--letterSpacing);
   text-decoration: none;
 }
-.typography--variant-Body1Mono-Regular {
-  font-family: var(--font-family-secondary);
-  font-size: var(--font-size-16);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--lineHeight-16);
-  letter-spacing: var(--letterSpacing);
-  text-decoration: none;
-}
-.typography--variant-Body1Mono-Bold {
-  font-family: var(--font-family-secondary);
-  font-size: var(--font-size-16);
-  font-weight: var(--font-weight-semiBold);
-  line-height: var(--lineHeight-16);
-  letter-spacing: var(--letterSpacing);
-  text-decoration: none;
-}
 .typography--variant-Body2-Light {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-light);
   line-height: var(--lineHeight-14);
@@ -160,7 +144,7 @@
   text-decoration: none;
 }
 .typography--variant-Body2 {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-regular);
   line-height: var(--lineHeight-14);
@@ -168,7 +152,7 @@
   text-decoration: none;
 }
 .typography--variant-Body2-Medium {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-meduim);
   line-height: var(--lineHeight-14);
@@ -176,7 +160,7 @@
   text-decoration: none;
 }
 .typography--variant-Body2-SemiBold{
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-semiBold);
   line-height: var(--lineHeight-14);
@@ -184,23 +168,7 @@
   text-decoration: none;
 }
 .typography--variant-Body2-Bold{
-  font-family: var(--font-family-main);
-  font-size: var(--font-size-14);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--lineHeight-14);
-  letter-spacing: var(--letterSpacing);
-  text-decoration: none;
-}
-.typography--variant-Body2Mono-Medium {
-  font-family: var(--font-family-secondary);
-  font-size: var(--font-size-14);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--lineHeight-14);
-  letter-spacing: var(--letterSpacing);
-  text-decoration: none;
-}
-.typography--variant-Body2Mono-Bold {
-  font-family: var(--font-family-secondary);
+  font-family: var(--font-family);
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-bold);
   line-height: var(--lineHeight-14);
@@ -208,7 +176,7 @@
   text-decoration: none;
 }
 .typography--variant-Caption {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-regular);
   line-height: var(--lineHeight-12);
@@ -216,7 +184,7 @@
   text-decoration: none;
 }
 .typography--variant-Caption-Medium {
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-meduim);
   line-height: var(--lineHeight-12);
@@ -224,36 +192,10 @@
   text-decoration: none;
 }
 .typography--variant-Caption-Bold{
-  font-family: var(--font-family-main);
+  font-family: var(--font-family);
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-bold);
   line-height: var(--lineHeight-12);
   letter-spacing: var(--letterSpacing);
   text-decoration: none;
 }
-
-.typography--variant-CaptionMono {
-  font-family: var(--font-family-secondary);
-  font-size: var(--font-size-12);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--lineHeight-12);
-  letter-spacing: var(--letterSpacing);
-  text-decoration: none;
-}
-.typography--variant-CaptionMono-Medium {
-  font-family: var(--font-family-secondary);
-  font-size: var(--font-size-12);
-  font-weight: var(--font-weight-meduim);
-  line-height: var(--lineHeight-12);
-  letter-spacing: var(--letterSpacing);
-  text-decoration: none;
-}
-.typography--variant-CaptionMono-Bold{
-  font-family: var(--font-family-secondary);
-  font-size: var(--font-size-12);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--lineHeight-12);
-  letter-spacing: var(--letterSpacing);
-  text-decoration: none;
-}
-
