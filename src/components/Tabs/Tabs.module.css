@@ -18,7 +18,7 @@
   background-color: var(--tab-extraLight);
   border: none;
 
-  font-family: 'Raleway';
+  font-family: var(--font-family);
   font-style: normal;
   font-weight: 400;
   font-size: 13px;
