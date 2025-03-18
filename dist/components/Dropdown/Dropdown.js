@@ -51,7 +51,7 @@ function checkItem(item, getOptionLabel, disabled, isDivider) {
         return null;
     }
 }
-export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedItem, style, onChange, isActive, activeIndex, index, }) => {
+export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedItem, variant, onChange, isActive, activeIndex, index, }) => {
     var _a;
     const handleItemClick = useCallback((event) => {
         event.preventDefault();
@@ -65,11 +65,11 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
         [styles['item-block--disabled']]: item === null || item === void 0 ? void 0 : item.disabled,
         [styles['item-block--active']]: isActive,
     });
-    const itemBlock = classNames(styles[`item-block`], styles[`item-block-${style}`], { [styles[`item-block-${style}--selected`]]: (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.value) === (item === null || item === void 0 ? void 0 : item.value) }, { [styles['item-block--disabled']]: item === null || item === void 0 ? void 0 : item.disabled });
+    const itemBlock = classNames(styles[`item-block`], styles[`item-block-${variant}`], { [styles[`item-block-${variant}--selected`]]: (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.value) === (item === null || item === void 0 ? void 0 : item.value) }, { [styles['item-block--disabled']]: item === null || item === void 0 ? void 0 : item.disabled });
     return (React.createElement("div", { className: itemContainerClasses, onClick: handleItemClick },
         React.createElement("div", { className: itemClassess },
             React.createElement("div", { className: itemBlock },
-                style === 'icons' &&
+                variant === 'icons' &&
                     (item === null || item === void 0 ? void 0 : item.icon) &&
                     React.cloneElement(item.icon, {
                         strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
@@ -83,7 +83,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
             return (React.createElement(DropdownListItem, { key: (_a = child === null || child === void 0 ? void 0 : child.key) !== null && _a !== void 0 ? _a : childIndex, item: child, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, onChange: onChange, isActive: activeIndex === index, activeIndex: activeIndex, index: childIndex }));
         })))));
 };
-export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOptionLabel, value, defaultValue, style = 'text', className, disabled = false, readOnly = false, isOpened = false, noOptionsText = 'Нет вариатов для выбора', isLeftLabel = false, error = false, helperText, onChange, onClose, clearable = true, required = false, isDivider = false, }) => {
+export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOptionLabel, value, defaultValue, variant = 'text', style, className, disabled = false, readOnly = false, isOpened = false, noOptionsText = 'Нет вариатов для выбора', isLeftLabel = false, error = false, helperText, onChange, onClose, clearable = true, required = false, isDivider = false, }) => {
     var _a;
     const [isOpen, setIsOpen] = useState(isOpened);
     const [modifiedOptions, setModifiedOptions] = useState([]);
@@ -170,13 +170,13 @@ export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOpti
             setErrorInputHelperText(helperText !== null && helperText !== void 0 ? helperText : 'Поле обязательно для заполнения');
         }
     };
-    const wrapperClassess = classNames({
+    const wrapperClassess = classNames(className, {
         [styles['dropdown--container']]: !isLeftLabel,
         [styles['dropdown--container-left']]: isLeftLabel,
         [styles['dropdown--container-label']]: label && !isLeftLabel && !required,
         [styles['dropdown--container-helperText']]: errorInput,
     });
-    const buttonClassess = classNames(styles.button, className, styles[`button--${size}`], {
+    const buttonClassess = classNames(styles.button, styles[`button--${size}`], {
         [styles['button-item--selected']]: (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.value) && !disabled,
         [styles['button--readOnly']]: readOnly,
         [styles['button--disabled']]: disabled,
@@ -193,12 +193,12 @@ export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOpti
     const selectedItemClassess = classNames({
         [styles['item-selected']]: selectedItem,
         [styles['item-placeholder']]: !selectedItem && ((placeholder !== null && placeholder !== void 0 ? placeholder : label) || (!placeholder && !label)),
-        [styles['button--icons--item-selected']]: style === 'icons' && (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.icon),
+        [styles['button--icons--item-selected']]: variant === 'icons' && (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.icon),
     });
     const getDropdownMenu = () => {
         const menu = isOpen && (React.createElement("div", { className: dropdownClassess }, modifiedOptions && modifiedOptions.length > 0 ? (modifiedOptions.map((modifiedOption, index) => {
             var _a;
-            return (React.createElement(DropdownListItem, { key: (_a = modifiedOption === null || modifiedOption === void 0 ? void 0 : modifiedOption.key) !== null && _a !== void 0 ? _a : index, item: modifiedOption, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, style: style, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index }));
+            return (React.createElement(DropdownListItem, { key: (_a = modifiedOption === null || modifiedOption === void 0 ? void 0 : modifiedOption.key) !== null && _a !== void 0 ? _a : index, item: modifiedOption, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, variant: variant, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index }));
         })) : (React.createElement("div", { className: styles['no-options'] }, noOptionsText))));
         return isOpen ? menu : null;
     };
@@ -258,11 +258,11 @@ export const Dropdown = ({ id, label, placeholder, size = 'lg', options, getOpti
     useEffect(() => {
         setErrorInput(error);
     }, [error]);
-    return (React.createElement("div", { id: id, className: wrapperClassess, ref: containerRef, style: { width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' } },
+    return (React.createElement("div", { id: id, className: wrapperClassess, ref: containerRef, style: style ? style : { width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' } },
         label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
         React.createElement("button", { className: buttonClassess, onClick: readOnly ? undefined : handleToggle, disabled: disabled, tabIndex: 0, onKeyDown: handleKeyDown },
             React.createElement("div", { className: selectedItemClassess },
-                style === 'icons' &&
+                variant === 'icons' &&
                     (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.icon) &&
                     React.cloneElement(selectedItem.icon, {
                         strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
