@@ -45,6 +45,8 @@ export interface InputProps {
     size?: 'sm' | 'md' | 'lg';
     /** Знчение */
     value?: string;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
     /** Дополнительный класс */
     className?: string;
     /** Многострочное поле */
@@ -134,8 +136,10 @@ export interface DropdownProps {
     value?: string | number | TOptions | null;
     /** Значение по умолчанию */
     defaultValue?: string | number | TOptions | null;
-    /** Стиль выпадающего списка(текст+иконка, текст) */
-    style?: 'icons' | 'text';
+    /** Вариaнты выпадающего списка(текст + иконка, текст)' */
+    variant?: 'icons' | 'text';
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
     /**Дополнительный класс */
     className?: string;
     /** Заблокированный */
@@ -307,4 +311,8 @@ export interface FileAttachProps {
     setAddedFiles: (addedFiles: File[]) => void;
     /**Заблокировано добавление файлов*/
     disabled?: boolean;
+    /** Дополнительный класс */
+    className?: string;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
 }

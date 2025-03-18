@@ -4,11 +4,12 @@ import styles from './FileAttach.module.css';
 import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';
 import { Loader } from '../Loader/Loader';
+import classNames from 'classnames';
 export const FileAttach = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx'],
-}, addedFiles, setAddedFiles, disabled = false, }) => {
+}, addedFiles, setAddedFiles, disabled = false, className, style, }) => {
     const [errorFiles, setErrorFiles] = useState([]);
     const fileValidator = (file) => {
         if (file.size > maxFileSize * 1024 * 1024 * 1024) {
@@ -59,7 +60,7 @@ export const FileAttach = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         }
         return formats.join(', ');
     };
-    return (React.createElement("section", { className: styles['fileAttach'] },
+    return (React.createElement("section", { className: classNames(styles['fileAttach'], className), style: style },
         React.createElement("div", Object.assign({}, getRootProps({ className: `${styles['dropzone']} ${disabled ? styles['disabled'] : ''}` })),
             React.createElement("input", Object.assign({}, getInputProps())),
             React.createElement(IconUpload, { htmlColor: disabled ? 'var(--grey-medium)' : 'var(--icons-grey)' }),
