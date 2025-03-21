@@ -169,30 +169,35 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
     </div>
   );
 };
+
 export const Dropdown: FC<DropdownProps> = ({
+  options,
   id,
   label,
   placeholder,
-  size = 'lg',
-  options,
-  getOptionLabel,
+  required = false,
   value,
   defaultValue,
+  onChange,
+  getOptionLabel,
   variant = 'text',
+  size = 'lg',
   style,
   className,
+  isLeftLabel = false,
+  isDivider = false,
   disabled = false,
   readOnly = false,
   isOpened = false,
-  noOptionsText = 'Нет вариатов для выбора',
-  isLeftLabel = false,
   error = false,
   helperText,
-  onChange,
+  onClick,
+  onBlur,
+  onFocus,
   onClose,
   clearable = true,
-  required = false,
-  isDivider = false,
+  enableAutocomplete = false,
+  noOptionsText = 'Нет вариантов для выбора',
 }) => {
   
   const [isOpen, setIsOpen] = useState(isOpened);
@@ -201,17 +206,78 @@ export const Dropdown: FC<DropdownProps> = ({
   const [errorInput, setErrorInput] = useState(false);
   const [errorInputHelperText, setErrorInputHelperText] = useState(helperText);
   const [activeIndex, setActiveIndex] = useState(-1);
-  
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredOptions, setFilteredOptions] = useState<TOptions[] | null>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number | undefined>(undefined);
 
-  const handleToggle = (event: React.MouseEvent<HTMLElement>) => {
-    setIsOpen((prev) => !prev);
-    if (isOpen) {
+  const wrapperClassess = classNames(className, {
+    [styles['dropdown--container']]: !isLeftLabel,
+    [styles['dropdown--container-left']]: isLeftLabel,
+    [styles['dropdown--container-label']]: label && !isLeftLabel && !required,
+    [styles['dropdown--container-helperText']]: errorInput,
+  });
+  const buttonClassess = classNames(styles.button, styles[`button--${size}`], {
+    [styles['button-item--selected']]: selectedItem?.value && !disabled,
+    [styles['button--readOnly']]: readOnly,
+    [styles['button--disabled']]: disabled,
+    [styles['button--error']]: errorInput,
+  });
+  const dropdownClassess = classNames(styles.dropdown, className, {
+    [styles['dropdown--disabled']]: disabled,
+  });
+  const labelClasses = classNames(styles.label, styles[size], {
+    [styles['label--default']]: !isLeftLabel,
+    [styles['label--left']]: isLeftLabel,
+    [styles['label--required']]: required,
+  });
+  const selectedItemClassess = classNames({
+    [styles['item-selected']]: selectedItem,
+    [styles['item-placeholder']]: !selectedItem && ((placeholder ?? label) || (!placeholder && !label)),
+    [styles['button--icons--item-selected']]: variant === 'icons' && selectedItem?.icon,
+  });
+
+  // обновляет значения searchValue и filteredOptions
+  const setAutocompleteValues = (value: string) => {
+    setSearchValue(value);
+
+    // фильтрация по введенному значению
+    if (modifiedOptions && modifiedOptions.length > 0) {
+      const filtered = modifiedOptions.filter((option) => {
+        if (!option || !option.value) return false;
+        const optionValue = String(option.value).toLowerCase();
+        return optionValue.includes(value.toLowerCase());
+      });
+      
+      setFilteredOptions(filtered);
+      setActiveIndex(filtered && filtered.length > 0 ? 0 : -1);
+    }
+  }
+
+  const handleToggle = useCallback((event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
+    
+    if (newIsOpen && enableAutocomplete) {
+      const value = selectedItem?.value ? selectedItem?.value.toString() : searchValue
+      setSearchValue(value);
+      setFilteredOptions(modifiedOptions);
+      
+      requestAnimationFrame(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      });
+    } else if (!newIsOpen) {
       onClose?.(event);
     }
-  };
+  }, [isOpen, enableAutocomplete, searchValue, selectedItem, modifiedOptions, onClose]);
+
   const onChangeHandler = (event: React.MouseEvent<HTMLElement>, item: TOptions | null) => {
     event.preventDefault();
     event.stopPropagation();
@@ -235,6 +301,15 @@ export const Dropdown: FC<DropdownProps> = ({
       setErrorInput(true);
     }
   };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const value = event.target.value;
+    setAutocompleteValues(value);
+  };
+
   //для выбора опции из списка с клавиатуры
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (!isOpen) {
@@ -246,6 +321,16 @@ export const Dropdown: FC<DropdownProps> = ({
       }
       return;
     }
+
+    if (enableAutocomplete && 
+        event.target instanceof HTMLInputElement && 
+        (event.key !== 'ArrowDown' && 
+        event.key !== 'ArrowUp' && 
+        event.key !== 'Enter' && 
+        event.key !== 'Escape')) {
+      return;
+    }
+
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
@@ -272,60 +357,91 @@ export const Dropdown: FC<DropdownProps> = ({
         break;
     }
   };
+
   //для сброса выбранного значения
   const handleReset = (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     event.preventDefault();
     event.stopPropagation();
+
     const startValue = defaultValue 
       ? (checkItem(defaultValue) as TOptions) 
       : null;
     setSelectedItem(startValue ?? null);
-    setIsOpen(false);
+
+    if (!enableAutocomplete) {
+      setIsOpen(false);
+    }
+
+    setSearchValue("");
+    setFilteredOptions(modifiedOptions);
     onChange?.(event, startValue ?? null);
     onClose?.(event);
     setActiveIndex(-1);
+    
     if(required) {
       setErrorInput(true);
       setErrorInputHelperText(helperText ?? 'Поле обязательно для заполнения');
     }
   };
-  const wrapperClassess = classNames(className,{
-    [styles['dropdown--container']]: !isLeftLabel,
-    [styles['dropdown--container-left']]: isLeftLabel,
-    [styles['dropdown--container-label']]: label && !isLeftLabel && !required,
-    [styles['dropdown--container-helperText']]: errorInput,
-  });
 
-  const buttonClassess = classNames(styles.button, styles[`button--${size}`], {
-    [styles['button-item--selected']]: selectedItem?.value && !disabled,
-    [styles['button--readOnly']]: readOnly,
-    [styles['button--disabled']]: disabled,
-    [styles['button--error']]: errorInput,
-  });
-  const dropdownClassess = classNames(styles.dropdown, className, {
-    [styles['dropdown--disabled']]: disabled,
-  });
-  const labelClasses = classNames(styles.label, styles[size], {
-    [styles['label--default']]: !isLeftLabel,
-    [styles['label--left']]: isLeftLabel,
-    [styles['label--required']]: required,
-  });
-
-  const selectedItemClassess = classNames({
-    [styles['item-selected']]: selectedItem,
-    [styles['item-placeholder']]: !selectedItem && ((placeholder ?? label) || (!placeholder && !label)),
-    [styles['button--icons--item-selected']]: variant === 'icons' && selectedItem?.icon,
-  });
+  const getTextField = () => {
+    return (
+      <div className={selectedItemClassess}>
+        {variant === 'icons' &&
+          selectedItem?.icon &&
+          React.cloneElement(selectedItem.icon as React.ReactElement, {
+            strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
+          })}
+        {isOpen && enableAutocomplete ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={searchValue}
+            className={styles.inlineSearchInput}
+            onChange={handleSearchChange}
+            placeholder={selectedItem?.value ? selectedItem.value.toString() : 'Поиск...'}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onClick?.(e);
+              e.currentTarget.focus();
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+            }}
+            onFocus={(e) => {
+              e.stopPropagation();
+              onFocus?.(e);
+            }}
+            onBlur={(e) => {
+              e.stopPropagation();
+              onBlur?.(e);
+            }}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+        ) : selectedItem ? (
+          selectedItem.value
+        ) : (
+          searchValue || (placeholder ?? label ?? 'Выберите значение')
+        )}
+      </div>
+    );
+  };
 
   const getDropdownMenu = () => {
+    const optionsToRender = enableAutocomplete && searchValue 
+      ? filteredOptions 
+      : modifiedOptions;
+
     const menu = isOpen && (
       <div className={dropdownClassess}>
-        {modifiedOptions && modifiedOptions.length > 0 ? (
-          modifiedOptions.map((modifiedOption, index) => {
+        {optionsToRender && optionsToRender.length > 0 ? (
+          optionsToRender.map((optionsToRender, index) => {
             return (
               <DropdownListItem
-                key={modifiedOption?.key ?? index}
-                item={modifiedOption}
+                key={optionsToRender?.key ?? index}
+                item={optionsToRender}
                 getOptionLabel={getOptionLabel}
                 size={size}
                 selectedItem={selectedItem}
@@ -338,7 +454,7 @@ export const Dropdown: FC<DropdownProps> = ({
             );
           })
         ) : (
-          <div className={styles['no-options']}>{noOptionsText}</div>
+          <div className={`${styles['item-container']} ${styles['item-block']}`} style={{ paddingLeft: "15px" }}>{noOptionsText}</div>
         )}
       </div>
     );
@@ -372,7 +488,7 @@ export const Dropdown: FC<DropdownProps> = ({
     };
   }, [selectedItem, label, isOpen, size, placeholder, onClose, isLeftLabel]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (options) {
       const modifiedOptions = options.map((option, index) => { 
         const modifiedOption = checkItem?.(option, getOptionLabel, disabled, isDivider) as TOptions;
@@ -396,17 +512,22 @@ export const Dropdown: FC<DropdownProps> = ({
     } else {
       setSelectedItem(null);
     }
-  }, [value, defaultValue, checkItem]);
+  }, [value, defaultValue]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setErrorInput(error);
   }, [error])
+
+  useEffect(() => {
+    setFilteredOptions(modifiedOptions);
+  }, [modifiedOptions]);
   
   return (
     <div
       id={id}
       className={wrapperClassess}
       ref={containerRef}
+      onClick={onClick}
       style={style? style : { width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' }}
     >
       {label && (
@@ -421,16 +542,8 @@ export const Dropdown: FC<DropdownProps> = ({
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
-        <div className={selectedItemClassess}>
-          {variant === 'icons' &&
-            selectedItem?.icon &&
-            React.cloneElement(selectedItem.icon as React.ReactElement, {
-              strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
-            })}
-          {selectedItem ? selectedItem.value : (placeholder ?? label ?? 'Выберите значение')}
-        </div>
-
-        {clearable && !readOnly && !disabled && selectedItem && (
+        {getTextField()}
+        {clearable && !readOnly && !disabled && (selectedItem || enableAutocomplete && searchValue) && (
           <div className={styles.resetButton}>
             <IconClose10 strokeWidth="0.2" htmlColor="var(--text-light)" onClick={handleReset} />
           </div>
