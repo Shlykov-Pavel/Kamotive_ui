@@ -103,7 +103,7 @@
 
 .label {
   line-height: 14px;
-  font-weight: 400;
+  font-weight: 600;
   transition: 0.3ms ease-out;
   /* color: var(--text-grey); */
 }
@@ -115,7 +115,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 32px);
-  color: var(--text-grey);
+  color: var(--text-dark);
 }
 .label--default .lg {
   font-size: 12px;
