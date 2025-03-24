@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { TabProps } from '../../types';;
 import { Typography } from '../Typography/Typography';
 
-export const Tab: FC<TabProps> = ({ value, onClick, label, selected, disabled = false }) => {
+export const Tab: FC<TabProps> = ({ value, onClick, onMouseEnter, label, selected, disabled = false }) => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (onClick && value && !disabled) {
         onClick(value);
@@ -22,6 +22,7 @@ export const Tab: FC<TabProps> = ({ value, onClick, label, selected, disabled = 
         [styles['disabled']]: disabled,
       })}
       onClick={handleClick}
+      onMouseEnter={onMouseEnter}
     >
       <Typography variant={selected ? 'Body2-Medium':"Body2"}>{label}</Typography>
     </button>

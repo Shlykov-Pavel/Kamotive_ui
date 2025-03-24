@@ -7,6 +7,7 @@ export interface TabProps {
   value?:string;
   /** Обработчик клика */
   onClick?: (value: string ) => void;
+  onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   /** Текст лейбла */
   label?:string;
   /** Размер */
