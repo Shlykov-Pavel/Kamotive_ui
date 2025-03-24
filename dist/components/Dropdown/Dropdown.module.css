@@ -143,6 +143,19 @@
   overflow-x: hidden;
 }
 
+.inlineSearchInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  padding: 0;
+  cursor: text;
+  pointer-events: auto;
+  text-align: left; 
+}
+
 .item--container {
   padding: 0.5em 0.5em;
   width: 87%;
@@ -195,6 +208,7 @@
 
 .label {
   transition: 0.3ms ease-out;
+  font-weight: 600;
   /* color: var(--text-grey); */
 }
 .label--default {
@@ -205,7 +219,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 32px);
-  color: var(--text-grey);
+  color: var(--text-dark);
 }
 .label--default.lg {
   font-size: 12px;
@@ -240,14 +254,27 @@
 
 .item-selected {
   color: var(--text-dark);
-  white-space: nowrap;
+  width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  text-align: left;
+  position: relative;
+}
+
+.item-selected .inlineSearchInput {
+  text-align: left;
+  direction: ltr;
+  width: 100%;
+  overflow: visible;
 }
 
 .item-placeholder {
   color: var(--text-grey);
   transition: 0.3ms ease-out;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .helperText.md {

@@ -120,52 +120,60 @@ export type BaseOptions = {
 };
 export type TOptions<T = {}> = BaseOptions & T;
 export interface DropdownProps {
+    /** Массив элементов для выпадающего списка */
+    options: Array<string | number | TOptions>;
     /** Идентификатор */
     id?: string;
-    /**  Лейбл */
+    /** Лейбл */
     label?: string;
     /** Подсказик заполнения */
     placeholder?: string;
-    /** Размер */
-    size?: 'md' | 'lg';
-    /** Массив элементов для выпадающего списка */
-    options: Array<string | number | TOptions>;
-    /** Функция для получения текста опции */
-    getOptionLabel?: (option: TOptions) => keyof TOptions;
+    /** Обязательное поле */
+    required?: boolean;
     /** Значение */
     value?: string | number | TOptions | null;
     /** Значение по умолчанию */
     defaultValue?: string | number | TOptions | null;
+    /** Callback, который будет вызван при изменении значения */
+    onChange?: (event: any, value: string | number | TOptions | null) => void;
+    /** Функция для получения текста опции */
+    getOptionLabel?: (option: TOptions) => keyof TOptions;
     /** Вариaнты выпадающего списка(текст + иконка, текст)' */
     variant?: 'icons' | 'text';
+    /** Размер */
+    size?: 'md' | 'lg';
     /** Стили передаваемые напрямую */
     style?: CSSProperties;
-    /**Дополнительный класс */
+    /** Дополнительный класс */
     className?: string;
+    /** Отображение левой метки */
+    isLeftLabel?: boolean;
+    /** Отображение разделителя */
+    isDivider?: boolean;
     /** Заблокированный */
     disabled?: boolean;
     /** Только для чтения */
     readOnly?: boolean;
     /** Открытый */
     isOpened?: boolean;
-    /** Текст при отсутствии опций */
-    noOptionsText?: string;
-    /** Отображение левой метки */
-    isLeftLabel?: boolean;
     /** Ошибка */
     error?: boolean;
     /** Текст ошибки */
     helperText?: string;
-    /** Callback, который будет вызван при изменении значения */
-    onChange?: (event: any, value: string | number | TOptions | null) => void;
+    /** Callback, который будет вызван при клике */
+    onClick?: (event: any) => void;
+    /** Callback при потере фокуса */
+    onBlur?: (event: any) => void;
+    /** Callback при получении фокуса */
+    onFocus?: (event: any) => void;
     /** Callback, который будет вызван при закрытии выпадающего списка */
     onClose?: (event: any) => void;
     /** Возможность сброса значения до первоначального */
     clearable?: boolean;
-    /** Обязательное поле */
-    required?: boolean;
-    /** Отображение разделителя */
-    isDivider?: boolean;
+    /** Включение автозаполнения */
+    enableAutocomplete?: boolean;
+    /** Текст при отсутствии опций */
+    noOptionsText?: string;
 }
 /** @internal */
 export interface TypographyProps {
@@ -237,6 +245,7 @@ export interface TabProps {
     value?: string;
     /** Обработчик клика */
     onClick?: (value: string) => void;
+    onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     /** Текст лейбла */
     label?: string;
     /** Размер */
