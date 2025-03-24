@@ -28,7 +28,7 @@
   background-color: transparent;
   padding: 10px 15px;
   outline: none;
-  border: 1px solid var(--grey-light);
+  border: 1px solid var(--grey-mediumLight);
   mix-blend-mode: multiply;
   border-radius: 10px;
   display: inline-flex;
