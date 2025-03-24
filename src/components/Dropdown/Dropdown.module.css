@@ -208,6 +208,7 @@
 
 .label {
   transition: 0.3ms ease-out;
+  font-weight: 600;
   /* color: var(--text-grey); */
 }
 .label--default {
@@ -218,7 +219,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 32px);
-  color: var(--text-grey);
+  color: var(--text-dark);
 }
 .label--default.lg {
   font-size: 12px;
