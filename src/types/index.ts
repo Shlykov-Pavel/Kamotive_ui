@@ -5,6 +5,28 @@ import { Accept } from 'react-dropzone/.';
 
 
   /** @internal */
+  export interface BreadcrumbProps {
+    /** Обработчик клика */
+    onClick?: () => void;
+    /** Активный */
+    active?: boolean;
+    /** Отображаемый текст */
+    label?: string;
+    /** Дочерние элементы */
+    children?: ReactNode;
+    /** Иконка */
+    icon?: React.ReactNode;
+  }
+
+  export interface BreadcrumbsProps {
+    /** Активный */
+    className?: string;
+    /** Разделитель */
+    separator?: React.ReactNode;
+    /** Дочерние элементы */
+    children: React.ReactElement<BreadcrumbProps>[];
+  }
+
   export interface ButtonProps {
     /** Тест кнопки */
     label?: string;
