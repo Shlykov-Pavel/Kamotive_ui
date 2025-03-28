@@ -3,14 +3,18 @@ import { Meta } from '@storybook/react';
 import { Tag } from './Tag';
 
 export interface TagProps {
-  /** Лейбл */
-  label?: string;
-  /** Цвет */
-  color?: string;
-  /**Наличие кнопки закрытия */
-  closeButton?: boolean;
-  /** Callback при изменении значения */
-  onClick?: () => void;
+    /** Лейбл */
+    label: string;
+    /** Цвет */
+    color?: string;
+    /**Наличие кнопки закрытия */
+    closeButton?: boolean;
+    /** Возможность изменить лейбл */
+    editable?: boolean;
+    /** Callback при изменении значения */
+    onChange?: (label: string) => void;
+    /** Callback при нажатии на кнопку закрытия */
+    onClick?: () => void;
 }
 
 const meta: Meta<TagProps> = {

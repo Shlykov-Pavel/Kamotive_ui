@@ -31,7 +31,20 @@ const meta: Meta<DateInputProps> = {
 export default meta;
 
 export const DateInputDefault = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
-DateInputDefault.storyName = 'Date Input';
+DateInputDefault.storyName = 'Date Input по умолчанию';
 DateInputDefault.args = {
 	disabled: false
+};
+
+export const DateInputDisabled = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
+DateInputDisabled.storyName = 'Date Input заблокированный';
+DateInputDisabled.args = {
+	disabled: true
+};
+
+export const DateInputError = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
+DateInputError.storyName = 'Date Input с ошибкой';
+DateInputError.args = {
+	error: true,
+	helperText: 'Сообщение об ошибке'
 };

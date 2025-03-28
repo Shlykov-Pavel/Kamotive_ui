@@ -41,8 +41,8 @@ interface SelectionPositions {
 interface CustomDatePickerProps {
   minDate?: Date;
   maxDate?: Date;
+  inputClassName?: string;
   calendarClassName?: string;
-  inline?: boolean;
   dateFormat?: string;
 }
 
@@ -267,7 +267,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
   style,
   className,
   disabled = false,
-  readOnly = false,
+  readOnly = disabled,
   isLeftLabel = false,
   icon,
   error = false,
@@ -276,10 +276,10 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
   onBlur,
   required = false,
 
-  minDate,
-  maxDate,
+  minDate = new Date('1975-12-31'),
+  maxDate = new Date('2074-12-31'),
+  inputClassName,
   calendarClassName,
-  inline = false,
   dateFormat = 'dd.MM.yyyy',
 }) => {
   const wrapperClassess = classNames(styles['wrapper--input'], className, {
@@ -322,6 +322,8 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
     'Декабрь',
   ];
 
+  const years = Array.from({ length: maxDate.getFullYear() - minDate.getFullYear() }, (_, i) => minDate.getFullYear() + i);
+
   const handleDateChange = (date: Date | null): void => {
     if (date) {
       setSelectedDate(date);
@@ -351,8 +353,6 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
     const itemClasses = (type: string, isActive: boolean) => classNames(styles.listItem, styles[`listItem--${type}`], {
       [styles['item--active']]: isActive,
     });
-
-    const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - 50 + i);
 
     const [currentMonth, setCurrentMonth] = useState(date.getMonth());
     const [currentYear, setCurrentYear] = useState(date.getFullYear());
@@ -510,7 +510,6 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
         onBlur={onBlur}
         dateFormat={dateFormat}
         locale="ru"
-        disabled={disabled}
         readOnly={readOnly}
         showPopperArrow={false}
         calendarClassName={classNames(styles.calendar, calendarClassName)}
@@ -518,7 +517,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
         onCalendarClose={() => setIsMonthPickerOpen(false)}
         minDate={minDate}
         maxDate={maxDate}
-        inline={inline}
+        inline={false}
         calendarStartDay={1}
         
         dayClassName={(date) => {
@@ -537,7 +536,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
         customInput={
           <CustomInput
             ref={inputRef}
-            className={inputClassess}
+            className={classNames(inputClassess, inputClassName)}
             onDateChange={handleCustomInputChange}
             onClose={handleCloseDatePicker}
           />
