@@ -1,0 +1,425 @@
+.wrapper--input {
+	position: relative;
+	max-width: 267px;
+	width: 100%;
+}
+
+.wrapper--input-label {
+	margin-top: 20px;
+}
+
+.wrapper--input-helperText {
+	margin-bottom: 15px;
+}
+
+.wrapper--left {
+	display: inline-flex;
+	flex-direction: row;
+	gap: 20px;
+	align-items: center;
+	width: fit-content;
+	max-width: none;
+}
+
+.input {
+	font-family: var(--font-family-content);
+	font-style: normal;
+	font-weight: 400;
+	position: relative;
+	color: var(--text-dark);
+	background-color: transparent;
+	padding: 10px 15px;
+	outline: none;
+	border: 1px solid var(--grey-mediumLight);
+	mix-blend-mode: multiply;
+	border-radius: 10px;
+	display: inline-flex;
+	width: 100%;
+}
+
+.input--left {
+	min-width: 260px;
+}
+
+.input.lg {
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.input.md {
+	font-size: 12px;
+	line-height: 16px;
+}
+
+.input.sm {
+	font-size: 10px;
+	line-height: 14px;
+}
+
+/* Стили при наведении мыши */
+.input:hover {
+	border: 1px solid #0d9aff00;
+	box-shadow: 0px 0px 2px var(--blue-main);
+}
+
+/* Стили при клике */
+.input:focus,
+.input:active {
+	border-color: var(--blue-main);
+	box-shadow: none;
+	color: var(--text-dark);
+}
+
+.filled {
+	border-color: var(--blue-main);
+	box-shadow: none;
+	color: var(--text-dark);
+}
+
+.label {
+	line-height: 14px;
+	font-weight: 600;
+	transition: 0.3ms ease-out;
+}
+
+.label--default {
+	position: absolute;
+	top: -18px;
+	cursor: text;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: calc(100% - 32px);
+	color: var(--text-dark);
+}
+
+.label--default .lg {
+	font-size: 12px;
+}
+
+.label--default.md {
+	font-size: 10px;
+}
+
+.label--default .sm {
+	font-size: 16px;
+}
+
+.label--left {
+	font-size: 13px;
+	color: var(--text-dark);
+	text-wrap-mode: nowrap;
+}
+
+.label--left.lg {
+	font-size: 14px;
+}
+
+.label--left .md {
+	font-size: 12px;
+}
+
+.label--left .sm {
+	font-size: 10px;
+}
+
+/* Стили для обязательного input */
+.label--default.label--required {
+	position: relative;
+	top: 0;
+}
+
+.label--required::after {
+	content: '*';
+	color: var(--error-main);
+	position: absolute;
+	margin-left: 2px;
+	top: 2px;
+	font-size: 22px;
+}
+
+/* Стили для input с ошибкой */
+.input--error {
+	border-color: var(--error-main);
+	color: var(--error-main);
+}
+
+.input--error:hover,
+.input--error:focus {
+	border-color: var(--error-secondary);
+	box-shadow: none;
+	color: var(--error-secondary);
+}
+
+.helperText.md {
+	font-size: 10px;
+}
+
+.helperText.sm {
+	font-size: 8px;
+}
+
+.helperText.lg {
+	font-size: 12px;
+}
+
+.helperText {
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+	cursor: text;
+	transition: 0.3ms ease-out;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: var(--error-main);
+}
+
+/* Стили для disabled */
+.input:disabled {
+	background-color: rgba(120, 120, 128, 0.08);
+	color: var(--text-grey);
+	cursor: not-allowed;
+	border: none;
+	box-shadow: none;
+}
+
+/* Стили для Read Only */
+.readOnly {
+	background-color: rgba(120, 120, 128, 0.08);
+	color: var(--text-dark);
+	border: none;
+}
+
+.readOnly:hover {
+	box-shadow: none;
+	border: none;
+}
+
+/* Стили для Иконок */
+.input--withIcon {
+	padding-left: 35px;
+	top: 5%;
+}
+
+.icon {
+	position: absolute;
+	top: 25%;
+	left: 10px;
+}
+
+/* Стили для календаря */
+.calendarPopper {
+	transform: translate(0, 52px) !important;
+	width: 100%;
+}
+
+:global(.react-datepicker-popper) {
+	z-index: 2 !important;
+}
+
+:global(.react-datepicker-wrapper) {
+	width: 100%;
+}
+
+.calendar {
+	border: none !important;
+	border-radius: 22px !important;
+	box-shadow: 0 0 32px rgba(0, 0, 0, 0.2) !important;
+	font-family: var(--font-family-content) !important;
+	padding: 20px 0;
+	justify-content: center;
+    display: flex !important;
+}
+
+.calendarHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+:global(.react-datepicker__header.react-datepicker__header--custom) {
+	background-color: white;
+	border-bottom: none;
+	padding: 0;
+	padding-bottom: 15px;
+}
+
+.monthDisplay{
+	font-size: var(--font-size-16);
+	font-weight: var(--font-weight-semiBold);
+	cursor: pointer;
+}
+
+:global(.react-datepicker__header--custom) :global(.react-datepicker__day-names) :global(.react-datepicker__day-name) {
+	font-weight: 600;
+	color: var(--icons-grey);
+}
+
+:global(.react-datepicker__month) {
+	margin: 0 !important;
+}
+
+/* Селекты месяца и года */
+.calendarSelects {
+	display: flex;
+	gap: 8px;
+}
+
+.calendarSelect {
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	padding: 4px 8px;
+	font-size: 14px;
+	background-color: white;
+	cursor: pointer;
+}
+
+/* Кнопки навигации */
+.calendarNavButton {
+	border: none;
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: white;
+	color: var(--icons-grey);
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.calendarNavButton:hover {
+	background-color: rgba(120, 120, 128, 0.08);
+}
+
+.calendarNavButton:active {
+	background-color: rgba(120, 120, 128, 0.12);
+}
+
+.calendarNavButton:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* Дни календаря */
+.calendarDay {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+:global(.current-month-day:hover) {
+	background-color: #C3E6FF !important;
+}
+
+:global(.react-datepicker__day:hover) {
+	background-color: #C3E6FF !important;
+	border-radius: 5px !important;
+}
+
+:global(.react-datepicker__day:focus) {
+	outline: 2px solid #0D99FF !important;
+}
+
+:global(.react-datepicker__day:not(.current-month-day)) {
+	background-color: transparent !important;
+}
+
+:global(.react-datepicker__day:not(.current-month-day):hover) {
+	background-color: #C3E6FF !important;
+}
+
+:global(.react-datepicker__day--selected) {
+	background-color: #0D99FF !important;
+	color: white !important;
+	border-radius: 5px !important;
+}
+
+:global(.react-datepicker__day--selected:hover) {
+	color: var(--text-dark) !important;
+}
+
+:global(.react-datepicker__day--keyboard-selected) {
+	background-color: #C3E6FF !important;
+}
+
+:global(.react-datepicker__day--keyboard-selected:not(.current-month-day)) {
+	background-color: transparent !important;
+}
+
+/* Стили для дней вне текущего месяца */
+:global(.react-datepicker__day--outside-month) {
+	color: #ccc !important;
+}
+
+:global(.react-datepicker__day--outside-month:hover) {
+	color: var(--text-grey) !important;
+	background-color: #C3E6FF !important;
+}
+
+/* Стили для выделенного диапазона дат */
+:global(.react-datepicker__day--in-range) {
+	background-color: #C3E6FF !important;
+}
+
+:global(.react-datepicker__day--range-start),
+:global(.react-datepicker__day--range-end) {
+	background-color: #0D99FF !important;
+	color: white !important;
+	border-radius: 5px !important;
+}
+
+.monthPicker {
+	flex-direction: column;
+	background: white;
+}
+
+.monthPickerWrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	margin-bottom: 15px;
+}
+
+.monthContainer {
+	height: 200px;
+	overflow-y: scroll;
+	scrollbar-width: none;
+	line-height: normal;
+}
+
+.buttonContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	gap: 10px;
+	padding-right: 20px;
+}
+
+.listItem {
+	margin-bottom: 5px;
+	cursor: pointer;
+	padding: 5px 10px;
+	border-radius: 8px;
+	text-align: center;
+}
+
+.listItem--month{
+	min-width: 100px;
+}
+
+.listItem--year{
+	min-width: 75px;
+}
+
+.listItem:hover {
+	background-color: #d5ecfd;
+}
+
+.item--active {
+	background-color: #C3E6FF;
+}

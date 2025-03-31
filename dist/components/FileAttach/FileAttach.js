@@ -55,7 +55,7 @@ export const FileAttach = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         const formats = [];
         for (const key in acceptedFormats) {
             if (acceptedFormats.hasOwnProperty(key)) {
-                formats.push(...acceptedFormats[key].map(format => format.replace('.', '')));
+                formats.push(...acceptedFormats[key].map((format) => format.replace('.', '')));
             }
         }
         return formats.join(', ');
@@ -64,7 +64,7 @@ export const FileAttach = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         React.createElement("div", Object.assign({}, getRootProps({ className: `${styles['dropzone']} ${disabled ? styles['disabled'] : ''}` })),
             React.createElement("input", Object.assign({}, getInputProps())),
             React.createElement(IconUpload, { htmlColor: disabled ? 'var(--grey-medium)' : 'var(--icons-grey)' }),
-            React.createElement(Typography, { variant: "Body2-Medium", color: disabled ? 'var(--grey-medium)' : 'var(--text-dark)' },
+            React.createElement(Typography, { variant: "Body1", color: disabled ? 'var(--grey-medium)' : 'var(--icons-grey)' },
                 React.createElement("span", { style: { textDecoration: 'underline' } }, "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 \u043D\u0430 \u043E\u0431\u043B\u0430\u0441\u0442\u044C"),
                 React.createElement("span", null, " \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0442\u0430\u0449\u0438\u0442\u0435 \u0444\u0430\u0439\u043B\u044B")),
             React.createElement("div", null,
@@ -76,5 +76,5 @@ export const FileAttach = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         acceptedFormats && (React.createElement(Typography, { variant: "Caption", color: "var(--grey-medium)" }, `Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`)),
         (addedFiles === null || addedFiles === void 0 ? void 0 : addedFiles.length) > 0 || (errorFiles === null || errorFiles === void 0 ? void 0 : errorFiles.length) > 0 ? (React.createElement("div", { className: styles['addedFiles'] },
             acceptedFileItems,
-            fileRejectionItems)) : (React.createElement(Typography, { variant: "Body2-Medium", color: "var(--text-dark)" }, "\u0424\u0430\u0439\u043B\u044B \u043D\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B"))));
+            fileRejectionItems)) : (React.createElement(Typography, { variant: "Caption", color: "var(--text-dark)" }, "\u0424\u0430\u0439\u043B\u044B \u043D\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B"))));
 };

@@ -33,7 +33,7 @@ const adjustTextColor = (backgroundColor) => {
     const contrastWithWhite = getContrastRatio(backgroundColor, white);
     return contrastWithWhite < 1.5 ? black : "";
 };
-export const Tag = ({ label, color = 'red', closeButton = false, editable = 'false', onClick, onChange, }) => {
+export const Tag = ({ label, color = 'red', closeButton = false, editable = false, onClick, onChange, }) => {
     const [newLabel, setNewLabel] = useState(label);
     const [width, setWidth] = useState(0);
     const measurementDivRef = useRef(null);

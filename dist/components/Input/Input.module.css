@@ -19,7 +19,7 @@
 }
 
 .input {
-  font-family: var(--font-family);
+  font-family: var(--font-family-content);
   font-style: normal;
   font-weight: 400;
   position: relative;
@@ -103,7 +103,7 @@
 
 .label {
   line-height: 14px;
-  font-weight: 600;
+  font-weight: 500;
   transition: 0.3ms ease-out;
   /* color: var(--text-grey); */
 }
@@ -116,6 +116,7 @@
   text-overflow: ellipsis;
   max-width: calc(100% - 32px);
   color: var(--text-dark);
+  font-weight: var(--font-weight-semiBold);
 }
 .label--default .lg {
   font-size: 12px;
@@ -127,7 +128,6 @@
   font-size: 16px;
 }
 .label--left {
-  font-size: 13px;
   color: var(--text-dark);
   text-wrap-mode: nowrap;
 }
@@ -142,17 +142,17 @@
 }
 
 /* Стили для обязательного input */
-.label--default.label--required {
+/* .label--default.label--required {
   position: relative;
   top: 0;
-}
+} */
 .label--required::after {
   content: '*';
   color: var(--error-main);
-  position: absolute;
+  /* position: absolute; */
   margin-left: 2px;
   top: 2px;
-  font-size: 22px;
+  font-size: 12px;
 }
 
 /* Стили для input с ошибкой */

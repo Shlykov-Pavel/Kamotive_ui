@@ -82,8 +82,8 @@ export const Button = ({ label, variant = 'fill', size = 'md', style, condition,
     }, [condition, error]);
     const iconColorStyle = iconColorFn();
     if (!buttonStyle) {
-        return React.createElement("button", { className: buttonClasses },
-            React.createElement(Typography, { variant: 'Body2' }, "\u041A\u043D\u043E\u043F\u043A\u0430"));
+        return (React.createElement("button", { className: buttonClasses },
+            React.createElement(Typography, { variant: "Body1" }, "\u041A\u043D\u043E\u043F\u043A\u0430")));
     }
     return (React.createElement("button", { className: buttonClasses, style: color && !error ? {
             '--button-color': color,
@@ -97,5 +97,5 @@ export const Button = ({ label, variant = 'fill', size = 'md', style, condition,
                 htmlColor: iconColorStyle,
                 strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
             }),
-        (buttonStyle === 'text' || buttonStyle === 'default') && React.createElement(Typography, { variant: 'Body2' }, label ? label : (typeof children === 'string' && children))));
+        (buttonStyle === 'text' || buttonStyle === 'default') && (React.createElement(Typography, { variant: "Body1" }, label ? label : typeof children === 'string' && children))));
 };
