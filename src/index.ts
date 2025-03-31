@@ -3,6 +3,7 @@ export { Checkbox as Checkbox } from './components/Checkbox/Checkbox';
 export { ColorPicker as ColorPicker } from './components/ColorPicker/ColorPicker';
 export { Dropdown as Dropdown } from './components/Dropdown/Dropdown';
 export { Input as Input } from './components/Input/Input';
+export { DateInput as DateInput } from './components/DateInput/DateInput';
 export { ProgressBar as ProgressBar } from './components/ProgressBar/ProgressBar';
 export { ProgressLoader as ProgressLoader } from './components/ProgressLoader/ProgressLoader';
 export { RadioButton as RadioButton } from './components/RadioButton/RadioButton';
@@ -20,6 +21,7 @@ export { Spinner as Spinner } from './components/Spinner/Spinner';
 export type {
   ButtonProps,
   InputProps,
+  DateInputProps,
   TagProps,
   SettingTagProps,
   ToggleButtonProps,

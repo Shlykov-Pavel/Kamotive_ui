@@ -50,7 +50,7 @@ export const Tag: FC<TagProps> = ({
   label, 
   color = 'red', 
   closeButton = false, 
-  editable = 'false',
+  editable = false,
   onClick, 
   onChange,
 }) => {
