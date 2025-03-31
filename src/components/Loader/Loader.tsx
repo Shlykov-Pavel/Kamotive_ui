@@ -13,16 +13,18 @@ export const Loader: FC<LoaderProps> = ({ name, size = 0, loading = false, error
       <div className={styles['loaderFile']}>
         <div className={styles['loaderInfo']}>
           <div className={styles['loaderIcon']}>
-            <IconFile htmlColor={"var(--icons-grey)"} />
+            <IconFile htmlColor={'var(--icons-grey)'} />
           </div>
 
           <div className={styles['loaderName']}>
-            <Typography variant="Body2-Medium" color="var(--text-dark)">
+            <Typography variant="Body1-Medium" color="var(--text-dark)">
               {name}
             </Typography>
-            {size !==0 && <Typography variant="Caption" color="var(--grey-medium)">
-              {`${(size/(1024)).toFixed(1)} кБ`}
-            </Typography> }
+            {size !== 0 && (
+              <Typography variant="Caption" color="var(--grey-medium)">
+                {`${(size / 1024).toFixed(1)} кБ`}
+              </Typography>
+            )}
           </div>
         </div>
         <button type="button" aria-label="Закрыть" title="Удалить файл" onClick={onClick} />

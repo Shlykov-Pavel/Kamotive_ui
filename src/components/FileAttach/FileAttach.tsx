@@ -46,19 +46,18 @@ export const FileAttach: FC<FileAttachProps> = ({
     return null;
   };
 
-  const { getRootProps, getInputProps} =
-    useDropzone({
-      onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-        setAddedFiles([...addedFiles, ...acceptedFiles]);
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      setAddedFiles([...addedFiles, ...acceptedFiles]);
 
-        setErrorFiles([...errorFiles, ...fileRejections]);
-      },
+      setErrorFiles([...errorFiles, ...fileRejections]);
+    },
 
-      validator: fileValidator,
-      accept: acceptedFormats,
-      maxFiles: maxFileCount,
-      disabled: disabled,
-    });
+    validator: fileValidator,
+    accept: acceptedFormats,
+    maxFiles: maxFileCount,
+    disabled: disabled,
+  });
 
   const acceptedFileItems = addedFiles.map((file: File, index: number) => (
     <Loader
@@ -79,11 +78,7 @@ export const FileAttach: FC<FileAttachProps> = ({
     />
   ));
 
-  const deleteAcceptedFile = (
-    addedFiles: File[], 
-    setAddedFiles: (addedFiles: File[]) => void, 
-    fileName: string
-  ) => {
+  const deleteAcceptedFile = (addedFiles: File[], setAddedFiles: (addedFiles: File[]) => void, fileName: string) => {
     setAddedFiles(addedFiles.filter((file) => file.name !== fileName));
   };
 
@@ -100,7 +95,7 @@ export const FileAttach: FC<FileAttachProps> = ({
     const formats = [];
     for (const key in acceptedFormats) {
       if (acceptedFormats.hasOwnProperty(key)) {
-        formats.push(...acceptedFormats[key].map(format => format.replace('.', '')));
+        formats.push(...acceptedFormats[key].map((format) => format.replace('.', '')));
       }
     }
     return formats.join(', ');
@@ -111,7 +106,7 @@ export const FileAttach: FC<FileAttachProps> = ({
       <div {...getRootProps({ className: `${styles['dropzone']} ${disabled ? styles['disabled'] : ''}` })}>
         <input {...getInputProps()} />
         <IconUpload htmlColor={disabled ? 'var(--grey-medium)' : 'var(--icons-grey)'} />
-        <Typography variant="Body2-Medium" color={disabled ? 'var(--grey-medium)' : 'var(--text-dark)'}>
+        <Typography variant="Body1" color={disabled ? 'var(--grey-medium)' : 'var(--icons-grey)'}>
           <span style={{ textDecoration: 'underline' }}>Нажмите на область</span>
           <span> или перетащите файлы</span>
         </Typography>
@@ -133,16 +128,16 @@ export const FileAttach: FC<FileAttachProps> = ({
           {`Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`}
         </Typography>
       )}
-        {addedFiles?.length > 0 || errorFiles?.length > 0 ? (
-           <div className={styles['addedFiles']}>
-              {acceptedFileItems}
-              {fileRejectionItems}
-            </div>
-        ) : (
-          <Typography variant="Body2-Medium" color="var(--text-dark)">
-            Файлы не добавлены
-          </Typography>
-        )}
+      {addedFiles?.length > 0 || errorFiles?.length > 0 ? (
+        <div className={styles['addedFiles']}>
+          {acceptedFileItems}
+          {fileRejectionItems}
+        </div>
+      ) : (
+        <Typography variant="Caption" color="var(--text-dark)">
+          Файлы не добавлены
+        </Typography>
+      )}
     </section>
   );
 };
