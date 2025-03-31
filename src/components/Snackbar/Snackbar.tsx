@@ -3,7 +3,7 @@ import { IconClose10, IconError10, IconInfo10, IconSuccess10, IconWarning10 } fr
 import { Typography } from '../Typography/Typography';
 import styles from './Snackbar.module.css'
 import classNames from 'classnames';
-import { SnackbarProps } from '../../types';;
+import { SnackbarProps } from '../../types';
 
 /**
 * @description Snackbar компонент для отображения всплывающих уведомлений
@@ -31,7 +31,6 @@ export const title = {
   info: 'Информация',
 };
 
-
 export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose }) => {
   const [isVisible, setIsVisible] = useState(true);
   useEffect(() => {
@@ -56,10 +55,10 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
       <div className={styles['snackbar-textAndIcon']}>
         {icon && icons[type]}
         <div className={styles['snackbar-text']}>
-          <Typography variant="Body2-Medium" color={'var(--text-dark)'}>
+          <Typography variant="Body1-Medium" color={'var(--text-dark)'}>
             {title[type]}
           </Typography>
-          <Typography variant="Caption" color={'var(--text-btn-light)'}>
+          <Typography variant="Body1" color={'var(--text-btn-light)'}>
             {children}
           </Typography>
         </div>
