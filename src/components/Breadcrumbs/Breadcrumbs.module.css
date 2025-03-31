@@ -5,7 +5,7 @@
   }
   
   .separator {
-	font-family: var(--font-family);
+	font-family: var(--font-family-content);
 	font-weight: 500;
 	font-size: var(--font-size-12);
 	color: var(--icons-grey);
