@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Typography } from '../Typography/Typography';
 import styles from './ProgressBar.module.css'
 import classNames from 'classnames';
-import { ProgressBarProps } from '../../types';;
+import { ProgressBarProps } from '../../types';
 
 /**
  * Компонент ProgressBar отображает прогресс в виде заполненной полосы.
@@ -54,12 +54,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
       />
       <label htmlFor="progress" className={styles['progress-bar-percentage']}>
         {showValue && (
-          <Typography
-            variant="Caption"
-            color={'#9CA0A7'}
-            style={{ fontWeight: '300' }}
-            className={styles["progress-bar-percentage"]}
-          >
+          <Typography variant="Body1" color={'#9CA0A7'} className={styles['progress-bar-percentage']}>
             {percent}%
           </Typography>
         )}
