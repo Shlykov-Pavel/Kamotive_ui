@@ -109,14 +109,15 @@ export const Button: React.FC<ButtonProps> = ({
 
   
   const iconColorStyle = iconColorFn();
-  
-  if (!buttonStyle){
-    return <button className={buttonClasses}>
-    <Typography variant='Body2'>Кнопка</Typography>
-  </button>
+
+  if (!buttonStyle) {
+    return (
+      <button className={buttonClasses}>
+        <Typography variant="Body1">Кнопка</Typography>
+      </button>
+    );
   }
-  
-  
+
   return (
     <button className={buttonClasses}  
     style={color && !error ? {
@@ -138,7 +139,9 @@ export const Button: React.FC<ButtonProps> = ({
           htmlColor: iconColorStyle,
           strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
         })}
-      {(buttonStyle === 'text' || buttonStyle ==='default') && <Typography variant='Body2'>{label ? label : (typeof children === 'string' && children)}</Typography> }
+      {(buttonStyle === 'text' || buttonStyle === 'default') && (
+        <Typography variant="Body1">{label ? label : typeof children === 'string' && children}</Typography>
+      )}
     </button>
   );
 };
