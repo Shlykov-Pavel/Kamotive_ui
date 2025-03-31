@@ -1,4 +1,6 @@
 export { ChevronDown10 } from './ChevronDown/ChevronDown10';
+export { ChevronRight } from './ChevronRight/ChevronRight';
+export { ChevronLeft } from './ChevronLeft/ChevronLeft';
 export { ChevronUp10 } from './ChevronUp/ChevronUp10';
 export { IconAlarm10 } from './IconAlarm/IconAlarm10';
 export { IconAccount10 } from './IconAccount/IconAccount10';

@@ -39,11 +39,10 @@
 .progress-bar-percentage {
   /* position: absolute; */
   /* top: 50%; */
-  /* font-family: var(--font-family);
+  /* font-family: var(--font-family-content);
   font-weight: 300;
   font-size: 11px;
   line-height: 13; */
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
