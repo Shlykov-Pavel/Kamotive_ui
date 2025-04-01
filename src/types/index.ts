@@ -430,3 +430,20 @@ import { Accept } from 'react-dropzone/.';
   /**Окно растягивается до максимальной ширины*/
   fullWidth?: boolean;
  }
+
+ export interface IconButtonProps {
+   /** Иконка кнопки */
+   icon?: React.ReactNode;
+   /** Размер кнопки */
+   size?: 'sm' | 'md' | 'lg';
+   /**Цвет кнопки */
+   color?: string;
+   /** Стиль кнопки иконки*/
+   style?: CSSProperties;
+   /** Заблокированная кнопка */
+   disabled?: boolean;
+   /** Callback, который будет вызван при клике по кнопке */
+   onClick: () => void;
+   /** Дочерние элементы */
+   children?: ReactNode;
+ }

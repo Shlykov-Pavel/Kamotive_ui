@@ -4,6 +4,8 @@ import type { Meta } from '@storybook/react';
 import { Dialog } from './Dialog';
 import { Typography } from '../Typography/Typography';
 import { Button } from '../Button/Button';
+import { IconButton } from '../IconButton/IconButton';
+import { IconClose10 } from '../../Icons';
 
 export interface DialogProps {
   /** Флаг открытия окна */
@@ -43,6 +45,11 @@ const meta: Meta<DialogProps> = {
       </div>
     ),
   ],
+  args: {
+    maxWidth: 'md',
+    overlay: true,
+    fullWidth: false,
+  },
   argTypes: {
     open: { description: 'Флаг открытия окна', control: { type: 'boolean' } },
     maxWidth: { description: 'Максимальная ширина окна ', type: 'string' },
@@ -67,7 +74,10 @@ export const DialogDefault = (argTypes: DialogProps): JSX.Element => {
     <>
       <Button label="Открыть окно" onClick={() => setOpen(true)} />
       <Dialog open={open}>
-        <Typography variant="Heading4"> Модальное окно</Typography>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Typography variant="Heading4"> Модальное окно</Typography>
+          <IconButton icon={<IconClose10/>} onClick={onClose}/>
+        </div>
         <Typography variant="Body1">
           Компонент Dialog реализован как пустой контейнер, который можно наполнить любым контентом
         </Typography>
