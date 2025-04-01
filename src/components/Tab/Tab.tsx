@@ -2,13 +2,13 @@ import React, { FC, MouseEvent } from 'react';
 
 import styles from './Tab.module.css';
 import classNames from 'classnames';
-import { TabProps } from '../../types';;
+import { TabProps } from '../../types';
 import { Typography } from '../Typography/Typography';
 
 export const Tab: FC<TabProps> = ({ value, onClick, onMouseEnter, label, selected, disabled = false }) => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (onClick && value && !disabled) {
-        onClick(value);
+      onClick(value);
     }
   };
   return (
@@ -24,7 +24,7 @@ export const Tab: FC<TabProps> = ({ value, onClick, onMouseEnter, label, selecte
       onClick={handleClick}
       onMouseEnter={onMouseEnter}
     >
-      <Typography variant={selected ? 'Body2-Medium':"Body2"}>{label}</Typography>
+      <Typography variant={selected ? 'Body1-SemiBold' : 'Body1'}>{label}</Typography>
     </button>
   );
 };

@@ -7,7 +7,7 @@
   align-items: center;
   gap: 10px;
 
-  font-family: var(--font-family);
+  font-family: var(--font-family-content) !important;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -61,7 +61,7 @@
 .tag input:focus {
   outline: none;
   border: none;
-  background-color: none; 
+  background-color: none;
 }
 
 .tag input::placeholder {

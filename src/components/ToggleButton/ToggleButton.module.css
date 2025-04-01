@@ -1,70 +1,69 @@
 .toggle {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 5px;
 
-    font-family: var(--font-family);
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-    color: var(--text-dark);
+  font-family: var(--font-family-content);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--text-dark);
 }
 .toggleInput.sm {
-    width: 22px;
-    height: 12px;
+  width: 22px;
+  height: 12px;
 }
 .toggleInput.md {
-    width: 28px;
-    height: 16px;
+  width: 28px;
+  height: 16px;
 }
 .toggleInput {
-    -webkit-appearance: none;
-    appearance: none;
-    display: inline-block;
-    border-radius: 10px;
-    background-color: var(--grey-medium);
-    background-clip: content-box;
-    position: relative;
-    cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  display: inline-block;
+  border-radius: 10px;
+  background-color: var(--grey-medium);
+  background-clip: content-box;
+  position: relative;
+  cursor: pointer;
 }
 .toggleInput:checked {
-    background-color: var(--blue-main);
+  background-color: var(--blue-main);
 }
 .toggleInput:disabled:checked {
-    background-color: var(--blue-disabled);
+  background-color: var(--blue-disabled);
 }
 /* Круг слева */
 .toggleInput::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-100%, -50%);
-    width: 45%;
-    height: 85%;
-    border-radius: 50%;
-    background-color: var(--white);
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-100%, -50%);
+  width: 45%;
+  height: 85%;
+  border-radius: 50%;
+  background-color: var(--white);
 }
 .toggleInput:hover::after {
-    box-shadow: 0 0 2px var(--blue-main);
+  box-shadow: 0 0 2px var(--blue-main);
 }
 .toggleInput:disabled::after {
-    background-color: var(--grey-extraLight);
-    cursor: not-allowed;
-    box-shadow: none;
+  background-color: var(--grey-extraLight);
+  cursor: not-allowed;
+  box-shadow: none;
 }
 /* Круг справа */
 .toggleInput:checked::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(0%, -50%);
-    width: 45%;
-    height: 85%;
-    border-radius: 50%;
-    background-color: var(--white);
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(0%, -50%);
+  width: 45%;
+  height: 85%;
+  border-radius: 50%;
+  background-color: var(--white);
 }
-

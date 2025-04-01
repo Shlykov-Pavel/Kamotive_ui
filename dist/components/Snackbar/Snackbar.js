@@ -3,7 +3,6 @@ import { IconClose10, IconError10, IconInfo10, IconSuccess10, IconWarning10 } fr
 import { Typography } from '../Typography/Typography';
 import styles from './Snackbar.module.css';
 import classNames from 'classnames';
-;
 /**
 * @description Snackbar компонент для отображения всплывающих уведомлений
 * @component
@@ -49,8 +48,8 @@ export const Snackbar = ({ children, type, duration = 10000, icon = true, onClos
         React.createElement("div", { className: styles['snackbar-textAndIcon'] },
             icon && icons[type],
             React.createElement("div", { className: styles['snackbar-text'] },
-                React.createElement(Typography, { variant: "Body2-Medium", color: 'var(--text-dark)' }, title[type]),
-                React.createElement(Typography, { variant: "Caption", color: 'var(--text-btn-light)' }, children))),
+                React.createElement(Typography, { variant: "Body1-Medium", color: 'var(--text-dark)' }, title[type]),
+                React.createElement(Typography, { variant: "Body1", color: 'var(--text-btn-light)' }, children))),
         React.createElement("button", { className: styles.button, onClick: handleClose },
             React.createElement(IconClose10, { htmlColor: 'var(--text-btn-light)' }))));
 };

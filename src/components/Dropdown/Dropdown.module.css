@@ -29,7 +29,7 @@
 }
 
 .button {
-  font-family: var(--font-family);
+  font-family: var(--font-family-content);
   font-style: normal;
   font-weight: 400;
   line-height: 16.5px;
@@ -112,10 +112,10 @@
   align-items: center;
 }
 
-.resetButton{
+.resetButton {
   right: 35px;
 }
-.dropdownIcon{
+.dropdownIcon {
   right: 5px;
 }
 .resetButton:hover,
@@ -153,7 +153,7 @@
   padding: 0;
   cursor: text;
   pointer-events: auto;
-  text-align: left; 
+  text-align: left;
 }
 
 .item--container {
@@ -208,6 +208,11 @@
 
 .label {
   transition: 0.3ms ease-out;
+  font-weight: 500;
+  /* color: var(--text-grey); */
+}
+.label--readOnly {
+  transition: 0.3ms ease-out;
   font-weight: 600;
   /* color: var(--text-grey); */
 }
@@ -220,6 +225,7 @@
   text-overflow: ellipsis;
   max-width: calc(100% - 32px);
   color: var(--text-dark);
+  font-weight: var(--font-weight-semiBold);
 }
 .label--default.lg {
   font-size: 12px;
@@ -239,17 +245,18 @@
   font-size: 12px;
 }
 /* Стили для обязательного поля */
-.label--default.label--required {
+/* .label--default.label--required {
   position: relative;
   top: 0;
-}
+} */
 .label--required::after {
   content: '*';
   color: var(--error-main);
-  position: absolute;
+  /* position: absolute; */
   margin-left: 2px;
   top: 2px;
-  font-size: 22px;
+  /* font-size: 22px; */
+  font-size: 12px;
 }
 
 .item-selected {

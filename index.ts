@@ -1,5 +1,6 @@
 export { Button as Button } from './src/components/Button/Button';
 export { Input as Input } from './src/components/Input/Input';
+export { DateInput as DateInput } from './src/components/DateInput/DateInput';
 export { Typography as Typography } from './src/components/Typography/Typography';
 export { Dropdown as Dropdown } from './src/components/Dropdown/Dropdown';
 export { ProgressBar as ProgressBar } from './src/components/ProgressBar/ProgressBar';

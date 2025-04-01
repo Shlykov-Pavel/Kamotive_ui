@@ -3,6 +3,26 @@ import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
 import { Accept } from 'react-dropzone/.';
 /** @internal */
+export interface BreadcrumbProps {
+    /** Обработчик клика */
+    onClick?: () => void;
+    /** Активный */
+    active?: boolean;
+    /** Отображаемый текст */
+    label?: string;
+    /** Дочерние элементы */
+    children?: ReactNode;
+    /** Иконка */
+    icon?: React.ReactNode;
+}
+export interface BreadcrumbsProps {
+    /** Активный */
+    className?: string;
+    /** Разделитель */
+    separator?: React.ReactNode;
+    /** Дочерние элементы */
+    children: React.ReactElement<BreadcrumbProps>[];
+}
 export interface ButtonProps {
     /** Тест кнопки */
     label?: string;
@@ -69,6 +89,39 @@ export interface InputProps {
     helperText?: string;
     /** Callback при изменении значения */
     onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    /** Обязательное поле */
+    required?: boolean;
+}
+/** @internal */
+export interface DateInputProps {
+    /** Идентификатор элемента */
+    id?: string;
+    /** Лейбл */
+    label?: string;
+    /** Размер */
+    size?: 'sm' | 'md' | 'lg';
+    /** Знчение */
+    value?: string;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
+    /** Дополнительный класс */
+    className?: string;
+    /** Заблокированное поле */
+    disabled?: boolean;
+    /** Только для чтения */
+    readOnly?: boolean;
+    /** Метка слева */
+    isLeftLabel?: boolean;
+    /** Иконка слева */
+    icon?: React.ReactNode;
+    /** Ошибка */
+    error?: boolean;
+    /** Текст ошибки */
+    helperText?: string;
+    /** Callback при изменении значения */
+    onChange?: (value: string | Date) => void;
+    /** Callback при потере фокуса */
+    onBlur?: React.FocusEventHandler<HTMLElement>;
     /** Обязательное поле */
     required?: boolean;
 }

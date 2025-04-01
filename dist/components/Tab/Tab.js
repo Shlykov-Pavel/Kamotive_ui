@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './Tab.module.css';
 import classNames from 'classnames';
-;
 import { Typography } from '../Typography/Typography';
 export const Tab = ({ value, onClick, onMouseEnter, label, selected, disabled = false }) => {
     const handleClick = (e) => {
@@ -13,5 +12,5 @@ export const Tab = ({ value, onClick, onMouseEnter, label, selected, disabled = 
             [styles['selected']]: selected,
             [styles['disabled']]: disabled,
         }), onClick: handleClick, onMouseEnter: onMouseEnter },
-        React.createElement(Typography, { variant: selected ? 'Body2-Medium' : "Body2" }, label)));
+        React.createElement(Typography, { variant: selected ? 'Body1-SemiBold' : 'Body1' }, label)));
 };
