@@ -16,6 +16,7 @@ export { Typography as Typography } from './components/Typography/Typography';
 export { Loader as Loader } from './components/Loader/Loader';
 export { FileAttach as FileAttach } from './components/FileAttach/FileAttach';
 export { Spinner as Spinner } from './components/Spinner/Spinner';
+export { Dialog as Dialog } from './components/Dialog/Dialog';
 
 export type {
   ButtonProps,
@@ -35,6 +36,7 @@ export type {
   SnackbarProps,
   LoaderProps,
   FileAttachProps,
-  SpinnerProps
+  SpinnerProps,
+  DialogProps,
 } from './types';
 import './fonts.css';

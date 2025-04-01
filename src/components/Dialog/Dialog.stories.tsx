@@ -1,0 +1,82 @@
+import React, { CSSProperties, useState } from 'react';
+import type { Meta } from '@storybook/react';
+
+import { Dialog } from './Dialog';
+import { Typography } from '../Typography/Typography';
+import { Button } from '../Button/Button';
+
+export interface DialogProps {
+  /** Флаг открытия окна */
+  open: boolean;
+  /** Максимальная ширина окна */
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+  /** Содержимое окна */
+  children?: React.ReactNode;
+  /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
+  /**Задний фон окна */
+  overlay?: boolean;
+  /**Окно растягивается до максимальной ширины*/
+  fullWidth?: boolean;
+ }
+
+const meta: Meta<DialogProps> = {
+  component: Dialog,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          backgroundColor: 'var(--white)',
+          padding: '30px',
+          borderRadius: '10px',
+          width: '900px',
+          height: '500px',
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
+  argTypes: {
+    open: { description: 'Флаг открытия окна', control: { type: 'boolean' } },
+    maxWidth: { description: 'Максимальная ширина окна ', type: 'string' },
+    children: {description: 'Содержимое окна' },
+    style: {description: 'Дополнительные стили для компонента' },
+    className: {description: 'Дополнительные классы для компонента' },
+    overlay: { description: 'Задний фон окна', control: { type: 'boolean' } },
+    fullWidth: { description: 'Окно растягивается до максимальной ширины', control: { type: 'boolean' } },
+
+  },
+};
+
+export default meta;
+
+export const DialogDefault = (argTypes: DialogProps): JSX.Element => {
+  const [open, setOpen] = useState<boolean>(false);
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <Button label="Открыть окно" onClick={() => setOpen(true)} />
+      <Dialog open={open}>
+        <Typography variant="Heading4"> Модальное окно</Typography>
+        <Typography variant="Body1">
+          Компонент Dialog реализован как пустой контейнер, который можно наполнить любым контентом
+        </Typography>
+        <div style={{display: 'flex', flexDirection: 'row', gap: '10px', justifyContent: 'end'}}>
+          <Button label="Закрыть" onClick={onClose} variant="outline" />
+          <Button label="Кнопка" />
+        </div>
+      </Dialog>
+    </>
+  );
+};
+DialogDefault.storyName = 'Модальное окно';
