@@ -17,5 +17,7 @@ export { Typography as Typography } from './components/Typography/Typography';
 export { Loader as Loader } from './components/Loader/Loader';
 export { FileAttach as FileAttach } from './components/FileAttach/FileAttach';
 export { Spinner as Spinner } from './components/Spinner/Spinner';
-export type { ButtonProps, InputProps, DateInputProps, TagProps, SettingTagProps, ToggleButtonProps, BaseOptions, TOptions, DropdownProps, TypographyProps, ProgressBarProps, ProgressLoaderProps, RadioProps, TabsProps, ColorPickerProps, SnackbarProps, LoaderProps, FileAttachProps, SpinnerProps } from './types';
+export { Dialog as Dialog } from './components/Dialog/Dialog';
+export { IconButton as IconButton } from './components/IconButton/IconButton';
+export type { ButtonProps, InputProps, DateInputProps, TagProps, SettingTagProps, ToggleButtonProps, BaseOptions, TOptions, DropdownProps, TypographyProps, ProgressBarProps, ProgressLoaderProps, RadioProps, TabsProps, ColorPickerProps, SnackbarProps, LoaderProps, FileAttachProps, SpinnerProps, DialogProps, IconButtonProps, } from './types';
 import './fonts.css';
