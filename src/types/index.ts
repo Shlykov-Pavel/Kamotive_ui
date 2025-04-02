@@ -403,7 +403,7 @@ import { Accept } from 'react-dropzone/.';
    acceptedFormats?: Accept;
    /**Добавленные файлы */
    addedFiles: File[];
-   /**Сосотояние для добавления файлов */
+   /**Состояние для добавления файлов */
    setAddedFiles:(addedFiles: File[]) => void;
    /**Заблокировано добавление файлов*/
    disabled?: boolean;
@@ -411,4 +411,39 @@ import { Accept } from 'react-dropzone/.';
    className?: string;
     /** Стили передаваемые напрямую */
     style?: CSSProperties;
+ }
+
+
+ export interface DialogProps {
+  /** Флаг открытия окна */
+  open: boolean;
+  /** Максимальная ширина окна */
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+  /** Содержимое окна */
+  children?: React.ReactNode;
+  /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
+  /**Задний фон окна */
+  overlay?: boolean;
+  /**Окно растягивается до максимальной ширины*/
+  fullWidth?: boolean;
+ }
+
+ export interface IconButtonProps {
+   /** Иконка кнопки */
+   icon?: React.ReactNode;
+   /** Размер кнопки */
+   size?: 'sm' | 'md' | 'lg';
+   /**Цвет кнопки */
+   color?: string;
+   /** Стиль кнопки иконки*/
+   style?: CSSProperties;
+   /** Заблокированная кнопка */
+   disabled?: boolean;
+   /** Callback, который будет вызван при клике по кнопке */
+   onClick: () => void;
+   /** Дочерние элементы */
+   children?: ReactNode;
  }
