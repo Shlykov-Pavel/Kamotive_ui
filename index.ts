@@ -17,4 +17,5 @@ export { Snackbar as Snackbar } from './src/components/Snackbar/Snackbar';
 export { Loader as Loader } from './src/components/Loader/Loader';
 export { FileAttach as FileAttach } from './src/components/FileAttach/FileAttach';
 export { Dialog as Dialog } from './src/components/Dialog/Dialog';
+export { IconButton as IconButton } from './src/components/IconButton/IconButton';
 import './src/fonts.css';
