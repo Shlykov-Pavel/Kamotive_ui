@@ -52,24 +52,41 @@ const meta: Meta<DialogProps> = {
   },
   argTypes: {
     open: { description: 'Флаг открытия окна', control: { type: 'boolean' } },
-    maxWidth: { description: 'Максимальная ширина окна ', type: 'string' },
-    children: {description: 'Содержимое окна' },
-    style: {description: 'Дополнительные стили для компонента' },
-    className: {description: 'Дополнительные классы для компонента' },
+    maxWidth: {
+      description: 'Максимальная ширина окна ',
+      control: {  type: 'text' },
+      options: ['xs', 'sm', 'md', 'lg', 'xl', 'string'],
+    },
+    children: { description: 'Содержимое окна' },
+    style: { description: 'Дополнительные стили для компонента' },
+    className: { description: 'Дополнительные классы для компонента' },
     overlay: { description: 'Задний фон окна', control: { type: 'boolean' } },
     fullWidth: { description: 'Окно растягивается до максимальной ширины', control: { type: 'boolean' } },
-
   },
 };
 
 export default meta;
 
-export const DialogDefault = (argTypes: DialogProps): JSX.Element => {
+export const DialogDefault = (argTypes: DialogProps): JSX.Element => <Dialog {...argTypes} />;
+DialogDefault.storyName = 'Модальное окно по умолчанию';
+DialogDefault.args = {
+  open: true,
+  children: (
+    <>
+      <Typography variant="Heading4"> Модальное окно</Typography>
+      <Typography variant="Body1">
+        Компонент Dialog реализован как пустой контейнер, который можно наполнить любым контентом
+      </Typography>
+    </>
+  ),
+  fullWidth: true,
+};
+
+export const DialogExample = (argTypes: DialogProps): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const onClose = () => {
     setOpen(false);
   };
-
   return (
     <>
       <Button label="Открыть окно" onClick={() => setOpen(true)} />
@@ -89,4 +106,4 @@ export const DialogDefault = (argTypes: DialogProps): JSX.Element => {
     </>
   );
 };
-DialogDefault.storyName = 'Модальное окно';
+DialogExample.storyName = 'Модальное окно с состоянием';
