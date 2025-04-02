@@ -1,0 +1,26 @@
+.iconButton {
+    cursor: pointer;
+    box-sizing: border-box;
+    background-color: var(--white);
+    border: none;
+}
+
+.iconButton--sm svg{
+    width: 14px;
+    height: 14px;
+}
+
+.iconButton--md svg{
+    width: 16px;
+    height: 16px;
+}
+
+.iconButton--lg svg{
+    width: 18px;
+    height: 18px;
+}
+
+.iconButton:disabled {
+    cursor: not-allowed;
+    box-shadow: none;
+}
