@@ -447,3 +447,50 @@ import { Accept } from 'react-dropzone/.';
    /** Дочерние элементы */
    children?: ReactNode;
  }
+
+ export interface ListItemProps {
+  id?: string;
+  /** Обработчик клика */
+  onClick?: () => void;
+  onCheck?: (activeId: string, isChecked: boolean) => void;
+  onRadioSelect?: (id: string) => void;
+  /** Активный */
+  checked?: boolean;
+  selected?: boolean;
+  /** Отображаемый текст */
+  label?: string;
+  style?: CSSProperties;
+  className?: string;
+  /** Дочерние элементы */
+  children?: ReactNode;
+  /** Иконка */
+  withCheckbox?: boolean;
+  withRadioButton?: boolean;
+  customBullet?: React.ReactNode;
+  bulletClassName?: string;
+  parentChecked?: boolean;
+}
+
+export interface ListProps {
+  id?: string;
+  /** Обработчик клика */
+  onClick?: () => void;
+  onCheck?: (activeIds: string | string[], isChecked: boolean) => void;
+  onRadioSelect?: (id: string) => void;
+  /** Активный */
+  checked?: boolean;
+  selected?: boolean;
+  /** Отображаемый текст */
+  label?: string;
+  /** Дочерние элементы */
+  children: React.ReactElement<ListItemProps>[];
+  /** Иконка */
+  collapsible?: boolean;
+  withCheckbox?: boolean;
+  withRadioButton?: boolean;
+  customBullet?: React.ReactNode;
+  customItemBullet?: React.ReactNode;
+  bulletClassName?: string;
+  isHeader?: boolean;
+  parentChecked?: boolean;
+}
