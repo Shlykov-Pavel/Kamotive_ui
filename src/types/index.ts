@@ -461,8 +461,12 @@ import { Accept } from 'react-dropzone/.';
   onClick?: () => void;
   /** Обработчик выбора чекбокса */
   onCheck?: (activeId: string | string[], isChecked: boolean) => void;
+  /** Заблокированный чекбокс/RadioButton */
+  disabled?: boolean;
   /** Кастомный цвет чекбокса */
   checkboxColor?: string;
+  /** Заливка чекбокса */
+  checkboxFilled?: boolean;
   /** Обработчик выбора RadioButton */
   onRadioSelect?: (id: string) => void;
   /** Активный чекбокс */
@@ -495,7 +499,7 @@ export interface ListItemProps extends BaseListProps {
 export interface ListProps extends BaseListProps {
   /** Дочерние элементы */
   children: React.ReactElement<ListItemProps> | React.ReactElement<ListItemProps>[];
-  /** Иконка */
+  /** Возможность раскрытия списка */
   collapsible?: boolean;
   /** Кастомный буллит дочернего компонента */
   customItemBullet?: React.ReactNode;

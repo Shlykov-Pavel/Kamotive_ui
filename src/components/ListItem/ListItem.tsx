@@ -13,11 +13,13 @@ export const ListItem: FC<ListItemProps> = ({
   onRadioSelect,
   checked = false,
   selected = false,
+  disabled = false,
   label,
   style,
   className,
   withCheckbox = false,
   checkboxColor,
+  checkboxFilled,
   withRadioButton = false,
   customBullet,
   bulletClassName,
@@ -61,12 +63,12 @@ export const ListItem: FC<ListItemProps> = ({
     <div className={itemClassNames} style={style} onClick={handleClick}>
       {withCheckbox && (
         <span className={styles.icon} onClick={handleCheckboxClick}>
-          <Checkbox checked={isChecked} color={checkboxColor} />
+          <Checkbox checked={isChecked} color={checkboxColor} filled={checkboxFilled} disabled={disabled}/>
         </span>
       )}
       {withRadioButton && (
         <span className={styles.icon} onClick={handleRadioClick}>
-          <RadioButton checked={selected} value={id} />
+          <RadioButton checked={selected} value={id} disabled={disabled}/>
         </span>
       )}
       {customBullet && <span className={bulletClassName}>{customBullet}</span>}
