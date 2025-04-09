@@ -11,10 +11,11 @@ export const IconButton: React.FC<IconButtonProps> = ({
   disabled = false,
   onClick,
   children,
+  className
 }) => {
   return (
     <button
-      className={classNames(styles['iconButton'], styles[`iconButton--${size}`])}
+      className={classNames(styles['iconButton'], styles[`iconButton--${size}`], className)}
       disabled={disabled}
       aria-disabled={disabled}
       type="button"

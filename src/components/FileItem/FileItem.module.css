@@ -1,0 +1,45 @@
+
+.fileItem {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: space-between;
+    
+    padding: 10px 15px;
+    border: 1px solid var(--info-secondary);
+    border-radius: 10px;
+
+  }
+  .error {
+    border-color: var(--error-main);
+  }
+
+  .fileItemFile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .fileItemInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex-grow: 1; 
+    align-items: flex-start;
+    overflow: hidden;
+}
+
+.fileItemIcon {
+    flex-shrink: 0
+}
+
+.fileItemName {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+    align-items: flex-start;
+    overflow: auto;
+}
+
+.fileIcon svg path {
+    stroke-width: 0.8;
+}
