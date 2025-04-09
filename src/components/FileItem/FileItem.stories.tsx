@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 
-import { Loader } from './Loader';
+import { FileItem } from './FileItem';
 
-export interface LoaderProps {
+export interface FileItemProps {
   /** Название файла */
  name?: string ;
   /** Размер файла */
@@ -12,12 +13,14 @@ export interface LoaderProps {
  loading?: boolean;
  /** Текст ошибки загрузки файла */
  error?: string;
- /** Функция обработки */
- onClick?: () => void;
+ /** Функция обработки скачивания файла */
+ onDownload?: () => void;
+ /** Функция обработки удаления файла */
+ onDelete?: () => void;
 }
 
-const meta: Meta<LoaderProps> = {
-  component: Loader,
+const meta: Meta<FileItemProps> = {
+  component: FileItem,
   parameters: {
     layout: 'centered',
   },
@@ -52,37 +55,45 @@ const meta: Meta<LoaderProps> = {
       description: 'Текст ошибки',
       type: 'string',
     },
+    onDownload : {
+      description: 'Функция обработки скачивания файла',
+    },
+    onDelete : {
+      description: 'обработки удаления файла',
+    }
   },
 };
 
 export default meta;
 
-type Story = StoryObj<LoaderProps>;
+type Story = StoryObj<FileItemProps>;
 
-export const LoaderDefault = (argTypes: LoaderProps): JSX.Element => <Loader {...argTypes} />;
+export const FileItemDefault = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} />;
 
-LoaderDefault.storyName = 'Loader по умолчанию';
+FileItemDefault.storyName = 'FileItem по умолчанию';
 
-LoaderDefault.args = {
+FileItemDefault.args = {
   name: 'file123.docx',
   size: '10',
+  onDownload: action('download-clicked'),
+  onDelete: action('delete-clicked'),
 };
 
-export const LoaderProgress = (argTypes: LoaderProps): JSX.Element => <Loader {...argTypes} />;
+export const FileItemProgress = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} />;
 
-LoaderProgress.storyName = 'Loader c progress bar';
+FileItemProgress.storyName = 'FileItem c progress bar';
 
-LoaderProgress.args = {
+FileItemProgress.args = {
   name: 'file123.docx',
   size: '10',
   loading: true,
 };
 
-export const LoaderError = (argTypes: LoaderProps): JSX.Element => <Loader {...argTypes} />;
+export const FileItemError = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} />;
 
-LoaderError.storyName = 'Loader c ошибкой загрузки';
+FileItemError.storyName = 'FileItem c ошибкой загрузки';
 
-LoaderError.args = {
+FileItemError.args = {
   name: 'file123.docx',
   size: '10',
   error: 'Произошла оошибка. Попробуйте снова'

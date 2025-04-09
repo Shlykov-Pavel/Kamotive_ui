@@ -5,7 +5,7 @@ import { IconButton } from './IconButton';
 import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10, IconClose10 } from '../../Icons';
 
 
-export interface IconButtonProps {
+  export interface IconButtonProps {
     /** Иконка кнопки */
     icon?: React.ReactNode;
     /** Размер кнопки */
@@ -20,6 +20,8 @@ export interface IconButtonProps {
     onClick: () => void;
     /** Дочерние элементы */
     children?: ReactNode;
+    /** Дополнительный класс */
+    className?: string;
   }
 
   const withWrapper = (Story: React.ComponentType) => (
@@ -73,7 +75,7 @@ export interface IconButtonProps {
       onClick: { description: 'Callback, который будет вызван при клике по кнопке', action: 'clicked' },
       children: { description: 'Дочерние элементы', control: { type: 'text' } },
       color: { description: 'Дополнительный цвет кнопки', control: { type: 'color' } },
-  
+      className: { description: 'Дополнительные классы для компонента' },
     },
   };
   

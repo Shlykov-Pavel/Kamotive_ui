@@ -14,7 +14,7 @@ export { Tag as Tag } from './src/components/Tag/Tag';
 export { SettingTag as SettingTag } from './src/components/SettingTag/SettingTag';
 export { ColorPicker as ColorPicker } from './src/components/ColorPicker/ColorPicker';
 export { Snackbar as Snackbar } from './src/components/Snackbar/Snackbar';
-export { Loader as Loader } from './src/components/Loader/Loader';
+export { FileItem as FileItem } from './src/components/FileItem/FileItem';
 export { FileAttach as FileAttach } from './src/components/FileAttach/FileAttach';
 export { Dialog as Dialog } from './src/components/Dialog/Dialog';
 export { IconButton as IconButton } from './src/components/IconButton/IconButton';

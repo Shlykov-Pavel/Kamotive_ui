@@ -14,7 +14,7 @@ export { Tabs as Tabs } from './components/Tabs/Tabs';
 export { Tag as Tag } from './components/Tag/Tag';
 export { ToggleButton as ToggleButton } from './components/ToggleButton/ToggleButton';
 export { Typography as Typography } from './components/Typography/Typography';
-export { Loader as Loader } from './components/Loader/Loader';
+export { FileItem as FileItem } from './components/FileItem/FileItem';
 export { FileAttach as FileAttach } from './components/FileAttach/FileAttach';
 export { Spinner as Spinner } from './components/Spinner/Spinner';
 export { Dialog as Dialog } from './components/Dialog/Dialog';
@@ -37,7 +37,7 @@ export type {
   TabsProps,
   ColorPickerProps,
   SnackbarProps,
-  LoaderProps,
+  FileItemProps,
   FileAttachProps,
   SpinnerProps,
   DialogProps,

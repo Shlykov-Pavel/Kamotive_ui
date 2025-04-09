@@ -5,7 +5,7 @@ import { FileAttachProps } from '../../types';
 import styles from './FileAttach.module.css';
 import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';
-import { Loader } from '../Loader/Loader';
+import { FileItem } from '../FileItem/FileItem';
 import classNames from 'classnames';
 
 export const FileAttach: FC<FileAttachProps> = ({
@@ -18,6 +18,7 @@ export const FileAttach: FC<FileAttachProps> = ({
   },
   addedFiles,
   setAddedFiles,
+  onDownload,
   disabled = false,
   className,
   style,
@@ -60,20 +61,21 @@ export const FileAttach: FC<FileAttachProps> = ({
   });
 
   const acceptedFileItems = addedFiles.map((file: File, index: number) => (
-    <Loader
+    <FileItem
       name={file.name}
       size={file.size}
-      onClick={() => deleteAcceptedFile(addedFiles, setAddedFiles, file.name)}
+      onDelete={() => deleteAcceptedFile(addedFiles, setAddedFiles, file.name)}
+      onDownload={onDownload}
       key={index}
     />
   ));
 
   const fileRejectionItems = errorFiles.map(({ file, errors }) => (
-    <Loader
+    <FileItem
       name={file.name}
       size={file.size}
       error={errors[0].message}
-      onClick={() => deleteRejectedFile(errorFiles, setErrorFiles, file.name)}
+      onDelete={() => deleteRejectedFile(errorFiles, setErrorFiles, file.name)}
       key={file.path}
     />
   ));

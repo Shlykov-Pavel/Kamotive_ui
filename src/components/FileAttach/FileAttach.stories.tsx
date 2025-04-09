@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 
 import { FileAttach } from './FileAttach';
 import { Accept } from 'react-dropzone/.';
@@ -15,6 +16,8 @@ export interface FileAttachProps {
   addedFiles: File[];
   /**Сосотояние для добавления файлов */
   setAddedFiles:(addedFiles: File[]) => void;
+  /** Функция обработки скачивания файла */
+  onDownload?: () => void;
   /**Заблокировано добавление файлов*/
   disabled?: boolean;
   /** Дополнительный класс */
@@ -49,6 +52,9 @@ const meta: Meta<FileAttachProps> = {
       description: 'Максимальное допустимое количество файлов',
       type: 'number',
     },
+    onDownload : {
+      description: 'Функция обработки скачивания файла',
+    },
     acceptedFormats: {
       description: 'Поддерживаемые форматы файлов',
     },
@@ -73,6 +79,19 @@ FileAttachDefault.storyName = 'FileAttach по умолчанию';
 FileAttachDefault.args = {
   maxFileSize: 2,
   maxFileCount: 2,
+};
+
+export const FileAttachDownload = (argTypes: FileAttachProps): JSX.Element => {
+  const [addedFiles, setAddedFiles] = useState<File[]>([]);
+  
+  return <FileAttach {...argTypes} addedFiles={addedFiles} setAddedFiles={setAddedFiles} />;
+};
+
+FileAttachDownload.storyName = 'FileAttach с загрузкой файлов';
+FileAttachDownload.args = {
+  maxFileSize: 2,
+  maxFileCount: 2,
+  onDownload: action('download-clicked'),
 };
 
 export const FileAttachDisabled = (argTypes: FileAttachProps): JSX.Element => {

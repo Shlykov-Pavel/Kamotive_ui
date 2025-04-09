@@ -381,7 +381,7 @@ import { Accept } from 'react-dropzone/.';
     onClose?: () => void;
   };
 
-  export interface LoaderProps {
+  export interface FileItemProps {
     /** Название файла */
    name?: string ;
     /** Размер файла */
@@ -390,8 +390,10 @@ import { Accept } from 'react-dropzone/.';
    loading?: boolean;
    /** Текст ошибки загрузки файла */
    error?: string;
-   /** Функция обработки */
-   onClick?: () => void;
+   /** Функция обработки скачивания файла */
+   onDownload?: () => void;
+   /** Функция обработки удаления файла */
+   onDelete?: () => void;
   }
 
   export interface FileAttachProps {
@@ -403,16 +405,17 @@ import { Accept } from 'react-dropzone/.';
    acceptedFormats?: Accept;
    /**Добавленные файлы */
    addedFiles: File[];
-   /**Состояние для добавления файлов */
+   /**Сосотояние для добавления файлов */
    setAddedFiles:(addedFiles: File[]) => void;
+   /** Функция обработки скачивания файла */
+   onDownload?: () => void;
    /**Заблокировано добавление файлов*/
    disabled?: boolean;
    /** Дополнительный класс */
    className?: string;
-    /** Стили передаваемые напрямую */
-    style?: CSSProperties;
+   /** Стили передаваемые напрямую */
+   style?: React.CSSProperties;
  }
-
 
  export interface DialogProps {
   /** Флаг открытия окна */
@@ -446,4 +449,6 @@ import { Accept } from 'react-dropzone/.';
    onClick: () => void;
    /** Дочерние элементы */
    children?: ReactNode;
+   /** Дополнительный класс */
+   className?: string;
  }
