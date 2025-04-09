@@ -40,8 +40,8 @@ export const ListItem: FC<ListItemProps> = ({
     const newCheckedState = !isChecked;
     setIsChecked(newCheckedState);
 
-    if (id && onCheck) {
-      onCheck(id, newCheckedState);
+    if (onCheck) {
+      onCheck(id || "", newCheckedState);
     }
   };
 

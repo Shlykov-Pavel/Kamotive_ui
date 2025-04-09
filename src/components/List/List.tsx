@@ -64,8 +64,8 @@ export const List: FC<ListProps> = ({
     const newCheckedState = !isChecked;
     setIsChecked(newCheckedState);
 
-    if (id && onCheck) {
-      onCheck(id, newCheckedState);
+    if (onCheck) {
+      onCheck(id || "", newCheckedState);
     }
 
     if (childIds.length > 0 && onCheck) {

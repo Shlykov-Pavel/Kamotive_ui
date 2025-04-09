@@ -305,6 +305,8 @@ import { Accept } from 'react-dropzone/.';
     label?: string;
     /** Цвет чекбока */
     color?: string;
+    /** Заливка */
+    filled?: boolean;
   }
 
   export interface RadioProps {
@@ -492,7 +494,7 @@ export interface ListItemProps extends BaseListProps {
 
 export interface ListProps extends BaseListProps {
   /** Дочерние элементы */
-  children: React.ReactElement<ListItemProps>[];
+  children: React.ReactElement<ListItemProps> | React.ReactElement<ListItemProps>[];
   /** Иконка */
   collapsible?: boolean;
   /** Кастомный буллит дочернего компонента */

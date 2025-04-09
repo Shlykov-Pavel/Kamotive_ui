@@ -100,3 +100,10 @@ CheckboxCustomColor.storyName = 'Checkbox с кастомным цветом';
 CheckboxCustomColor.args = {
   color: 'red',
 };
+
+export const CheckboxCustomColorFilled = (argTypes: CheckboxProps): JSX.Element => <Checkbox {...argTypes} />;
+CheckboxCustomColorFilled.storyName = 'Checkbox с кастомным цветом заполненный';
+CheckboxCustomColorFilled.args = {
+  color: 'red',
+  filled: true,
+};
