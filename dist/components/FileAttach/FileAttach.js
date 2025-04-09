@@ -3,13 +3,13 @@ import { useDropzone } from 'react-dropzone';
 import styles from './FileAttach.module.css';
 import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';
-import { Loader } from '../Loader/Loader';
+import { FileItem } from '../FileItem/FileItem';
 import classNames from 'classnames';
 export const FileAttach = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx'],
-}, addedFiles, setAddedFiles, disabled = false, className, style, }) => {
+}, addedFiles, setAddedFiles, onDownload, disabled = false, className, style, }) => {
     const [errorFiles, setErrorFiles] = useState([]);
     const fileValidator = (file) => {
         if (file.size > maxFileSize * 1024 * 1024 * 1024) {
@@ -42,8 +42,8 @@ export const FileAttach = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         maxFiles: maxFileCount,
         disabled: disabled,
     });
-    const acceptedFileItems = addedFiles.map((file, index) => (React.createElement(Loader, { name: file.name, size: file.size, onClick: () => deleteAcceptedFile(addedFiles, setAddedFiles, file.name), key: index })));
-    const fileRejectionItems = errorFiles.map(({ file, errors }) => (React.createElement(Loader, { name: file.name, size: file.size, error: errors[0].message, onClick: () => deleteRejectedFile(errorFiles, setErrorFiles, file.name), key: file.path })));
+    const acceptedFileItems = addedFiles.map((file, index) => (React.createElement(FileItem, { name: file.name, size: file.size, onDelete: () => deleteAcceptedFile(addedFiles, setAddedFiles, file.name), onDownload: onDownload, key: index })));
+    const fileRejectionItems = errorFiles.map(({ file, errors }) => (React.createElement(FileItem, { name: file.name, size: file.size, error: errors[0].message, onDelete: () => deleteRejectedFile(errorFiles, setErrorFiles, file.name), key: file.path })));
     const deleteAcceptedFile = (addedFiles, setAddedFiles, fileName) => {
         setAddedFiles(addedFiles.filter((file) => file.name !== fileName));
     };
