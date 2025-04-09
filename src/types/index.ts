@@ -303,6 +303,8 @@ import { Accept } from 'react-dropzone/.';
     size?: 'sm' | 'md';
     /** Текст лейбла */
     label?: string;
+    /** Цвет чекбока */
+    color?: string;
   }
 
   export interface RadioProps {
@@ -392,6 +394,8 @@ import { Accept } from 'react-dropzone/.';
    error?: string;
    /** Функция обработки */
    onClick?: () => void;
+   /** Стили передаваемые напрямую */
+   style?: CSSProperties;
   }
 
   export interface FileAttachProps {
@@ -448,49 +452,51 @@ import { Accept } from 'react-dropzone/.';
    children?: ReactNode;
  }
 
- export interface ListItemProps {
+ export interface BaseListProps {
+  /** Идентификатор */
   id?: string;
   /** Обработчик клика */
   onClick?: () => void;
-  onCheck?: (activeId: string, isChecked: boolean) => void;
+  /** Обработчик выбора чекбокса */
+  onCheck?: (activeId: string | string[], isChecked: boolean) => void;
+  /** Кастомный цвет чекбокса */
+  checkboxColor?: string;
+  /** Обработчик выбора RadioButton */
   onRadioSelect?: (id: string) => void;
-  /** Активный */
+  /** Активный чекбокс */
   checked?: boolean;
+  /** Активный чекбокс родительского компонента */
+  parentChecked?: boolean;
+  /** Выбранный RadioButton */
   selected?: boolean;
   /** Отображаемый текст */
   label?: string;
+  /** Добавлен чекбокс */
+  withCheckbox?: boolean;
+  /** Добавлен RadioButton */
+  withRadioButton?: boolean;
+  /** Кастомный буллит */
+  customBullet?: React.ReactNode;
+  /** Стиль кастомного буллита */
+  bulletClassName?: string;
+}
+
+export interface ListItemProps extends BaseListProps {
+  /** Стиль элемента списка */
   style?: CSSProperties;
+  /** Дополнительный класс */
   className?: string;
   /** Дочерние элементы */
   children?: ReactNode;
-  /** Иконка */
-  withCheckbox?: boolean;
-  withRadioButton?: boolean;
-  customBullet?: React.ReactNode;
-  bulletClassName?: string;
-  parentChecked?: boolean;
 }
 
-export interface ListProps {
-  id?: string;
-  /** Обработчик клика */
-  onClick?: () => void;
-  onCheck?: (activeIds: string | string[], isChecked: boolean) => void;
-  onRadioSelect?: (id: string) => void;
-  /** Активный */
-  checked?: boolean;
-  selected?: boolean;
-  /** Отображаемый текст */
-  label?: string;
+export interface ListProps extends BaseListProps {
   /** Дочерние элементы */
   children: React.ReactElement<ListItemProps>[];
   /** Иконка */
   collapsible?: boolean;
-  withCheckbox?: boolean;
-  withRadioButton?: boolean;
-  customBullet?: React.ReactNode;
+  /** Кастомный буллит дочернего компонента */
   customItemBullet?: React.ReactNode;
-  bulletClassName?: string;
+  /** Внешний компонент без буллитов/чекбоксов */
   isHeader?: boolean;
-  parentChecked?: boolean;
 }

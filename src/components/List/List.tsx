@@ -17,6 +17,7 @@ export const List: FC<ListProps> = ({
   id,
   collapsible = false,
   withCheckbox = false,
+  checkboxColor,
   withRadioButton = false,
   customBullet,
   customItemBullet,
@@ -45,7 +46,7 @@ export const List: FC<ListProps> = ({
     }
   };
 
-  const handleChildCheck = (childId: string, isChecked: boolean) => {
+  const handleChildCheck = (childId: string | string[], isChecked: boolean) => {
     if (onCheck) {
       onCheck(childId, isChecked);
     }
@@ -101,7 +102,7 @@ export const List: FC<ListProps> = ({
             <div>
               {withCheckbox && (
                 <span onClick={handleCheckboxClick}>
-                  <Checkbox checked={isChecked} />
+                  <Checkbox checked={isChecked} color={checkboxColor} />
                 </span>
               )}
               {withRadioButton && (

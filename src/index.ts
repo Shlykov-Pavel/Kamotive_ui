@@ -19,6 +19,8 @@ export { FileAttach as FileAttach } from './components/FileAttach/FileAttach';
 export { Spinner as Spinner } from './components/Spinner/Spinner';
 export { Dialog as Dialog } from './components/Dialog/Dialog';
 export { IconButton as IconButton } from './components/IconButton/IconButton';
+export { List as List } from './components/List/List';
+export { ListItem as ListItem } from './components/ListItem/ListItem';
 
 export type {
   ButtonProps,
@@ -42,5 +44,8 @@ export type {
   SpinnerProps,
   DialogProps,
   IconButtonProps,
+  BaseListProps,
+  ListProps,
+  ListItemProps,
 } from './types';
 import './fonts.css';

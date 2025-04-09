@@ -23,7 +23,7 @@
   display: inline-block;
   padding: 6px;
 
-  border: 1px solid var(--icons-active);
+  border: 1px solid var(--border-color);
   border-radius: 3px;
   background-color: var(--white);
   background-clip: content-box;
@@ -35,11 +35,11 @@
 .input[type="checkbox"]:hover,
 .input[type="checkbox"]:checked:hover,
 .input[type="checkbox"]:checked:hover::after {
-  border-color: var(--blue-main);
+  border-color: var(--border-color-hover);
 }
 
 .input[type="checkbox"]:checked {
-  border-color: var(--icons-medium);
+  border-color: var(--border-color-checked);
 }
 
 .input[type="checkbox"]:checked::after {
@@ -52,7 +52,7 @@
   width: 40%;
   height: 75%;
 
-  border: solid var(--icons-medium);
+  border: solid var(--border-color-checked);
   border-width: 0 2px 2px 0;
   background-color: none;
 }
@@ -61,7 +61,7 @@
 .input[type="checkbox"]:disabled:checked,
 .input[type="checkbox"]:disabled:checked:after {
   background-color: var(--white);
-  border-color: var(--icons-light);
+  border-color: var(--border-color-disabled);
   cursor: not-allowed;
   box-shadow: none;
 }

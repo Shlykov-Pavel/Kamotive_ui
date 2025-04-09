@@ -84,12 +84,12 @@ export const ListWithCheckbox = () => {
   };
 
   return (
-    <List id="documents" label="Documents" withCheckbox onCheck={handleCheckedItems} collapsible>
-      <ListItem label="Document 1" id="doc1" />
-      <ListItem label="Document 2" id="doc2" />
-      <List label="Images" id="images" withCheckbox collapsible>
-        <ListItem label="Image 1" id="img1" />
-        <ListItem label="Image 2" id="img2" />
+    <List id="documents" label="Documents" withCheckbox onCheck={handleCheckedItems} collapsible checkboxColor="var(--red)">
+      <ListItem label="Document 1" id="doc1" checkboxColor="var(--orange)" />
+      <ListItem label="Document 2" id="doc2" checkboxColor="var(--yellow)" />
+      <List label="Images" id="images" withCheckbox collapsible checkboxColor="var(--green)">
+        <ListItem label="Image 1" id="img1" checkboxColor="var(--blue)" />
+        <ListItem label="Image 2" id="img2" checkboxColor="var(--purple)" />
       </List>
     </List>
   );
@@ -151,10 +151,10 @@ export const ListItemsWithChildren = () => {
     <div>
       <List>
         <ListItem>
-          <Loader name="file123.docx" size={5679} />
+          <Loader name="file123.docx" size={5679} style={{ width: "250px" }}/>
         </ListItem>
         <ListItem>
-          <Loader name="file12.pdf" size={10031} />
+          <Loader name="file12.pdf" size={10031} style={{ width: "250px" }}/>
         </ListItem>
       </List>
     </div>

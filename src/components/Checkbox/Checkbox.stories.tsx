@@ -94,3 +94,9 @@ CheckboxCheckedDisabled.args = {
   checked: true,
   disabled: true,
 };
+
+export const CheckboxCustomColor = (argTypes: CheckboxProps): JSX.Element => <Checkbox {...argTypes} />;
+CheckboxCustomColor.storyName = 'Checkbox с кастомным цветом';
+CheckboxCustomColor.args = {
+  color: 'red',
+};

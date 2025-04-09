@@ -7,9 +7,9 @@ import { Typography } from '../Typography/Typography';
 import { IconFile } from '../../Icons/IconFile/IconFile';
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 
-export const Loader: FC<LoaderProps> = ({ name, size = 0, loading = false, error = '', onClick }) => {
+export const Loader: FC<LoaderProps> = ({ name, size = 0, loading = false, error = '', onClick, style }) => {
   return (
-    <div className={`${styles['loader']} ${error ? styles['error'] : ''}`}>
+    <div className={`${styles['loader']} ${error ? styles['error'] : ''}`} style={style}>
       <div className={styles['loaderFile']}>
         <div className={styles['loaderInfo']}>
           <div className={styles['loaderIcon']}>

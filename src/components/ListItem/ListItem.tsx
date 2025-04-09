@@ -17,6 +17,7 @@ export const ListItem: FC<ListItemProps> = ({
   style,
   className,
   withCheckbox = false,
+  checkboxColor,
   withRadioButton = false,
   customBullet,
   bulletClassName,
@@ -28,6 +29,7 @@ export const ListItem: FC<ListItemProps> = ({
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     if (onClick) {
+      e.stopPropagation();
       onClick();
     }
   };
@@ -59,7 +61,7 @@ export const ListItem: FC<ListItemProps> = ({
     <div className={itemClassNames} style={style} onClick={handleClick}>
       {withCheckbox && (
         <span className={styles.icon} onClick={handleCheckboxClick}>
-          <Checkbox checked={isChecked} />
+          <Checkbox checked={isChecked} color={checkboxColor} />
         </span>
       )}
       {withRadioButton && (
