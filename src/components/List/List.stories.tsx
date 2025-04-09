@@ -3,7 +3,7 @@ import type { Meta } from '@storybook/react';
 import { List } from './List';
 import { ListProps } from '../../types/index';
 import { ListItem } from '../ListItem/ListItem';
-import { Loader } from '../Loader/Loader';
+import { FileItem } from '../FileItem/FileItem';
 
 const meta: Meta<ListProps> = {
   component: List,
@@ -186,10 +186,10 @@ export const ListItemsWithChildren = (argTypes: ListProps) => {
     <div>
       <List {...argTypes}>
         <ListItem>
-          <Loader name="file123.docx" size={5679} style={{ width: "250px" }}/>
+          <FileItem name="file123.docx" size={5679} style={{ width: "250px" }}/>
         </ListItem>
         <ListItem>
-          <Loader name="file12.pdf" size={10031} style={{ width: "250px" }}/>
+          <FileItem name="file12.pdf" size={10031} style={{ width: "250px" }}/>
         </ListItem>
       </List>
     </div>
