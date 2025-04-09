@@ -1,0 +1,40 @@
+.collapsibleList {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	padding: 8px;
+}
+
+.checkbox--active {
+	font-weight: bold;
+}
+
+.content {
+	transition: max-height 0.3s ease-out;
+	overflow: hidden;
+}
+
+.content--expanded {
+	max-height: fit-content;
+}
+
+.content--collapsed {
+	max-height: 0;
+}
+
+.bullet {
+	margin-right: 10px;
+}
+
+.indicator {
+	margin-left: auto;
+	font-size: 12px;
+	display: flex;
+	justify-content: center;
+}

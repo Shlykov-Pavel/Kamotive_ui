@@ -278,6 +278,10 @@ export interface CheckboxProps {
     size?: 'sm' | 'md';
     /** Текст лейбла */
     label?: string;
+    /** Цвет чекбока */
+    color?: string;
+    /** Заливка */
+    filled?: boolean;
 }
 export interface RadioProps {
     /** Значение */
@@ -348,7 +352,7 @@ export type SnackbarProps = {
     /** Функция обработки закрытия сообщения */
     onClose?: () => void;
 };
-export interface LoaderProps {
+export interface FileItemProps {
     /** Название файла */
     name?: string;
     /** Размер файла */
@@ -357,8 +361,12 @@ export interface LoaderProps {
     loading?: boolean;
     /** Текст ошибки загрузки файла */
     error?: string;
-    /** Функция обработки */
-    onClick?: () => void;
+    /** Функция обработки скачивания файла */
+    onDownload?: () => void;
+    /** Функция обработки удаления файла */
+    onDelete?: () => void;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
 }
 export interface FileAttachProps {
     /** Максимальный размер файла */
@@ -369,14 +377,16 @@ export interface FileAttachProps {
     acceptedFormats?: Accept;
     /**Добавленные файлы */
     addedFiles: File[];
-    /**Состояние для добавления файлов */
+    /**Сосотояние для добавления файлов */
     setAddedFiles: (addedFiles: File[]) => void;
+    /** Функция обработки скачивания файла */
+    onDownload?: () => void;
     /**Заблокировано добавление файлов*/
     disabled?: boolean;
     /** Дополнительный класс */
     className?: string;
     /** Стили передаваемые напрямую */
-    style?: CSSProperties;
+    style?: React.CSSProperties;
 }
 export interface DialogProps {
     /** Флаг открытия окна */
@@ -409,4 +419,56 @@ export interface IconButtonProps {
     onClick: () => void;
     /** Дочерние элементы */
     children?: ReactNode;
+    /** Дополнительный класс */
+    className?: string;
+}
+export interface BaseListProps {
+    /** Идентификатор */
+    id?: string;
+    /** Обработчик клика */
+    onClick?: () => void;
+    /** Обработчик выбора чекбокса */
+    onCheck?: (activeId: string | string[], isChecked: boolean) => void;
+    /** Заблокированный чекбокс/RadioButton */
+    disabled?: boolean;
+    /** Кастомный цвет чекбокса */
+    checkboxColor?: string;
+    /** Заливка чекбокса */
+    checkboxFilled?: boolean;
+    /** Обработчик выбора RadioButton */
+    onRadioSelect?: (id: string) => void;
+    /** Активный чекбокс */
+    checked?: boolean;
+    /** Активный чекбокс родительского компонента */
+    parentChecked?: boolean;
+    /** Выбранный RadioButton */
+    selected?: boolean;
+    /** Отображаемый текст */
+    label?: string;
+    /** Добавлен чекбокс */
+    withCheckbox?: boolean;
+    /** Добавлен RadioButton */
+    withRadioButton?: boolean;
+    /** Кастомный буллит */
+    customBullet?: React.ReactNode;
+    /** Стиль кастомного буллита */
+    bulletClassName?: string;
+}
+export interface ListItemProps extends BaseListProps {
+    /** Стиль элемента списка */
+    style?: CSSProperties;
+    /** Дополнительный класс */
+    className?: string;
+    /** Дочерние элементы */
+    children?: ReactNode;
+}
+export interface ListProps extends BaseListProps {
+    /** Дочерние элементы */
+    children: React.ReactElement<ListItemProps> | React.ReactElement<ListItemProps>[];
+    /** Возможность раскрытия списка */
+    collapsible?: boolean;
+    /** Кастомный буллит дочернего компонента */
+    customItemBullet?: React.ReactNode;
+    /** Внешний компонент без буллитов/чекбоксов */
+    isHeader?: boolean;
 }
