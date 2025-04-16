@@ -1,3 +1,4 @@
+import { CheckboxDisabled } from './../components/Checkbox/Checkbox.stories';
 import * as React from 'react';
 import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
@@ -462,6 +463,10 @@ import { Accept } from 'react-dropzone/.';
  export interface BaseListProps {
   /** Идентификатор */
   id?: string;
+  /** Стиль элемента списка */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
   /** Обработчик клика */
   onClick?: () => void;
   /** Обработчик выбора чекбокса */
@@ -493,10 +498,6 @@ import { Accept } from 'react-dropzone/.';
 }
 
 export interface ListItemProps extends BaseListProps {
-  /** Стиль элемента списка */
-  style?: CSSProperties;
-  /** Дополнительный класс */
-  className?: string;
   /** Дочерние элементы */
   children?: ReactNode;
 }
@@ -510,4 +511,19 @@ export interface ListProps extends BaseListProps {
   customItemBullet?: React.ReactNode;
   /** Внешний компонент без буллитов/чекбоксов */
   isHeader?: boolean;
+  /** Раскрытый список */
+  open?: boolean;
+}
+
+export interface TooltipProps {
+  /** Текст подсказки */
+  label: string;
+  /** Дочерние элементы */
+  children: React.ReactNode;
+  /** Дополнительный класс */
+  className?: string;
+  /** Стиль подсказки */
+	style?: CSSProperties;
+  /** Положение подсказки */
+  overlayChildren?: boolean;
 }

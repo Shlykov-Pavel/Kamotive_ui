@@ -8,16 +8,16 @@ import { ProgressBar } from '../ProgressBar/ProgressBar';
 import { IconButton } from '../IconButton/IconButton';
 import { IconClose10, IconDownload, IconFile } from '../../Icons';
 
-export const FileItem: FC<FileItemProps> = ({ name, size = 0, loading = false, error = '', onDownload , onDelete}) => {
+export const FileItem: FC<FileItemProps> = ({ name, size = 0, loading = false, error = '', onDownload , onDelete, style }) => {
   return (
-    <div className={`${styles['fileItem']} ${error ? styles['error'] : ''}`}>
+    <div className={`${styles['fileItem']} ${error ? styles['error'] : ''}`} style={style}>
       <div className={styles['fileItemFile']}>
         <div className={styles['fileItemInfo']}>
           <div className={styles['fileItemIcon']}>
             <IconFile htmlColor={'var(--icons-grey)'} />
           </div>
           <div className={styles['fileItemName']}>
-            <Typography variant="Body1-Medium" color="var(--text-dark)">
+            <Typography variant="Body1" color="var(--text-dark)">
               {name}
             </Typography>
             {size !== 0 && (

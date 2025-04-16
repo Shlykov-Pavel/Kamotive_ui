@@ -81,7 +81,7 @@
 .typography--variant-Body-Medium {
   font-family: var(--font-family-content);
   font-size: var(--font-size-16);
-  font-weight: var(--font-weight-meduim);
+  font-weight: var(--font-weight-medium);
   line-height: var(--lineHeight-16);
   letter-spacing: var(--letterSpacing);
   text-decoration: none;
@@ -161,7 +161,7 @@
 .typography--variant-Body2-Medium {
   font-family: var(--font-family-content);
   font-size: var(--font-size-12);
-  font-weight: var(--font-weight-meduim);
+  font-weight: var(--font-weight-medium);
   line-height: var(--lineHeight-12);
   letter-spacing: var(--letterSpacing);
   text-decoration: none;
@@ -193,7 +193,7 @@
 .typography--variant-Caption-Medium {
   font-family: var(--font-family-content);
   font-size: var(--font-size-12);
-  font-weight: var(--font-weight-meduim);
+  font-weight: var(--font-weight-medium);
   line-height: var(--lineHeight-12);
   letter-spacing: var(--letterSpacing);
   text-decoration: none;
