@@ -26,11 +26,8 @@ export const Tooltip: FC<TooltipProps> = ({
 	position = 'none',
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isVisible, setIsVisible] = useState(false);
 	const [coords, setCoords] = useState({ x: 0, y: 0 });
-	const timeoutRef = useRef<number | null>(null);
-	const mousePositionRef = useRef({ x: 0, y: 0 });
-	const childrenRef = useRef<HTMLDivElement>(null);
-	const tooltipElementRef = useRef<HTMLDivElement>(null);
 	const [childrenRect, setChildrenRect] = useState<ChildrenRect>({
 		x: 0,
 		y: 0,
@@ -41,6 +38,10 @@ export const Tooltip: FC<TooltipProps> = ({
 		contentWidth: 0,
 		contentHeight: 0,
 	});
+	const timeoutRef = useRef<number | null>(null);
+	const mousePositionRef = useRef({ x: 0, y: 0 });
+	const childrenRef = useRef<HTMLDivElement>(null);
+	const tooltipElementRef = useRef<HTMLDivElement>(null);
 
 	const updateContainerRect = () => {
 		if (childrenRef.current) {
@@ -131,6 +132,10 @@ export const Tooltip: FC<TooltipProps> = ({
 			y: posY
 		});
 		setIsOpen(true);
+
+		setTimeout(() => {
+			setIsVisible(true);
+		}, 10);
 		
 		setTimeout(() => {
 			if (tooltipElementRef.current) {
@@ -176,6 +181,8 @@ export const Tooltip: FC<TooltipProps> = ({
 			timeoutRef.current = null;
 		}
 
+		setIsVisible(false);
+
 		setTimeout(() => {
 			setIsOpen(false);
 		}, 500);
@@ -196,7 +203,7 @@ export const Tooltip: FC<TooltipProps> = ({
 		zIndex: 1000,
 	} as CSSProperties;
 
-	const tooltipClassNames = classNames(styles.tooltip, isOpen && styles['tooltip--open'], className);
+	const tooltipClassNames = classNames(styles.tooltip, isVisible && styles['tooltip--visible'], className);
 	return (
 		<>
 			<div

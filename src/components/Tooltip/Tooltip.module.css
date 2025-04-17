@@ -6,14 +6,16 @@
 	width: fit-content;
 	font-family: var(--font-family-content);
 	color: white;
-	display: none;
-	pointer-events: none;
-	box-shadow: 0 4px 14.9px -3px rgba(0, 0, 0, 0.3);
-}
-
-.tooltip--open {
 	display: flex;
 	align-items: center;
+	pointer-events: none;
+	box-shadow: 0 4px 14.9px -3px rgba(0, 0, 0, 0.3);
+	opacity: 0;
+  	transition: opacity 0.1s ease-out;
+}
+
+.tooltip--visible {
+	opacity: 1;
 }
 
 .wrapper {
