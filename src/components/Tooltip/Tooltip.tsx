@@ -3,13 +3,16 @@ import styles from './Tooltip.module.css';
 import { TooltipProps } from '../../types';
 import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
+import ReactDOM from 'react-dom';
 
 interface ChildrenRect {
 	x: number;
 	y: number;
 	width: number;
 	height: number;
+	contentX: number;
 	contentY: number;
+	contentWidth: number;
   	contentHeight: number;
   }
 
@@ -19,18 +22,23 @@ export const Tooltip: FC<TooltipProps> = ({
 	className,
 	style,
 	overlayChildren = false,
+	textSize='sm',
+	position = 'none',
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [position, setPosition] = useState({ x: 0, y: 0 });
+	const [coords, setCoords] = useState({ x: 0, y: 0 });
 	const timeoutRef = useRef<number | null>(null);
 	const mousePositionRef = useRef({ x: 0, y: 0 });
 	const childrenRef = useRef<HTMLDivElement>(null);
+	const tooltipElementRef = useRef<HTMLDivElement>(null);
 	const [childrenRect, setChildrenRect] = useState<ChildrenRect>({
 		x: 0,
 		y: 0,
 		width: 0,
 		height: 0,
+		contentX: 0,
 		contentY: 0,
+		contentWidth: 0,
 		contentHeight: 0,
 	});
 
@@ -43,17 +51,23 @@ export const Tooltip: FC<TooltipProps> = ({
 			
 			const paddingTop = parseFloat(computedStyle.paddingTop);
 			const paddingBottom = parseFloat(computedStyle.paddingBottom);
+			const paddingLeft = parseFloat(computedStyle.paddingLeft);
+			const paddingRight = parseFloat(computedStyle.paddingRight);
 			
+			const contentX = rect.left + paddingLeft;
 			const contentY = rect.top + paddingTop;
 			const contentHeight = rect.height - paddingTop - paddingBottom;
+			const contentWidth = rect.width - paddingLeft - paddingRight;
 
 			setChildrenRect({
 			  x: rect.left,
 			  y: rect.top,
 			  width: rect.width,
 			  height: rect.height,
+			  contentX: contentX,
 			  contentY: contentY,
-			  contentHeight: contentHeight
+			  contentWidth: contentWidth,
+			  contentHeight: contentHeight,
 			});
 		}
 	};
@@ -69,6 +83,77 @@ export const Tooltip: FC<TooltipProps> = ({
 		};
 	}, []);
 
+	const adjustToViewPort = (posX: number, posY: number) => {
+		if (tooltipElementRef.current) {
+			const OFFSET = 15;
+
+			const tooltipWidth = tooltipElementRef.current.offsetWidth;
+			const tooltipHeight = tooltipElementRef.current.offsetHeight;
+			
+			const viewportWidth = window.innerWidth;
+			const viewportHeight = window.innerHeight;
+			
+			if (posX + tooltipWidth > viewportWidth) {
+				posX = viewportWidth - tooltipWidth - OFFSET;
+			}
+			
+			if (posY + tooltipHeight > viewportHeight) {
+				posY = mousePositionRef.current.y - tooltipHeight - OFFSET;
+			}
+		}
+
+		return [posX, posY];
+	}
+
+	const updateCoords = () => {
+		const OFFSET_X = 8;
+		const OFFSET_Y = 15;
+		const CONTENT_OFFSET_Y = 5;
+
+		/** положение подсказки
+		 * x - всегда зависит от положения курсора в момент наведения
+		 * y - если пропс overlayChildren true, подсказка будет поверх дочерних компонентов в месте наведения,
+		 * в ином случае подсказка всплывает под дочерним элементом
+		 */
+		let posX = mousePositionRef.current.x + OFFSET_X;
+		let posY = overlayChildren || mousePositionRef.current.y > childrenRect.contentY + childrenRect.contentHeight
+			? mousePositionRef.current.y + OFFSET_Y
+			: childrenRect.contentY + childrenRect.contentHeight + CONTENT_OFFSET_Y;
+		
+		if (position === 'bottom-center' || position === 'bottom-right' || position === 'bottom-left') {
+			posY = childrenRect.contentY + childrenRect.contentHeight + CONTENT_OFFSET_Y;
+		} else if (position !== 'none') {
+			posY = childrenRect.contentY - childrenRect.contentHeight - CONTENT_OFFSET_Y;
+		}
+
+		setCoords({
+			x: posX,
+			y: posY
+		});
+		setIsOpen(true);
+		
+		setTimeout(() => {
+			if (tooltipElementRef.current) {
+				const tooltipWidth = tooltipElementRef.current.offsetWidth;
+
+				if (position === 'bottom-center' || position === 'top-center') {
+					posX = childrenRect.x + (childrenRect.width - tooltipWidth) / 2;
+				} else if (position === 'bottom-right' || position === 'top-right') {
+					posX = childrenRect.contentX + childrenRect.contentWidth - tooltipWidth;
+				} else if (position !== 'none') {
+					posX = childrenRect.contentX;
+				}
+		
+				adjustToViewPort(posX, posY);
+				
+				setCoords({
+					x: posX,
+					y: posY
+				});
+			}
+		}, 0);
+	}
+
 	const handleMouseEnter = (e: React.MouseEvent) => {
 		updateContainerRect();
 		mousePositionRef.current = {
@@ -80,21 +165,8 @@ export const Tooltip: FC<TooltipProps> = ({
 			clearTimeout(timeoutRef.current);
 		}
 	
-		/** положение подсказки
-		 * x - всегда зависит от положения курсора в момент наведения
-		 * y - если пропс overlayChildren true, подсказка будет поверх дочерних компонентов в месте наведения,
-		 * в ином случае подсказка всплывает под дочерним элементом
-		 */
 		timeoutRef.current = window.setTimeout(() => {
-			const OFFSET_X = 8;
-			const OFFSET_Y = 15;
-			setPosition({
-				x: mousePositionRef.current.x + OFFSET_X,
-				y: overlayChildren || mousePositionRef.current.y > childrenRect.contentY + childrenRect.contentHeight
-					? mousePositionRef.current.y + OFFSET_Y
-					: childrenRect.contentY + childrenRect.contentHeight
-			});
-			setIsOpen(true);
+			updateCoords();
 		}, 750);
 	}
 
@@ -119,8 +191,8 @@ export const Tooltip: FC<TooltipProps> = ({
 	const tooltipStyles = {
 		...style,
 		position: 'fixed',
-		left: `${position.x}px`,
-		top: `${position.y}px`,
+		left: `${coords.x}px`,
+		top: `${coords.y}px`,
 		zIndex: 1000,
 	} as CSSProperties;
 
@@ -136,9 +208,12 @@ export const Tooltip: FC<TooltipProps> = ({
 			>
 				{children}
 			</div>
-			<div className={tooltipClassNames} style={tooltipStyles}>
-				<Typography variant="Body1-Medium">{label}</Typography>
-			</div>
+			{isOpen && ReactDOM.createPortal(
+				<div ref={tooltipElementRef} className={tooltipClassNames} style={tooltipStyles}>
+					<Typography variant={textSize === 'sm' ? "Caption-Medium" : textSize === 'md' ? "Body2-Medium" : "Body1-Medium"}>{label}</Typography>
+				</div>,
+				document.body
+			)}
 		</>
 	);
 };

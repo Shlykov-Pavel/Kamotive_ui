@@ -526,4 +526,6 @@ export interface TooltipProps {
 	style?: CSSProperties;
   /** Положение подсказки */
   overlayChildren?: boolean;
+  textSize?: 'sm' | 'md' | 'lg';
+  position?: 'none' | 'bottom-center' | 'bottom-right' | 'bottom-left' | 'top-center' | 'top-right' | 'top-left'
 }

@@ -184,25 +184,25 @@
 }
 .typography--variant-Caption {
   font-family: var(--font-family-content);
-  font-size: var(--font-size-12);
+  font-size: var(--font-size-10);
   font-weight: var(--font-weight-regular);
-  line-height: var(--lineHeight-12);
+  line-height: var(--lineHeight-10);
   letter-spacing: var(--letterSpacing);
   text-decoration: none;
 }
 .typography--variant-Caption-Medium {
   font-family: var(--font-family-content);
-  font-size: var(--font-size-12);
+  font-size: var(--font-size-10);
   font-weight: var(--font-weight-medium);
-  line-height: var(--lineHeight-12);
+  line-height: var(--lineHeight-10);
   letter-spacing: var(--letterSpacing);
   text-decoration: none;
 }
 .typography--variant-Caption-Bold {
   font-family: var(--font-family-content);
-  font-size: var(--font-size-12);
+  font-size: var(--font-size-10);
   font-weight: var(--font-weight-bold);
-  line-height: var(--lineHeight-12);
+  line-height: var(--lineHeight-10);
   letter-spacing: var(--letterSpacing);
   text-decoration: none;
 }
