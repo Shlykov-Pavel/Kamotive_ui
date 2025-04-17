@@ -4,6 +4,7 @@ import { TooltipProps } from '../../types';
 import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
 import ReactDOM from 'react-dom';
+import { hexToRgba } from '../Tag/Tag'
 
 interface ChildrenRect {
 	x: number;
@@ -22,8 +23,13 @@ export const Tooltip: FC<TooltipProps> = ({
 	className,
 	style,
 	overlayChildren = false,
-	textSize='sm',
+	textSize = 'sm',
 	position = 'none',
+	displayDelay = 750,
+	hideDelay = 500,
+	opacity = 0.4,
+	color,
+	followCursor = false,
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
@@ -106,57 +112,100 @@ export const Tooltip: FC<TooltipProps> = ({
 		return [posX, posY];
 	}
 
-	const updateCoords = () => {
+	const updateCoords = (mouseX?: number, mouseY?: number) => {
 		const OFFSET_X = 8;
 		const OFFSET_Y = 15;
 		const CONTENT_OFFSET_Y = 5;
 
-		/** положение подсказки
-		 * x - всегда зависит от положения курсора в момент наведения
-		 * y - если пропс overlayChildren true, подсказка будет поверх дочерних компонентов в месте наведения,
-		 * в ином случае подсказка всплывает под дочерним элементом
-		 */
-		let posX = mousePositionRef.current.x + OFFSET_X;
-		let posY = overlayChildren || mousePositionRef.current.y > childrenRect.contentY + childrenRect.contentHeight
-			? mousePositionRef.current.y + OFFSET_Y
-			: childrenRect.contentY + childrenRect.contentHeight + CONTENT_OFFSET_Y;
-		
-		if (position === 'bottom-center' || position === 'bottom-right' || position === 'bottom-left') {
-			posY = childrenRect.contentY + childrenRect.contentHeight + CONTENT_OFFSET_Y;
-		} else if (position !== 'none') {
-			posY = childrenRect.contentY - childrenRect.contentHeight - CONTENT_OFFSET_Y;
+		const cursorX = mouseX !== undefined ? mouseX : mousePositionRef.current.x;
+        const cursorY = mouseY !== undefined ? mouseY : mousePositionRef.current.y;
+
+		// Если followCursor активен, всегда используем позицию курсора
+		if (followCursor) {
+			let posX = cursorX + OFFSET_X;
+			let posY = cursorY + OFFSET_Y;
+			
+			// Проверяем границы экрана
+			[posX, posY] = adjustToViewPort(posX, posY);
+			
+			setCoords({
+				x: posX,
+				y: posY
+			});
+		} else {
+			// Оригинальная логика позиционирования
+			let posX = cursorX + OFFSET_X;
+			let posY = overlayChildren || cursorY > childrenRect.contentY + childrenRect.contentHeight
+				? cursorY + OFFSET_Y
+				: childrenRect.contentY + childrenRect.contentHeight + CONTENT_OFFSET_Y;
+			
+			if (position === 'bottom-center' || position === 'bottom-right' || position === 'bottom-left') {
+				posY = childrenRect.contentY + childrenRect.contentHeight + CONTENT_OFFSET_Y;
+			} else if (position !== 'none') {
+				posY = childrenRect.contentY - childrenRect.contentHeight - CONTENT_OFFSET_Y;
+			}
+
+			setCoords({
+				x: posX,
+				y: posY
+			});
 		}
 
-		setCoords({
-			x: posX,
-			y: posY
-		});
-		setIsOpen(true);
+		if (!isOpen) {
+			setIsOpen(true);
+			setTimeout(() => {
+				setIsVisible(true);
+			}, 10);
+		}
 
-		setTimeout(() => {
-			setIsVisible(true);
-		}, 10);
-		
-		setTimeout(() => {
-			if (tooltipElementRef.current) {
-				const tooltipWidth = tooltipElementRef.current.offsetWidth;
-
-				if (position === 'bottom-center' || position === 'top-center') {
-					posX = childrenRect.x + (childrenRect.width - tooltipWidth) / 2;
-				} else if (position === 'bottom-right' || position === 'top-right') {
-					posX = childrenRect.contentX + childrenRect.contentWidth - tooltipWidth;
-				} else if (position !== 'none') {
-					posX = childrenRect.contentX;
-				}
-		
-				adjustToViewPort(posX, posY);
-				
-				setCoords({
-					x: posX,
-					y: posY
-				});
+		if (!followCursor) {
+			/** положение подсказки
+			 * x - всегда зависит от положения курсора в момент наведения
+			 * y - если пропс overlayChildren true, подсказка будет поверх дочерних компонентов в месте наведения,
+			 * в ином случае подсказка всплывает под дочерним элементом
+			 */
+			let posX = mousePositionRef.current.x + OFFSET_X;
+			let posY = overlayChildren || mousePositionRef.current.y > childrenRect.contentY + childrenRect.contentHeight
+				? mousePositionRef.current.y + OFFSET_Y
+				: childrenRect.contentY + childrenRect.contentHeight + CONTENT_OFFSET_Y;
+			
+			if (position === 'bottom-center' || position === 'bottom-right' || position === 'bottom-left') {
+				posY = childrenRect.contentY + childrenRect.contentHeight + CONTENT_OFFSET_Y;
+			} else if (position !== 'none') {
+				posY = childrenRect.contentY - childrenRect.contentHeight - CONTENT_OFFSET_Y;
 			}
-		}, 0);
+
+			setCoords({
+				x: posX,
+				y: posY
+			});
+			setIsOpen(true);
+
+			setTimeout(() => {
+				setIsVisible(true);
+			}, 10);
+			
+			setTimeout(() => {
+				if (tooltipElementRef.current) {
+					const tooltipWidth = tooltipElementRef.current.offsetWidth;
+
+					if (position === 'bottom-center' || position === 'top-center') {
+						posX = childrenRect.x + (childrenRect.width - tooltipWidth) / 2;
+					} else if (position === 'bottom-right' || position === 'top-right') {
+						posX = childrenRect.contentX + childrenRect.contentWidth - tooltipWidth;
+					} else if (position !== 'none') {
+						posX = childrenRect.contentX;
+					}
+			
+					adjustToViewPort(posX, posY);
+					
+					setCoords({
+						x: posX,
+						y: posY
+					});
+				}
+			}, 0);
+		}
 	}
 
 	const handleMouseEnter = (e: React.MouseEvent) => {
@@ -172,7 +221,7 @@ export const Tooltip: FC<TooltipProps> = ({
 	
 		timeoutRef.current = window.setTimeout(() => {
 			updateCoords();
-		}, 750);
+		}, displayDelay);
 	}
 
 	const handleMouseLeave = () => {
@@ -185,7 +234,7 @@ export const Tooltip: FC<TooltipProps> = ({
 
 		setTimeout(() => {
 			setIsOpen(false);
-		}, 500);
+		}, hideDelay);
 	}
 
 	const handleMouseMove = (e: React.MouseEvent) => {
@@ -193,6 +242,10 @@ export const Tooltip: FC<TooltipProps> = ({
 			x: e.clientX,
 			y: e.clientY,
 		};
+
+		if (isOpen && followCursor) {
+            updateCoords(e.clientX, e.clientY);
+        }
 	};
 
 	const tooltipStyles = {
@@ -200,6 +253,7 @@ export const Tooltip: FC<TooltipProps> = ({
 		position: 'fixed',
 		left: `${coords.x}px`,
 		top: `${coords.y}px`,
+		backgroundColor: color ? hexToRgba(color, opacity) : `rgba(0, 0, 0, ${opacity})`,
 		zIndex: 1000,
 	} as CSSProperties;
 

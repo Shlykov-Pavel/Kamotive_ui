@@ -526,6 +526,18 @@ export interface TooltipProps {
 	style?: CSSProperties;
   /** Положение подсказки */
   overlayChildren?: boolean;
+  /** Размер текста */
   textSize?: 'sm' | 'md' | 'lg';
-  position?: 'none' | 'bottom-center' | 'bottom-right' | 'bottom-left' | 'top-center' | 'top-right' | 'top-left'
+  /** Позиция подсказки */
+  position?: 'none' | 'bottom-center' | 'bottom-right' | 'bottom-left' | 'top-center' | 'top-right' | 'top-left';
+  /** Время, через которое будет показана подсказка */
+  displayDelay?: number;
+  /** Время, через которое будет скрыта подсказка */
+  hideDelay?: number;
+  /** Прозрачность подсказки (значение от 0 до 1) */
+  opacity?: number;
+  /** Цвет подсказки */
+  color?: string;
+  /** Подсказка, следующая за курсором */
+  followCursor?: boolean;
 }

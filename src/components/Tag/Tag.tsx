@@ -4,7 +4,7 @@ import { TagProps } from '../../types';;
 import styles from './Tag.module.css';
 import classNames from 'classnames';
 
-const hexToRgba = (hex: string, alpha: number): string => {
+export const hexToRgba = (hex: string, alpha: number): string => {
   //преобразуем в rgba для заднего фона
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);

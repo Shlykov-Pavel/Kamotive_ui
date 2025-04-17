@@ -14,17 +14,15 @@ const meta: Meta<TooltipProps> = {
     (Story) => (
       <div style={{
           backgroundColor: 'var(--white)',
-          padding: '30px',
-          borderRadius: '10px'
         }}>
         <Story />
       </div>
     ),
   ],
   argTypes: {
-    children: { description: 'Передает дочерние элементы для отображения' },
     label: { description: 'Текст для отображения' },
-    overlayChildren: { description: 'Положение подсказки: если пропс overlayChildren true, подсказка будет поверх дочерних компонентов в месте наведения, в ином случае подсказка всплывает под дочерним элементом' }
+    children: { description: 'Передает дочерние элементы для отображения' },
+    overlayChildren: { description: 'Положение подсказки: если пропс overlayChildren true, подсказка будет поверх дочерних компонентов в месте наведения, в ином случае подсказка всплывает под дочерним элементом' },
   },
 };
 
@@ -91,4 +89,39 @@ TooltipOverlay.args = {
   label: 'Tooltip',
   overlayChildren: true,
   children: <Typography variant="Body1" style={{ padding: '50px' }}>text with tooltip</Typography>
+};
+
+export const TooltipCustomColor = (argTypes: TooltipProps): JSX.Element => <Tooltip {...argTypes} />;
+TooltipCustomColor.storyName = 'Tooltip с кастомным цветом и прозрачностью';
+TooltipCustomColor.args = {
+  label: 'Tooltip',
+  color: '#FF6EB9',
+  opacity: 0.6,
+  children: <Typography variant="Body1" style={{ padding: '50px' }}>text with tooltip</Typography>
+};
+
+export const TooltipCustomDelay = (argTypes: TooltipProps): JSX.Element => <Tooltip {...argTypes} />;
+TooltipCustomDelay.storyName = 'Tooltip с кастомной задержкой появления и исчезновения';
+TooltipCustomDelay.args = {
+  label: 'Tooltip',
+  displayDelay: 0,
+  hideDelay: 0,
+  position: 'bottom-center',
+  children: <Typography variant="Body1" style={{ padding: '50px' }}>text with tooltip</Typography>
+};
+
+export const TooltipFollowCursor = (argTypes: TooltipProps): JSX.Element => <Tooltip {...argTypes} />;
+TooltipFollowCursor.storyName = 'Tooltip, следующий за курсором';
+TooltipFollowCursor.args = {
+  label: 'Tooltip',
+  color: '#6203ff',
+  opacity: 0.3,
+  displayDelay: 0,
+  hideDelay: 0,
+  followCursor: true,
+  children: (
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Typography variant="Body1">text with tooltip</Typography>
+    </div>
+  ),
 };
