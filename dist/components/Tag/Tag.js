@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 ;
 import styles from './Tag.module.css';
 import classNames from 'classnames';
-const hexToRgba = (hex, alpha) => {
+export const hexToRgba = (hex, alpha) => {
     //преобразуем в rgba для заднего фона
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);

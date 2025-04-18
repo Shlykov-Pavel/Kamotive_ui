@@ -1,0 +1,22 @@
+.tooltip {
+	backdrop-filter: blur(5px);
+	border-radius: 8px;
+	padding: 5px 8px;
+	width: fit-content;
+	font-family: var(--font-family-content);
+	color: white;
+	display: flex;
+	align-items: center;
+	pointer-events: none;
+	box-shadow: 0 4px 14.9px -3px rgba(0, 0, 0, 0.3);
+	opacity: 0;
+  	transition: opacity 0.1s ease-out;
+}
+
+.tooltip--visible {
+	opacity: 1;
+}
+
+.wrapper {
+	width: fit-content;
+}
