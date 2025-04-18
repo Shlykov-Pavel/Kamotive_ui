@@ -97,11 +97,15 @@ import { IconAccount10, IconAdd, IconAlarm10, IconBank10, IconBell10, IconBriefc
     ) }
 
   defaultIconButtonChidren.storyName = 'IconButton при передаче иконки через дочерний компонент';
-
+  defaultIconButtonChidren.parameters = {
+    controls: { disable: true },
+  };
 
   export const defaultIconButtonIcon = (argTypes: IconButtonProps): JSX.Element => {
     return(
         <IconButton onClick={() => {}} color='#0D99FF' icon={<IconAdd/>}/> 
     ) }
     defaultIconButtonIcon.storyName = 'IconButton при передаче иконки через пропсы';
-  
+    defaultIconButtonIcon.parameters = {
+      controls: { disable: true },
+    };
