@@ -425,6 +425,10 @@ export interface IconButtonProps {
 export interface BaseListProps {
     /** Идентификатор */
     id?: string;
+    /** Стиль элемента списка */
+    style?: CSSProperties;
+    /** Дополнительный класс */
+    className?: string;
     /** Обработчик клика */
     onClick?: () => void;
     /** Обработчик выбора чекбокса */
@@ -455,10 +459,6 @@ export interface BaseListProps {
     bulletClassName?: string;
 }
 export interface ListItemProps extends BaseListProps {
-    /** Стиль элемента списка */
-    style?: CSSProperties;
-    /** Дополнительный класс */
-    className?: string;
     /** Дочерние элементы */
     children?: ReactNode;
 }
@@ -471,4 +471,32 @@ export interface ListProps extends BaseListProps {
     customItemBullet?: React.ReactNode;
     /** Внешний компонент без буллитов/чекбоксов */
     isHeader?: boolean;
+    /** Раскрытый список */
+    open?: boolean;
+}
+export interface TooltipProps {
+    /** Текст подсказки */
+    label: string;
+    /** Дочерние элементы */
+    children: React.ReactNode;
+    /** Дополнительный класс */
+    className?: string;
+    /** Стиль подсказки */
+    style?: CSSProperties;
+    /** Положение подсказки */
+    overlayChildren?: boolean;
+    /** Размер текста */
+    textSize?: 'sm' | 'md' | 'lg';
+    /** Позиция подсказки */
+    position?: 'none' | 'bottom-center' | 'bottom-right' | 'bottom-left' | 'top-center' | 'top-right' | 'top-left';
+    /** Время, через которое будет показана подсказка */
+    displayDelay?: number;
+    /** Время, через которое будет скрыта подсказка */
+    hideDelay?: number;
+    /** Прозрачность подсказки (значение от 0 до 1) */
+    opacity?: number;
+    /** Цвет подсказки */
+    color?: string;
+    /** Подсказка, следующая за курсором */
+    followCursor?: boolean;
 }

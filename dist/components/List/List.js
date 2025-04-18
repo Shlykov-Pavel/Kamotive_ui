@@ -5,8 +5,8 @@ import { Typography } from '../Typography/Typography';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { RadioButton } from '../RadioButton/RadioButton';
 import { ChevronDown10 } from '../../Icons';
-export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selected = false, disabled = false, label, id, collapsible = false, withCheckbox = false, checkboxColor, checkboxFilled, withRadioButton = false, customBullet, customItemBullet, bulletClassName, children, isHeader = false, parentChecked = false, }) => {
-    const [isOpen, setIsOpen] = useState(false);
+export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selected = false, disabled = false, label, id, style, className, collapsible = false, open = false, withCheckbox = false, checkboxColor, checkboxFilled, withRadioButton = false, customBullet, customItemBullet, bulletClassName, children, isHeader = false, parentChecked = false, }) => {
+    const [isOpen, setIsOpen] = useState(open);
     const [isChecked, setIsChecked] = useState(checked || parentChecked);
     const childIds = [];
     React.Children.forEach(children, (child) => {
@@ -54,10 +54,10 @@ export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selecte
     useEffect(() => {
         setIsChecked(parentChecked || checked);
     }, [parentChecked, checked]);
-    const headerClassNames = classNames(styles.header);
+    const headerClassNames = classNames(styles.header, className);
     const contentClassNames = classNames(styles.content, isOpen ? styles['content--expanded'] : styles['content--collapsed']);
     return (React.createElement("div", { className: styles.collapsibleList },
-        label && (React.createElement("div", { className: headerClassNames, onClick: handleClick },
+        label && (React.createElement("div", { className: headerClassNames, onClick: handleClick, style: style },
             !isHeader && (React.createElement("div", null,
                 withCheckbox && (React.createElement("span", { onClick: handleCheckboxClick },
                     React.createElement(Checkbox, { checked: isChecked, color: checkboxColor, filled: checkboxFilled, disabled: disabled }))),
@@ -82,6 +82,8 @@ export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selecte
                     onRadioSelect: handleChildRadioSelect,
                     parentChecked: isChecked,
                     selected: child.props.selected,
+                    style: child.props.style || style,
+                    className: child.props.className,
                 });
             }
             return child;
