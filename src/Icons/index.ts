@@ -19,4 +19,5 @@ export { IconColorPicker10 } from './IconColorPicker/IconColorPicker10';
 export { IconFile } from './IconFile/IconFile';
 export { IconUpload } from './IconUpload/IconUpload';
 export { IconDownload } from './IconDownload/IconDownload';
+export { IconAdd } from './IconAdd/IconAdd';
 
