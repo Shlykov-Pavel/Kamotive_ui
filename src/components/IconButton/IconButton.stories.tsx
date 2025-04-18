@@ -2,7 +2,7 @@ import React, { CSSProperties, ReactNode } from "react";
 import type { Meta } from '@storybook/react';
 
 import { IconButton } from './IconButton';
-import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10, IconClose10 } from '../../Icons';
+import { IconAccount10, IconAdd, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10, IconClose10 } from '../../Icons';
 
 
   export interface IconButtonProps {
@@ -19,7 +19,7 @@ import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, Ic
     /** Callback, который будет вызван при клике по кнопке */
     onClick: () => void;
     /** Дочерние элементы */
-    children?: ReactNode;
+    children?: React.ReactNode;
     /** Дополнительный класс */
     className?: string;
   }
@@ -29,7 +29,6 @@ import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, Ic
       backgroundColor: 'var(--white)',
       padding: '30px',
       borderRadius: '10px',
-      width: '900px'
     }}>
       <Story />
     </div>
@@ -57,6 +56,7 @@ import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, Ic
     args: {
       size: 'md',
       disabled: false,
+      color: '#0d99ff'
     },
     argTypes: {
       size: {
@@ -84,9 +84,28 @@ import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, Ic
   export const defaultIconButton = (argTypes: IconButtonProps): JSX.Element => <IconButton {...argTypes} />;
   defaultIconButton.storyName = 'IconButton по умолчанию';
   defaultIconButton.args = {
-  icon: <IconClose10 />,
-  color: '#0D99FF',
-};
-defaultIconButton.parameters = {
-  controls: { disable: true },
-};
+    icon: <IconClose10 />,
+    color: '#0D99FF',
+  };
+  defaultIconButton.parameters = {
+    controls: { disable: true },
+  };
+
+  export const defaultIconButtonChidren = (argTypes: IconButtonProps): JSX.Element => {
+    return(
+      <IconButton onClick={() => {}} color='var(--white)' size="lg" style={{backgroundColor: 'var(--blue-main)', width: '30px', height: '30px'}} > <IconAdd/> </IconButton> 
+    ) }
+
+  defaultIconButtonChidren.storyName = 'IconButton при передаче иконки через дочерний компонент';
+  defaultIconButtonChidren.parameters = {
+    controls: { disable: true },
+  };
+
+  export const defaultIconButtonIcon = (argTypes: IconButtonProps): JSX.Element => {
+    return(
+        <IconButton onClick={() => {}} color='#0D99FF' icon={<IconAdd/>}/> 
+    ) }
+    defaultIconButtonIcon.storyName = 'IconButton при передаче иконки через пропсы';
+    defaultIconButtonIcon.parameters = {
+      controls: { disable: true },
+    };

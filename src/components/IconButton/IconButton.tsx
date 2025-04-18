@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { IconButtonProps } from '../../types';
 import styles from './IconButton.module.css';
@@ -13,6 +13,12 @@ export const IconButton: React.FC<IconButtonProps> = ({
   children,
   className
 }) => {
+ 
+  const validChildren = React.Children.toArray(children).filter(
+    child => React.isValidElement(child)
+  );
+  const renderIcon =  icon || validChildren[0]
+
   return (
     <button
       className={classNames(styles['iconButton'], styles[`iconButton--${size}`], className)}
@@ -22,8 +28,8 @@ export const IconButton: React.FC<IconButtonProps> = ({
       onClick={onClick}
       style={style}
     >
-      {(icon || (typeof children === 'object' && children)) &&
-        React.cloneElement(icon as React.ReactElement, {
+      {(renderIcon) &&
+        React.cloneElement(renderIcon as React.ReactElement, {
           htmlColor: color,
           strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
         })}
