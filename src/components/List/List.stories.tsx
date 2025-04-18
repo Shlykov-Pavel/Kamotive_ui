@@ -31,6 +31,7 @@ const meta: Meta<ListProps> = {
     withRadioButton: false,
     checkboxFilled: false,
     isHeader: false,
+    open: true,
   },
   argTypes: {
     collapsible: { description: 'Возможность раскрытия списка', control: { type: 'boolean' } },
@@ -136,6 +137,7 @@ export const ListWithRadioButton = (argTypes: ListProps) => {
       id="options"
       selected={selectedItemId === 'options'}
       onRadioSelect={handleRadioSelect}
+      style={{ gap: "5px" }}
       {...argTypes}
     >
       <ListItem label="Option 1" id="option1" selected={selectedItemId === 'option1'} />
@@ -163,7 +165,7 @@ export const ListRadioButtonWithHeader = (argTypes: ListProps) => {
   };
 
   return (
-    <List label="Options" onRadioSelect={handleRadioSelect} {...argTypes}>
+    <List label="Options" onRadioSelect={handleRadioSelect} {...argTypes} style={{ gap: "5px" }}>
       <ListItem label="Option 1" id="option1" selected={selectedItemId === 'option1'} />
       <ListItem label="Option 2" id="option2" selected={selectedItemId === 'option2'} />
       <List label="More Options" id="more-options" selected={selectedItemId === 'more-options'} collapsible>

@@ -22,5 +22,6 @@ export { List as List } from './src/components/List/List';
 export { ListItem as ListItem } from './src/components/ListItem/ListItem';
 export { Breadcrumb as Breadcrumb } from './src/components/Breadcrumb/Breadcrumb';
 export { Breadcrumbs as Breadcrumbs } from './src/components/Breadcrumbs/Breadcrumbs';
+export { Tooltip as Tooltip } from './src/components/Tooltip/Tooltip'
 
 import './src/fonts.css';

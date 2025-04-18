@@ -16,7 +16,10 @@ export const List: FC<ListProps> = ({
   disabled = false,
   label,
   id,
+  style,
+  className,
   collapsible = false,
+  open = false,
   withCheckbox = false,
   checkboxColor,
   checkboxFilled,
@@ -28,7 +31,7 @@ export const List: FC<ListProps> = ({
   isHeader = false,
   parentChecked = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(open);
   const [isChecked, setIsChecked] = useState(checked || parentChecked);
 
   const childIds: string[] = [];
@@ -89,7 +92,7 @@ export const List: FC<ListProps> = ({
     setIsChecked(parentChecked || checked);
   }, [parentChecked, checked]);
 
-  const headerClassNames = classNames(styles.header);
+  const headerClassNames = classNames(styles.header, className);
 
   const contentClassNames = classNames(
     styles.content,
@@ -99,7 +102,7 @@ export const List: FC<ListProps> = ({
   return (
     <div className={styles.collapsibleList}>
       {label && (
-        <div className={headerClassNames} onClick={handleClick}>
+        <div className={headerClassNames} onClick={handleClick} style={style}>
           {!isHeader && (
             <div>
               {withCheckbox && (
@@ -141,6 +144,8 @@ export const List: FC<ListProps> = ({
               onRadioSelect: handleChildRadioSelect,
               parentChecked: isChecked,
               selected: child.props.selected,
+              style: child.props.style || style,
+              className: child.props.className,
             });
           }
           return child;
