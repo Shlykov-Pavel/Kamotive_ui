@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Accept, FileRejection, useDropzone } from 'react-dropzone';
 
-import { FileLoaderProps, TAttachemnts } from '../../types';
+import { FileLoaderProps, TAttachments } from '../../types';
 import styles from './FileLoader.module.css';
 import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';
@@ -9,7 +9,7 @@ import { FileItem } from '../FileItem/FileItem';
 import classNames from 'classnames';
 
 interface CustomFileRejection extends Omit<FileRejection, 'file'> {
-  file: TAttachemnts;
+  file: TAttachemTAttachmentsnts;
 }
 export const FileLoader: FC<FileLoaderProps> = ({
   maxFileSize = 2,
@@ -29,7 +29,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
   const [loadingFilesNames, setLoadingFilesNames] = useState<string[]>([]);
   const [errorFiles, setErrorFiles] = useState<CustomFileRejection[]>([]);
 
-  const [addedFilesFormated, setAddedFilesFormatted] = useState<TAttachemnts[]>([]);
+  const [addedFilesFormated, setAddedFilesFormatted] = useState<TAttachments[]>([]);
 
   const fileValidator = (file: File) => {
     if (file.size > maxFileSize * 1024 * 1024 * 1024) {
@@ -57,7 +57,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
     onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       setAddedFiles([...addedFiles, ...acceptedFiles]);
       //преобразование типа файлов для отрисовки в списке
-      const newFormatAttachments: TAttachemnts[] = acceptedFiles.map((file) => {
+      const newFormatAttachments: TAttachments[] = acceptedFiles.map((file) => {
         return {
           id: `file-${file.name}`,
           filename: file.name,
@@ -80,7 +80,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
 
         const filesToAdd = fileRejections.slice(0, remainingFiles).map((rejection) => rejection.file);
         setAddedFiles([...addedFiles, ...filesToAdd]);
-        const newFormatFilesToAdd: TAttachemnts[] = filesToAdd.map((rejectionAdd) => ({
+        const newFormatFilesToAdd: TAttachments[] = filesToAdd.map((rejectionAdd) => ({
           id: Math.random().toString(36).substring(2, 9),
           filename: rejectionAdd.name,
           size: rejectionAdd.size,
@@ -124,9 +124,9 @@ export const FileLoader: FC<FileLoaderProps> = ({
   });
 
   const handleDeleteFiles = (id: string) => {
-    const filename = addedFilesFormated.find((file: TAttachemnts) => file.id === id)?.filename;
+    const filename = addedFilesFormated.find((file: TAttachments) => file.id === id)?.filename;
     setAddedFiles(addedFiles.filter((file: File) => file.name !== filename));
-    setAddedFilesFormatted(addedFilesFormated.filter((file: TAttachemnts) => file.filename !== filename));
+    setAddedFilesFormatted(addedFilesFormated.filter((file: TAttachments) => file.filename !== filename));
     setLoadingFilesNames(loadingFilesNames.filter((id) => id !== id));
   };
 
@@ -140,7 +140,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
     });
   };
 
-  const acceptedFileItems = addedFilesFormated.map((file: TAttachemnts) => {
+  const acceptedFileItems = addedFilesFormated.map((file: TAttachments) => {
     return (
       <FileItem
         key={file.id}
