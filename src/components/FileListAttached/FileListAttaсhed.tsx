@@ -16,6 +16,13 @@ export const FileListAttaсhed: FC<FileListAttaсhedProps> = ({
   className,
   style,
 }) => {
+  if (!filesList || filesList.length === 0) {
+    return (
+      <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
+        Нет прикрепленных файлов
+      </Typography>
+    );
+  }
   return (
     <div className={classNames(styles['fileList'], className)} style={style}>
       {isInfoShown && (

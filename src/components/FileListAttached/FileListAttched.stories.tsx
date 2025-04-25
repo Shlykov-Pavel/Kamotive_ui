@@ -16,7 +16,7 @@ type TAttachemnts = {
 
 interface FileListAttaсhedProps {
   /** Список прикрепленных файлов */
-  filesList: TAttachemnts[];
+  filesList: TAttachemnts[] | [] | undefined;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /** Функция обработки скачивания файла */
@@ -32,6 +32,18 @@ interface FileListAttaсhedProps {
   /** Стили передаваемые напрямую */
   style?: React.CSSProperties;
 }
+
+const createMockFile = (name: string, size: number): TAttachemnts => ({
+  id: Math.random().toString(36).substring(2, 9),
+  filename: name,
+  size: size,
+});
+
+const fileListMocked: TAttachemnts[] = [
+  createMockFile('file1.txt', 1024),
+  createMockFile('Длинное название с дополнительным данными и датой 02-03-1999.xlsx', 2048),
+  createMockFile('file3.txt', 3072),
+];
 
 const meta: Meta<FileListAttaсhedProps> = {
   title: 'Components/FileAttach/FileListAttaсhed',
@@ -56,6 +68,16 @@ const meta: Meta<FileListAttaсhedProps> = {
       </div>
     ),
   ],
+  args: {
+    filesList: fileListMocked,
+    onDelete: action('onDelete'),
+    onDownload: action('onDownload'),
+    canDelete: true,
+    canDownload: true,
+    isInfoShown: true,
+    className: '',
+    style: {},
+  },
   argTypes: {
     filesList: {
       description: 'Массив уже прикрепленных файлов(которые есть в объекте)',
@@ -90,18 +112,6 @@ const meta: Meta<FileListAttaсhedProps> = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-const createMockFile = (name: string, size: number): TAttachemnts => ({
-  id: Math.random().toString(36).substring(2, 9),
-  filename: name,
-  size: size,
-});
-
-const fileListMocked: TAttachemnts[] = [
-  createMockFile('file1.txt', 1024),
-  createMockFile('Длинное название с дополнительным данными и датой 02-03-1999.xlsx', 2048),
-  createMockFile('file3.txt', 3072),
-];
 
 export const FileListAttaсhedDefault = (argTypes: FileListAttaсhedProps): JSX.Element => {
   const [filesList, setFilesList] = useState(fileListMocked);

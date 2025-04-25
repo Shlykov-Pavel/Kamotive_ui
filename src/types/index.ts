@@ -423,7 +423,7 @@ export interface FileAttachProps {
 }
 export interface FileListAttaсhedProps {
   /** Список прикрепленных файлов */
-  filesList: TAttachemnts[];
+  filesList: TAttachemnts[] | [] | undefined;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /** Функция обработки скачивания файла */
