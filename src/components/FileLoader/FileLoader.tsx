@@ -27,6 +27,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
   style,
 }) => {
   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
+  const [loadingFilesNames, setLoadingFilesNames] = useState<string[]>([]);
   const [errorFiles, setErrorFiles] = useState<CustomFileRejection[]>([]);
 
   const [addedFilesFormated, setAddedFilesFormatted] = useState<TAttachemnts[]>([]);
@@ -56,14 +57,17 @@ export const FileLoader: FC<FileLoaderProps> = ({
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       setAddedFiles([...addedFiles, ...acceptedFiles]);
-
       //преобразование типа файлов для отрисовки в списке
-      const newFormatAttachments: TAttachemnts[] = acceptedFiles.map((file) => ({
-        id: Math.random().toString(36).substring(2, 9),
-        filename: file.name,
-        size: file.size,
-        type: file.type,
-      }));
+      const newFormatAttachments: TAttachemnts[] = acceptedFiles.map((file) => {
+        return {
+          id: `file-${file.name}`,
+          filename: file.name,
+          size: file.size,
+          type: file.type,
+        };
+      });
+      setLoadingFilesNames(newFormatAttachments.map((file) => file.filename));
+
       setIsLoadingFiles(true);
       setAddedFilesFormatted([...addedFilesFormated, ...newFormatAttachments]);
 
@@ -124,19 +128,32 @@ export const FileLoader: FC<FileLoaderProps> = ({
     const filename = addedFilesFormated.find((file: TAttachemnts) => file.id === id)?.filename;
     setAddedFiles(addedFiles.filter((file: File) => file.name !== filename));
     setAddedFilesFormatted(addedFilesFormated.filter((file: TAttachemnts) => file.filename !== filename));
+    setLoadingFilesNames(loadingFilesNames.filter((id) => id !== id));
   };
 
-  const acceptedFileItems = addedFilesFormated.map((file: TAttachemnts) => (
-    <FileItem
-      key={file.id}
-      file={file}
-      loading={isLoadingFiles}
-      onDelete={handleDeleteFiles}
-      onDownload={onDownload}
-      isAddedFile={true}
-    />
-  ));
+  const removeFromLoadingFiles = (id: string) => {
+    setLoadingFilesNames((prev) => {
+      const newIds = prev.filter((fileId) => fileId !== id);
+      if (newIds.length === 0) {
+        setIsLoadingFiles(false);
+      }
+      return newIds;
+    });
+  };
 
+  const acceptedFileItems = addedFilesFormated.map((file: TAttachemnts) => {
+    return (
+      <FileItem
+        key={file.id}
+        file={file}
+        loading={loadingFilesNames.includes(file.filename)} // Показываем лоадер только для новых файлов
+        onDelete={handleDeleteFiles}
+        onDownload={onDownload}
+        isAddedFile={true}
+        onLoadingFinished={removeFromLoadingFiles}
+      />
+    );
+  });
   const handleDeleteRejectedFile = (id: string) => {
     setErrorFiles(errorFiles.filter((rejection) => rejection.file.id !== id));
   };
@@ -175,6 +192,12 @@ export const FileLoader: FC<FileLoaderProps> = ({
       );
     }
   }, [addedFiles]);
+
+  useEffect(() => {
+    if (loadingFilesNames.length === 0 && isLoadingFiles) {
+      setIsLoadingFiles(false);
+    }
+  }, [loadingFilesNames, isLoadingFiles]);
 
   return (
     <section className={classNames(styles['fileLoader'], className)} style={style}>

@@ -460,6 +460,8 @@ export interface FileItemProps {
   isAddedFile?: boolean;
   /** Флаг отклоненного файла */
   isRejectedFile?: boolean;
+  /** Id загруженного файла */
+  onLoadingFinished?: (id: string) => void;
 }
 
 export interface FileLoaderProps {

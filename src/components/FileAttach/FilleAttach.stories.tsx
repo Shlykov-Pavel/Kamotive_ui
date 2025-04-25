@@ -224,7 +224,7 @@ export const FileAttchLeftPosition = (argTypes: FileAttachProps): JSX.Element =>
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
       position="left"
-      style={{ height: '310px', border: '1px solid', padding: '50px', width: '680px' }}
+      style={{ height: '400px', width: '680px' }}
     />
   );
 };

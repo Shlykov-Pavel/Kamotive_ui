@@ -59,3 +59,4 @@ export type {
   TooltipProps,
 } from './types';
 import './fonts.css';
+import './colors.css';

@@ -21,6 +21,7 @@ export const FileItem: FC<FileItemProps> = ({
   style,
   isAddedFile,
   isRejectedFile,
+  onLoadingFinished,
 }) => {
   const [isLoadingFinished, setIsLoadingFinished] = useState(false);
   const [animationDuration, setAnimationDuration] = useState(0);
@@ -117,6 +118,11 @@ export const FileItem: FC<FileItemProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (isLoadingFinished && onLoadingFinished && file.id) {
+      onLoadingFinished(file.id);
+    }
+  }, [isLoadingFinished, file.id, onLoadingFinished]);
   return (
     <div
       className={fileItemClasses}
