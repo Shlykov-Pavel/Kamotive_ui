@@ -28,9 +28,9 @@ interface FileAttachProps {
   /**Сосотояние для добавления файлов */
   setAddedFiles: (addedFiles: File[]) => void;
   /** Функция обработки скачивания файла */
-  onDownload?: () => void;
+  onDownload?: (file: TAttachemnts) => void;
   /** Функция обработки удаления файла */
-  onDelete?: () => void;
+  onDelete?: (id: string) => void;
   /**Разрешени на добавление файлов*/
   canAdd?: boolean;
   /**Разрешение на удаление файлов */

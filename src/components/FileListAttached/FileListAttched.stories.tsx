@@ -20,7 +20,7 @@ interface FileListAttaсhedProps {
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /** Функция обработки скачивания файла */
-  onDownload?: (id: string) => void;
+  onDownload?: (file: TAttachemnts) => void;
   /**Разрешение на удаление файлов */
   canDelete?: boolean;
   /**Разрешение на скачивание файлов */
@@ -118,9 +118,8 @@ export const FileListAttaсhedDefault = (argTypes: FileListAttaсhedProps): JSX.
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showSnackbarText, setShowSnackbarText] = useState('');
 
-  const downloadFile = (id: string) => {
+  const downloadFile = (file: TAttachemnts) => {
     setShowSnackbar(true);
-    const file = fileListMocked.find((file) => file.id === id);
     if (file) {
       const name = file.filename;
       setShowSnackbarText(`Файл ${name} успешно скачан`);

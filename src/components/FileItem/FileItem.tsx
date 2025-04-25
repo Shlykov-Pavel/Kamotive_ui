@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 
-import { FileItemProps } from '../../types';
+import { FileItemProps, TAttachemnts } from '../../types';
 import styles from './FileItem.module.css';
 
 import { Typography } from '../Typography/Typography';
@@ -111,10 +111,10 @@ export const FileItem: FC<FileItemProps> = ({
     }
   };
 
-  const handleDownloadClick = (e: React.MouseEvent, id: string) => {
+  const handleDownloadClick = (e: React.MouseEvent, file: TAttachemnts) => {
     e.stopPropagation();
-    if (onDownload && id) {
-      onDownload(id);
+    if (onDownload && file) {
+      onDownload(file);
     }
   };
 
@@ -128,7 +128,7 @@ export const FileItem: FC<FileItemProps> = ({
       className={fileItemClasses}
       style={style}
       ref={fileItemRef}
-      onClick={() => !(isAddedFile || isRejectedFile) && canDownload && file.id && onDownload && onDownload(file.id)}
+      onClick={() => !(isAddedFile || isRejectedFile) && canDownload && file && onDownload && onDownload(file)}
     >
       <div className={styles['fileItemFile']}>
         <div className={styles['fileItemInfo']}>
@@ -157,7 +157,7 @@ export const FileItem: FC<FileItemProps> = ({
         {!(isAddedFile || isRejectedFile) && canDownload && (
           <IconButton
             icon={<IconDownload />}
-            onClick={(e: React.MouseEvent) => handleDownloadClick(e, file.id || '')}
+            onClick={(e: React.MouseEvent) => handleDownloadClick(e, file)}
             color="var(--icons-grey)"
             className={styles['fileIcon']}
           />

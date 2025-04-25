@@ -21,7 +21,7 @@ interface FileItemProps {
   /** Текст ошибки загрузки файла */
   error?: string;
   /** Функция обработки скачивания файла */
-  onDownload?: (id: string) => void;
+  onDownload?: (file: TAttachemnts) => void;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /**Разрешение на удаление файлов */

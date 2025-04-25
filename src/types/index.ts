@@ -405,9 +405,9 @@ export interface FileAttachProps {
   /**Сосотояние для добавления файлов */
   setAddedFiles: (addedFiles: File[]) => void;
   /** Функция обработки скачивания файла */
-  onDownload?: () => void;
+  onDownload?: (file: TAttachemnts) => void;
   /** Функция обработки удаления файла */
-  onDelete?: () => void;
+  onDelete?: (id: string) => void;
   /**Разрешени на добавление файлов*/
   canAdd?: boolean;
   /**Разрешение на удаление файлов */
@@ -427,7 +427,7 @@ export interface FileListAttaсhedProps {
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /** Функция обработки скачивания файла */
-  onDownload?: (id: string) => void;
+  onDownload?: (file: TAttachemnts) => void;
   /**Разрешение на удаление файлов */
   canDelete?: boolean;
   /**Разрешение на скачивание файлов */
@@ -447,7 +447,7 @@ export interface FileItemProps {
   /** Текст ошибки загрузки файла */
   error?: string;
   /** Функция обработки скачивания файла */
-  onDownload?: (id: string) => void;
+  onDownload?: (file: TAttachemnts) => void;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /**Разрешение на удаление файлов */
@@ -475,8 +475,6 @@ export interface FileLoaderProps {
   addedFiles: File[];
   /**Сосотояние для добавления файлов */
   setAddedFiles: (addedFiles: File[]) => void;
-  /** Функция обработки скачивания файла */
-  onDownload?: () => void;
   /**Разрешени на добавление файлов*/
   canAdd?: boolean;
   /** Дополнительный класс */

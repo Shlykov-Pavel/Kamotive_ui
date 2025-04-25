@@ -16,8 +16,6 @@ export interface FileLoaderProps {
   addedFiles: File[];
   /**Сосотояние для добавления файлов */
   setAddedFiles: (addedFiles: File[]) => void;
-  /** Функция обработки скачивания файла */
-  onDownload?: () => void;
   /**Заблокировано добавление файлов*/
   canAdd?: boolean;
   /** Дополнительный класс */
@@ -55,9 +53,6 @@ const meta: Meta<FileLoaderProps> = {
     maxFileCount: {
       description: 'Максимальное допустимое количество файлов',
       type: 'number',
-    },
-    onDownload: {
-      description: 'Функция обработки скачивания файла',
     },
     acceptedFormats: {
       description: 'Поддерживаемые форматы файлов',

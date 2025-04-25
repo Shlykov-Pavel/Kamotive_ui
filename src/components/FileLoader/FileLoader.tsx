@@ -21,7 +21,6 @@ export const FileLoader: FC<FileLoaderProps> = ({
   },
   addedFiles,
   setAddedFiles,
-  onDownload,
   canAdd = true,
   className,
   style,
@@ -148,7 +147,6 @@ export const FileLoader: FC<FileLoaderProps> = ({
         file={file}
         loading={loadingFilesNames.includes(file.filename)} // Показываем лоадер только для новых файлов
         onDelete={handleDeleteFiles}
-        onDownload={onDownload}
         isAddedFile={true}
         onLoadingFinished={removeFromLoadingFiles}
       />
