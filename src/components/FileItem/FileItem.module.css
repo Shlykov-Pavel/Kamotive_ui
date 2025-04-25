@@ -1,45 +1,73 @@
-
 .fileItem {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    justify-content: space-between;
-    
-    padding: 10px 15px;
-    border: 1px solid var(--info-secondary);
-    border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: space-between;
 
-  }
-  .error {
-    border-color: var(--error-main);
-  }
+  padding: 10px 15px;
+  border: 1px solid var(--info-secondary);
+  border-radius: 10px;
+}
+.error {
+  border-color: var(--error-main);
+}
 
-  .fileItemFile{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-  .fileItemInfo {
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-    flex-grow: 1; 
-    align-items: flex-start;
-    overflow: hidden;
+.fileItemFile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.fileItemInfo {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  flex-grow: 1;
+  align-items: flex-start;
+  overflow: hidden;
 }
 
 .fileItemIcon {
-    flex-shrink: 0
+  flex-shrink: 0;
 }
 
 .fileItemName {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; 
-    align-items: flex-start;
-    overflow: auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: flex-start;
+  overflow: auto;
 }
 
 .fileIcon svg path {
-    stroke-width: 0.8;
+  stroke-width: 0.8;
+}
+
+.fileItem_attached {
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.fileItem_attached:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+  transform: translateY(-1px);
+}
+
+.fileItem_attached .fileIcon,
+.fileItem_attached button {
+  background-color: transparent;
+  transition: background-color 0.15s ease-in-out;
+  border-radius: 50%;
+  height: 28px;
+}
+
+.fileItem_attached .fileIcon:hover,
+.fileItem_attached button:hover {
+  background-color: white !important;
+  border-radius: 50%;
+  height: 28px;
+}
+
+.fileItem_attached:hover .fileIcon:not(:hover),
+.fileItem_attached:hover button:not(:hover) {
+  background-color: transparent !important;
 }

@@ -11,16 +11,25 @@ export type SnackbarProps = {
   /** Иконка */
   icon?: boolean;
   /** Длительность показа сообщения */
-  duration: number;
+  duration?: number;
   /** Функция обработки закрытия сообщения */
   onClose?: () => void;
+  /** Стили передаваемые напрямую */
+  style?: React.CSSProperties;
 };
 
-const withWrapper = (Story: React.ComponentType) => <div style={{
-  backgroundColor: 'var(--white)',
-  padding: '30px',
-  borderRadius: '10px',
-  width: '900px'}}>{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => (
+  <div
+    style={{
+      backgroundColor: 'var(--white)',
+      padding: '30px',
+      borderRadius: '10px',
+      width: '900px',
+    }}
+  >
+    {<Story />}
+  </div>
+);
 
 const meta: Meta = {
   title: 'Components/Snackbar',
@@ -48,6 +57,10 @@ const meta: Meta = {
       description: 'Callback, который будет вызван при закрытии сообщения',
       action: 'клик',
     },
+    style: {
+      description: 'Стили передаваемые напрямую',
+      control: { type: 'object' },
+    },
   },
 };
 
@@ -58,7 +71,14 @@ export const SnackbarColors = (argTypes: SnackbarProps): JSX.Element => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {types.map((type) => (
-        <Snackbar {...argTypes} type={type} key={type} duration={0} onClose={argTypes.onClose}>
+        <Snackbar
+          {...argTypes}
+          type={type}
+          key={type}
+          duration={0}
+          onClose={argTypes.onClose}
+          style={{ position: 'relative' }}
+        >
           Текст
         </Snackbar>
       ))}

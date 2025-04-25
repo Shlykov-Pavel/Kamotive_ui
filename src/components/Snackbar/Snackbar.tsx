@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { IconClose10, IconError10, IconInfo10, IconSuccess10, IconWarning10 } from '../../Icons';
 import { Typography } from '../Typography/Typography';
-import styles from './Snackbar.module.css'
+import styles from './Snackbar.module.css';
 import classNames from 'classnames';
 import { SnackbarProps } from '../../types';
 
@@ -31,7 +31,7 @@ export const title = {
   info: 'Информация',
 };
 
-export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose }) => {
+export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose, style }) => {
   const [isVisible, setIsVisible] = useState(true);
   useEffect(() => {
     if (duration > 0) {
@@ -51,7 +51,7 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
   if (!isVisible) return null;
   const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`]);
   return (
-    <div className={snackbarClasses}>
+    <div className={snackbarClasses} style={style}>
       <div className={styles['snackbar-textAndIcon']}>
         {icon && icons[type]}
         <div className={styles['snackbar-text']}>
