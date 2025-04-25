@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions';
 import { FileListAttaсhed } from './FileListAttaсhed';
 import { Snackbar } from '../Snackbar/Snackbar';
 
-type TAttachemnts = {
+type TAttachments = {
   id: string;
   filename: string;
   uri?: string;
@@ -16,11 +16,11 @@ type TAttachemnts = {
 
 interface FileListAttaсhedProps {
   /** Список прикрепленных файлов */
-  filesList: TAttachemnts[] | [] | undefined;
+  filesList: TAttachments[] | [] | undefined;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /** Функция обработки скачивания файла */
-  onDownload?: (file: TAttachemnts) => void;
+  onDownload?: (file: TAttachments) => void;
   /**Разрешение на удаление файлов */
   canDelete?: boolean;
   /**Разрешение на скачивание файлов */
@@ -33,13 +33,13 @@ interface FileListAttaсhedProps {
   style?: React.CSSProperties;
 }
 
-const createMockFile = (name: string, size: number): TAttachemnts => ({
+const createMockFile = (name: string, size: number): TAttachments => ({
   id: Math.random().toString(36).substring(2, 9),
   filename: name,
   size: size,
 });
 
-const fileListMocked: TAttachemnts[] = [
+const fileListMocked: TAttachments[] = [
   createMockFile('file1.txt', 1024),
   createMockFile('Длинное название с дополнительным данными и датой 02-03-1999.xlsx', 2048),
   createMockFile('file3.txt', 3072),
@@ -118,7 +118,7 @@ export const FileListAttaсhedDefault = (argTypes: FileListAttaсhedProps): JSX.
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showSnackbarText, setShowSnackbarText] = useState('');
 
-  const downloadFile = (file: TAttachemnts) => {
+  const downloadFile = (file: TAttachments) => {
     setShowSnackbar(true);
     if (file) {
       const name = file.filename;

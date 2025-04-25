@@ -382,7 +382,7 @@ export type SnackbarProps = {
   style?: CSSProperties;
 };
 
-export type TAttachemnts = {
+export type TAttachments = {
   id: string;
   filename: string;
   uri?: string;
@@ -393,7 +393,7 @@ export type TAttachemnts = {
 
 export interface FileAttachProps {
   //Массив уже прикрепленных файлов(которые есть в объекте)
-  filesList: TAttachemnts[];
+  filesList: TAttachments[];
   /** Максимальный размер файла */
   maxFileSize?: number;
   /** Максимальное количество файлов */
@@ -405,7 +405,7 @@ export interface FileAttachProps {
   /**Сосотояние для добавления файлов */
   setAddedFiles: (addedFiles: File[]) => void;
   /** Функция обработки скачивания файла */
-  onDownload?: (file: TAttachemnts) => void;
+  onDownload?: (file: TAttachments) => void;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /**Разрешени на добавление файлов*/
@@ -423,11 +423,11 @@ export interface FileAttachProps {
 }
 export interface FileListAttaсhedProps {
   /** Список прикрепленных файлов */
-  filesList: TAttachemnts[] | [] | undefined;
+  filesList: TAttachments[] | [] | undefined;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /** Функция обработки скачивания файла */
-  onDownload?: (file: TAttachemnts) => void;
+  onDownload?: (file: TAttachments) => void;
   /**Разрешение на удаление файлов */
   canDelete?: boolean;
   /**Разрешение на скачивание файлов */
@@ -441,13 +441,13 @@ export interface FileListAttaсhedProps {
 }
 export interface FileItemProps {
   /** Файл */
-  file: TAttachemnts;
+  file: TAttachments;
   /** Флаг загрузки файла */
   loading?: boolean;
   /** Текст ошибки загрузки файла */
   error?: string;
   /** Функция обработки скачивания файла */
-  onDownload?: (file: TAttachemnts) => void;
+  onDownload?: (file: TAttachments) => void;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /**Разрешение на удаление файлов */

@@ -4,7 +4,7 @@ import { action } from '@storybook/addon-actions';
 
 import { FileItem } from './FileItem';
 
-type TAttachemnts = {
+type TAttachments = {
   id: string;
   filename: string;
   uri?: string;
@@ -15,13 +15,13 @@ type TAttachemnts = {
 
 interface FileItemProps {
   /** Файл */
-  file: TAttachemnts;
+  file: TAttachments;
   /** Флаг загрузки файла */
   loading?: boolean;
   /** Текст ошибки загрузки файла */
   error?: string;
   /** Функция обработки скачивания файла */
-  onDownload?: (file: TAttachemnts) => void;
+  onDownload?: (file: TAttachments) => void;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /**Разрешение на удаление файлов */
@@ -102,7 +102,7 @@ export default meta;
 
 type Story = StoryObj<FileItemProps>;
 
-const createMockFile = (name: string, size: number): TAttachemnts => ({
+const createMockFile = (name: string, size: number): TAttachments => ({
   id: Math.random().toString(36).substring(2, 9),
   filename: name,
   size: size,

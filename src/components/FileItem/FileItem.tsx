@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 
-import { FileItemProps, TAttachemnts } from '../../types';
+import { FileItemProps, TAttachments } from '../../types';
 import styles from './FileItem.module.css';
 
 import { Typography } from '../Typography/Typography';
@@ -111,7 +111,7 @@ export const FileItem: FC<FileItemProps> = ({
     }
   };
 
-  const handleDownloadClick = (e: React.MouseEvent, file: TAttachemnts) => {
+  const handleDownloadClick = (e: React.MouseEvent, file: TAttachments) => {
     e.stopPropagation();
     if (onDownload && file) {
       onDownload(file);

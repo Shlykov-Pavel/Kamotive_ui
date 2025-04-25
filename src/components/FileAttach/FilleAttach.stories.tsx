@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions';
 import { Accept } from 'react-dropzone';
 import { FileAttach } from './FileAttach';
 
-type TAttachemnts = {
+type TAttachments = {
   id: string;
   filename: string;
   uri?: string;
@@ -16,7 +16,7 @@ type TAttachemnts = {
 
 interface FileAttachProps {
   //Массив уже прикрепленных файлов(которые есть в объекте)
-  filesList: TAttachemnts[];
+  filesList: TAttachments[];
   /** Максимальный размер файла */
   maxFileSize?: number;
   /** Максимальное количество файлов */
@@ -28,7 +28,7 @@ interface FileAttachProps {
   /**Сосотояние для добавления файлов */
   setAddedFiles: (addedFiles: File[]) => void;
   /** Функция обработки скачивания файла */
-  onDownload?: (file: TAttachemnts) => void;
+  onDownload?: (file: TAttachments) => void;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
   /**Разрешени на добавление файлов*/
@@ -46,7 +46,7 @@ interface FileAttachProps {
 }
 
 // Моковые данные для файлов
-const createMockFile = (name: string, type: string, size: number): TAttachemnts => {
+const createMockFile = (name: string, type: string, size: number): TAttachments => {
   const file = new File(['mock content'], name, { type });
   Object.defineProperty(file, 'size', {
     value: size,
@@ -59,7 +59,7 @@ const createMockFile = (name: string, type: string, size: number): TAttachemnts 
   };
 };
 
-const mockFiles: TAttachemnts[] = [
+const mockFiles: TAttachments[] = [
   createMockFile('document.pdf', 'application/pdf', 1024 * 1024 * 1.5),
   createMockFile('image.jpg', 'image/jpeg', 1024 * 512),
   createMockFile(
@@ -194,7 +194,7 @@ FileAttachWithExistingFiles.args = {
 };
 
 export const FileAttchLeftPosition = (argTypes: FileAttachProps): JSX.Element => {
-  const mockFilesList: TAttachemnts[] = [
+  const mockFilesList: TAttachments[] = [
     createMockFile('document.pdf', 'application/pdf', 1024 * 1024 * 1.5),
     createMockFile('image.jpg', 'image/jpeg', 1024 * 512),
     createMockFile(
