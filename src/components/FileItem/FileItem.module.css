@@ -60,18 +60,6 @@
   height: 28px;
 }
 
-.fileItem_attached .fileIcon:hover,
-.fileItem_attached button:hover {
-  background-color: white !important;
-  border-radius: 50%;
-  height: 28px;
-}
-
-.fileItem_attached:hover .fileIcon:not(:hover),
-.fileItem_attached:hover button:not(:hover) {
-  background-color: transparent !important;
-}
-
 .fileItemActions {
   display: flex;
   justify-content: center;

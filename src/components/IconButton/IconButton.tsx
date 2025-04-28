@@ -18,7 +18,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   const combinedStyle = {
     ...style,
     ...(style?.backgroundColor && {
-      '--hover-background': `color-mix(in srgb, ${style.backgroundColor} 90%, white)`,
+      '--hover-background': `color-mix(in ${style.backgroundColor} 85%, black)`,
     }),
     ...(style?.borderRadius && {
       '--hover-border-radius': style.borderRadius,
