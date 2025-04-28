@@ -9,7 +9,7 @@ import { FileItem } from '../FileItem/FileItem';
 import classNames from 'classnames';
 
 interface CustomFileRejection extends Omit<FileRejection, 'file'> {
-  file: TAttachemTAttachmentsnts;
+  file: TAttachments;
 }
 export const FileLoader: FC<FileLoaderProps> = ({
   maxFileSize = 2,
@@ -22,6 +22,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
   addedFiles,
   setAddedFiles,
   canAdd = true,
+  lng = 'ru',
   className,
   style,
 }) => {
@@ -35,19 +36,23 @@ export const FileLoader: FC<FileLoaderProps> = ({
     if (file.size > maxFileSize * 1024 * 1024 * 1024) {
       return {
         code: 'name-too-large',
-        message: `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`,
+        message:
+          lng === 'ru'
+            ? `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`
+            : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
       };
     }
     if (addedFiles.find((addedFile: File) => addedFile.name === file.name)) {
       return {
         code: 'repeating-file-name',
-        message: `Файл уже добавлен`,
+        message: lng === 'ru' ? `Файл уже добавлен` : `File already added`,
       };
     }
     if (addedFiles.length > maxFileCount - 1) {
       return {
         code: 'files-count-too-large',
-        message: `Максимальное количество файлов ${maxFileCount}`,
+        message:
+          lng === 'ru' ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
       };
     }
     return null;
@@ -92,7 +97,10 @@ export const FileLoader: FC<FileLoaderProps> = ({
           errors: [
             {
               code: 'files-count-too-large',
-              message: `Максимальное количество файлов ${maxFileCount}`,
+              message:
+                lng === 'ru'
+                  ? `Максимальное количество файлов ${maxFileCount}`
+                  : `Maximum number of files ${maxFileCount}`,
             },
           ],
           file: {
@@ -130,16 +138,6 @@ export const FileLoader: FC<FileLoaderProps> = ({
     setLoadingFilesNames(loadingFilesNames.filter((id) => id !== id));
   };
 
-  const removeFromLoadingFiles = (id: string) => {
-    setLoadingFilesNames((prev) => {
-      const newIds = prev.filter((fileId) => fileId !== id);
-      if (newIds.length === 0) {
-        setIsLoadingFiles(false);
-      }
-      return newIds;
-    });
-  };
-
   const acceptedFileItems = addedFilesFormated.map((file: TAttachments) => {
     return (
       <FileItem
@@ -148,7 +146,6 @@ export const FileLoader: FC<FileLoaderProps> = ({
         loading={loadingFilesNames.includes(file.filename)} // Показываем лоадер только для новых файлов
         onDelete={handleDeleteFiles}
         isAddedFile={true}
-        onLoadingFinished={removeFromLoadingFiles}
       />
     );
   });
@@ -177,20 +174,6 @@ export const FileLoader: FC<FileLoaderProps> = ({
     return formats.join(', ');
   };
 
-  //Для истории
-  useEffect(() => {
-    if (addedFiles.length > 0) {
-      setAddedFilesFormatted(
-        addedFiles.map((file: File) => ({
-          id: Math.random().toString(36).substring(2, 9),
-          filename: file.name,
-          size: file.size,
-          type: file.type,
-        }))
-      );
-    }
-  }, [addedFiles]);
-
   useEffect(() => {
     if (loadingFilesNames.length === 0 && isLoadingFiles) {
       setIsLoadingFiles(false);
@@ -207,25 +190,44 @@ export const FileLoader: FC<FileLoaderProps> = ({
           color={!canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)'}
           style={{ textAlign: 'center' }}
         >
-          <span style={{ textDecoration: 'underline' }}>Нажмите на область</span>
-          <span> или перетащите файлы</span>
+          {lng === 'ru' ? (
+            <>
+              <span style={{ textDecoration: 'underline' }}>Нажмите на область</span> <span> или перетащите файлы</span>
+            </>
+          ) : (
+            <>
+              <span style={{ textDecoration: 'underline' }}>Сlick on this area</span> <span>or drag files here</span>
+            </>
+          )}
         </Typography>
         <div>
-          {maxFileSize && (
+          {maxFileSize && lng === 'ru' ? (
             <Typography variant="Body2" color="var(--grey-medium)">
               {`Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`} <br />
             </Typography>
+          ) : (
+            <Typography variant="Body2" color="var(--grey-medium)">
+              {`Maximum file size ${maxFileSize.toFixed(0)} GB`} <br />
+            </Typography>
           )}
-          {maxFileCount && (
+          {maxFileCount && lng === 'ru' ? (
             <Typography variant="Body2" color="var(--grey-medium)">
               {`За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`}
+            </Typography>
+          ) : (
+            <Typography variant="Body2" color="var(--grey-medium)">
+              {`You can upload ${maxFileCount} ${maxFileCount > 1 ? `files` : `file`}`}
             </Typography>
           )}
         </div>
       </div>
-      {acceptedFormats && (
+      {acceptedFormats && lng === 'ru' ? (
         <Typography variant="Body2" color="var(--grey-medium)">
           {`Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`}
+        </Typography>
+      ) : (
+        <Typography variant="Body2" color="var(--grey-medium)">
+          {`Supported formats: ${getAcceptedFormatsString(acceptedFormats)}`}
         </Typography>
       )}
       {addedFiles?.length > 0 || errorFiles?.length > 0 ? (
@@ -233,9 +235,13 @@ export const FileLoader: FC<FileLoaderProps> = ({
           {acceptedFileItems}
           {fileRejectionItems}
         </div>
-      ) : (
+      ) : lng === 'ru' ? (
         <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
           Файлы не добавлены
+        </Typography>
+      ) : (
+        <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
+          Files not added
         </Typography>
       )}
     </section>

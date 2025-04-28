@@ -39,6 +39,8 @@ interface FileAttachProps {
   canDownload?: boolean;
   /**Позиционирование блока прикрепленных файлов */
   position?: 'left' | 'right' | 'bottom';
+  /** Язык */
+  lng?: 'ru' | 'en';
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */
@@ -141,6 +143,11 @@ const meta: Meta<FileAttachProps> = {
       description: 'Позиционирование блока прикрепленных файлов',
       control: { type: 'select' },
       options: ['left', 'right', 'bottom'],
+    },
+    lng: {
+      description: 'Язык',
+      control: { type: 'select' },
+      options: ['ru', 'en'],
     },
     className: {
       description: 'Дополнительный класс',
@@ -302,3 +309,20 @@ export const FileAttachCouldntDelete = (argTypes: FileAttachProps): JSX.Element 
 };
 
 FileAttachDisabled.storyName = 'FileAttach c запрещенным скачиванием';
+
+export const FileAttachEnglish = (argTypes: FileAttachProps): JSX.Element => {
+  const [addedFiles, setAddedFiles] = useState<File[]>([]);
+  return (
+    <FileAttach
+      {...argTypes}
+      filesList={mockFiles}
+      addedFiles={addedFiles}
+      setAddedFiles={setAddedFiles}
+      lng="en"
+      style={{
+        width: '360px',
+      }}
+    />
+  );
+};
+FileAttachEnglish.storyName = 'FileAttach на английском';

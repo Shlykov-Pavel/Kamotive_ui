@@ -27,6 +27,8 @@ interface FileListAttaсhedProps {
   canDownload?: boolean;
   /**Флаг для показа информационного текста */
   isInfoShown?: boolean;
+  /** Язык */
+  lng?: 'ru' | 'en';
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */
@@ -99,6 +101,11 @@ const meta: Meta<FileListAttaсhedProps> = {
     isInfoShown: {
       description: 'Флаг для показа информационного текста',
       type: 'boolean',
+    },
+    lng: {
+      description: 'Язык',
+      control: { type: 'select' },
+      options: ['ru', 'en'],
     },
     className: {
       description: 'Дополнительный класс',
@@ -188,4 +195,16 @@ FileListAttaсhedWithoutText.args = {
   canDelete: true,
   canDownload: true,
   isInfoShown: false,
+};
+
+export const FileListAttaсhedEnglish = (argTypes: FileListAttaсhedProps): JSX.Element => {
+  return <FileListAttaсhed {...argTypes} />;
+};
+FileListAttaсhedEnglish.storyName = 'FileListAttaсhed на английском';
+FileListAttaсhedEnglish.args = {
+  filesList: fileListMocked,
+  canDelete: true,
+  canDownload: true,
+  isInfoShown: true,
+  lng: 'en',
 };

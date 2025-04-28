@@ -27,6 +27,7 @@ export const FileAttach: FC<FileAttachProps> = ({
   canDelete = true,
   canDownload = true,
   position = 'bottom',
+  lng = 'ru',
   className,
   style,
 }) => {
@@ -43,6 +44,7 @@ export const FileAttach: FC<FileAttachProps> = ({
         addedFiles={addedFiles}
         setAddedFiles={setAddedFiles}
         canAdd={canAdd}
+        lng={lng}
       />
       <FileListAttaсhed
         filesList={filesList}

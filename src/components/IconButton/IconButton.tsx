@@ -15,6 +15,15 @@ export const IconButton: React.FC<IconButtonProps> = ({
 }) => {
   const validChildren = React.Children.toArray(children).filter((child) => React.isValidElement(child));
   const renderIcon = icon || validChildren[0];
+  const combinedStyle = {
+    ...style,
+    ...(style?.backgroundColor && {
+      '--hover-background': `color-mix(in srgb, ${style.backgroundColor} 90%, white)`,
+    }),
+    ...(style?.borderRadius && {
+      '--hover-border-radius': style.borderRadius,
+    }),
+  };
 
   return (
     <button
@@ -23,7 +32,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
       aria-disabled={disabled}
       type="button"
       onClick={(e) => onClick(e)}
-      style={style}
+      style={combinedStyle}
     >
       {renderIcon &&
         React.cloneElement(renderIcon as React.ReactElement, {

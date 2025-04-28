@@ -416,6 +416,8 @@ export interface FileAttachProps {
   canDownload?: boolean;
   /**Позиционирование блока прикрепленных файлов */
   position?: 'left' | 'right' | 'bottom';
+  /** Язык */
+  lng?: 'ru' | 'en';
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */
@@ -434,6 +436,8 @@ export interface FileListAttaсhedProps {
   canDownload?: boolean;
   /**Флаг для показа информационного текста */
   isInfoShown?: boolean;
+  /** Язык */
+  lng?: 'ru' | 'en';
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */
@@ -460,8 +464,6 @@ export interface FileItemProps {
   isAddedFile?: boolean;
   /** Флаг отклоненного файла */
   isRejectedFile?: boolean;
-  /** Id загруженного файла */
-  onLoadingFinished?: (id: string) => void;
 }
 
 export interface FileLoaderProps {
@@ -477,6 +479,8 @@ export interface FileLoaderProps {
   setAddedFiles: (addedFiles: File[]) => void;
   /**Разрешени на добавление файлов*/
   canAdd?: boolean;
+  /** Язык */
+  lng?: 'ru' | 'en';
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */

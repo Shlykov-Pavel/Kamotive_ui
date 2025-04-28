@@ -5,6 +5,8 @@
   border: none;
   display: flex;
   align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
 }
 
 .iconButton--sm svg {
@@ -28,7 +30,6 @@
 }
 
 .iconButton:hover {
-  background-color: var(--grey-extraLight);
-  border-radius: 50%;
-  height: 28px;
+  background-color: var(--hover-background, var(--grey-extraLight));
+  border-radius: var(--hover-border-radius, 50%);
 }

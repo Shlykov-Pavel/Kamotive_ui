@@ -21,7 +21,6 @@ export const FileItem: FC<FileItemProps> = ({
   style,
   isAddedFile,
   isRejectedFile,
-  onLoadingFinished,
 }) => {
   const [isLoadingFinished, setIsLoadingFinished] = useState(false);
   const [animationDuration, setAnimationDuration] = useState(0);
@@ -118,11 +117,6 @@ export const FileItem: FC<FileItemProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (isLoadingFinished && onLoadingFinished && file.id) {
-      onLoadingFinished(file.id);
-    }
-  }, [isLoadingFinished, file.id, onLoadingFinished]);
   return (
     <div
       className={fileItemClasses}
@@ -154,21 +148,23 @@ export const FileItem: FC<FileItemProps> = ({
             )}
           </div>
         </div>
-        {!(isAddedFile || isRejectedFile) && canDownload && (
-          <IconButton
-            icon={<IconDownload />}
-            onClick={(e: React.MouseEvent) => handleDownloadClick(e, file)}
-            color="var(--icons-grey)"
-            className={styles['fileIcon']}
-          />
-        )}
-        {canDelete && (
-          <IconButton
-            icon={<IconClose10 />}
-            onClick={(e: React.MouseEvent) => handleDeleteClick(e, file.id || '')}
-            color="var(--icons-grey)"
-          />
-        )}
+        <div className={styles['fileItemActions']}>
+          {!(isAddedFile || isRejectedFile) && canDownload && (
+            <IconButton
+              icon={<IconDownload />}
+              onClick={(e: React.MouseEvent) => handleDownloadClick(e, file)}
+              color="var(--icons-grey)"
+              className={styles['fileIcon']}
+            />
+          )}
+          {canDelete && (
+            <IconButton
+              icon={<IconClose10 />}
+              onClick={(e: React.MouseEvent) => handleDeleteClick(e, file.id || '')}
+              color="var(--icons-grey)"
+            />
+          )}
+        </div>
       </div>
 
       {loading && !isLoadingFinished && (

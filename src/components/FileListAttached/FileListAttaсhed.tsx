@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 
 import { FileListAttaсhedProps } from '../../types';
 import styles from './FileListAttached.module.css';
@@ -13,33 +13,54 @@ export const FileListAttaсhed: FC<FileListAttaсhedProps> = ({
   canDelete,
   canDownload,
   isInfoShown = true,
+  lng = 'ru',
   className,
   style,
 }) => {
   if (!filesList || filesList.length === 0) {
-    return (
+    return lng === 'ru' ? (
       <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
         Нет прикрепленных файлов
+      </Typography>
+    ) : (
+      <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
+        No attached files
       </Typography>
     );
   }
   return (
     <div className={classNames(styles['fileList'], className)} style={style}>
-      {isInfoShown && (
-        <Typography variant="Body2-SemiBold" color="var(--text-dark)" style={{ lineHeight: '20px' }}>
+      {isInfoShown && lng === 'ru' ? (
+        <Typography
+          variant="Body2-SemiBold"
+          color="var(--text-dark)"
+          style={{ lineHeight: '20px' }}
+          className={styles['fileListHeader']}
+        >
           {`Прикрепленные файлы (${filesList.length})`}
         </Typography>
+      ) : (
+        <Typography
+          variant="Body2-SemiBold"
+          color="var(--text-dark)"
+          style={{ lineHeight: '20px' }}
+          className={styles['fileListHeader']}
+        >
+          {`Attached files (${filesList.length})`}
+        </Typography>
       )}
-      {filesList.map((file) => (
-        <FileItem
-          key={file.id}
-          file={file}
-          onDownload={onDownload}
-          onDelete={onDelete}
-          canDelete={canDelete}
-          canDownload={canDownload}
-        />
-      ))}
+      <div className={styles['fileListFiles']}>
+        {filesList.map((file) => (
+          <FileItem
+            key={file.id}
+            file={file}
+            onDownload={onDownload}
+            onDelete={onDelete}
+            canDelete={canDelete}
+            canDownload={canDownload}
+          />
+        ))}
+      </div>
     </div>
   );
 };

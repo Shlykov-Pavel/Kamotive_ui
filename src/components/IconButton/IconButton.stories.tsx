@@ -106,7 +106,7 @@ export const defaultIconButtonChidren = (argTypes: IconButtonProps): JSX.Element
       onClick={() => {}}
       color="var(--white)"
       size="lg"
-      style={{ backgroundColor: 'var(--blue-main)', width: '30px', height: '30px' }}
+      style={{ backgroundColor: 'var(--blue-main)', width: '30px', height: '30px', borderRadius: '10px' }}
     >
       {' '}
       <IconAdd />{' '}

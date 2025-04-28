@@ -18,6 +18,8 @@ export interface FileLoaderProps {
   setAddedFiles: (addedFiles: File[]) => void;
   /**Заблокировано добавление файлов*/
   canAdd?: boolean;
+  /** Язык */
+  lng?: 'ru' | 'en';
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */
@@ -61,6 +63,11 @@ const meta: Meta<FileLoaderProps> = {
       description: 'Устанавливает атрибут disabled добавления файла. Передаются разрешения на добавление файлов.',
       control: { type: 'boolean' },
     },
+    lng: {
+      description: 'Язык',
+      control: { type: 'select' },
+      options: ['ru', 'en'],
+    },
   },
 };
 
@@ -101,4 +108,15 @@ export const FileLoaderDisabled = (argTypes: FileLoaderProps): JSX.Element => {
 FileLoaderDisabled.storyName = 'FileLoader заблокированный';
 FileLoaderDisabled.args = {
   canAdd: false,
+};
+
+export const FileLoaderEnglish = (argTypes: FileLoaderProps): JSX.Element => {
+  const [addedFiles, setAddedFiles] = useState<File[]>([]);
+
+  return <FileLoader {...argTypes} addedFiles={addedFiles} setAddedFiles={setAddedFiles} lng="en" />;
+};
+FileLoaderEnglish.storyName = 'FileLoader на английском';
+FileLoaderEnglish.args = {
+  maxFileSize: 2,
+  maxFileCount: 2,
 };

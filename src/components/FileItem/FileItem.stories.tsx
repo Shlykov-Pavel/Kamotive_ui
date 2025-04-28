@@ -34,8 +34,6 @@ interface FileItemProps {
   isAddedFile?: boolean;
   /** Флаг отклоненного файла */
   isRejectedFile?: boolean;
-  /** Id загруженного файла */
-  onLoadingFinished?: (id: string) => void;
 }
 
 const meta: Meta<FileItemProps> = {

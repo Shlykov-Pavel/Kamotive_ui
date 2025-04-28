@@ -1,13 +1,26 @@
 .fileList {
   display: flex;
   flex-direction: column;
-  gap: 5px;
   flex: 1;
   min-width: 260px;
   max-height: 100%;
   overflow-y: auto;
-  padding-right: 10px;
+  position: relative;
 }
+.fileListHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin-bottom: 5px;
+}
+.fileListFiles {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+  /* padding-right: 10px; */
+}
+
 /* Стилизация скроллбара для WebKit (Chrome, Safari, новые версии Edge) */
 .fileList::-webkit-scrollbar {
   width: 6px; /* Ширина скроллбара */
