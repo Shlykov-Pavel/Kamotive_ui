@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties } from 'react';
 import type { Meta } from '@storybook/react';
 
 import { IconButton } from './IconButton';

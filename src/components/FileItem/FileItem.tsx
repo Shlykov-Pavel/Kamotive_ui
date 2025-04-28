@@ -154,7 +154,6 @@ export const FileItem: FC<FileItemProps> = ({
               icon={<IconDownload />}
               onClick={(e: React.MouseEvent) => handleDownloadClick(e, file)}
               color="var(--icons-grey)"
-              className={styles['fileIcon']}
             />
           )}
           {canDelete && (

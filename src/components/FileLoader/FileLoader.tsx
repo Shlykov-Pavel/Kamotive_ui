@@ -201,35 +201,38 @@ export const FileLoader: FC<FileLoaderProps> = ({
           )}
         </Typography>
         <div>
-          {maxFileSize && lng === 'ru' ? (
-            <Typography variant="Body2" color="var(--grey-medium)">
-              {`Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`} <br />
-            </Typography>
-          ) : (
-            <Typography variant="Body2" color="var(--grey-medium)">
-              {`Maximum file size ${maxFileSize.toFixed(0)} GB`} <br />
-            </Typography>
-          )}
-          {maxFileCount && lng === 'ru' ? (
-            <Typography variant="Body2" color="var(--grey-medium)">
-              {`За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`}
-            </Typography>
-          ) : (
-            <Typography variant="Body2" color="var(--grey-medium)">
-              {`You can upload ${maxFileCount} ${maxFileCount > 1 ? `files` : `file`}`}
-            </Typography>
-          )}
+          {maxFileSize &&
+            (lng === 'ru' ? (
+              <Typography variant="Body2" color="var(--grey-medium)">
+                {`Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`} <br />
+              </Typography>
+            ) : (
+              <Typography variant="Body2" color="var(--grey-medium)">
+                {`Maximum file size ${maxFileSize.toFixed(0)} GB`} <br />
+              </Typography>
+            ))}
+          {maxFileCount &&
+            (lng === 'ru' ? (
+              <Typography variant="Body2" color="var(--grey-medium)">
+                {`За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`}
+              </Typography>
+            ) : (
+              <Typography variant="Body2" color="var(--grey-medium)">
+                {`You can upload ${maxFileCount} ${maxFileCount > 1 ? `files` : `file`}`}
+              </Typography>
+            ))}
         </div>
       </div>
-      {acceptedFormats && lng === 'ru' ? (
-        <Typography variant="Body2" color="var(--grey-medium)">
-          {`Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`}
-        </Typography>
-      ) : (
-        <Typography variant="Body2" color="var(--grey-medium)">
-          {`Supported formats: ${getAcceptedFormatsString(acceptedFormats)}`}
-        </Typography>
-      )}
+      {acceptedFormats &&
+        (lng === 'ru' ? (
+          <Typography variant="Body2" color="var(--grey-medium)">
+            {`Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`}
+          </Typography>
+        ) : (
+          <Typography variant="Body2" color="var(--grey-medium)">
+            {`Supported formats: ${getAcceptedFormatsString(acceptedFormats)}`}
+          </Typography>
+        ))}
       {addedFiles?.length > 0 || errorFiles?.length > 0 ? (
         <div className={styles['addedFiles']}>
           {acceptedFileItems}

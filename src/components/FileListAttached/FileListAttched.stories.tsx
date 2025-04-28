@@ -187,15 +187,17 @@ FileListAttaсhedBlockedDelete.args = {
 };
 
 export const FileListAttaсhedWithoutText = (argTypes: FileListAttaсhedProps): JSX.Element => {
-  return <FileListAttaсhed {...argTypes} />;
+  return (
+    <FileListAttaсhed
+      {...argTypes}
+      filesList={fileListMocked}
+      canDelete={true}
+      canDownload={true}
+      isInfoShown={false}
+    />
+  );
 };
 FileListAttaсhedWithoutText.storyName = 'FileListAttaсhed без текста';
-FileListAttaсhedWithoutText.args = {
-  filesList: fileListMocked,
-  canDelete: true,
-  canDownload: true,
-  isInfoShown: false,
-};
 
 export const FileListAttaсhedEnglish = (argTypes: FileListAttaсhedProps): JSX.Element => {
   return <FileListAttaсhed {...argTypes} />;

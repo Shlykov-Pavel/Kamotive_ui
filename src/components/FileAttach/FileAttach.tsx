@@ -1,11 +1,7 @@
-import React, { FC, useState } from 'react';
-import { Accept, FileRejection, useDropzone } from 'react-dropzone';
+import React, { FC } from 'react';
 
-import { FileAttachProps, TAttachments } from '../../types';
+import { FileAttachProps } from '../../types';
 import styles from './FileAttach.module.css';
-import { Typography } from '../Typography/Typography';
-import { IconUpload } from '../../Icons';
-import { FileItem } from '../FileItem/FileItem';
 import classNames from 'classnames';
 import { FileLoader } from '../FileLoader/FileLoader';
 import { FileListAttaсhed } from '../FileListAttached/FileListAttaсhed';
@@ -52,6 +48,7 @@ export const FileAttach: FC<FileAttachProps> = ({
         onDownload={onDownload}
         canDelete={canDelete}
         canDownload={canDownload}
+        lng={lng}
       />
     </div>
   );

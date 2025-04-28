@@ -77,7 +77,6 @@ const mockFiles: TAttachments[] = [
 ];
 
 const meta: Meta<FileAttachProps> = {
-  // title: 'Components',
   component: FileAttach,
   parameters: {
     layout: 'centered',
@@ -175,11 +174,10 @@ export const FileAttachDefault = (argTypes: FileAttachProps): JSX.Element => {
   );
 };
 
-// Uncomment and update these stories as needed
+FileAttachDefault.storyName = 'FileAttach по умолчанию';
 
 export const FileAttachWithExistingFiles = (argTypes: FileAttachProps): JSX.Element => {
   const [addedFiles, setAddedFiles] = useState<File[]>([]);
-
   return (
     <FileAttach
       {...argTypes}
@@ -271,7 +269,7 @@ export const FileAttachDisabled = (argTypes: FileAttachProps): JSX.Element => {
 
 FileAttachDisabled.storyName = 'FileAttach заблокированный';
 
-export const FileAttachCouldntDownload = (argTypes: FileAttachProps): JSX.Element => {
+export const FileAttachDisabledDownload = (argTypes: FileAttachProps): JSX.Element => {
   const [addedFiles, setAddedFiles] = useState<File[]>([]);
 
   return (
@@ -288,9 +286,9 @@ export const FileAttachCouldntDownload = (argTypes: FileAttachProps): JSX.Elemen
   );
 };
 
-FileAttachDisabled.storyName = 'FileAttach c запрещенным скачиванием';
+FileAttachDisabledDownload.storyName = 'FileAttach c запрещенным скачиванием';
 
-export const FileAttachCouldntDelete = (argTypes: FileAttachProps): JSX.Element => {
+export const FileAttachDisabledDelete = (argTypes: FileAttachProps): JSX.Element => {
   const [addedFiles, setAddedFiles] = useState<File[]>([]);
 
   return (
@@ -308,7 +306,7 @@ export const FileAttachCouldntDelete = (argTypes: FileAttachProps): JSX.Element 
   );
 };
 
-FileAttachDisabled.storyName = 'FileAttach c запрещенным скачиванием';
+FileAttachDisabledDelete.storyName = 'FileAttach c запрещенным удалением';
 
 export const FileAttachEnglish = (argTypes: FileAttachProps): JSX.Element => {
   const [addedFiles, setAddedFiles] = useState<File[]>([]);

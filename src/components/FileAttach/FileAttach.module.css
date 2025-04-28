@@ -2,26 +2,20 @@
   display: flex;
   gap: 15px;
   min-width: 260px;
-  flex: 1; /* Change from width: 100% to flex: 1 */
-  max-width: 100%; /* Add max-width to prevent overflow */
+  flex: 1;
+  max-width: 100%;
 }
 .fileAttach_position_left {
   flex-direction: row;
   justify-content: space-between;
-  /* width: 100%; */
-
   flex-wrap: wrap;
 }
 .fileAttach_position_right {
   flex-direction: row-reverse;
-  /* gap: 10px; */
   justify-content: space-between;
-  /* width: 100%; */
   flex-wrap: wrap;
 }
 
 .fileAttach_position_bottom {
   flex-direction: column;
-  /* gap: 10px; */
-  /* width: 100%; */
 }
