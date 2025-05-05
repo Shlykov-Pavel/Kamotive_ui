@@ -5,7 +5,7 @@ import classNames from 'classnames';
 /**
  * Компонент ProgressBar отображает прогресс в виде заполненной полосы.
  */
-export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = true, animated = false, }) => {
+export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = true, animated = false, animationDuration = 8000, setIsLoadingFinished, }) => {
     const [percent, setPercent] = useState(value);
     const validPercentage = Math.min(Math.max(value, 0), max);
     const progressBarClasses = classNames(styles['progress-bar'], styles[size], {
@@ -15,7 +15,7 @@ export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = tru
     useEffect(() => {
         if (animated) {
             const targetPercent = validPercentage;
-            const animationDuration = 8000; // Длительность анимации в миллисекундах
+            // const animationDuration = animationDuration ?? 8000; // Длительность анимации в миллисекундах
             const stepTime = 100; // Интервал обновления в миллисекундах
             const totalSteps = animationDuration / stepTime;
             const increment = targetPercent / totalSteps;
@@ -25,6 +25,10 @@ export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = tru
                 setPercent(Math.round(currentPercent));
                 if (currentPercent >= targetPercent) {
                     clearInterval(intervalId);
+                    // Вызываем callback, когда прогресс достиг 100%
+                    if (setIsLoadingFinished) {
+                        setIsLoadingFinished(true);
+                    }
                 }
             }, stepTime);
             return () => clearInterval(intervalId);
@@ -32,8 +36,8 @@ export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = tru
         else {
             setPercent(validPercentage);
         }
-    }, [animated, validPercentage]);
-    return (React.createElement("div", { className: styles["progress-bar--wrapper"] },
+    }, [animated, validPercentage, setIsLoadingFinished, animationDuration]);
+    return (React.createElement("div", { className: styles['progress-bar--wrapper'] },
         React.createElement("progress", { id: "linear-progress", className: progressBarClasses, value: percent, max: max }),
         React.createElement("label", { htmlFor: "progress", className: styles['progress-bar-percentage'] }, showValue && (React.createElement(Typography, { variant: "Body1", color: '#9CA0A7', className: styles['progress-bar-percentage'] },
             percent,

@@ -1,26 +1,36 @@
 .iconButton {
-    cursor: pointer;
-    box-sizing: border-box;
-    background-color: var(--white);
-    border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  background-color: var(--white);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
 }
 
-.iconButton--sm svg{
-    width: 14px;
-    height: 14px;
+.iconButton--sm svg {
+  width: 14px;
+  height: 14px;
 }
 
-.iconButton--md svg{
-    width: 16px;
-    height: 16px;
+.iconButton--md svg {
+  width: 16px;
+  height: 16px;
 }
 
-.iconButton--lg svg{
-    width: 18px;
-    height: 18px;
+.iconButton--lg svg {
+  width: 18px;
+  height: 18px;
 }
 
 .iconButton:disabled {
-    cursor: not-allowed;
-    box-shadow: none;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.iconButton:hover {
+  background-color: var(--hover-background, var(--grey-extraLight));
+  border-radius: var(--hover-border-radius, 50%);
+  filter: brightness(var(--hover-brightness, 0.97));
 }

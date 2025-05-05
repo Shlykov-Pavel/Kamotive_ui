@@ -1,0 +1,46 @@
+.fileList {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 260px;
+  max-height: 100%;
+  overflow-y: auto;
+  position: relative;
+}
+.fileListHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin-bottom: 5px;
+}
+.fileListFiles {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+}
+
+/* Стилизация скроллбара для WebKit (Chrome, Safari, новые версии Edge) */
+.fileList::-webkit-scrollbar {
+  width: 6px; /* Ширина скроллбара */
+}
+
+.fileList::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03); /* Светлый фон для трека */
+  border-radius: 10px;
+}
+
+.fileList::-webkit-scrollbar-thumb {
+  background: var(--grey-medium, #c4c4c4); /* Цвет ползунка */
+  border-radius: 10px;
+}
+
+.fileList::-webkit-scrollbar-thumb:hover {
+  background: var(--grey-dark, #a0a0a0); /* Цвет ползунка при наведении */
+}
+
+/* Стилизация скроллбара для Firefox */
+.fileList {
+  scrollbar-width: thin; /* "auto", "thin" или "none" */
+  scrollbar-color: var(--grey-medium, #c4c4c4) rgba(0, 0, 0, 0.03); /* цвет ползунка и трека */
+}

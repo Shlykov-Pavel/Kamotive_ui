@@ -143,13 +143,13 @@
   color: var(--text-dark);
   font-weight: var(--font-weight-semiBold);
 }
-.label--default .lg {
+.label--default.lg {
   font-size: 12px;
 }
 .label--default.md {
   font-size: 10px;
 }
-.label--default .sm {
+.label--default.sm {
   font-size: 16px;
 }
 .label--left {
@@ -159,10 +159,10 @@
 .label--left.lg {
   font-size: 14px;
 }
-.label--left .md {
+.label--left.md {
   font-size: 12px;
 }
-.label--left .sm {
+.label--left.sm {
   font-size: 10px;
 }
 
