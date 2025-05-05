@@ -11,13 +11,19 @@ export const IconButton: React.FC<IconButtonProps> = ({
   disabled = false,
   onClick,
   children,
-  className
+  className,
 }) => {
- 
-  const validChildren = React.Children.toArray(children).filter(
-    child => React.isValidElement(child)
-  );
-  const renderIcon =  icon || validChildren[0]
+  const validChildren = React.Children.toArray(children).filter((child) => React.isValidElement(child));
+  const renderIcon = icon || validChildren[0];
+  const combinedStyle = {
+    ...style,
+    ...(style?.backgroundColor && {
+      '--hover-background': `color-mix(in ${style.backgroundColor} 85%, black)`,
+    }),
+    ...(style?.borderRadius && {
+      '--hover-border-radius': style.borderRadius,
+    }),
+  };
 
   return (
     <button
@@ -25,10 +31,10 @@ export const IconButton: React.FC<IconButtonProps> = ({
       disabled={disabled}
       aria-disabled={disabled}
       type="button"
-      onClick={onClick}
-      style={style}
+      onClick={(e) => onClick(e)}
+      style={combinedStyle}
     >
-      {(renderIcon) &&
+      {renderIcon &&
         React.cloneElement(renderIcon as React.ReactElement, {
           htmlColor: color,
           strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',

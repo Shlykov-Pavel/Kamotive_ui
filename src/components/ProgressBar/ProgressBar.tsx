@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 
 import { Typography } from '../Typography/Typography';
-import styles from './ProgressBar.module.css'
+import styles from './ProgressBar.module.css';
 import classNames from 'classnames';
 import { ProgressBarProps } from '../../types';
 
@@ -15,6 +15,8 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   size = 'md',
   showValue = true,
   animated = false,
+  animationDuration = 8000,
+  setIsLoadingFinished,
 }) => {
   const [percent, setPercent] = useState(value);
   const validPercentage = Math.min(Math.max(value, 0), max);
@@ -26,7 +28,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   useEffect(() => {
     if (animated) {
       const targetPercent = validPercentage;
-      const animationDuration = 8000; // Длительность анимации в миллисекундах
+      // const animationDuration = animationDuration ?? 8000; // Длительность анимации в миллисекундах
       const stepTime = 100; // Интервал обновления в миллисекундах
       const totalSteps = animationDuration / stepTime;
       const increment = targetPercent / totalSteps;
@@ -36,15 +38,20 @@ export const ProgressBar: FC<ProgressBarProps> = ({
         setPercent(Math.round(currentPercent));
         if (currentPercent >= targetPercent) {
           clearInterval(intervalId);
+          // Вызываем callback, когда прогресс достиг 100%
+          if (setIsLoadingFinished) {
+            setIsLoadingFinished(true);
+          }
         }
       }, stepTime);
       return () => clearInterval(intervalId);
     } else {
       setPercent(validPercentage);
     }
-  }, [animated, validPercentage]);
+  }, [animated, validPercentage, setIsLoadingFinished, animationDuration]);
+
   return (
-    <div className={styles["progress-bar--wrapper"]}>
+    <div className={styles['progress-bar--wrapper']}>
       <progress
         id="linear-progress"
         className={progressBarClasses}

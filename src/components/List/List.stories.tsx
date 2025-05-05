@@ -100,9 +100,7 @@ ListWithDifferentBullets.args = {
 };
 
 export const ListWithCheckbox = (argTypes: ListProps) => {
-  const handleCheckedItems = (checkedItems: string | string[], isChecked: boolean) => {
-    console.log(checkedItems);
-  };
+  const handleCheckedItems = (checkedItems: string | string[], isChecked: boolean) => {};
 
   return (
     <List id="documents" label="Documents" onCheck={handleCheckedItems} checkboxColor="var(--red)" {...argTypes}>
@@ -128,7 +126,6 @@ export const ListWithRadioButton = (argTypes: ListProps) => {
 
   const handleRadioSelect = (id: string) => {
     setSelectedItemId(id);
-    console.log(`Selected item: ${id}`);
   };
 
   return (
@@ -137,7 +134,7 @@ export const ListWithRadioButton = (argTypes: ListProps) => {
       id="options"
       selected={selectedItemId === 'options'}
       onRadioSelect={handleRadioSelect}
-      style={{ gap: "5px" }}
+      style={{ gap: '5px' }}
       {...argTypes}
     >
       <ListItem label="Option 1" id="option1" selected={selectedItemId === 'option1'} />
@@ -161,11 +158,10 @@ export const ListRadioButtonWithHeader = (argTypes: ListProps) => {
 
   const handleRadioSelect = (id: string) => {
     setSelectedItemId(id);
-    console.log(`Selected item: ${id}`);
   };
 
   return (
-    <List label="Options" onRadioSelect={handleRadioSelect} {...argTypes} style={{ gap: "5px" }}>
+    <List label="Options" onRadioSelect={handleRadioSelect} {...argTypes} style={{ gap: '5px' }}>
       <ListItem label="Option 1" id="option1" selected={selectedItemId === 'option1'} />
       <ListItem label="Option 2" id="option2" selected={selectedItemId === 'option2'} />
       <List label="More Options" id="more-options" selected={selectedItemId === 'more-options'} collapsible>
@@ -183,20 +179,19 @@ ListRadioButtonWithHeader.args = {
   isHeader: true,
 };
 
-export const ListItemsWithChildren = (argTypes: ListProps) => {
-  return (
-    <div>
-      <List {...argTypes}>
-        <ListItem>
-          <FileItem name="file123.docx" size={5679} style={{ width: "250px" }}/>
-        </ListItem>
-        <ListItem>
-          <FileItem name="file12.pdf" size={10031} style={{ width: "250px" }}/>
-        </ListItem>
-      </List>
-    </div>
-  );
-};
-ListItemsWithChildren.storyName = 'List файлов без заголовка';
-ListItemsWithChildren.args = {
-};
+// export const ListItemsWithChildren = (argTypes: ListProps) => {
+//   return (
+//     <div>
+//       <List {...argTypes}>
+//         <ListItem>
+//           <FileItem name="file123.docx" size={5679} style={{ width: '250px' }} />
+//         </ListItem>
+//         <ListItem>
+//           <FileItem name="file12.pdf" size={10031} style={{ width: '250px' }} />
+//         </ListItem>
+//       </List>
+//     </div>
+//   );
+// };
+// ListItemsWithChildren.storyName = 'List файлов без заголовка';
+// ListItemsWithChildren.args = {};

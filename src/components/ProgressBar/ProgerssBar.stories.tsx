@@ -13,13 +13,24 @@ export interface ProgressBarProps {
   showValue?: boolean;
   /** Анимация */
   animated?: boolean;
+  /** Длительность анимации */
+  animationDuration?: number;
+  /**Для выставления флага окончания загрузки */
+  setIsLoadingFinished?: (value: boolean) => void;
 }
 
-const withWrapper = (Story: React.ComponentType) => <div style={{
-  backgroundColor: 'var(--white)',
-  padding: '30px',
-  borderRadius: '10px',
-  width: '900px'}}>{<Story />}</div>;
+const withWrapper = (Story: React.ComponentType) => (
+  <div
+    style={{
+      backgroundColor: 'var(--white)',
+      padding: '30px',
+      borderRadius: '10px',
+      width: '900px',
+    }}
+  >
+    {<Story />}
+  </div>
+);
 
 const meta: Meta<typeof ProgressBar> = {
   title: 'Components/ProgressBar',
@@ -52,16 +63,21 @@ const meta: Meta<typeof ProgressBar> = {
     },
     showValue: { description: 'Показывать значение прогресса' },
     animated: { description: 'Показывать анимацию' },
+    animationDuration: { description: 'Длительность анимации' },
+    setIsLoadingFinished: { description: 'Для выставления флага окончания загрузки' },
   },
 };
 export default meta;
 
 export const ProgressBarWithValues = (argTypes: ProgressBarProps): JSX.Element => {
   return (
-    <div style={{ 
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '30px'}}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '30px',
+      }}
+    >
       <ProgressBar value={0} {...argTypes} />
       <ProgressBar value={50} {...argTypes} />
       <ProgressBar value={100} {...argTypes} />

@@ -247,8 +247,6 @@ export const TypographyVariants = (argTypes: TypographyProps): JSX.Element => {
   return (
     <div>
       {typogrphy.map((item, index) => {
-        console.log('item', item);
-
         return (
           <div
             key={index}

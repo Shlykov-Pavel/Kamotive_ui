@@ -4,427 +4,490 @@ import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
 import { Accept } from 'react-dropzone/.';
 
+/** @internal */
+export interface BreadcrumbProps {
+  /** Обработчик клика */
+  onClick?: () => void;
+  /** Активный */
+  active?: boolean;
+  /** Отображаемый текст */
+  label?: string;
+  /** Дочерние элементы */
+  children?: ReactNode;
+  /** Иконка */
+  icon?: React.ReactNode;
+}
 
-  /** @internal */
-  export interface BreadcrumbProps {
-    /** Обработчик клика */
-    onClick?: () => void;
-    /** Активный */
-    active?: boolean;
-    /** Отображаемый текст */
-    label?: string;
-    /** Дочерние элементы */
-    children?: ReactNode;
-    /** Иконка */
-    icon?: React.ReactNode;
-  }
+export interface BreadcrumbsProps {
+  /** Активный */
+  className?: string;
+  /** Разделитель */
+  separator?: React.ReactNode;
+  /** Дочерние элементы */
+  children: React.ReactElement<BreadcrumbProps>[];
+}
 
-  export interface BreadcrumbsProps {
-    /** Активный */
-    className?: string;
-    /** Разделитель */
-    separator?: React.ReactNode;
-    /** Дочерние элементы */
-    children: React.ReactElement<BreadcrumbProps>[];
-  }
+export interface ButtonProps {
+  /** Тест кнопки */
+  label?: string;
+  /** Вид кнопки (заполненный/обводка/ссылка) */
+  variant?: 'fill' | 'outline' | 'link';
+  /** Размер кнопки */
+  size?: 'sm' | 'md' | 'lg';
+  /** Стиль кнопки(текст+иконка, текст, иконка) */
+  style?: 'default' | 'text' | 'icon';
+  /** Состояние кнопки */
+  condition?: 'default' | 'error' | 'success' | 'warning' | 'info';
+  /** Иконка кнопки */
+  icon?: React.ReactNode;
+  /** Заблокированная кнопка */
+  disabled?: boolean;
+  /** Callback, который будет вызван при клике по кнопке */
+  onClick?: () => void;
+  /** Дочерние элементы */
+  children?: ReactNode;
+  /** Указатель на ошибку для установки condition */
+  error?: boolean;
+  /** Дополнительный цвет кнопки*/
+  color?: string;
+  /** Имя поля */
+  name?: string;
+  /** Тип кнопки */
+  type?: 'button' | 'submit' | 'reset';
+  /** Указатель на форму */
+  form?: string;
+}
 
-  export interface ButtonProps {
-    /** Тест кнопки */
-    label?: string;
-    /** Вид кнопки (заполненный/обводка/ссылка) */
-    variant?: 'fill' | 'outline' | 'link';
-    /** Размер кнопки */
-    size?: 'sm' | 'md' | 'lg';
-    /** Стиль кнопки(текст+иконка, текст, иконка) */
-    style?: 'default' | 'text' | 'icon';
-    /** Состояние кнопки */
-    condition?: 'default' | 'error' | 'success' | 'warning' | 'info';
-    /** Иконка кнопки */
-    icon?: React.ReactNode;
-    /** Заблокированная кнопка */
-    disabled?: boolean;
-    /** Callback, который будет вызван при клике по кнопке */
-    onClick?: () => void;
-    /** Дочерние элементы */
-    children?: ReactNode;
-    /** Указатель на ошибку для установки condition */
-    error?: boolean;
-    /** Дополнительный цвет кнопки*/
-    color?: string;
-    /** Имя поля */
-    name?: string;
-    /** Тип кнопки */
-    type?: 'button' | 'submit' | 'reset';
-    /** Указатель на форму */
-    form?: string;
-  }
+/** @internal */
+export interface InputProps {
+  /** Идентификатор элемента */
+  id?: string;
+  /** Лейбл */
+  label?: string;
+  /** Подсказка */
+  placeholder?: string;
+  /** Размер */
+  size?: 'sm' | 'md' | 'lg';
+  /** Знчение */
+  value?: string;
+  /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
+  /** Многострочное поле */
+  multiline?: boolean;
+  /** Количество строк в многострочном поле */
+  rows?: number;
+  /** Изменение размера многострочного поля */
+  resize?: boolean;
+  /** Заблокированное поле */
+  disabled?: boolean;
+  /** Только для чтения */
+  readOnly?: boolean;
+  /** Метка слева */
+  isLeftLabel?: boolean;
+  /** Иконка слева */
+  icon?: React.ReactNode;
+  /** Ошибка */
+  error?: boolean;
+  /** Текст ошибки */
+  helperText?: string;
+  /** Callback при изменении значения */
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  /** Обязательное поле */
+  required?: boolean;
+}
 
+/** @internal */
+export interface DateInputProps {
+  /** Идентификатор элемента */
+  id?: string;
+  /** Лейбл */
+  label?: string;
+  /** Размер */
+  size?: 'sm' | 'md' | 'lg';
+  /** Знчение */
+  value?: string;
+  /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
+  /** Заблокированное поле */
+  disabled?: boolean;
+  /** Только для чтения */
+  readOnly?: boolean;
+  /** Метка слева */
+  isLeftLabel?: boolean;
+  /** Иконка слева */
+  icon?: React.ReactNode;
+  /** Ошибка */
+  error?: boolean;
+  /** Текст ошибки */
+  helperText?: string;
+  /** Callback при изменении значения */
+  onChange?: (value: string | Date) => void;
+  /** Callback при потере фокуса */
+  onBlur?: React.FocusEventHandler<HTMLElement>;
+  /** Обязательное поле */
+  required?: boolean;
+}
 
-  /** @internal */
-  export interface InputProps {
-    /** Идентификатор элемента */
-    id?: string;
-    /** Лейбл */
-    label?: string;
-    /** Подсказка */
-    placeholder?: string;
-    /** Размер */
-    size?: 'sm' | 'md' | 'lg';
-    /** Знчение */
-    value?: string;
-    /** Стили передаваемые напрямую */
-    style?: CSSProperties;
-    /** Дополнительный класс */
-    className?: string;
-    /** Многострочное поле */
-    multiline?: boolean;
-    /** Количество строк в многострочном поле */
-    rows?: number;
-    /** Изменение размера многострочного поля */
-    resize?: boolean;
-    /** Заблокированное поле */
-    disabled?: boolean;
-    /** Только для чтения */
-    readOnly?: boolean;
-    /** Метка слева */
-    isLeftLabel?: boolean;
-    /** Иконка слева */
-    icon?: React.ReactNode;
-    /** Ошибка */
-    error?: boolean;
-    /** Текст ошибки */
-    helperText?: string;
-    /** Callback при изменении значения */
-    onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-    /** Обязательное поле */
-    required?: boolean;
-  }
+/** @internal */
+export interface TagProps {
+  /** Лейбл */
+  label: string;
+  /** Цвет */
+  color?: string;
+  /**Наличие кнопки закрытия */
+  closeButton?: boolean;
+  /** Возможность изменить лейбл */
+  editable?: boolean;
+  /** Callback при изменении значения */
+  onChange?: (label: string) => void;
+  /** Callback при нажатии на кнопку закрытия */
+  onClick?: () => void;
+}
 
-    /** @internal */
-  export interface DateInputProps {
-        /** Идентификатор элемента */
-        id?: string;
-        /** Лейбл */
-        label?: string;
-        /** Размер */
-        size?: 'sm' | 'md' | 'lg';
-        /** Знчение */
-        value?: string;
-        /** Стили передаваемые напрямую */
-        style?: CSSProperties;
-        /** Дополнительный класс */
-        className?: string;
-        /** Заблокированное поле */
-        disabled?: boolean;
-        /** Только для чтения */
-        readOnly?: boolean;
-        /** Метка слева */
-        isLeftLabel?: boolean;
-        /** Иконка слева */
-        icon?: React.ReactNode;
-        /** Ошибка */
-        error?: boolean;
-        /** Текст ошибки */
-        helperText?: string;
-        /** Callback при изменении значения */
-        onChange?: (value: string | Date) => void;
-        /** Callback при потере фокуса */
-        onBlur?: React.FocusEventHandler<HTMLElement>;
-        /** Обязательное поле */
-        required?: boolean;
-  }
+export interface SettingTagProps {
+  /** Лейбл */
+  label: string;
+  /** Цвет */
+  color?: string;
+  /** Callback при изменении значения/цвета */
+  onChange?: (data: string) => void;
+}
 
-  /** @internal */
-  export interface TagProps {
-    /** Лейбл */
-    label: string;
-    /** Цвет */
-    color?: string;
-    /**Наличие кнопки закрытия */
-    closeButton?: boolean;
-    /** Возможность изменить лейбл */
-    editable?: boolean;
-    /** Callback при изменении значения */
-    onChange?: (label: string) => void;
-    /** Callback при нажатии на кнопку закрытия */
-    onClick?: () => void;
-  }
+export interface ToggleButtonProps {
+  /** Знчение */
+  value?: boolean;
+  /** Callback при изменении значения */
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  /** Заблокированная кнопка */
+  disabled?: boolean;
+  /** Размер кнопки */
+  size?: 'sm' | 'md';
+  /** Текст кнопки */
+  label?: string;
+}
 
+export type BaseOptions = {
+  id?: string;
+  key?: string | number;
+  name?: string;
+  description?: string;
+  value?: string | number;
+  icon?: React.JSX.Element;
+  disabled?: boolean;
+  isDivider?: boolean;
+  children?: TOptions[];
+};
 
-  export interface SettingTagProps {
-    /** Лейбл */
-    label: string;
-    /** Цвет */
-    color?: string;
-    /** Callback при изменении значения/цвета */
-    onChange?: (data: string) => void;
-  }
+export type TOptions<T = {}> = BaseOptions & T;
 
+//Типы для dropdown
+export interface DropdownProps {
+  /** Массив элементов для выпадающего списка */
+  options: Array<string | number | TOptions>;
+  /** Идентификатор */
+  id?: string;
+  /** Лейбл */
+  label?: string;
+  /** Подсказик заполнения */
+  placeholder?: string;
+  /** Обязательное поле */
+  required?: boolean;
+  /** Значение */
+  value?: string | number | TOptions | null;
+  /** Значение по умолчанию */
+  defaultValue?: string | number | TOptions | null;
+  /** Callback, который будет вызван при изменении значения */
+  onChange?: (event: any, value: string | number | TOptions | null) => void;
+  /** Функция для получения текста опции */
+  getOptionLabel?: (option: TOptions) => keyof TOptions;
+  /** Вариaнты выпадающего списка(текст + иконка, текст)' */
+  variant?: 'icons' | 'text';
+  /** Размер */
+  size?: 'md' | 'lg';
+  /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
+  /** Отображение левой метки */
+  isLeftLabel?: boolean;
+  /** Отображение разделителя */
+  isDivider?: boolean;
+  /** Заблокированный */
+  disabled?: boolean;
+  /** Только для чтения */
+  readOnly?: boolean;
+  /** Открытый */
+  isOpened?: boolean;
+  /** Ошибка */
+  error?: boolean;
+  /** Текст ошибки */
+  helperText?: string;
+  /** Callback, который будет вызван при клике */
+  onClick?: (event: any) => void;
+  /** Callback при потере фокуса */
+  onBlur?: (event: any) => void;
+  /** Callback при получении фокуса */
+  onFocus?: (event: any) => void;
+  /** Callback, который будет вызван при закрытии выпадающего списка */
+  onClose?: (event: any) => void;
+  /** Возможность сброса значения до первоначального */
+  clearable?: boolean;
+  /** Включение автозаполнения */
+  enableAutocomplete?: boolean;
+  /** Текст при отсутствии опций */
+  noOptionsText?: string;
+}
 
-  export interface ToggleButtonProps {
-    /** Знчение */
-    value?: boolean;
-    /** Callback при изменении значения */
-    onChange?: React.ChangeEventHandler<HTMLInputElement>;
-    /** Заблокированная кнопка */
-    disabled?: boolean;
-    /** Размер кнопки */
-    size?: 'sm' | 'md';
-    /** Текст кнопки */
-    label?: string;
-  }
+/** @internal */
+export interface TypographyProps {
+  /** Вариант шрифта */
+  variant?: `${ETypographyVariants}`;
+  /** Текст */
+  children: ReactNode;
+  /** Дополнительный класс */
+  className?: string;
+  /** Цвет текста */
+  color?: CSSProperties['color'];
+  /** Стиль текста */
+  style?: CSSProperties;
+}
 
+export interface ProgressBarProps {
+  /** Значение */
+  value?: number;
+  /** Максимальное значение */
+  max?: number;
+  /** Размер */
+  size?: 'sm' | 'md' | 'lg';
+  /** Показывать значение */
+  showValue?: boolean;
+  /** Анимация */
+  animated?: boolean;
+  /** Длительность анимации */
+  animationDuration?: number;
+  /**Для выставления флага окончания загрузки */
+  setIsLoadingFinished?: (value: boolean) => void;
+}
 
-  export type BaseOptions = {
-    id?: string;
-    key?: string | number;
-    name?: string;
-    description?: string;
-    value?: string | number;
-    icon?: React.JSX.Element;
-    disabled?: boolean;
-    isDivider?: boolean;
-    children?: TOptions[];
-  };
+export interface ProgressLoaderProps {
+  /** Значение */
+  value: number;
+  /** Размер */
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  /** Показывать значение */
+  showValue?: boolean;
+  /** Анимация */
+  animated?: boolean;
+}
 
-  export type TOptions<T = {}> = BaseOptions & T;
+export interface SpinnerProps {
+  /** Размер */
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+}
 
-  //Типы для dropdown
-  export interface DropdownProps {
-    /** Массив элементов для выпадающего списка */
-    options: Array<string | number | TOptions>;
-    /** Идентификатор */
-    id?: string;
-    /** Лейбл */
-    label?: string;
-    /** Подсказик заполнения */
-    placeholder?: string;
-    /** Обязательное поле */
-    required?: boolean;
-    /** Значение */
-    value?: string | number | TOptions | null;
-    /** Значение по умолчанию */
-    defaultValue?: string | number | TOptions | null;
-    /** Callback, который будет вызван при изменении значения */
-    onChange?: (event: any, value: string | number | TOptions | null) => void;
-    /** Функция для получения текста опции */
-    getOptionLabel?: (option: TOptions) => keyof TOptions;
-    /** Вариaнты выпадающего списка(текст + иконка, текст)' */
-    variant?: 'icons' | 'text';
-    /** Размер */
-    size?: 'md' | 'lg';
-    /** Стили передаваемые напрямую */
-    style?: CSSProperties;
-    /** Дополнительный класс */
-    className?: string;
-    /** Отображение левой метки */
-    isLeftLabel?: boolean;
-    /** Отображение разделителя */
-    isDivider?: boolean;
-    /** Заблокированный */
-    disabled?: boolean;
-    /** Только для чтения */
-    readOnly?: boolean;
-    /** Открытый */
-    isOpened?: boolean;
-    /** Ошибка */
-    error?: boolean;
-    /** Текст ошибки */
-    helperText?: string;
-    /** Callback, который будет вызван при клике */
-    onClick?: (event: any) => void;
-    /** Callback при потере фокуса */
-    onBlur?: (event: any) => void;
-    /** Callback при получении фокуса */
-    onFocus?: (event: any) => void;
-    /** Callback, который будет вызван при закрытии выпадающего списка */
-    onClose?: (event: any) => void;
-    /** Возможность сброса значения до первоначального */
-    clearable?: boolean;
-    /** Включение автозаполнения */
-    enableAutocomplete?: boolean;
-    /** Текст при отсутствии опций */
-    noOptionsText?: string;
-  }
+export interface CheckboxProps {
+  /** Идентификатор */
+  checked?: boolean;
+  /** Обработчик изменения состояния */
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  /** Заблокированный чекбокс */
+  disabled?: boolean;
+  /** Размер чекбокса */
+  size?: 'sm' | 'md';
+  /** Текст лейбла */
+  label?: string;
+  /** Цвет чекбока */
+  color?: string;
+  /** Заливка */
+  filled?: boolean;
+}
 
+export interface RadioProps {
+  /** Значение */
+  value?: string;
+  /**  Лейбл */
+  label?: string;
+  /** Выбраный */
+  checked?: boolean;
+  /** Обработчик изменения состояния */
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  /** Заблокированный чекбокс */
+  disabled?: boolean;
+  /** Размер чекбокса */
+  size?: 'sm' | 'md';
+}
 
-  /** @internal */
-  export interface TypographyProps {
-    /** Вариант шрифта */
-    variant?: `${ETypographyVariants}`;
-    /** Текст */
-    children: ReactNode;
-    /** Дополнительный класс */
-    className?: string;
-    /** Цвет текста */
-    color?: CSSProperties['color'];
-    /** Стиль текста */
-    style?: CSSProperties;
-  }
+export interface TabProps {
+  /** Значение */
+  value?: string;
+  /** Обработчик клика */
+  onClick?: (value: string) => void;
+  onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  /** Текст лейбла */
+  label?: string;
+  /** Размер */
+  selected?: boolean;
+  /** Заблокированный */
+  disabled?: boolean;
+  /** Табы */
+  children?: React.ReactNode;
+}
 
+export interface TabsProps {
+  /** Табы */
+  children: React.ReactElement<TabProps>[];
+  /** Значение */
+  value?: string;
+  /** Обработчик изменения значения */
+  onChange?: (value: string) => void;
+}
 
+export interface ColorPickerProps {
+  /** Цвет выбранный пользователем */
+  color?: string;
+  /** Основной цвет */
+  mainColor?: string;
+  /** Последние использованные цвета*/
+  recentColors?: string[];
+  /** Флаг наведения на меню*/
+  setIsHovered: (isHover: boolean) => void;
+  /** Ширина ColorPicker */
+  width?: number;
+  /** Высота ColorPicker*/
+  height?: number;
+  /** Автофокус ColorPicker*/
+  autoOpen?: boolean;
+  /** Callback функция при изменении цвета */
+  onChange?: (color: string) => void;
+  /** Функция обработки изменения цвета */
+  onColorChange: (color: string) => void;
+}
 
-  export interface ProgressBarProps {
-    /** Значение */
-    value?: number;
-    /** Максимальное значение */
-    max?: number;
-    /** Размер */
-    size?: 'sm' | 'md' | 'lg';
-    /** Показывать значение */
-    showValue?: boolean;
-    /** Анимация */
-    animated?: boolean;
-  }
+export type SnackbarProps = {
+  /** Сообщение */
+  children: ReactNode;
+  /** Тип сообщения */
+  type: 'success' | 'error' | 'warning' | 'info';
+  /** Иконка */
+  icon?: boolean;
+  /** Длительность показа сообщения */
+  duration?: number;
+  /** Функция обработки закрытия сообщения */
+  onClose?: () => void;
+  /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+};
 
-  export interface ProgressLoaderProps {
-    /** Значение */
-    value: number;
-    /** Размер */
-    size?: 'sm' | 'md' | 'lg' | 'xl';
-    /** Показывать значение */
-    showValue?: boolean;
-    /** Анимация */
-    animated?: boolean;
-  }
+export type TAttachments = {
+  id: string;
+  filename: string;
+  uri?: string;
+  size?: number;
+  createDateTime?: string;
+  updateDateTime?: string;
+};
 
-  export interface SpinnerProps {
-    /** Размер */
-    size?: 'xs' | 'sm' | 'md' | 'lg';
-  }
+export interface FileAttachProps {
+  //Массив уже прикрепленных файлов(которые есть в объекте)
+  filesList: TAttachments[];
+  /** Максимальный размер файла */
+  maxFileSize?: number;
+  /** Максимальное количество файлов */
+  maxFileCount?: number;
+  /**Поддерживаемые форматы файлов */
+  acceptedFormats?: Accept;
+  /**Добавленные файлы */
+  addedFiles: File[];
+  /**Сосотояние для добавления файлов */
+  setAddedFiles: (addedFiles: File[]) => void;
+  /** Функция обработки скачивания файла */
+  onDownload?: (file: TAttachments) => void;
+  /** Функция обработки удаления файла */
+  onDelete?: (id: string) => void;
+  /**Разрешени на добавление файлов*/
+  canAdd?: boolean;
+  /**Разрешение на удаление файлов */
+  canDelete?: boolean;
+  /**Разрешение на скачивание файлов */
+  canDownload?: boolean;
+  /**Позиционирование блока прикрепленных файлов */
+  position?: 'left' | 'right' | 'bottom';
+  /** Язык */
+  lng?: 'ru' | 'en';
+  /** Дополнительный класс */
+  className?: string;
+  /** Стили передаваемые напрямую */
+  style?: React.CSSProperties;
+}
+export interface FileListAttaсhedProps {
+  /** Список прикрепленных файлов */
+  filesList: TAttachments[] | [] | undefined;
+  /** Функция обработки удаления файла */
+  onDelete?: (id: string) => void;
+  /** Функция обработки скачивания файла */
+  onDownload?: (file: TAttachments) => void;
+  /**Разрешение на удаление файлов */
+  canDelete?: boolean;
+  /**Разрешение на скачивание файлов */
+  canDownload?: boolean;
+  /**Флаг для показа информационного текста */
+  isInfoShown?: boolean;
+  /** Язык */
+  lng?: 'ru' | 'en';
+  /** Дополнительный класс */
+  className?: string;
+  /** Стили передаваемые напрямую */
+  style?: React.CSSProperties;
+}
+export interface FileItemProps {
+  /** Файл */
+  file: TAttachments;
+  /** Флаг загрузки файла */
+  loading?: boolean;
+  /** Текст ошибки загрузки файла */
+  error?: string;
+  /** Функция обработки скачивания файла */
+  onDownload?: (file: TAttachments) => void;
+  /** Функция обработки удаления файла */
+  onDelete?: (id: string) => void;
+  /**Разрешение на удаление файлов */
+  canDelete?: boolean;
+  /**Разрешение на скачивание файлов */
+  canDownload?: boolean;
+  /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Флаг добавленного файла */
+  isAddedFile?: boolean;
+  /** Флаг отклоненного файла */
+  isRejectedFile?: boolean;
+}
 
-  export interface CheckboxProps {
-    /** Идентификатор */
-    checked?: boolean;
-    /** Обработчик изменения состояния */
-    onChange?: ChangeEventHandler<HTMLInputElement>;
-    /** Заблокированный чекбокс */
-    disabled?: boolean;
-    /** Размер чекбокса */
-    size?: 'sm' | 'md';
-    /** Текст лейбла */
-    label?: string;
-    /** Цвет чекбока */
-    color?: string;
-    /** Заливка */
-    filled?: boolean;
-  }
+export interface FileLoaderProps {
+  /** Максимальный размер файла */
+  maxFileSize?: number;
+  /** Максимальное количество файлов */
+  maxFileCount?: number;
+  /**Поддерживаемые форматы файлов */
+  acceptedFormats?: Accept;
+  /**Добавленные файлы */
+  addedFiles: File[];
+  /**Сосотояние для добавления файлов */
+  setAddedFiles: (addedFiles: File[]) => void;
+  /**Разрешени на добавление файлов*/
+  canAdd?: boolean;
+  /** Язык */
+  lng?: 'ru' | 'en';
+  /** Дополнительный класс */
+  className?: string;
+  /** Стили передаваемые напрямую */
+  style?: React.CSSProperties;
+}
 
-  export interface RadioProps {
-    /** Значение */
-    value?: string;
-    /**  Лейбл */
-    label?: string;
-    /** Выбраный */
-    checked?: boolean;
-    /** Обработчик изменения состояния */
-    onChange?: ChangeEventHandler<HTMLInputElement>;
-    /** Заблокированный чекбокс */
-    disabled?: boolean;
-    /** Размер чекбокса */
-    size?: 'sm' | 'md';
-  }
-
-
-  export interface TabProps {
-    /** Значение */
-    value?: string;
-    /** Обработчик клика */
-    onClick?: (value: string) => void;
-    onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    /** Текст лейбла */
-    label?: string;
-    /** Размер */
-    selected?: boolean;
-    /** Заблокированный */
-    disabled?: boolean;
-    /** Табы */
-    children?: React.ReactNode;
-  }
-
-  export interface TabsProps {
-    /** Табы */
-    children: React.ReactElement<TabProps>[];
-    /** Значение */
-    value?: string;
-    /** Обработчик изменения значения */
-    onChange?: (value: string) => void;
-  }
-
-
-  export interface ColorPickerProps {
-    /** Цвет выбранный пользователем */
-    color?: string;
-    /** Основной цвет */
-    mainColor?: string;
-    /** Последние использованные цвета*/
-    recentColors?: string[];
-    /** Флаг наведения на меню*/
-    setIsHovered: (isHover: boolean) => void;
-    /** Ширина ColorPicker */
-    width?: number;
-    /** Высота ColorPicker*/
-    height?: number;
-    /** Автофокус ColorPicker*/
-    autoOpen?: boolean;
-    /** Callback функция при изменении цвета */
-    onChange?: (color: string) => void;
-    /** Функция обработки изменения цвета */
-    onColorChange: (color: string) => void;
-  }
-
-  export type SnackbarProps = {
-    /** Сообщение */
-    children: ReactNode;
-    /** Тип сообщения */
-    type: 'success' | 'error' | 'warning' | 'info';
-    /** Иконка */
-    icon?: boolean;
-    /** Длительность показа сообщения */
-    duration: number;
-    /** Функция обработки закрытия сообщения */
-    onClose?: () => void;
-  };
-
-  export interface FileItemProps {
-    /** Название файла */
-   name?: string ;
-    /** Размер файла */
-   size?: number ;
-   /** Флаг загрузки файла */
-   loading?: boolean;
-   /** Текст ошибки загрузки файла */
-   error?: string;
-   /** Функция обработки скачивания файла */
-   onDownload?: () => void;
-   /** Функция обработки удаления файла */
-   onDelete?: () => void;
-   /** Стили передаваемые напрямую */
-   style?: CSSProperties;
-  }
-
-  export interface FileAttachProps {
-    /** Максимальный размер файла */
-   maxFileSize?: number;
-   /** Максимальное количество файлов */
-   maxFileCount?: number; 
-    /**Поддерживаемые форматы файлов */
-   acceptedFormats?: Accept;
-   /**Добавленные файлы */
-   addedFiles: File[];
-   /**Сосотояние для добавления файлов */
-   setAddedFiles:(addedFiles: File[]) => void;
-   /** Функция обработки скачивания файла */
-   onDownload?: () => void;
-   /**Заблокировано добавление файлов*/
-   disabled?: boolean;
-   /** Дополнительный класс */
-   className?: string;
-   /** Стили передаваемые напрямую */
-   style?: React.CSSProperties;
- }
-
- export interface DialogProps {
+export interface DialogProps {
   /** Флаг открытия окна */
   open: boolean;
   /** Максимальная ширина окна */
@@ -439,28 +502,28 @@ import { Accept } from 'react-dropzone/.';
   overlay?: boolean;
   /**Окно растягивается до максимальной ширины*/
   fullWidth?: boolean;
- }
+}
 
- export interface IconButtonProps {
-   /** Иконка кнопки */
-   icon?: React.ReactNode;
-   /** Размер кнопки */
-   size?: 'sm' | 'md' | 'lg';
-   /**Цвет кнопки */
-   color?: string;
-   /** Стиль кнопки иконки*/
-   style?: CSSProperties;
-   /** Заблокированная кнопка */
-   disabled?: boolean;
-   /** Callback, который будет вызван при клике по кнопке */
-   onClick: () => void;
-   /** Дочерние элементы */
-   children?: ReactNode;
-   /** Дополнительный класс */
-   className?: string;
- }
+export interface IconButtonProps {
+  /** Иконка кнопки */
+  icon?: React.ReactNode;
+  /** Размер кнопки */
+  size?: 'sm' | 'md' | 'lg';
+  /**Цвет кнопки */
+  color?: string;
+  /** Стиль кнопки иконки*/
+  style?: CSSProperties;
+  /** Заблокированная кнопка */
+  disabled?: boolean;
+  /** Callback, который будет вызван при клике по кнопке */
+  onClick: (e: React.MouseEvent) => void;
+  /** Дочерние элементы */
+  children?: ReactNode;
+  /** Дополнительный класс */
+  className?: string;
+}
 
- export interface BaseListProps {
+export interface BaseListProps {
   /** Идентификатор */
   id?: string;
   /** Стиль элемента списка */
@@ -523,7 +586,7 @@ export interface TooltipProps {
   /** Дополнительный класс */
   className?: string;
   /** Стиль подсказки */
-	style?: CSSProperties;
+  style?: CSSProperties;
   /** Положение подсказки */
   overlayChildren?: boolean;
   /** Размер текста */

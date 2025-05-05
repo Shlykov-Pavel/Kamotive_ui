@@ -14,14 +14,17 @@ export { Tag as Tag } from './src/components/Tag/Tag';
 export { SettingTag as SettingTag } from './src/components/SettingTag/SettingTag';
 export { ColorPicker as ColorPicker } from './src/components/ColorPicker/ColorPicker';
 export { Snackbar as Snackbar } from './src/components/Snackbar/Snackbar';
-export { FileItem as FileItem } from './src/components/FileItem/FileItem';
 export { FileAttach as FileAttach } from './src/components/FileAttach/FileAttach';
+export { FileListAttaсhed as FileListAttaсhed } from './src/components/FileListAttached/FileListAttaсhed';
+export { FileItem as FileItem } from './src/components/FileItem/FileItem';
+export { FileLoader as FileLoader } from './src/components/FileLoader/FileLoader';
 export { Dialog as Dialog } from './src/components/Dialog/Dialog';
 export { IconButton as IconButton } from './src/components/IconButton/IconButton';
 export { List as List } from './src/components/List/List';
 export { ListItem as ListItem } from './src/components/ListItem/ListItem';
 export { Breadcrumb as Breadcrumb } from './src/components/Breadcrumb/Breadcrumb';
 export { Breadcrumbs as Breadcrumbs } from './src/components/Breadcrumbs/Breadcrumbs';
-export { Tooltip as Tooltip } from './src/components/Tooltip/Tooltip'
+export { Tooltip as Tooltip } from './src/components/Tooltip/Tooltip';
 
 import './src/fonts.css';
+import './src/colors.css';
