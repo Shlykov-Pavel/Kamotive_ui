@@ -252,6 +252,10 @@ export interface ProgressBarProps {
     showValue?: boolean;
     /** Анимация */
     animated?: boolean;
+    /** Длительность анимации */
+    animationDuration?: number;
+    /**Для выставления флага окончания загрузки */
+    setIsLoadingFinished?: (value: boolean) => void;
 }
 export interface ProgressLoaderProps {
     /** Значение */
@@ -348,27 +352,22 @@ export type SnackbarProps = {
     /** Иконка */
     icon?: boolean;
     /** Длительность показа сообщения */
-    duration: number;
+    duration?: number;
     /** Функция обработки закрытия сообщения */
     onClose?: () => void;
-};
-export interface FileItemProps {
-    /** Название файла */
-    name?: string;
-    /** Размер файла */
-    size?: number;
-    /** Флаг загрузки файла */
-    loading?: boolean;
-    /** Текст ошибки загрузки файла */
-    error?: string;
-    /** Функция обработки скачивания файла */
-    onDownload?: () => void;
-    /** Функция обработки удаления файла */
-    onDelete?: () => void;
     /** Стили передаваемые напрямую */
     style?: CSSProperties;
-}
+};
+export type TAttachments = {
+    id: string;
+    filename: string;
+    uri?: string;
+    size?: number;
+    createDateTime?: string;
+    updateDateTime?: string;
+};
 export interface FileAttachProps {
+    filesList: TAttachments[];
     /** Максимальный размер файла */
     maxFileSize?: number;
     /** Максимальное количество файлов */
@@ -380,9 +379,81 @@ export interface FileAttachProps {
     /**Сосотояние для добавления файлов */
     setAddedFiles: (addedFiles: File[]) => void;
     /** Функция обработки скачивания файла */
-    onDownload?: () => void;
-    /**Заблокировано добавление файлов*/
-    disabled?: boolean;
+    onDownload?: (file: TAttachments) => void;
+    /** Функция обработки удаления файла */
+    onDelete?: (id: string) => void;
+    /**Разрешени на добавление файлов*/
+    canAdd?: boolean;
+    /**Разрешение на удаление файлов */
+    canDelete?: boolean;
+    /**Разрешение на скачивание файлов */
+    canDownload?: boolean;
+    /**Позиционирование блока прикрепленных файлов */
+    position?: 'left' | 'right' | 'bottom';
+    /** Язык */
+    lng?: 'ru' | 'en';
+    /** Дополнительный класс */
+    className?: string;
+    /** Стили передаваемые напрямую */
+    style?: React.CSSProperties;
+}
+export interface FileListAttaсhedProps {
+    /** Список прикрепленных файлов */
+    filesList: TAttachments[] | [] | undefined;
+    /** Функция обработки удаления файла */
+    onDelete?: (id: string) => void;
+    /** Функция обработки скачивания файла */
+    onDownload?: (file: TAttachments) => void;
+    /**Разрешение на удаление файлов */
+    canDelete?: boolean;
+    /**Разрешение на скачивание файлов */
+    canDownload?: boolean;
+    /**Флаг для показа информационного текста */
+    isInfoShown?: boolean;
+    /** Язык */
+    lng?: 'ru' | 'en';
+    /** Дополнительный класс */
+    className?: string;
+    /** Стили передаваемые напрямую */
+    style?: React.CSSProperties;
+}
+export interface FileItemProps {
+    /** Файл */
+    file: TAttachments;
+    /** Флаг загрузки файла */
+    loading?: boolean;
+    /** Текст ошибки загрузки файла */
+    error?: string;
+    /** Функция обработки скачивания файла */
+    onDownload?: (file: TAttachments) => void;
+    /** Функция обработки удаления файла */
+    onDelete?: (id: string) => void;
+    /**Разрешение на удаление файлов */
+    canDelete?: boolean;
+    /**Разрешение на скачивание файлов */
+    canDownload?: boolean;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
+    /** Флаг добавленного файла */
+    isAddedFile?: boolean;
+    /** Флаг отклоненного файла */
+    isRejectedFile?: boolean;
+}
+export interface FileLoaderProps {
+    /** Максимальный размер файла */
+    maxFileSize?: number;
+    /** Максимальное количество файлов */
+    maxFileCount?: number;
+    /**Поддерживаемые форматы файлов */
+    acceptedFormats?: Accept;
+    /**Добавленные файлы */
+    addedFiles: File[];
+    /**Сосотояние для добавления файлов */
+    setAddedFiles: (addedFiles: File[]) => void;
+    /**Разрешени на добавление файлов*/
+    canAdd?: boolean;
+    /** Язык */
+    lng?: 'ru' | 'en';
     /** Дополнительный класс */
     className?: string;
     /** Стили передаваемые напрямую */
@@ -416,7 +487,7 @@ export interface IconButtonProps {
     /** Заблокированная кнопка */
     disabled?: boolean;
     /** Callback, который будет вызван при клике по кнопке */
-    onClick: () => void;
+    onClick: (e: React.MouseEvent) => void;
     /** Дочерние элементы */
     children?: ReactNode;
     /** Дополнительный класс */

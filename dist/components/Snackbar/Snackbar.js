@@ -26,7 +26,7 @@ export const title = {
     warning: 'Внимание',
     info: 'Информация',
 };
-export const Snackbar = ({ children, type, duration = 10000, icon = true, onClose }) => {
+export const Snackbar = ({ children, type, duration = 10000, icon = true, onClose, style }) => {
     const [isVisible, setIsVisible] = useState(true);
     useEffect(() => {
         if (duration > 0) {
@@ -44,7 +44,7 @@ export const Snackbar = ({ children, type, duration = 10000, icon = true, onClos
     if (!isVisible)
         return null;
     const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`]);
-    return (React.createElement("div", { className: snackbarClasses },
+    return (React.createElement("div", { className: snackbarClasses, style: style },
         React.createElement("div", { className: styles['snackbar-textAndIcon'] },
             icon && icons[type],
             React.createElement("div", { className: styles['snackbar-text'] },
