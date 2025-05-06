@@ -391,7 +391,7 @@ export interface FileAttachProps {
     /**Позиционирование блока прикрепленных файлов */
     position?: 'left' | 'right' | 'bottom';
     /** Язык */
-    lng?: 'ru' | 'en';
+    lng?: string;
     /** Дополнительный класс */
     className?: string;
     /** Стили передаваемые напрямую */
@@ -411,7 +411,7 @@ export interface FileListAttaсhedProps {
     /**Флаг для показа информационного текста */
     isInfoShown?: boolean;
     /** Язык */
-    lng?: 'ru' | 'en';
+    lng?: string;
     /** Дополнительный класс */
     className?: string;
     /** Стили передаваемые напрямую */
@@ -453,7 +453,7 @@ export interface FileLoaderProps {
     /**Разрешени на добавление файлов*/
     canAdd?: boolean;
     /** Язык */
-    lng?: 'ru' | 'en';
+    lng?: string;
     /** Дополнительный класс */
     className?: string;
     /** Стили передаваемые напрямую */

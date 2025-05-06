@@ -18,7 +18,7 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         if (file.size > maxFileSize * 1024 * 1024 * 1024) {
             return {
                 code: 'name-too-large',
-                message: lng === 'ru'
+                message: lng === 'ru' || lng.includes('ru')
                     ? `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`
                     : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
             };
@@ -26,13 +26,13 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         if (addedFiles.find((addedFile) => addedFile.name === file.name)) {
             return {
                 code: 'repeating-file-name',
-                message: lng === 'ru' ? `Файл уже добавлен` : `File already added`,
+                message: lng === 'ru' || lng.includes('ru') ? `Файл уже добавлен` : `File already added`,
             };
         }
         if (addedFiles.length > maxFileCount - 1) {
             return {
                 code: 'files-count-too-large',
-                message: lng === 'ru' ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
+                message: lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
             };
         }
         return null;
@@ -71,7 +71,7 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                     errors: [
                         {
                             code: 'files-count-too-large',
-                            message: lng === 'ru'
+                            message: lng === 'ru' || lng.includes('ru')
                                 ? `Максимальное количество файлов ${maxFileCount}`
                                 : `Maximum number of files ${maxFileCount}`,
                         },
@@ -136,7 +136,7 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         React.createElement("div", Object.assign({}, getRootProps({ className: `${styles['dropzone']} ${!canAdd ? styles['disabled'] : ''}` })),
             React.createElement("input", Object.assign({}, getInputProps())),
             React.createElement(IconUpload, { htmlColor: !canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)' }),
-            React.createElement(Typography, { variant: "Body1", color: !canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)', style: { textAlign: 'center' } }, lng === 'ru' ? (React.createElement(React.Fragment, null,
+            React.createElement(Typography, { variant: "Body1", color: !canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)', style: { textAlign: 'center' } }, lng === 'ru' || lng.includes('ru') ? (React.createElement(React.Fragment, null,
                 React.createElement("span", { style: { textDecoration: 'underline' } }, "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 \u043D\u0430 \u043E\u0431\u043B\u0430\u0441\u0442\u044C"),
                 " ",
                 React.createElement("span", null, " \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0442\u0430\u0449\u0438\u0442\u0435 \u0444\u0430\u0439\u043B\u044B"))) : (React.createElement(React.Fragment, null,
@@ -145,7 +145,7 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                 React.createElement("span", null, "or drag files here")))),
             React.createElement("div", null,
                 maxFileSize &&
-                    (lng === 'ru' ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" },
+                    (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" },
                         `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`,
                         " ",
                         React.createElement("br", null))) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" },
@@ -153,10 +153,10 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                         " ",
                         React.createElement("br", null)))),
                 maxFileCount &&
-                    (lng === 'ru' ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`)) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `You can upload ${maxFileCount} ${maxFileCount > 1 ? `files` : `file`}`))))),
+                    (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`)) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `You can upload ${maxFileCount} ${maxFileCount > 1 ? `files` : `file`}`))))),
         acceptedFormats &&
-            (lng === 'ru' ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`)) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `Supported formats: ${getAcceptedFormatsString(acceptedFormats)}`))),
+            (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`)) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `Supported formats: ${getAcceptedFormatsString(acceptedFormats)}`))),
         (addedFiles === null || addedFiles === void 0 ? void 0 : addedFiles.length) > 0 || (errorFiles === null || errorFiles === void 0 ? void 0 : errorFiles.length) > 0 ? (React.createElement("div", { className: styles['addedFiles'] },
             acceptedFileItems,
-            fileRejectionItems)) : lng === 'ru' ? (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, "\u0424\u0430\u0439\u043B\u044B \u043D\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B")) : (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, "Files not added"))));
+            fileRejectionItems)) : lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, "\u0424\u0430\u0439\u043B\u044B \u043D\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B")) : (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, "Files not added"))));
 };
