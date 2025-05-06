@@ -28,7 +28,7 @@ interface FileListAttaсhedProps {
   /**Флаг для показа информационного текста */
   isInfoShown?: boolean;
   /** Язык */
-  lng?: 'ru' | 'en';
+  lng?: string;
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */
@@ -104,8 +104,7 @@ const meta: Meta<FileListAttaсhedProps> = {
     },
     lng: {
       description: 'Язык',
-      control: { type: 'select' },
-      options: ['ru', 'en'],
+      type: 'string',
     },
     className: {
       description: 'Дополнительный класс',

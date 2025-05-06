@@ -19,7 +19,7 @@ export interface FileLoaderProps {
   /**Заблокировано добавление файлов*/
   canAdd?: boolean;
   /** Язык */
-  lng?: 'ru' | 'en';
+  lng?: string;
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */
@@ -65,8 +65,7 @@ const meta: Meta<FileLoaderProps> = {
     },
     lng: {
       description: 'Язык',
-      control: { type: 'select' },
-      options: ['ru', 'en'],
+      type: 'string',
     },
   },
 };

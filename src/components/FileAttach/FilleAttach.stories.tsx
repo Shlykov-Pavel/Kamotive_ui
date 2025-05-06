@@ -40,7 +40,7 @@ interface FileAttachProps {
   /**Позиционирование блока прикрепленных файлов */
   position?: 'left' | 'right' | 'bottom';
   /** Язык */
-  lng?: 'ru' | 'en';
+  lng?: string;
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */
@@ -145,8 +145,7 @@ const meta: Meta<FileAttachProps> = {
     },
     lng: {
       description: 'Язык',
-      control: { type: 'select' },
-      options: ['ru', 'en'],
+      type: 'string',
     },
     className: {
       description: 'Дополнительный класс',

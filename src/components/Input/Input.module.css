@@ -128,7 +128,7 @@
 
 .label {
   line-height: 14px;
-  font-weight: 500;
+  font-weight: 500 !important;
   transition: 0.3ms ease-out;
   /* color: var(--text-grey); */
 }
@@ -140,30 +140,30 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 32px);
-  color: var(--text-dark);
-  font-weight: var(--font-weight-semiBold);
+  color: var(--text-dark) !important;;
+  /* font-weight: var(--font-weight-semiBold) !important;; */
 }
 .label--default.lg {
-  font-size: 12px;
+  font-size: 12px !important;;
 }
 .label--default.md {
-  font-size: 10px;
+  font-size: 10px !important;;
 }
 .label--default.sm {
-  font-size: 16px;
+  font-size: 16px !important;;
 }
 .label--left {
-  color: var(--text-dark);
+  color: var(--text-dark) !important;;
   text-wrap-mode: nowrap;
 }
 .label--left.lg {
-  font-size: 14px;
+  font-size: 14px !important;;
 }
 .label--left.md {
-  font-size: 12px;
+  font-size: 12px !important;;
 }
 .label--left.sm {
-  font-size: 10px;
+  font-size: 10px !important;;
 }
 
 /* Стили для обязательного input */
@@ -193,13 +193,13 @@
 }
 
 .helperText.md {
-  font-size: 10px;
+  font-size: 10px !important;
 }
 .helperText.sm {
-  font-size: 8px;
+  font-size: 8px !important;
 }
 .helperText.lg {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 .helperText {
   position: absolute;
@@ -211,13 +211,13 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--error-main);
+  color: var(--error-main) !important;
 }
 
 /* Стили для disabled */
 .input:disabled {
   background-color: rgba(120, 120, 128, 0.08);
-  color: var(--text-grey);
+  color: var(--text-grey) !important;
   cursor: not-allowed;
   border: none;
   box-shadow: none;
