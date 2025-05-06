@@ -208,7 +208,7 @@
 
 .label {
   transition: 0.3ms ease-out;
-  font-weight: 500;
+  font-weight: 500 !important;
   /* color: var(--text-grey); */
 }
 .label--readOnly {
@@ -225,13 +225,13 @@
   text-overflow: ellipsis;
   max-width: calc(100% - 32px);
   color: var(--text-dark);
-  font-weight: var(--font-weight-semiBold);
+  /* font-weight: var(--font-weight-semiBold); */
 }
 .label--default.lg {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 .label--default.md {
-  font-size: 10px;
+  font-size: 10px !important;
 }
 
 .label--left {
@@ -239,24 +239,18 @@
   min-width: fit-content;
 }
 .label--left.lg {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 .label--left.md {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 /* Стили для обязательного поля */
-/* .label--default.label--required {
-  position: relative;
-  top: 0;
-} */
 .label--required::after {
   content: '*';
   color: var(--error-main);
-  /* position: absolute; */
   margin-left: 2px;
   top: 2px;
-  /* font-size: 22px; */
-  font-size: 12px;
+  font-size: 12px !important;
 }
 
 .item-selected {
