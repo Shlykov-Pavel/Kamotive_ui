@@ -18,7 +18,7 @@ export const FileListAttaсhed: FC<FileListAttaсhedProps> = ({
   style,
 }) => {
   if (!filesList || filesList.length === 0) {
-    return lng === 'ru' ? (
+    return lng === 'ru' || lng.includes('ru') ? (
       <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
         Нет прикрепленных файлов
       </Typography>
@@ -31,7 +31,7 @@ export const FileListAttaсhed: FC<FileListAttaсhedProps> = ({
   return (
     <div className={classNames(styles['fileList'], className)} style={style}>
       {isInfoShown &&
-        (lng === 'ru' ? (
+        (lng === 'ru' || lng.includes('ru') ? (
           <Typography
             variant="Body2-SemiBold"
             color="var(--text-dark)"

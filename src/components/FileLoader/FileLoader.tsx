@@ -37,7 +37,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
       return {
         code: 'name-too-large',
         message:
-          lng === 'ru'
+          lng === 'ru' || lng.includes('ru')
             ? `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`
             : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
       };
@@ -45,14 +45,14 @@ export const FileLoader: FC<FileLoaderProps> = ({
     if (addedFiles.find((addedFile: File) => addedFile.name === file.name)) {
       return {
         code: 'repeating-file-name',
-        message: lng === 'ru' ? `Файл уже добавлен` : `File already added`,
+        message: lng === 'ru' || lng.includes('ru') ? `Файл уже добавлен` : `File already added`,
       };
     }
     if (addedFiles.length > maxFileCount - 1) {
       return {
         code: 'files-count-too-large',
         message:
-          lng === 'ru' ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
+          lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
       };
     }
     return null;
@@ -98,7 +98,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
             {
               code: 'files-count-too-large',
               message:
-                lng === 'ru'
+                lng === 'ru' || lng.includes('ru')
                   ? `Максимальное количество файлов ${maxFileCount}`
                   : `Maximum number of files ${maxFileCount}`,
             },
@@ -190,7 +190,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
           color={!canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)'}
           style={{ textAlign: 'center' }}
         >
-          {lng === 'ru' ? (
+          {lng === 'ru' || lng.includes('ru') ? (
             <>
               <span style={{ textDecoration: 'underline' }}>Нажмите на область</span> <span> или перетащите файлы</span>
             </>
@@ -202,7 +202,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
         </Typography>
         <div>
           {maxFileSize &&
-            (lng === 'ru' ? (
+            (lng === 'ru' || lng.includes('ru') ? (
               <Typography variant="Body2" color="var(--grey-medium)">
                 {`Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`} <br />
               </Typography>
@@ -212,7 +212,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
               </Typography>
             ))}
           {maxFileCount &&
-            (lng === 'ru' ? (
+            (lng === 'ru'|| lng.includes('ru') ? (
               <Typography variant="Body2" color="var(--grey-medium)">
                 {`За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`}
               </Typography>
@@ -224,7 +224,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
         </div>
       </div>
       {acceptedFormats &&
-        (lng === 'ru' ? (
+        (lng === 'ru' || lng.includes('ru') ? (
           <Typography variant="Body2" color="var(--grey-medium)">
             {`Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`}
           </Typography>
@@ -238,7 +238,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
           {acceptedFileItems}
           {fileRejectionItems}
         </div>
-      ) : lng === 'ru' ? (
+      ) : lng === 'ru' || lng.includes('ru') ? (
         <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
           Файлы не добавлены
         </Typography>
