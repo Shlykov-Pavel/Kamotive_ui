@@ -128,6 +128,11 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         return formats.join(', ');
     };
     useEffect(() => {
+        if (addedFiles.length === 0) {
+            setAddedFilesFormatted([]);
+        }
+    }, [addedFiles]);
+    useEffect(() => {
         if (loadingFilesNames.length === 0 && isLoadingFiles) {
             setIsLoadingFiles(false);
         }

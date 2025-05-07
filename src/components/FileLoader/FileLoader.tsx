@@ -174,6 +174,12 @@ export const FileLoader: FC<FileLoaderProps> = ({
     return formats.join(', ');
   };
 
+  useEffect(()=>{
+    if (addedFiles.length === 0) {
+      setAddedFilesFormatted([]);
+    }
+  }, [addedFiles]);
+
   useEffect(() => {
     if (loadingFilesNames.length === 0 && isLoadingFiles) {
       setIsLoadingFiles(false);
