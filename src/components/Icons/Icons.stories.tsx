@@ -1,6 +1,6 @@
 import React, { CSSProperties, ReactNode, useState } from 'react';
 import type { Meta } from '@storybook/react';
-import { ChevronDown10, ChevronLeft, ChevronRight, ChevronUp10, IconAccount10, IconAdd, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10, IconCheck10, IconClose10, IconColorPicker10, IconDownload, IconError10, IconEyeOff10, IconFile, IconInfo10, IconSuccess10, IconUpload, IconWarning10 } from '../../Icons';
+import { ChevronDown10, ChevronLeft, ChevronRight, ChevronUp10, IconAccount10, IconAdd, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10, IconCheck10, IconClose10, IconColorPicker10, IconDownload, IconError10, IconEyeOff10, IconFile, IconInfo10, IconSuccess10, IconUpload, IconWarning10, IconPhone, IconLocation, IconEmail, IconEye10, IconPencil } from '../../Icons';
 import { IconButton } from '../IconButton/IconButton';
 import { Typography } from '../Typography/Typography';
 
@@ -85,7 +85,7 @@ const iconOptions = [
   { name: 'IconDownload', icon: <IconDownload /> },
   { name: 'IconUpload', icon: <IconUpload /> },
   { name: 'IconFile', icon: <IconFile /> },
-  { name: 'IconEyeOff10', icon: <IconEyeOff10 /> },
+  { name: 'IconEmail', icon: <IconEmail /> },
   { name: 'IconAdd', icon: <IconAdd /> },
   { name: 'IconCheck10', icon: <IconCheck10 /> },
   { name: 'IconClose10', icon: <IconClose10 /> },
@@ -96,7 +96,11 @@ const iconOptions = [
   { name: 'IconBell', icon: <IconBell10 /> },
   { name: 'IconBank', icon: <IconBank10 /> },
   { name: 'IconBriefcase10', icon: <IconBriefcase10 /> },
-  
+  { name: 'IconPhone', icon: <IconPhone /> },
+  { name: 'IconLocation', icon: <IconLocation /> },
+  { name: 'IconEye10', icon: <IconEye10 /> },
+  { name: 'IconEyeOff10', icon: <IconEyeOff10 /> },
+  { name: 'IconPencil', icon: <IconPencil /> },
 ];
   
   export default meta;
