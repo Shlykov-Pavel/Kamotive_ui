@@ -2,7 +2,7 @@ import { CheckboxDisabled } from './../components/Checkbox/Checkbox.stories';
 import * as React from 'react';
 import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
-import { Accept } from 'react-dropzone/.';
+import { Accept, FileError } from 'react-dropzone/.';
 
 /** @internal */
 export interface BreadcrumbProps {
@@ -422,6 +422,8 @@ export interface FileAttachProps {
   className?: string;
   /** Стили передаваемые напрямую */
   style?: React.CSSProperties;
+  /** Функция валидации файла */
+  fileValidator?: (file: File) => FileError | FileError[] | null;
 }
 export interface FileListAttaсhedProps {
   /** Список прикрепленных файлов */
@@ -479,12 +481,16 @@ export interface FileLoaderProps {
   setAddedFiles: (addedFiles: File[]) => void;
   /**Разрешени на добавление файлов*/
   canAdd?: boolean;
+  /** Список прикрепленных файлов */
+  filesList?: TAttachments[] | [] | undefined;
   /** Язык */
   lng?: string;
   /** Дополнительный класс */
   className?: string;
   /** Стили передаваемые напрямую */
   style?: React.CSSProperties;
+   /** Функция валидации файла */
+  fileValidator?: (file: File) => FileError | FileError[] | null;
 }
 
 export interface DialogProps {

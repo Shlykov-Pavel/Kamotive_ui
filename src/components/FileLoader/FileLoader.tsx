@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Accept, FileRejection, useDropzone } from 'react-dropzone';
+import { Accept, FileError, FileRejection, useDropzone } from 'react-dropzone';
 
 import { FileLoaderProps, TAttachments } from '../../types';
 import styles from './FileLoader.module.css';
@@ -21,10 +21,12 @@ export const FileLoader: FC<FileLoaderProps> = ({
   },
   addedFiles,
   setAddedFiles,
+  filesList = [],
   canAdd = true,
   lng = 'ru',
   className,
   style,
+  fileValidator
 }) => {
   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
   const [loadingFilesNames, setLoadingFilesNames] = useState<string[]>([]);
@@ -32,7 +34,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
 
   const [addedFilesFormated, setAddedFilesFormatted] = useState<TAttachments[]>([]);
 
-  const fileValidator = (file: File) => {
+  const fileValidatorInner = (file: File): FileError | FileError[] | null => {
     if (file.size > maxFileSize * 1024 * 1024 * 1024) {
       return {
         code: 'name-too-large',
@@ -42,6 +44,14 @@ export const FileLoader: FC<FileLoaderProps> = ({
             : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
       };
     }
+    // Проверка на дубликаты в filesList
+    if (filesList.find((existingFile: TAttachments) => existingFile.filename === file.name)) {
+      return {
+        code: 'repeating-file-name',
+        message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке` : `File already exists in the list`,
+      };
+    }
+    // Проверка на дубликаты в addedFiles
     if (addedFiles.find((addedFile: File) => addedFile.name === file.name)) {
       return {
         code: 'repeating-file-name',
@@ -55,10 +65,12 @@ export const FileLoader: FC<FileLoaderProps> = ({
           lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
       };
     }
+    if (fileValidator) {
+      const customValidationResult = fileValidator(file);
+     
+    }
     return null;
-  };
-
-  const { getRootProps, getInputProps } = useDropzone({
+  };  const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       setAddedFiles([...addedFiles, ...acceptedFiles]);
       //преобразование типа файлов для отрисовки в списке
@@ -125,7 +137,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
       }
     },
 
-    validator: fileValidator,
+    validator: fileValidatorInner,
     accept: acceptedFormats,
     maxFiles: maxFileCount,
     disabled: !canAdd,

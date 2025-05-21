@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { Accept } from 'react-dropzone';
+import { Accept, FileError } from 'react-dropzone';
 import { FileAttach } from './FileAttach';
 
 type TAttachments = {
@@ -45,6 +45,8 @@ interface FileAttachProps {
   className?: string;
   /** Стили передаваемые напрямую */
   style?: React.CSSProperties;
+  /** Функция валидации файла */
+  fileValidator?: (file: File) => (file: File) => FileError | FileError[] | null;
 }
 
 // Моковые данные для файлов
@@ -153,6 +155,10 @@ const meta: Meta<FileAttachProps> = {
     style: {
       description: 'Стили передаваемые напрямую',
     },
+    fileValidator: {
+      description: 'Функция валидации файла',
+      type: 'function',
+    }
   },
 };
 

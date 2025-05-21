@@ -5,6 +5,14 @@ import { action } from '@storybook/addon-actions';
 import { FileLoader } from './FileLoader';
 import { Accept } from 'react-dropzone';
 
+type TAttachments = {
+  id: string;
+  filename: string;
+  uri?: string;
+  size?: number;
+  createDateTime?: string;
+  updateDateTime?: string;
+};
 export interface FileLoaderProps {
   /** Максимальный размер файла */
   maxFileSize?: number;
@@ -16,6 +24,8 @@ export interface FileLoaderProps {
   addedFiles: File[];
   /**Сосотояние для добавления файлов */
   setAddedFiles: (addedFiles: File[]) => void;
+  /** Список прикрепленных файлов */
+  filesList?: TAttachments[] | [] | undefined;
   /**Заблокировано добавление файлов*/
   canAdd?: boolean;
   /** Язык */
@@ -24,6 +34,8 @@ export interface FileLoaderProps {
   className?: string;
   /** Стили передаваемые напрямую */
   style?: React.CSSProperties;
+   /** Функция валидации файла */
+  fileValidator?: (file: File) => boolean;
 }
 
 const meta: Meta<FileLoaderProps> = {
@@ -55,6 +67,15 @@ const meta: Meta<FileLoaderProps> = {
     maxFileCount: {
       description: 'Максимальное допустимое количество файлов',
       type: 'number',
+    },
+    addedFiles: {
+      description: 'Добавленные файлы',
+    },
+    setAddedFiles: {
+      description: 'Состояние для добавления файлов'
+    },
+    filesList: {
+      description: 'Список прикрепленных файлов',
     },
     acceptedFormats: {
       description: 'Поддерживаемые форматы файлов',
