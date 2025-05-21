@@ -48,7 +48,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
     if (filesList.find((existingFile: TAttachments) => existingFile.filename === file.name)) {
       return {
         code: 'repeating-file-name',
-        message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке` : `File already exists in the list`,
+        message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке прикрпеленных файлов` : `File already exists in the list of attached files`,
       };
     }
     // Проверка на дубликаты в addedFiles
@@ -67,7 +67,9 @@ export const FileLoader: FC<FileLoaderProps> = ({
     }
     if (fileValidator) {
       const customValidationResult = fileValidator(file);
-     
+       if (customValidationResult) {
+          return customValidationResult;
+        }
     }
     return null;
   };  const { getRootProps, getInputProps } = useDropzone({
