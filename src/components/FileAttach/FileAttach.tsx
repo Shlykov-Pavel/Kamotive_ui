@@ -26,6 +26,7 @@ export const FileAttach: FC<FileAttachProps> = ({
   lng = 'ru',
   className,
   style,
+  fileValidator,
 }) => {
   const fileAttachClasses = classNames(styles['fileAttach'], className, {
     [styles[`fileAttach_position_${position}`]]: position,
@@ -39,8 +40,11 @@ export const FileAttach: FC<FileAttachProps> = ({
         acceptedFormats={acceptedFormats}
         addedFiles={addedFiles}
         setAddedFiles={setAddedFiles}
+        filesList={filesList}
         canAdd={canAdd}
         lng={lng}
+        fileValidator={fileValidator}
+
       />
       <FileListAttaсhed
         filesList={filesList}
