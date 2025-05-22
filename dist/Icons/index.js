@@ -20,3 +20,8 @@ export { IconFile } from './IconFile/IconFile';
 export { IconUpload } from './IconUpload/IconUpload';
 export { IconDownload } from './IconDownload/IconDownload';
 export { IconAdd } from './IconAdd/IconAdd';
+export { IconPhone } from './IconPhone/IconPhone';
+export { IconLocation } from './IconLocation/IconLocation';
+export { IconEmail } from './IconEmail/IconEmail';
+export { IconEye10 } from './IconEye/IconEye10';
+export { IconPencil } from './IconPencil/IconPencil';
