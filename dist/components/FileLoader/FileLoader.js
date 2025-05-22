@@ -9,12 +9,12 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx'],
-}, addedFiles, setAddedFiles, canAdd = true, lng = 'ru', className, style, }) => {
+}, addedFiles, setAddedFiles, filesList = [], canAdd = true, lng = 'ru', className, style, fileValidator }) => {
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [loadingFilesNames, setLoadingFilesNames] = useState([]);
     const [errorFiles, setErrorFiles] = useState([]);
     const [addedFilesFormated, setAddedFilesFormatted] = useState([]);
-    const fileValidator = (file) => {
+    const fileValidatorInner = (file) => {
         if (file.size > maxFileSize * 1024 * 1024 * 1024) {
             return {
                 code: 'name-too-large',
@@ -23,6 +23,14 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                     : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
             };
         }
+        // Проверка на дубликаты в filesList
+        if (filesList.find((existingFile) => existingFile.filename === file.name)) {
+            return {
+                code: 'repeating-file-name',
+                message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке прикрепленных файлов` : `File already exists in the list of attached files`,
+            };
+        }
+        // Проверка на дубликаты в addedFiles
         if (addedFiles.find((addedFile) => addedFile.name === file.name)) {
             return {
                 code: 'repeating-file-name',
@@ -34,6 +42,12 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                 code: 'files-count-too-large',
                 message: lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
             };
+        }
+        if (fileValidator) {
+            const customValidationResult = fileValidator(file);
+            if (customValidationResult) {
+                return customValidationResult;
+            }
         }
         return null;
     };
@@ -98,7 +112,7 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                 setErrorFiles([...errorFiles, ...formattedRejections]);
             }
         },
-        validator: fileValidator,
+        validator: fileValidatorInner,
         accept: acceptedFormats,
         maxFiles: maxFileCount,
         disabled: !canAdd,
