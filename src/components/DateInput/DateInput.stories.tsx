@@ -25,6 +25,7 @@ const meta: Meta<DateInputProps> = {
   },
   argTypes: {
 	disabled: { description: 'Устанавливает атрибут disabled', control: { type: 'boolean' } },
+	readOnly: { description: 'Устанавливает атрибут readOnly', control: { type: 'boolean' } },
   },
 };
 
@@ -40,6 +41,12 @@ export const DateInputDisabled = (argTypes: DateInputProps): JSX.Element => <Dat
 DateInputDisabled.storyName = 'Date Input заблокированный';
 DateInputDisabled.args = {
 	disabled: true
+};
+
+export const DateInputReadOnly = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
+DateInputReadOnly.storyName = 'Date Input только для чтения';
+DateInputReadOnly.args = {
+	readOnly: true
 };
 
 export const DateInputError = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;

@@ -30,6 +30,8 @@ interface CustomInputProps {
   onClose?: () => void;
   onDateChange?: (date: Date) => void;
   className?: string;
+  disabled?: boolean;
+  readOnly?: boolean;
 }
 
 interface SelectionPositions {
@@ -53,7 +55,7 @@ interface MonthPickerProps {
 type DatePart = 'day' | 'month' | 'year';
 
 const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps>(
-  ({ value = '', onClick, onDateChange, onClose, className }, ref) => {
+  ({ value = '', onClick, onDateChange, onClose, className, disabled=false, readOnly=false }, ref) => {
 
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [selectedPart, setSelectedPart] = useState<DatePart | null>(null);
@@ -84,7 +86,9 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
 
     const updateInputValue = (char: string, position: number) => {
       setShouldReselect(true);
-      setInput(input.substring(0, position) + char + input.substring(position + char.length));
+      if (!readOnly) {
+        setInput(input.substring(0, position) + char + input.substring(position + char.length));
+      }
     };
 
     const handleClick = (e: React.MouseEvent<HTMLInputElement>): void => {
@@ -225,7 +229,9 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
     }, []);
 
     useEffect(() => {
-      setInput(value);
+      if (!readOnly) {
+        setInput(value);
+      }
     }, [value]);
 
     useEffect(() => {
@@ -252,7 +258,8 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        readOnly
+        readOnly={readOnly}
+        disabled={disabled}
         className={className}
       />
     );
@@ -267,7 +274,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
   style,
   className,
   disabled = false,
-  readOnly = disabled,
+  readOnly = false,
   isLeftLabel = false,
   icon,
   error = false,
@@ -511,6 +518,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
         dateFormat={dateFormat}
         locale="ru"
         readOnly={readOnly}
+        disabled={disabled}
         showPopperArrow={false}
         calendarClassName={classNames(styles.calendar, calendarClassName)}
         popperClassName={styles.calendarPopper}
@@ -539,6 +547,8 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
             className={classNames(inputClassess, inputClassName)}
             onDateChange={handleCustomInputChange}
             onClose={handleCloseDatePicker}
+            disabled={disabled}
+            readOnly={readOnly}
           />
         }
       />
