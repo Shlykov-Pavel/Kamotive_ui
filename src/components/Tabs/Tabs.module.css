@@ -9,7 +9,9 @@
 }
 
 .tab {
-  width: 126px;
+  /* width: 126px; */
+  width: 100%;
+  white-space: nowrap;
   height: 24px;
   padding: 3px 10px;
   display: flex;

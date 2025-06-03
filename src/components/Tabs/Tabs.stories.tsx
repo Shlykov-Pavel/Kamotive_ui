@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import type { Meta } from '@storybook/react';
 import { Tabs } from './Tabs';
 import { Tab } from '../Tab/Tab';
@@ -16,6 +16,10 @@ interface TabProps {
  children?: React.ReactNode;
  /** Обработчик клика */
  onClick?: (value: string ) => void;
+ /** Стили передаваемые напрямую */
+ style?: CSSProperties;
+ /** Дополнительный класс */
+ className?: string;
 }
 interface TabsProps {
   /** Табы */
@@ -24,6 +28,10 @@ interface TabsProps {
  value?: string;
  /** Обработчик изменения значения */
  onChange?: (value: string) => void;
+  /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
 }
 
 
@@ -48,6 +56,8 @@ const meta: Meta<TabsProps> = {
     value: { description: 'Задает выбор активного таба. Выбран по умолчанию первый таб.' },
     onChange: { description: 'Callback функция, вызываемая при изменении значения' },
     children: { description: 'Содержимое вкладок' },
+    style: { description: 'Стили передаваемые напрямую' },
+    className: { description: 'Дополнительный класс' },
   },
 };
 
