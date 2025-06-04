@@ -335,6 +335,11 @@ export interface TabProps {
   disabled?: boolean;
   /** Табы */
   children?: React.ReactNode;
+   /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
+
 }
 
 export interface TabsProps {
@@ -344,6 +349,10 @@ export interface TabsProps {
   value?: string;
   /** Обработчик изменения значения */
   onChange?: (value: string) => void;
+   /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
 }
 
 export interface ColorPickerProps {
