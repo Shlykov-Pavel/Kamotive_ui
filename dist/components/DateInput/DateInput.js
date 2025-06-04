@@ -11,7 +11,7 @@ import { ChevronRight } from '../../Icons/ChevronRight/ChevronRight';
 import { ChevronLeft } from '../../Icons/ChevronLeft/ChevronLeft';
 import { Button } from '../Button/Button';
 registerLocale('ru', ru);
-const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, className }, ref) => {
+const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, className, disabled = false, readOnly = false }, ref) => {
     const inputRef = useRef(null);
     const [selectedPart, setSelectedPart] = useState(null);
     const [tempInput, setTempInput] = useState('');
@@ -38,7 +38,9 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
     };
     const updateInputValue = (char, position) => {
         setShouldReselect(true);
-        setInput(input.substring(0, position) + char + input.substring(position + char.length));
+        if (!readOnly) {
+            setInput(input.substring(0, position) + char + input.substring(position + char.length));
+        }
     };
     const handleClick = (e) => {
         e.preventDefault();
@@ -174,7 +176,9 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
         }
     }, []);
     useEffect(() => {
-        setInput(value);
+        if (!readOnly) {
+            setInput(value);
+        }
     }, [value]);
     useEffect(() => {
         setTempInput('');
@@ -185,9 +189,9 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
     useImperativeHandle(ref, () => ({
         removeSelection,
     }), [removeSelection]);
-    return (React.createElement("input", { ref: inputRef, value: input, onClick: handleClick, onKeyDown: handleKeyDown, onFocus: handleFocus, onBlur: handleBlur, readOnly: true, className: className }));
+    return (React.createElement("input", { ref: inputRef, value: input, onClick: handleClick, onKeyDown: handleKeyDown, onFocus: handleFocus, onBlur: handleBlur, readOnly: readOnly, disabled: disabled, className: className }));
 });
-export const DateInput = ({ id, label = 'Выберите дату', size = 'lg', value, style, className, disabled = false, readOnly = disabled, isLeftLabel = false, icon, error = false, helperText, onChange, onBlur, required = false, minDate = new Date('1975-12-31'), maxDate = new Date('2074-12-31'), inputClassName, calendarClassName, dateFormat = 'dd.MM.yyyy', }) => {
+export const DateInput = ({ id, label = 'Выберите дату', size = 'lg', value, style, className, disabled = false, readOnly = false, isLeftLabel = false, icon, error = false, helperText, onChange, onBlur, required = false, minDate = new Date('1975-12-31'), maxDate = new Date('2074-12-31'), inputClassName, calendarClassName, dateFormat = 'dd.MM.yyyy', }) => {
     const wrapperClassess = classNames(styles['wrapper--input'], className, {
         [styles['wrapper--left']]: isLeftLabel,
         [styles['wrapper--input-label']]: label && !isLeftLabel && !required,
@@ -322,7 +326,7 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
     return (React.createElement("div", { className: wrapperClassess, style: style },
         label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
         React.createElement("div", { className: styles.icon, onClick: () => { var _a; return (_a = datePickerRef.current) === null || _a === void 0 ? void 0 : _a.setOpen(true); } }, icon || React.createElement(IconCalendar10, null)),
-        React.createElement(DatePicker, Object.assign({ id: id, ref: datePickerRef, selected: selectedDate, onChange: handleDateChange, onBlur: onBlur, dateFormat: dateFormat, locale: "ru", readOnly: readOnly, showPopperArrow: false, calendarClassName: classNames(styles.calendar, calendarClassName), popperClassName: styles.calendarPopper, onCalendarClose: () => setIsMonthPickerOpen(false), minDate: minDate, maxDate: maxDate, inline: false, calendarStartDay: 1, dayClassName: (date) => {
+        React.createElement(DatePicker, Object.assign({ id: id, ref: datePickerRef, selected: selectedDate, onChange: handleDateChange, onBlur: onBlur, dateFormat: dateFormat, locale: "ru", readOnly: readOnly, disabled: disabled, showPopperArrow: false, calendarClassName: classNames(styles.calendar, calendarClassName), popperClassName: styles.calendarPopper, onCalendarClose: () => setIsMonthPickerOpen(false), minDate: minDate, maxDate: maxDate, inline: false, calendarStartDay: 1, dayClassName: (date) => {
                 return date.getMonth() === (selectedDate === null || selectedDate === void 0 ? void 0 : selectedDate.getMonth()) && date.getFullYear() === (selectedDate === null || selectedDate === void 0 ? void 0 : selectedDate.getFullYear())
                     ? 'current-month-day'
                     : '';
@@ -331,6 +335,6 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
             : {
                 renderCustomHeader: renderCustomHeader,
                 renderDayContents: renderDayContents,
-            }), { customInput: React.createElement(CustomInput, { ref: inputRef, className: classNames(inputClassess, inputClassName), onDateChange: handleCustomInputChange, onClose: handleCloseDatePicker }) })),
+            }), { customInput: React.createElement(CustomInput, { ref: inputRef, className: classNames(inputClassess, inputClassName), onDateChange: handleCustomInputChange, onClose: handleCloseDatePicker, disabled: disabled, readOnly: readOnly }) })),
         error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]) }, helperText))));
 };
