@@ -1,6 +1,6 @@
 {
   "name": "kamotive_ui",
-  "version": "1.2.20",
+  "version": "1.2.21",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
