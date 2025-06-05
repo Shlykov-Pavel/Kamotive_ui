@@ -31,17 +31,18 @@ function checkItem(
   isDivider?: boolean,
 ) {
   if (typeof item === 'object' && item !== null) {
+     const itemCopy = { ...item };
     //проверка на вложенные объекты с таким же типом
-    Object.keys(item as TOptions).forEach((key) => {
-      const value = (item as TOptions)[key as keyof TOptions];
+    Object.keys(itemCopy as TOptions).forEach((key) => {
+      const value = (itemCopy as TOptions)[key as keyof TOptions];
       if (typeof value === 'object' && value !== null && !React.isValidElement(value)) {
       const nestedItem = checkItem(value as TOptions, getOptionLabel, disabled, isDivider) as TOptions;
       if (nestedItem) {
-        if (!item.children) {
-          item.children = [];
+        if (!itemCopy.children) {
+          itemCopy.children = [];
         }
-        item.children.push(nestedItem);
-        delete (item as any)[key];
+        itemCopy.children.push(nestedItem);
+        delete (itemCopy as any)[key];
       }
     }
   });
@@ -49,39 +50,39 @@ function checkItem(
   // проверка на наличие пользовательского поля для вывода(передаваемой функции getOptionLabel)
     if(getOptionLabel){
       return { 
-        ...item, 
-        value: getOptionLabel(item), 
+        ...itemCopy, 
+        value: getOptionLabel(itemCopy), 
         disabled: disabled ?? false, 
         isDivider: isDivider ?? false,  
       };
     }
-    if ('value' in item) {
+    if ('value' in itemCopy) {
       return { 
-        ...item, 
+        ...itemCopy, 
         disabled: disabled ?? false, 
         isDivider: isDivider ?? false,
       };
-    } else if ('name' in item && !('value' in item)) {
+    } else if ('name' in itemCopy && !('value' in itemCopy)) {
       return { 
-        ...item, 
-        value: item.name, 
+        ...itemCopy, 
+        value: itemCopy.name, 
         disabled: disabled ?? false, 
         isDivider: isDivider ?? false ,
       };
-    } else if ('description' in item && !('value' in item)) {
+    } else if ('description' in itemCopy && !('value' in itemCopy)) {
       return { 
-        ...item, 
-        value: item.description, 
+        ...itemCopy, 
+        value: itemCopy.description, 
         disabled: disabled ?? false, 
         isDivider: isDivider ?? false,
       };
     } 
     else {
-      const keys = Object.keys(item) as Array<keyof typeof item>;
+      const keys = Object.keys(itemCopy) as Array<keyof typeof itemCopy>;
       if (keys.length) {
-        const firstValue = item[keys[0]];
+        const firstValue = itemCopy[keys[0]];
         return { 
-          ...item, 
+          ...itemCopy, 
           value: firstValue, 
           disabled: disabled ?? false, 
           isDivider: isDivider ?? false,
