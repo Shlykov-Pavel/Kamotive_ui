@@ -21,7 +21,7 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ onClick, active, label, icon, 
       onClick={handleClick}
     >
       {icon && <span className={iconClassNames}>{icon}</span>}
-      <Typography variant="Body2-Medium" style={{ fontWeight: '500' }} className={childrenClassNames} >
+      <Typography variant="Body1-Medium" className={childrenClassNames} >
         {label || children}
       </Typography>
     </button>

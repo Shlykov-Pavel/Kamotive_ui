@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-export const IconEye10: FC<{ color?: string; htmlColor?: string; strokeWidth?: string }> = ({
+export const IconEye: FC<{ color?: string; htmlColor?: string; strokeWidth?: string }> = ({
   color = 'inherit',
   htmlColor,
   strokeWidth,
