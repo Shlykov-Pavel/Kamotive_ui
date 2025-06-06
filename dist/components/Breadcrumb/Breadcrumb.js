@@ -13,5 +13,5 @@ export const Breadcrumb = ({ onClick, active, label, icon, children }) => {
     const iconClassNames = classNames(childrenClassNames, styles.icon);
     return (React.createElement("button", { className: classNames(styles.breadcrumb), onClick: handleClick },
         icon && React.createElement("span", { className: iconClassNames }, icon),
-        React.createElement(Typography, { variant: "Body2-Medium", style: { fontWeight: '500' }, className: childrenClassNames }, label || children)));
+        React.createElement(Typography, { variant: "Body1-Medium", className: childrenClassNames }, label || children)));
 };

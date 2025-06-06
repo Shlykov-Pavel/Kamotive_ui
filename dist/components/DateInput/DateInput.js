@@ -3,7 +3,7 @@ import styles from './DateInput.module.css';
 import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
 import DatePicker from 'react-datepicker';
-import { IconCalendar10 } from '../../Icons/IconCalendar/IconCalendar10';
+import { IconCalendar } from '../../Icons/IconCalendar/IconCalendar';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import { ru } from 'date-fns/locale/ru';
@@ -325,7 +325,7 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
     };
     return (React.createElement("div", { className: wrapperClassess, style: style },
         label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
-        React.createElement("div", { className: styles.icon, onClick: () => { var _a; return (_a = datePickerRef.current) === null || _a === void 0 ? void 0 : _a.setOpen(true); } }, icon || React.createElement(IconCalendar10, null)),
+        React.createElement("div", { className: styles.icon, onClick: () => { var _a; return (_a = datePickerRef.current) === null || _a === void 0 ? void 0 : _a.setOpen(true); } }, icon || React.createElement(IconCalendar, null)),
         React.createElement(DatePicker, Object.assign({ id: id, ref: datePickerRef, selected: selectedDate, onChange: handleDateChange, onBlur: onBlur, dateFormat: dateFormat, locale: "ru", readOnly: readOnly, disabled: disabled, showPopperArrow: false, calendarClassName: classNames(styles.calendar, calendarClassName), popperClassName: styles.calendarPopper, onCalendarClose: () => setIsMonthPickerOpen(false), minDate: minDate, maxDate: maxDate, inline: false, calendarStartDay: 1, dayClassName: (date) => {
                 return date.getMonth() === (selectedDate === null || selectedDate === void 0 ? void 0 : selectedDate.getMonth()) && date.getFullYear() === (selectedDate === null || selectedDate === void 0 ? void 0 : selectedDate.getFullYear())
                     ? 'current-month-day'
