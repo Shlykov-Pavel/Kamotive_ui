@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { IconClose10, IconError10, IconInfo10, IconSuccess10, IconWarning10 } from '../../Icons';
+import { IconClose, IconError, IconInfo, IconSuccess, IconWarning } from '../../Icons';
 import { Typography } from '../Typography/Typography';
 import styles from './Snackbar.module.css';
 import classNames from 'classnames';
@@ -18,10 +18,10 @@ import { SnackbarProps } from '../../types';
 @returns {JSX.Element | null} Возвращает компонент уведомления или null если оно скрыто */
 
 export const icons = {
-  success: <IconSuccess10 htmlColor="#34c759" />,
-  error: <IconError10 htmlColor="#ff3b30" />,
-  warning: <IconWarning10 htmlColor="#ff9500" />,
-  info: <IconInfo10 htmlColor="#6F6F6F" />,
+  success: <IconSuccess htmlColor="#34c759" />,
+  error: <IconError htmlColor="#ff3b30" />,
+  warning: <IconWarning htmlColor="#ff9500" />,
+  info: <IconInfo htmlColor="#6F6F6F" />,
 };
 
 export const title = {
@@ -64,7 +64,7 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
         </div>
       </div>
       <button className={styles.button} onClick={handleClose}>
-        <IconClose10 htmlColor={'var(--text-btn-light)'} />
+        <IconClose htmlColor={'var(--text-btn-light)'} />
       </button>
     </div>
   );

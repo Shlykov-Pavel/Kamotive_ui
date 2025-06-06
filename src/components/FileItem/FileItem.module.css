@@ -21,7 +21,7 @@
   flex-direction: row;
   gap: 5px;
   flex-grow: 1;
-  align-items: flex-start;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .fileIcon svg path {
-  stroke-width: 0.8;
+  stroke-width: 0.5 !important;
 }
 
 .fileItem_attached {

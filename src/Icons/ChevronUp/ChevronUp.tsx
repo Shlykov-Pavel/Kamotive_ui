@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { CSSProperties, FC } from 'react';
 
-export const ChevronUp10: FC<{ color?: string; htmlColor?: string; strokeWidth?: string }> = ({
+export const ChevronUp: FC<{ color?: string; htmlColor?: string; strokeWidth?: string ; style?: CSSProperties }> = ({
   color = 'inherit',
   htmlColor,
-  strokeWidth,
+  strokeWidth = '0.3',
+  style
 }) => {
   return (
     <svg
@@ -13,11 +14,12 @@ export const ChevronUp10: FC<{ color?: string; htmlColor?: string; strokeWidth?:
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={color}
+      style={style}
     >
       <path
         fill={htmlColor || 'currentColor'}
         stroke={htmlColor || 'currentColor'}
-        strokeWidth={strokeWidth || '0'}
+        style={{ strokeWidth: strokeWidth }}
         d="M5.84,15.41L11.5,9.75L17.16,15.41L16.45,16.11L11.5,11.16L6.55,16.11L5.84,15.41Z" 
         />
     </svg>

@@ -26,6 +26,8 @@
 }
 .snackbar-textAndIcon svg {
   padding-top: 5px;
+  width: 24px;
+  height: 24px;
 }
 .snackbar-text {
   display: flex;

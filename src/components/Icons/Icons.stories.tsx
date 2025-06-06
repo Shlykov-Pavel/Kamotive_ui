@@ -1,6 +1,6 @@
 import React, { CSSProperties, ReactNode, useState } from 'react';
 import type { Meta } from '@storybook/react';
-import { ChevronDown10, ChevronLeft, ChevronRight, ChevronUp10, IconAccount10, IconAdd, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10, IconCheck10, IconClose10, IconColorPicker10, IconDownload, IconError10, IconEyeOff10, IconFile, IconInfo10, IconSuccess10, IconUpload, IconWarning10, IconPhone, IconLocation, IconEmail, IconEye10, IconPencil } from '../../Icons';
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, IconAccount, IconAdd, IconAlarm, IconAddress, IconBell, IconBriefcase, IconCalendar, IconCheck, IconClose, IconColorPicker, IconDownload, IconError, IconEyeOff, IconFile, IconInfo, IconSuccess, IconUpload, IconWarning, IconPhone, IconLocation, IconEmail, IconEye, IconPencil, IconDelete, IconDublicate, IconSpaceChange, IconGoTo, IconHome } from '../../Icons';
 import { IconButton } from '../IconButton/IconButton';
 import { Typography } from '../Typography/Typography';
 
@@ -74,33 +74,38 @@ const meta: Meta<IconButtonProps> = {
   };
 
 const iconOptions = [
-  { name: 'ChevronDown10', icon: <ChevronDown10 /> },
-  { name: 'ChevronUp10', icon: <ChevronUp10 /> },
-  { name: 'ChevronLeft', icon: <ChevronLeft /> },
-  { name: 'ChevronRight', icon: <ChevronRight /> },
-  { name: 'IconSuccess10', icon: <IconSuccess10 /> },
-  { name: 'IconError10', icon: <IconError10 /> },
-  { name: 'IconInfo10', icon: <IconInfo10 /> },
-  { name: 'IconWarning10', icon: <IconWarning10 /> },
-  { name: 'IconDownload', icon: <IconDownload /> },
-  { name: 'IconUpload', icon: <IconUpload /> },
-  { name: 'IconFile', icon: <IconFile /> },
-  { name: 'IconEmail', icon: <IconEmail /> },
-  { name: 'IconAdd', icon: <IconAdd /> },
-  { name: 'IconCheck10', icon: <IconCheck10 /> },
-  { name: 'IconClose10', icon: <IconClose10 /> },
-  { name: 'IconColorPicker10', icon: <IconColorPicker10 /> },
-  { name: 'IconAlarm10', icon: <IconAlarm10 /> },
-  { name: 'IconCalendar10', icon: <IconCalendar10 /> },
-  { name: 'IconAccount', icon: <IconAccount10 /> },
-  { name: 'IconBell', icon: <IconBell10 /> },
-  { name: 'IconBank', icon: <IconBank10 /> },
-  { name: 'IconBriefcase10', icon: <IconBriefcase10 /> },
-  { name: 'IconPhone', icon: <IconPhone /> },
-  { name: 'IconLocation', icon: <IconLocation /> },
-  { name: 'IconEye10', icon: <IconEye10 /> },
-  { name: 'IconEyeOff10', icon: <IconEyeOff10 /> },
-  { name: 'IconPencil', icon: <IconPencil /> },
+  { name: 'Вниз / ChevronDown', icon: <ChevronDown /> },
+  { name: 'Вверх / ChevronUp', icon: <ChevronUp /> },
+  { name: 'Влево / ChevronLeft', icon: <ChevronLeft /> },
+  { name: 'Вправо / ChevronRight', icon: <ChevronRight /> },
+  { name: 'Успех / IconSuccess', icon: <IconSuccess /> },
+  { name: 'Ошибка / IconError', icon: <IconError /> },
+  { name: 'Информация / IconInfo', icon: <IconInfo /> },
+  { name: 'Предупреждение / IconWarning', icon: <IconWarning /> },
+  { name: 'Скачать / IconDownload', icon: <IconDownload /> },
+  { name: 'Загрузить / IconUpload', icon: <IconUpload /> },
+  { name: 'Файл / IconFile', icon: <IconFile /> },
+  { name: 'Почта / IconEmail', icon: <IconEmail /> },
+  { name: 'Добавить / IconAdd', icon: <IconAdd /> },
+  { name: 'Выбрать / IconCheck', icon: <IconCheck /> },
+  { name: 'Закрыть / IconClose', icon: <IconClose /> },
+  { name: 'Выбор цвет / IconColorPicker', icon: <IconColorPicker /> },
+  { name: 'Предупреждение / IconAlarm', icon: <IconAlarm /> },
+  { name: 'Календарь / IconCalendar', icon: <IconCalendar /> },
+  { name: 'Профиль / IconAccount', icon: <IconAccount /> },
+  { name: 'Уведолмение / IconBell', icon: <IconBell /> },
+  { name: 'Адрес / IconAddress', icon: <IconAddress /> },
+  { name: 'Портфолио / IconBriefcase', icon: <IconBriefcase /> },
+  { name: 'Телефон / IconPhone', icon: <IconPhone /> },
+  { name: 'Местоположение / IconLocation', icon: <IconLocation /> },
+  { name: 'Просмотр / IconEye', icon: <IconEye /> },
+  { name: 'Просмотр заблокирован / IconEyeOff', icon: <IconEyeOff /> },
+  { name: 'Редактировать / IconPencil', icon: <IconPencil /> },
+  { name: 'Удалить / IconDelete', icon: <IconDelete />},
+  { name: 'Копировать / IconDublicate', icon: <IconDublicate />},
+  { name: 'Сменить пространство / IconSpaceChange', icon: <IconSpaceChange />},
+  { name: 'Переход / IconGoTo', icon: <IconGoTo />},
+  { name: 'Домашняя страница / IconHome', icon: <IconHome />  },
 ];
   
   export default meta;

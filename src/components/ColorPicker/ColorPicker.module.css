@@ -218,9 +218,14 @@
 .colorPickerIcon {
   position: absolute;
   top: 69%;
-  left: 8px;
+  left: 7px;
   z-index: 200;
   padding: 10px;
+  
+}
+.colorPicker  svg {
+    width: 16px;
+    height: 16px;
 }
 
 .hex {

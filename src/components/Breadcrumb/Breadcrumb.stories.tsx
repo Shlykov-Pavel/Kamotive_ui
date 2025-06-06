@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta } from '@storybook/react';
 import { Breadcrumb } from './Breadcrumb';
 import { BreadcrumbProps } from '../../types/index'
-import { IconBell10 } from '../../Icons/IconBell/IconBell10'
+import { IconBell } from '../../Icons/IconBell/IconBell'
 
 const meta: Meta<BreadcrumbProps> = {
   component: Breadcrumb,
@@ -50,12 +50,12 @@ export const BreadcrumbWithIcon = (argTypes: BreadcrumbProps): JSX.Element => <B
 BreadcrumbWithIcon.storyName = 'Breadcrumb с иконкой';
 BreadcrumbWithIcon.args = {
   active: true,
-  children: [<IconBell10 />, 'Breadcrumb с иконкой'],
+  children: [<IconBell />, 'Breadcrumb с иконкой'],
 };
 
 export const BreadcrumbIcon = (argTypes: BreadcrumbProps): JSX.Element => <Breadcrumb {...argTypes} />;
 BreadcrumbIcon.storyName = 'Breadcrumb без текста';
 BreadcrumbIcon.args = {
   active: true,
-  children: <IconBell10 />,
+  children: <IconBell />,
 };

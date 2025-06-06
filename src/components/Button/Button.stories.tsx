@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react';
 import type { Meta } from '@storybook/react';
 import { Button } from './Button';
-import { IconAccount10, IconAlarm10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
+import { IconAccount, IconAlarm, IconAddress, IconBell, IconBriefcase, IconCalendar } from '../../Icons';
 
 export interface ButtonProps {
   /** Тест кнопки */
@@ -36,12 +36,12 @@ export interface ButtonProps {
 
 
 const iconOptions = {
-  IconAlarm10: <IconAlarm10 />,
-  IconAccount: <IconAccount10 />,
-  IconBank: <IconBank10 />,
-  IconBell: <IconBell10 />,
-  IconBriefcase10: <IconBriefcase10 />,
-  IconCalendar10: <IconCalendar10 />,
+  IconAlarm: <IconAlarm />,
+  IconAccount: <IconAccount />,
+  IconAddress: <IconAddress />,
+  IconBell: <IconBell />,
+  IconBriefcase: <IconBriefcase />,
+  IconCalendar: <IconCalendar />,
   unset: null,
 };
 
@@ -128,7 +128,7 @@ export default meta;
 export const ButtonDefault = (argTypes: ButtonProps): JSX.Element => <Button {...argTypes} />;
 ButtonDefault.storyName = 'Button по умолчанию';
 ButtonDefault.args = {
-  icon: <IconAccount10 />,
+  icon: <IconAccount />,
 };
 
 // Стандартная синияя кнопка без иконки
@@ -148,7 +148,7 @@ ButtonWithLabelChild.storyName = 'Button c внутренним лейблом �
 ButtonWithLabelChild.args = {
   variant: 'fill',
   size: 'md',
-  icon: <IconAccount10 />,
+  icon: <IconAccount />,
   
 };
 ButtonWithLabelChild.parameters = {
@@ -157,7 +157,7 @@ ButtonWithLabelChild.parameters = {
 
 
 // Стандартная синияя кнопка только иконка проброс через children
-export const ButtonFillOnlyIcon = (argTypes: ButtonProps): JSX.Element => <Button icon={<IconAlarm10 />}/>;
+export const ButtonFillOnlyIcon = (argTypes: ButtonProps): JSX.Element => <Button icon={<IconAlarm />}/>;
 ButtonFillOnlyIcon.storyName = 'Button только иконка';
 ButtonFillOnlyIcon.args = {
   label: '',
@@ -173,7 +173,7 @@ export const ButtonOutlinedWithIcon = (argTypes: ButtonProps): JSX.Element => <B
 ButtonOutlinedWithIcon.storyName = 'Button outlined по умолчанию';
 ButtonOutlinedWithIcon.args = {
   variant: 'outline',
-  icon: <IconAccount10 />,
+  icon: <IconAccount />,
   iconColor: '#0D99FF',
 };
 ButtonOutlinedWithIcon.parameters = {
@@ -197,7 +197,7 @@ ButtonOutlinedOnlyIcon.args = {
   label: '',
   variant: 'outline',
   condition: 'default',
-  icon: <IconAccount10 />,
+  icon: <IconAccount />,
 };
 ButtonOutlinedOnlyIcon.parameters = {
   controls: { disable: true },
@@ -243,7 +243,7 @@ export const ButtonStates = (argTypes: ButtonProps): JSX.Element => {
     <Button
       label={label}
       variant="fill"
-      icon={<IconAccount10 />}
+      icon={<IconAccount />}
       condition={state}
       onClick={handleButtonClick}
     />
@@ -284,7 +284,7 @@ export const ButtonOutlineStates = (argTypes: ButtonProps): JSX.Element => {
       variant="outline"
       condition={state}
       onClick={handleButtonClick}
-      icon={<IconAccount10 />}
+      icon={<IconAccount />}
     />
   );
 };

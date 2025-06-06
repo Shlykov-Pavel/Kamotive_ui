@@ -1,23 +1,25 @@
-import React, { FC } from 'react';
+import React, { CSSProperties, FC } from 'react';
 
-export const IconFile: FC<{ color?: string; htmlColor?: string; strokeWidth?: string }> = ({
+export const IconFile: FC<{ color?: string; htmlColor?: string; strokeWidth?: string; style?: CSSProperties }> = ({
   color = 'inherit',
   htmlColor,
-  strokeWidth,
+  strokeWidth = '0.3',
+  style
 }) => {
   return (
     <svg
-      width="25"
-      height="30"
+      width="20"
+      height="20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       className={color}
+      style={style}
     >
       <path
         fill={htmlColor || 'currentColor'}
         stroke={htmlColor || 'currentColor'}
-        strokeWidth={strokeWidth || '0'}
+        style={{ strokeWidth: strokeWidth }}
         strokeLinejoin="round"
         d="M14,11C12.34,11 11,9.66 11,8V4H7C5.9,4 5,4.9 5,6V19C5,20.1 5.9,21 7,21H16C17.1,21 18,20.1 18,19V11H14M12,8C12,9.1 12.9,10 14,10H17.59L12,4.41V8M7,3H12L19,10V19C19,20.66 17.66,22 16,22H7C5.34,22 4,20.66 4,19V6C4,4.34 5.34,3 7,3Z"
       />
