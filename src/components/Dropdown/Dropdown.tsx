@@ -1,10 +1,10 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './Dropdown.module.css';
 import classNames from 'classnames';
-import { ChevronDown10 } from '../../Icons/ChevronDown/ChevronDown10';
-import { ChevronUp10 } from '../../Icons/ChevronUp/ChevronUp10';
-import { IconClose10 } from '../../Icons/IconClose/IconClose10';
-import { IconCheck10 } from '../../Icons/IconCheck/IconCheck10';
+import { ChevronDown } from '../../Icons/ChevronDown/ChevronDown';
+import { ChevronUp } from '../../Icons/ChevronUp/ChevronUp';
+import { IconClose } from '../../Icons/IconClose/IconClose';
+import { IconCheck } from '../../Icons/IconCheck/IconCheck';
 import { DropdownProps, TOptions } from '../../types';;
 import { Typography } from '../Typography/Typography';
 
@@ -143,7 +143,7 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
             <span>{item?.value}</span>
           </div>
           {selectedItem?.value === item?.value && (
-            <IconCheck10 strokeWidth={size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0'} htmlColor="#0D99FF" />
+            <IconCheck strokeWidth={size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0'} htmlColor="#0D99FF" />
           )}
         </div>
         {item?.isDivider && <div className={styles.divider}></div>}
@@ -546,14 +546,14 @@ export const Dropdown: FC<DropdownProps> = ({
         {getTextField()}
         {clearable && !readOnly && !disabled && (selectedItem || enableAutocomplete && searchValue) && (
           <div className={styles.resetButton}>
-            <IconClose10 strokeWidth="0.2" htmlColor="var(--text-light)" onClick={handleReset} />
+            <IconClose strokeWidth="0.2" htmlColor="var(--text-light)" onClick={handleReset} />
           </div>
         )}
         <div className={styles.dropdownIcon}>
           {!isOpen ? (
-            <ChevronDown10 strokeWidth={size === 'lg' ? '0.5' : '0.3'} />
+            <ChevronDown strokeWidth={size === 'lg' ? '0.5' : '0.3'} />
           ) : (
-            <ChevronUp10 strokeWidth={size === 'lg' ? '0.5' : '0.3'} />
+            <ChevronUp strokeWidth={size === 'lg' ? '0.5' : '0.3'} />
           )}
         </div>
         {getDropdownMenu()}

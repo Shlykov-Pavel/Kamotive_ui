@@ -13,7 +13,7 @@ import styles from './DateInput.module.css';
 import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
 import DatePicker, { ReactDatePickerCustomHeaderProps } from 'react-datepicker';
-import { IconCalendar10 } from '../../Icons/IconCalendar/IconCalendar10';
+import { IconCalendar } from '../../Icons/IconCalendar/IconCalendar';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
@@ -507,7 +507,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
         </Typography>
       )}
       <div className={styles.icon} onClick={() => datePickerRef.current?.setOpen(true)}>
-        {icon || <IconCalendar10 />}
+        {icon || <IconCalendar />}
       </div>
       <DatePicker
         id={id}

@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import React, { ChangeEvent, ChangeEventHandler, ReactNode, useEffect, useState } from 'react';
 import { Input } from './Input';
-import { IconAlarm10, IconAccount10, IconBank10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons/index';
+import { IconAlarm, IconAccount, IconAddress, IconBell, IconBriefcase, IconCalendar } from '../../Icons/index';
 
 export interface InputProps {
   /** Идентификатор элемента */
@@ -43,12 +43,12 @@ export interface InputProps {
 }
 
 const iconOptions = {
-  IconAlarm10: <IconAlarm10 />,
-  IconAccount: <IconAccount10 />,
-  IconBank: <IconBank10 />,
-  IconBell: <IconBell10 />,
-  IconBriefcase10: <IconBriefcase10 />,
-  IconCalendar10: <IconCalendar10 />,
+  IconAlarm: <IconAlarm />,
+  IconAccount: <IconAccount />,
+  IconAddress: <IconAddress />,
+  IconBell: <IconBell />,
+  IconBriefcase: <IconBriefcase />,
+  IconCalendar: <IconCalendar />,
   unset: null,
 };
 
@@ -194,7 +194,7 @@ InputWithIconDefault.storyName = 'Input с иконкой по умолчани�
 InputWithIconDefault.args = {
   value: 'Инпут с иконкой',
   className: 'input--withIcon',
-  icon: <IconAccount10 />,
+  icon: <IconAccount />,
 };
 InputWithIconDefault.parameters = {
   controls: { disable: true },

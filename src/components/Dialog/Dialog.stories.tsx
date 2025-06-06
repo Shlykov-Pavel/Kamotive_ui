@@ -5,7 +5,7 @@ import { Dialog } from './Dialog';
 import { Typography } from '../Typography/Typography';
 import { Button } from '../Button/Button';
 import { IconButton } from '../IconButton/IconButton';
-import { IconClose10 } from '../../Icons';
+import { IconClose } from '../../Icons';
 
 export interface DialogProps {
   /** Флаг открытия окна */
@@ -93,7 +93,7 @@ export const DialogExample = (argTypes: DialogProps): JSX.Element => {
       <Dialog open={open}>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
           <Typography variant="Heading4"> Модальное окно</Typography>
-          <IconButton icon={<IconClose10/>} onClick={onClose}/>
+          <IconButton icon={<IconClose/>} onClick={onClose}/>
         </div>
         <Typography variant="Body1">
           Компонент Dialog реализован как пустой контейнер, который можно наполнить любым контентом

@@ -3,14 +3,14 @@ import type { Meta } from '@storybook/react';
 
 import { IconButton } from './IconButton';
 import {
-  IconAccount10,
+  IconAccount,
   IconAdd,
-  IconAlarm10,
-  IconBank10,
-  IconBell10,
-  IconBriefcase10,
-  IconCalendar10,
-  IconClose10,
+  IconAlarm,
+  IconAddress,
+  IconBell,
+  IconBriefcase,
+  IconCalendar,
+  IconClose,
 } from '../../Icons';
 
 export interface IconButtonProps {
@@ -45,13 +45,13 @@ const withWrapper = (Story: React.ComponentType) => (
 );
 
 const iconOptions = {
-  IconAlarm10: <IconAlarm10 />,
-  IconAccount: <IconAccount10 />,
-  IconBank: <IconBank10 />,
-  IconBell: <IconBell10 />,
-  IconBriefcase10: <IconBriefcase10 />,
-  IconCalendar10: <IconCalendar10 />,
-  IconClose10: <IconClose10 />,
+  IconAlarm: <IconAlarm />,
+  IconAccount: <IconAccount />,
+  IconAddress: <IconAddress />,
+  IconBell: <IconBell />,
+  IconBriefcase: <IconBriefcase />,
+  IconCalendar: <IconCalendar />,
+  IconClose: <IconClose />,
   unset: null,
 };
 
@@ -93,7 +93,7 @@ export default meta;
 export const defaultIconButton = (argTypes: IconButtonProps): JSX.Element => <IconButton {...argTypes} />;
 defaultIconButton.storyName = 'IconButton по умолчанию';
 defaultIconButton.args = {
-  icon: <IconClose10 />,
+  icon: <IconClose />,
   color: '#0D99FF',
 };
 defaultIconButton.parameters = {

@@ -5,7 +5,7 @@ import { ListItemProps, ListProps } from '../../types';
 import { Typography } from '../Typography/Typography';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { RadioButton } from '../RadioButton/RadioButton';
-import { ChevronDown10 } from '../../Icons';
+import { ChevronDown } from '../../Icons';
 
 export const List: FC<ListProps> = ({
   onClick,
@@ -120,7 +120,7 @@ export const List: FC<ListProps> = ({
           )}
           <Typography variant="Body1">{label}</Typography>
           {collapsible && (
-            <span className={styles.indicator}>{isOpen ? <ChevronDown10 /> : <ChevronDown10 rotation={270} />}</span>
+            <span className={styles.indicator}>{isOpen ? <ChevronDown /> : <ChevronDown rotation={270} />}</span>
           )}
         </div>
       )}

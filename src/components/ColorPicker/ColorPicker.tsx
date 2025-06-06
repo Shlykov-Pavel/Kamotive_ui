@@ -6,7 +6,7 @@ import { Chrome } from '@uiw/react-color';
 import EditableInput from '@uiw/react-color-editable-input';
 import { ColorResult } from '@uiw/react-color';
 import { GithubPlacement } from '@uiw/react-color-github';
-import { IconColorPicker10 } from '../../Icons';
+import { IconColorPicker } from '../../Icons';
 import { ColorPickerProps } from '../../types';;
 
 // Функция для преобразования HEXA в HEX
@@ -205,7 +205,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
         />
         {isOpen && (
           <div ref={popoverRef} className={popoverClassess}>
-            {isOpen && <IconColorPicker10 className={styles.colorPickerIcon} htmlColor={'var(--white)'} />}
+            {isOpen && <IconColorPicker className={styles.colorPickerIcon} htmlColor={'var(--white)'} />}
             <Chrome
               color={selectedColor}
               placement={GithubPlacement.Right}

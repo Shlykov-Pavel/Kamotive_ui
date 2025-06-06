@@ -204,7 +204,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
     <section className={classNames(styles['fileLoader'], className)} style={style}>
       <div {...getRootProps({ className: `${styles['dropzone']} ${!canAdd ? styles['disabled'] : ''}` })}>
         <input {...getInputProps()} />
-        <IconUpload htmlColor={!canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)'} />
+        <IconUpload htmlColor={!canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)'} width='34' height='34' />
         <Typography
           variant="Body1"
           color={!canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)'}

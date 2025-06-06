@@ -1,25 +1,27 @@
-import React, { FC } from 'react';
+import React, { CSSProperties, FC } from 'react';
 
-export const IconGoTo: FC<{ color?: string; htmlColor?: string; strokeWidth?: string, onClick?: (event: React.MouseEvent<SVGSVGElement>) => void; }> = ({
+export const IconGoTo: FC<{ color?: string; htmlColor?: string; strokeWidth?: string, onClick?: (event: React.MouseEvent<SVGSVGElement>) => void; style?: CSSProperties }> = ({
   color = 'inherit',
   htmlColor,
   strokeWidth,
   onClick,
+  style
 }) => {
   return (
     <svg
-      width="15"
-      height="15"
+      width="20" 
+      height="20" 
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={color}
       onClick={onClick}
+      style={style}
     >
       <path
         fill={htmlColor || 'currentColor'}
         stroke={htmlColor || 'currentColor'}
-        strokeWidth={strokeWidth || '0'}
+        style={{ strokeWidth: strokeWidth }}
         d="M9,6H17C18.66,6 20,7.34 20,9V20C20,21.66 18.66,23 17,23H9C7.34,23 6,21.66 6,20V19H7V20C7,21.1 7.9,22 9,22H17C18.1,22 19,21.1 19,20V9C19,7.9 18.1,7 17,7H9C7.9,7 7,7.9 7,9V14H6V9C6,7.34 7.34,6 9,6M5,2H15V3H5C3.9,3 3,3.9 3,5V14C3,15.1 3.9,16 5,16H12.25L10,13.75L10.66,13L14.16,16.5L10.66,20L10,19.25L12.25,17H5C3.34,17 2,15.66 2,14V5C2,3.34 3.34,2 5,2Z" 
       />
     </svg>

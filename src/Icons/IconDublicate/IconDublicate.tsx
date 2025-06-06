@@ -1,15 +1,16 @@
-import React, { FC } from 'react';
+import React, { CSSProperties, FC } from 'react';
 
-export const IconDublicate: FC<{ color?: string; htmlColor?: string; strokeWidth?: string, onClick?: (event: React.MouseEvent<SVGSVGElement>) => void; }> = ({
+export const IconDublicate: FC<{ color?: string; htmlColor?: string; strokeWidth?: string, onClick?: (event: React.MouseEvent<SVGSVGElement>) => void; style?: CSSProperties }> = ({
   color = 'inherit',
   htmlColor,
-  strokeWidth,
+  strokeWidth = '0.3',
   onClick,
+  style
 }) => {
   return (
     <svg
-      width="15"
-      height="15"
+      width="20" 
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +20,7 @@ export const IconDublicate: FC<{ color?: string; htmlColor?: string; strokeWidth
       <path
         fill={htmlColor || 'currentColor'}
         stroke={htmlColor || 'currentColor'}
-        strokeWidth={strokeWidth || '0'}
+        style={{ strokeWidth: strokeWidth }}
         d="M15,11C13.34,11 12,9.66 12,8V4H8C6.9,4 6,4.9 6,6V19C6,20.1 6.9,21 8,21H17C18.1,21 19,20.1 19,19V11H15M13,8C13,9.1 13.9,10 15,10H18.59L13,4.41V8M8,3H13L20,10V19C20,20.66 18.66,22 17,22H8C6.34,22 5,20.66 5,19V6C5,4.34 6.34,3 8,3M8,24C5.24,24 3,21.76 3,19V7H4V19C4,21.21 5.79,23 8,23H16V24H8Z"
       />
     </svg>

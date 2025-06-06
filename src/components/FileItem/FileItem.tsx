@@ -6,7 +6,7 @@ import styles from './FileItem.module.css';
 import { Typography } from '../Typography/Typography';
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 import { IconButton } from '../IconButton/IconButton';
-import { IconClose10, IconDownload, IconFile } from '../../Icons';
+import { IconClose, IconDownload, IconFile } from '../../Icons';
 import { Tooltip } from '../Tooltip/Tooltip';
 import classNames from 'classnames';
 
@@ -151,16 +151,20 @@ export const FileItem: FC<FileItemProps> = ({
         <div className={styles['fileItemActions']}>
           {!(isAddedFile || isRejectedFile) && canDownload && (
             <IconButton
+              className={styles.fileIcon}
               icon={<IconDownload />}
               onClick={(e: React.MouseEvent) => handleDownloadClick(e, file)}
               color="var(--icons-grey)"
+              size="sm"
             />
           )}
           {canDelete && (
             <IconButton
-              icon={<IconClose10 />}
+              className={styles.fileIcon}
+              icon={<IconClose />}
               onClick={(e: React.MouseEvent) => handleDeleteClick(e, file.id || '')}
               color="var(--icons-grey)"
+              size="sm"
             />
           )}
         </div>

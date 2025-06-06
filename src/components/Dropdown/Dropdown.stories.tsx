@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Meta } from '@storybook/react';
 import { Dropdown } from './Dropdown';
-import { IconAccount10, IconAlarm10, IconBell10, IconBriefcase10, IconCalendar10 } from '../../Icons';
-import { IconEyeOff10 } from '../../Icons/IconEyeOff/IconEyeOff10';
+import { IconAccount, IconAlarm, IconBell, IconBriefcase, IconCalendar } from '../../Icons';
+import { IconEyeOff } from '../../Icons/IconEyeOff/IconEyeOff';
 import { Button } from '../Button/Button';
 
   export type BaseOptions = {
@@ -77,12 +77,12 @@ export interface DropdownProps {
   }
 
 const dropdownOptions = [
-  { value: 'Выбор_1', icon: <IconAccount10 /> },
-  { value: 'Выбор_2', icon: <IconAlarm10 /> },
-  { value: 'Задизейбленный выбор', disabled: true, icon: <IconEyeOff10 /> },
-  { value: 'Выбор_4', icon: <IconBell10 /> },
-  { value: 'Выбор_5', icon: <IconBriefcase10 /> },
-  { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar10 /> },
+  { value: 'Выбор_1', icon: <IconAccount /> },
+  { value: 'Выбор_2', icon: <IconAlarm /> },
+  { value: 'Задизейбленный выбор', disabled: true, icon: <IconEyeOff /> },
+  { value: 'Выбор_4', icon: <IconBell /> },
+  { value: 'Выбор_5', icon: <IconBriefcase /> },
+  { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar /> },
 ] ;
 
 const withWrapper = (Story: React.ComponentType) => (
@@ -280,7 +280,7 @@ DropdownOpenedDefault.parameters = {
 export const DropdownOpenedDefaultSelected = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedDefaultSelected.storyName = 'Dropdown открытый с иконками по умолчанию c выбранным значением';
 DropdownOpenedDefaultSelected.args = {
-  defaultValue: { value: 'Выбор_2', icon: <IconAlarm10 /> },
+  defaultValue: { value: 'Выбор_2', icon: <IconAlarm /> },
   isOpened: true,
   variant: 'icons',
   options: dropdownOptions,
@@ -302,7 +302,7 @@ DropdownOpenedText.parameters = {
 export const DropdownOpenedTextSelected = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedTextSelected.storyName = 'Dropdown открытый без иконок по умолчанию c выбранным значением';
 DropdownOpenedTextSelected.args = {
-  defaultValue: { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar10 /> },
+  defaultValue: { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar /> },
   isOpened: true,
   variant: 'text',
   options: dropdownOptions,
@@ -342,7 +342,7 @@ export const DropdownSelectVariantSelect = (argTypes: DropdownProps): JSX.Elemen
 DropdownSelectVariantSelect.storyName = 'Dropdown селект c лейблом';
 DropdownSelectVariantSelect.args = {
   label: 'Лейбл селекта',
-  defaultValue: { value: 'Выбор_1', icon: <IconAccount10 /> },
+  defaultValue: { value: 'Выбор_1', icon: <IconAccount /> },
   isOpened: false,
   options: dropdownOptions,
 };
@@ -356,7 +356,7 @@ export const DropdownSelectVariantSelectLeftLabel = (argTypes: DropdownProps): J
 );
 DropdownSelectVariantSelectLeftLabel.storyName = 'Dropdown селект c боковым лейблом';
 DropdownSelectVariantSelectLeftLabel.args = {
-  defaultValue: { value: 'Выбор_1', icon: <IconAccount10 /> },
+  defaultValue: { value: 'Выбор_1', icon: <IconAccount /> },
   isOpened: false,
   options: dropdownOptions,
   label: 'Лейбл селекта',

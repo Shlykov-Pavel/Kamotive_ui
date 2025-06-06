@@ -1,9 +1,10 @@
 import React, { CSSProperties, FC } from 'react';
+import styles from '../Icons.module.css';
 
-export const IconPencil: FC<{ color?: string; htmlColor?: string; strokeWidth?: string; style?: CSSProperties }> = ({
+export const IconWarning: FC<{ color?: string; htmlColor?: string; strokeWidth?: string; style?: CSSProperties }> = ({
   color = 'inherit',
   htmlColor,
-  strokeWidth,
+  strokeWidth = '0.3',
   style
 }) => {
   return (
@@ -20,7 +21,8 @@ export const IconPencil: FC<{ color?: string; htmlColor?: string; strokeWidth?: 
         fill={htmlColor || 'currentColor'}
         stroke={htmlColor || 'currentColor'}
         style={{ strokeWidth: strokeWidth }}
-        d="M19.71,8.04L17.37,10.37L13.62,6.62L15.96,4.29C16.35,3.9 17,3.9 17.37,4.29L19.71,6.63C20.1,7 20.1,7.65 19.71,8.04M3,17.25L13.06,7.18L16.81,10.93L6.75,21H3V17.25M16.62,5.04L15.08,6.58L17.42,8.92L18.96,7.38L16.62,5.04M15.36,11L13,8.64L4,17.66V20H6.34L15.36,11Z" 
+        strokeLinejoin="round"
+        d="M1,21L11.5,2.81L22,21H1M20.27,20L11.5,4.81L2.73,20H20.27M11,14V10H12V14H11M11,16H12V18H11V16Z" 
       />
     </svg>
   );
