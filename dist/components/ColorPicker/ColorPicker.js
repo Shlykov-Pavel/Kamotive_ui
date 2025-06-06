@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Chrome } from '@uiw/react-color';
 import EditableInput from '@uiw/react-color-editable-input';
 import { GithubPlacement } from '@uiw/react-color-github';
-import { IconColorPicker10 } from '../../Icons';
+import { IconColorPicker } from '../../Icons';
 ;
 // Функция для преобразования HEXA в HEX
 const hexaToHex = (hexa = 'fff') => {
@@ -149,7 +149,7 @@ export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsH
                     height: `${height}px`,
                 } }),
             isOpen && (React.createElement("div", { ref: popoverRef, className: popoverClassess },
-                isOpen && React.createElement(IconColorPicker10, { className: styles.colorPickerIcon, htmlColor: 'var(--white)' }),
+                isOpen && React.createElement(IconColorPicker, { className: styles.colorPickerIcon, htmlColor: 'var(--white)' }),
                 React.createElement(Chrome, { color: selectedColor, placement: GithubPlacement.Right, onChange: colorChangeHandler, className: styles.customChrome, showEyeDropper: false }),
                 React.createElement("div", { className: styles.hex, style: { padding: '0 10px 0 20px' } },
                     React.createElement(EditableInput, { value: hexaToHex(selectedColor), style: { width: 68, alignItems: 'flex-start' }, onChange: (e, color) => {

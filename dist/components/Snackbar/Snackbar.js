@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IconClose10, IconError10, IconInfo10, IconSuccess10, IconWarning10 } from '../../Icons';
+import { IconClose, IconError, IconInfo, IconSuccess, IconWarning } from '../../Icons';
 import { Typography } from '../Typography/Typography';
 import styles from './Snackbar.module.css';
 import classNames from 'classnames';
@@ -15,10 +15,10 @@ import classNames from 'classnames';
 Операция выполнена успешно
 @returns {JSX.Element | null} Возвращает компонент уведомления или null если оно скрыто */
 export const icons = {
-    success: React.createElement(IconSuccess10, { htmlColor: "#34c759" }),
-    error: React.createElement(IconError10, { htmlColor: "#ff3b30" }),
-    warning: React.createElement(IconWarning10, { htmlColor: "#ff9500" }),
-    info: React.createElement(IconInfo10, { htmlColor: "#6F6F6F" }),
+    success: React.createElement(IconSuccess, { htmlColor: "#34c759" }),
+    error: React.createElement(IconError, { htmlColor: "#ff3b30" }),
+    warning: React.createElement(IconWarning, { htmlColor: "#ff9500" }),
+    info: React.createElement(IconInfo, { htmlColor: "#6F6F6F" }),
 };
 export const title = {
     success: 'Успешно',
@@ -51,5 +51,5 @@ export const Snackbar = ({ children, type, duration = 10000, icon = true, onClos
                 React.createElement(Typography, { variant: "Body1-Medium", color: 'var(--text-dark)' }, title[type]),
                 React.createElement(Typography, { variant: "Body1", color: 'var(--text-btn-light)' }, children))),
         React.createElement("button", { className: styles.button, onClick: handleClose },
-            React.createElement(IconClose10, { htmlColor: 'var(--text-btn-light)' }))));
+            React.createElement(IconClose, { htmlColor: 'var(--text-btn-light)' }))));
 };

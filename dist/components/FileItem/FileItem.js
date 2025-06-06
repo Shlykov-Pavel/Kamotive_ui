@@ -3,7 +3,7 @@ import styles from './FileItem.module.css';
 import { Typography } from '../Typography/Typography';
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 import { IconButton } from '../IconButton/IconButton';
-import { IconClose10, IconDownload, IconFile } from '../../Icons';
+import { IconClose, IconDownload, IconFile } from '../../Icons';
 import { Tooltip } from '../Tooltip/Tooltip';
 import classNames from 'classnames';
 export const FileItem = ({ file, loading = false, error = '', onDownload, onDelete, canDelete = true, canDownload = true, style, isAddedFile, isRejectedFile, }) => {
@@ -104,8 +104,8 @@ export const FileItem = ({ file, loading = false, error = '', onDownload, onDele
                         React.createElement(Typography, { variant: "Body1", color: "var(--text-dark)" }, croppedName(file.filename)))) : (React.createElement(Typography, { variant: "Body1", color: "var(--text-dark)" }, croppedName(file.filename))),
                     file.size !== 0 && (React.createElement(Typography, { variant: "Caption", color: "var(--grey-medium)" }, `${file.size ? (file.size / 1024).toFixed(1) : 0} кБ`)))),
             React.createElement("div", { className: styles['fileItemActions'] },
-                !(isAddedFile || isRejectedFile) && canDownload && (React.createElement(IconButton, { icon: React.createElement(IconDownload, null), onClick: (e) => handleDownloadClick(e, file), color: "var(--icons-grey)" })),
-                canDelete && (React.createElement(IconButton, { icon: React.createElement(IconClose10, null), onClick: (e) => handleDeleteClick(e, file.id || ''), color: "var(--icons-grey)" })))),
+                !(isAddedFile || isRejectedFile) && canDownload && (React.createElement(IconButton, { className: styles.fileIcon, icon: React.createElement(IconDownload, null), onClick: (e) => handleDownloadClick(e, file), color: "var(--icons-grey)", size: "sm" })),
+                canDelete && (React.createElement(IconButton, { className: styles.fileIcon, icon: React.createElement(IconClose, null), onClick: (e) => handleDeleteClick(e, file.id || ''), color: "var(--icons-grey)", size: "sm" })))),
         loading && !isLoadingFinished && (React.createElement(ProgressBar, { animated: true, size: "sm", value: 100, setIsLoadingFinished: setIsLoadingFinished, animationDuration: animationDuration })),
         error && (React.createElement(Typography, { variant: "Caption", color: "var(--error-main)" }, error))));
 };

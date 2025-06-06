@@ -1,6 +1,0 @@
-import { FC } from 'react';
-export declare const IconBank10: FC<{
-    color?: string;
-    htmlColor?: string;
-    strokeWidth?: string;
-}>;

@@ -1,46 +1,47 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './Dropdown.module.css';
 import classNames from 'classnames';
-import { ChevronDown10 } from '../../Icons/ChevronDown/ChevronDown10';
-import { ChevronUp10 } from '../../Icons/ChevronUp/ChevronUp10';
-import { IconClose10 } from '../../Icons/IconClose/IconClose10';
-import { IconCheck10 } from '../../Icons/IconCheck/IconCheck10';
+import { ChevronDown } from '../../Icons/ChevronDown/ChevronDown';
+import { ChevronUp } from '../../Icons/ChevronUp/ChevronUp';
+import { IconClose } from '../../Icons/IconClose/IconClose';
+import { IconCheck } from '../../Icons/IconCheck/IconCheck';
 ;
 import { Typography } from '../Typography/Typography';
 function checkItem(item, getOptionLabel, disabled, isDivider) {
     if (typeof item === 'object' && item !== null) {
+        const itemCopy = Object.assign({}, item);
         //проверка на вложенные объекты с таким же типом
-        Object.keys(item).forEach((key) => {
-            const value = item[key];
+        Object.keys(itemCopy).forEach((key) => {
+            const value = itemCopy[key];
             if (typeof value === 'object' && value !== null && !React.isValidElement(value)) {
                 const nestedItem = checkItem(value, getOptionLabel, disabled, isDivider);
                 if (nestedItem) {
-                    if (!item.children) {
-                        item.children = [];
+                    if (!itemCopy.children) {
+                        itemCopy.children = [];
                     }
-                    item.children.push(nestedItem);
-                    delete item[key];
+                    itemCopy.children.push(nestedItem);
+                    delete itemCopy[key];
                 }
             }
         });
         // проверка на наличие пользовательского поля для вывода(передаваемой функции getOptionLabel)
         if (getOptionLabel) {
-            return Object.assign(Object.assign({}, item), { value: getOptionLabel(item), disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
+            return Object.assign(Object.assign({}, itemCopy), { value: getOptionLabel(itemCopy), disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
         }
-        if ('value' in item) {
-            return Object.assign(Object.assign({}, item), { disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
+        if ('value' in itemCopy) {
+            return Object.assign(Object.assign({}, itemCopy), { disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
         }
-        else if ('name' in item && !('value' in item)) {
-            return Object.assign(Object.assign({}, item), { value: item.name, disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
+        else if ('name' in itemCopy && !('value' in itemCopy)) {
+            return Object.assign(Object.assign({}, itemCopy), { value: itemCopy.name, disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
         }
-        else if ('description' in item && !('value' in item)) {
-            return Object.assign(Object.assign({}, item), { value: item.description, disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
+        else if ('description' in itemCopy && !('value' in itemCopy)) {
+            return Object.assign(Object.assign({}, itemCopy), { value: itemCopy.description, disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
         }
         else {
-            const keys = Object.keys(item);
+            const keys = Object.keys(itemCopy);
             if (keys.length) {
-                const firstValue = item[keys[0]];
-                return Object.assign(Object.assign({}, item), { value: firstValue, disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
+                const firstValue = itemCopy[keys[0]];
+                return Object.assign(Object.assign({}, itemCopy), { value: firstValue, disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false });
             }
         }
     }
@@ -76,7 +77,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
                     }),
                 React.createElement("div", { className: styles.item },
                     React.createElement("span", null, item === null || item === void 0 ? void 0 : item.value)),
-                (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.value) === (item === null || item === void 0 ? void 0 : item.value) && (React.createElement(IconCheck10, { strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0', htmlColor: "#0D99FF" }))),
+                (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.value) === (item === null || item === void 0 ? void 0 : item.value) && (React.createElement(IconCheck, { strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0', htmlColor: "#0D99FF" }))),
             (item === null || item === void 0 ? void 0 : item.isDivider) && React.createElement("div", { className: styles.divider })),
         (item === null || item === void 0 ? void 0 : item.children) && (React.createElement("div", { className: styles.nestedMenu }, (_a = item.children) === null || _a === void 0 ? void 0 : _a.map((child, childIndex) => {
             var _a;
@@ -340,8 +341,8 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         React.createElement("button", { className: buttonClassess, onClick: readOnly ? undefined : handleToggle, disabled: disabled, tabIndex: 0, onKeyDown: handleKeyDown },
             getTextField(),
             clearable && !readOnly && !disabled && (selectedItem || enableAutocomplete && searchValue) && (React.createElement("div", { className: styles.resetButton },
-                React.createElement(IconClose10, { strokeWidth: "0.2", htmlColor: "var(--text-light)", onClick: handleReset }))),
-            React.createElement("div", { className: styles.dropdownIcon }, !isOpen ? (React.createElement(ChevronDown10, { strokeWidth: size === 'lg' ? '0.5' : '0.3' })) : (React.createElement(ChevronUp10, { strokeWidth: size === 'lg' ? '0.5' : '0.3' }))),
+                React.createElement(IconClose, { strokeWidth: "0.2", htmlColor: "var(--text-light)", onClick: handleReset }))),
+            React.createElement("div", { className: styles.dropdownIcon }, !isOpen ? (React.createElement(ChevronDown, { strokeWidth: size === 'lg' ? '0.5' : '0.3' })) : (React.createElement(ChevronUp, { strokeWidth: size === 'lg' ? '0.5' : '0.3' }))),
             getDropdownMenu()),
         errorInput && errorInputHelperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]) }, helperText !== null && helperText !== void 0 ? helperText : errorInputHelperText))));
 };

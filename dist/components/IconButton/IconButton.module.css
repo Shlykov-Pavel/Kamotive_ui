@@ -10,18 +10,18 @@
 }
 
 .iconButton--sm svg {
-  width: 14px;
-  height: 14px;
-}
-
-.iconButton--md svg {
   width: 16px;
   height: 16px;
 }
 
+.iconButton--md svg {
+  width: 24px;
+  height: 24px;
+}
+
 .iconButton--lg svg {
-  width: 18px;
-  height: 18px;
+  width: 30px;
+  height: 30px;
 }
 
 .iconButton:disabled {

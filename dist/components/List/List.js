@@ -4,7 +4,7 @@ import styles from './List.module.css';
 import { Typography } from '../Typography/Typography';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { RadioButton } from '../RadioButton/RadioButton';
-import { ChevronDown10 } from '../../Icons';
+import { ChevronDown } from '../../Icons';
 export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selected = false, disabled = false, label, id, style, className, collapsible = false, open = false, withCheckbox = false, checkboxColor, checkboxFilled, withRadioButton = false, customBullet, customItemBullet, bulletClassName, children, isHeader = false, parentChecked = false, }) => {
     const [isOpen, setIsOpen] = useState(open);
     const [isChecked, setIsChecked] = useState(checked || parentChecked);
@@ -65,7 +65,7 @@ export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selecte
                     React.createElement(RadioButton, { checked: selected, value: id, disabled: disabled }))),
                 customBullet && React.createElement("span", { className: classNames(styles.bullet, bulletClassName) }, customBullet))),
             React.createElement(Typography, { variant: "Body1" }, label),
-            collapsible && (React.createElement("span", { className: styles.indicator }, isOpen ? React.createElement(ChevronDown10, null) : React.createElement(ChevronDown10, { rotation: 270 }))))),
+            collapsible && (React.createElement("span", { className: styles.indicator }, isOpen ? React.createElement(ChevronDown, null) : React.createElement(ChevronDown, { rotation: 270 }))))),
         React.createElement("div", { className: collapsible ? contentClassNames : styles.content, style: { paddingLeft: !label ? 0 : '16px' } }, React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
                 return React.cloneElement(child, {
