@@ -18,11 +18,13 @@ import { IconCalendar } from '../../Icons/IconCalendar/IconCalendar';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import { ru } from 'date-fns/locale/ru';
+import { enUS } from 'date-fns/locale/en-US';
 import { ChevronRight } from '../../Icons/ChevronRight/ChevronRight';
 import { ChevronLeft } from '../../Icons/ChevronLeft/ChevronLeft';
 import { Button } from '../Button/Button';
 
 registerLocale('ru', ru);
+registerLocale('en', enUS);
 
 interface CustomInputProps {
   value?: string;
@@ -32,6 +34,7 @@ interface CustomInputProps {
   className?: string;
   disabled?: boolean;
   readOnly?: boolean;
+  dateFormat?: string;
 }
 
 interface SelectionPositions {
@@ -55,7 +58,7 @@ interface MonthPickerProps {
 type DatePart = 'day' | 'month' | 'year';
 
 const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps>(
-  ({ value = '', onClick, onDateChange, onClose, className, disabled=false, readOnly=false }, ref) => {
+  ({ value = '', onClick, onDateChange, onClose, className, disabled=false, readOnly=false, dateFormat='dd.MM.yyyy' }, ref) => {
 
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [selectedPart, setSelectedPart] = useState<DatePart | null>(null);
@@ -63,6 +66,8 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
     const [hasFocus, setHasFocus] = useState<boolean>(false);
     const [shouldReselect, setShouldReselect] = useState<boolean>(false);
     const [input, setInput] = useState(value);
+
+    const separator = dateFormat.includes('.') ? '.' : dateFormat.includes('-') ? '-' : '/';
 
     const positions: SelectionPositions = {
       day: { start: 0, end: 2 },
@@ -123,7 +128,7 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
         } else if (selectedPart === 'year') {
           selectDatePart('month');
         }
-      } else if (e.key === 'ArrowRight' || e.key === '.') {
+      } else if (e.key === 'ArrowRight' || e.key === separator) {
         e.preventDefault();
         if (selectedPart === 'day') {
           selectDatePart('month');
@@ -133,13 +138,14 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
       } else if (/^\d$/.test(e.key)) {
         e.preventDefault();
 
-        if (!/^\d{2}\.\d{2}\.\d{4}$/.test(input)) {
+        const dateRegex = new RegExp(`^\\d{2}\\${separator}\\d{2}\\${separator}\\d{4}$`);
+        if (!dateRegex.test(input)) {
           const today = new Date();
           handleDateUpdate(today, e.key);
           return;
         }
 
-        const [day, month, year] = input.split('.').map((part) => parseInt(part, 10));
+        const [day, month, year] = input.split(separator).map((part) => parseInt(part, 10));
         const currentDate = new Date(year, month - 1, day);
 
         handleDateUpdate(currentDate, e.key);
@@ -189,7 +195,7 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
           return;
         }
 
-        updateInputValue(key, positions.day.start + 1);
+        updateInputValue(key, positions.month.start + 1);
         let newMonth = parseInt(newTempInput, 10);
         newDate.setMonth(newMonth - 1);
         onDateChange(newDate);
@@ -258,6 +264,7 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onChange={() => {}}
         readOnly={readOnly}
         disabled={disabled}
         className={className}
@@ -282,6 +289,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
   onChange,
   onBlur,
   required = false,
+  lng = 'ru',
 
   minDate = new Date('1975-12-31'),
   maxDate = new Date('2074-12-31'),
@@ -314,20 +322,38 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
   const datePickerRef = useRef<any>(null);
   const inputRef = useRef<{ removeSelection: () => void } | null>(null);
 
-  const months = [
-    'Январь',
-    'Февраль',
-    'Март',
-    'Апрель',
-    'Май',
-    'Июнь',
-    'Июль',
-    'Август',
-    'Сентябрь',
-    'Октябрь',
-    'Ноябрь',
-    'Декабрь',
-  ];
+  const weekDays = lng === 'ru' ? ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] : ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+  const months =
+    lng === 'ru'
+      ? [
+          'Январь',
+          'Февраль',
+          'Март',
+          'Апрель',
+          'Май',
+          'Июнь',
+          'Июль',
+          'Август',
+          'Сентябрь',
+          'Октябрь',
+          'Ноябрь',
+          'Декабрь',
+        ]
+      : [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ];
 
   const years = Array.from({ length: maxDate.getFullYear() - minDate.getFullYear() }, (_, i) => minDate.getFullYear() + i);
 
@@ -436,7 +462,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
               setIsMonthPickerOpen(false);
             }}
           >
-            Отмена
+            {lng === 'ru' ? "Отмена" : "Cancel"}
           </Button>
           <Button
             onClick={() => {
@@ -445,7 +471,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
               setIsMonthPickerOpen(false);
             }}
           >
-            Применить
+             {lng === 'ru' ? "Применить" : "Apply"}
           </Button>
         </div>
       </div>
@@ -516,7 +542,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
         onChange={handleDateChange}
         onBlur={onBlur}
         dateFormat={dateFormat}
-        locale="ru"
+        locale={lng === 'ru' ? 'ru' : 'en'}
         readOnly={readOnly}
         disabled={disabled}
         showPopperArrow={false}
@@ -527,7 +553,13 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
         maxDate={maxDate}
         inline={false}
         calendarStartDay={1}
-        
+        formatWeekDay={(dayName) => {
+          const dayIndex = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье']
+            .findIndex(day => day === dayName);
+
+          return weekDays[dayIndex];
+        }}
+
         dayClassName={(date) => {
           return date.getMonth() === selectedDate?.getMonth() && date.getFullYear() === selectedDate?.getFullYear()
             ? 'current-month-day'
@@ -549,6 +581,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
             onClose={handleCloseDatePicker}
             disabled={disabled}
             readOnly={readOnly}
+            dateFormat={dateFormat}
           />
         }
       />

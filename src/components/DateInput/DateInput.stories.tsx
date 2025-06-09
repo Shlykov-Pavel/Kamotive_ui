@@ -55,3 +55,11 @@ DateInputError.args = {
 	error: true,
 	helperText: 'Сообщение об ошибке'
 };
+
+export const DateInputEn = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
+DateInputEn.storyName = 'Date Input локализованный en-EN';
+DateInputEn.args = {
+	lng: 'en',
+	label: 'Select a date',
+	dateFormat: 'dd-MM-yyyy',
+};
