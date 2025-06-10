@@ -82,7 +82,7 @@ const dropdownOptions = [
   { value: 'Задизейбленный выбор', disabled: true, icon: <IconEyeOff /> },
   { value: 'Выбор_4', icon: <IconBell /> },
   { value: 'Выбор_5', icon: <IconBriefcase /> },
-  { value: 'Длиный тексттттттттттттттттттттт тексттттттттттттттттттттт', icon: <IconCalendar /> },
+  { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar /> },
 ] ;
 
 const withWrapper = (Story: React.ComponentType) => (
@@ -302,7 +302,7 @@ DropdownOpenedText.parameters = {
 export const DropdownOpenedTextSelected = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedTextSelected.storyName = 'Dropdown открытый без иконок по умолчанию c выбранным значением';
 DropdownOpenedTextSelected.args = {
-  defaultValue: { value: 'Длиный тексттттттттттттттттттттт тексттттттттттттттттттттт', icon: <IconCalendar /> },
+  defaultValue: { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar /> },
   isOpened: true,
   variant: 'text',
   options: dropdownOptions,

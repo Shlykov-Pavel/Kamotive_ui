@@ -271,17 +271,13 @@
 
 .item-selected {
   color: var(--text-dark);
-  /* width: 80%; */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
   text-align: left;
   position: relative;
-
-   flex: 1; /* Добавьте это для лучшего контроля ширины */
-  /* max-width: 100%; Убедитесь что элемент не выходит за границы */
-   /* max-width: calc(100% - 60px); */
+  flex: 1;
 }
 
 .item-selected .inlineSearchInput {
