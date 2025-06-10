@@ -58,7 +58,7 @@ const withWrapper = (Story: React.ComponentType) => (
       backgroundColor: 'var(--white)',
       padding: '30px',
       borderRadius: '10px',
-      width: '900px',
+      width: '300px',
     }}
   >
     {<Story />}
