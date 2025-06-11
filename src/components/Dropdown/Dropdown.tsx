@@ -5,8 +5,14 @@ import { ChevronDown } from '../../Icons/ChevronDown/ChevronDown';
 import { ChevronUp } from '../../Icons/ChevronUp/ChevronUp';
 import { IconClose } from '../../Icons/IconClose/IconClose';
 import { IconCheck } from '../../Icons/IconCheck/IconCheck';
-import { DropdownProps, TOptions } from '../../types';;
+import { DropdownProps, TOptions } from '../../types';
 import { Typography } from '../Typography/Typography';
+import { Tooltip } from '../Tooltip/Tooltip';
+
+const isTextOverflowing = (element: HTMLElement | null): boolean => {
+  if (!element) return false;
+  return element.scrollWidth > element.clientWidth;
+};
 
 /**
  * Компонент Dropdown позволяет пользователям выбирать однин вариант из выпадающего меню
@@ -107,6 +113,23 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
   activeIndex,
   index,
 }) => {
+
+  const itemRef = useRef<HTMLDivElement>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      setShowTooltip(isTextOverflowing(itemRef.current));
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    
+    return () => {
+      window.removeEventListener('resize', checkOverflow);
+    };
+  }, [item?.value]);
+
   const handleItemClick = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
@@ -130,7 +153,7 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
     { [styles['item-block--disabled']]: item?.disabled }
   );
 
-  return (
+  const itemContent = (
     <div className={itemContainerClasses} onClick={handleItemClick}>
       <div className={itemClassess}>
         <div className={itemBlock}>
@@ -139,7 +162,7 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
             React.cloneElement(item.icon as React.ReactElement, {
               strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
             })}
-          <div className={styles.item}>
+          <div className={styles.item} ref={itemRef}>
             <span>{item?.value}</span>
           </div>
           {selectedItem?.value === item?.value && (
@@ -168,6 +191,13 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
         </div>
       )}
     </div>
+  );
+return showTooltip ? (
+    <Tooltip label={item?.value?.toString() || ''} position="bottom-left">
+      {itemContent}
+    </Tooltip>
+  ) : (
+    itemContent
   );
 };
 
@@ -385,9 +415,23 @@ export const Dropdown: FC<DropdownProps> = ({
     }
   };
 
+  const [showSelectedTooltip, setShowSelectedTooltip] = useState(false);
+  const selectedItemRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const checkOverflow = () => {
+      setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    
+    return () => {
+      window.removeEventListener('resize', checkOverflow);
+    };
+  }, [selectedItem?.value]);
   const getTextField = () => {
-    return (
-      <div className={selectedItemClassess}>
+    const textFieldContent = (
+      <div className={selectedItemClassess} ref={selectedItemRef}>
         {variant === 'icons' &&
           selectedItem?.icon &&
           React.cloneElement(selectedItem.icon as React.ReactElement, {
@@ -427,6 +471,18 @@ export const Dropdown: FC<DropdownProps> = ({
           searchValue || (placeholder ?? label ?? 'Выберите значение')
         )}
       </div>
+    );
+   
+
+    return showSelectedTooltip ? (
+       <div  className={styles.textField}>
+       <Tooltip label={selectedItem?.value?.toString() || ''} position="bottom-left" style={{width: '100% !important'}}>
+        {textFieldContent}
+      </Tooltip>
+      </div>
+     
+    ) : (
+      textFieldContent
     );
   };
 
@@ -544,6 +600,7 @@ export const Dropdown: FC<DropdownProps> = ({
         onKeyDown={handleKeyDown}
       >
         {getTextField()}
+        <div className={styles.actionButtons}>
         {clearable && !readOnly && !disabled && (selectedItem || enableAutocomplete && searchValue) && (
           <div className={styles.resetButton}>
             <IconClose strokeWidth="0.2" htmlColor="var(--text-light)" onClick={handleReset} />
@@ -555,6 +612,7 @@ export const Dropdown: FC<DropdownProps> = ({
           ) : (
             <ChevronUp strokeWidth={size === 'lg' ? '0.5' : '0.3'} />
           )}
+        </div>
         </div>
         {getDropdownMenu()}
       </button>
