@@ -1,7 +1,6 @@
 .dropdown--container {
   position: relative;
   width: 100%;
-  max-width: 260px;
 }
 .dropdown--container-left {
   display: flex;
@@ -35,17 +34,15 @@
   line-height: 16.5px;
   border-radius: 10px;
   cursor: pointer;
-  padding: 10px 15px;
+  padding: 6px 12px;
   transition: all 0.3s ease;
   background-color: transparent;
   color: var(--text-dark);
   border: 1px solid var(--grey-mediumLight);
-  /* mix-blend-mode: multiply; */
   display: flex;
   align-items: center;
   gap: 20px;
   justify-content: space-between;
-  /* min-width: fit-content; */
   position: relative;
   width: 100%;
 }
@@ -100,10 +97,15 @@
 .button:focus-visible {
   outline: none;
 }
-
+.actionButtons {
+  display: flex;
+  gap: 0px;
+  align-items: center;
+  margin-right: -6px;
+}
 .resetButton,
 .dropdownIcon {
-  position: absolute;
+  /* position: absolute; */
   background: none;
   border: none;
   cursor: pointer;
@@ -141,6 +143,20 @@
   overflow-y: auto;
   z-index: 1000;
   overflow-x: hidden;
+}
+
+.textField{
+  width: 100%;
+  overflow: hidden;
+}
+
+.textField > :first-child {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  display: block;
 }
 
 .inlineSearchInput {
@@ -255,13 +271,13 @@
 
 .item-selected {
   color: var(--text-dark);
-  width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
   text-align: left;
   position: relative;
+  flex: 1;
 }
 
 .item-selected .inlineSearchInput {

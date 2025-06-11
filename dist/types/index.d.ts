@@ -124,6 +124,8 @@ export interface DateInputProps {
     onBlur?: React.FocusEventHandler<HTMLElement>;
     /** Обязательное поле */
     required?: boolean;
+    /** Язык */
+    lng?: string;
 }
 /** @internal */
 export interface TagProps {

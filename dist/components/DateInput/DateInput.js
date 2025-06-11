@@ -7,17 +7,20 @@ import { IconCalendar } from '../../Icons/IconCalendar/IconCalendar';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import { ru } from 'date-fns/locale/ru';
+import { enUS } from 'date-fns/locale/en-US';
 import { ChevronRight } from '../../Icons/ChevronRight/ChevronRight';
 import { ChevronLeft } from '../../Icons/ChevronLeft/ChevronLeft';
 import { Button } from '../Button/Button';
 registerLocale('ru', ru);
-const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, className, disabled = false, readOnly = false }, ref) => {
+registerLocale('en', enUS);
+const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, className, disabled = false, readOnly = false, dateFormat = 'dd.MM.yyyy' }, ref) => {
     const inputRef = useRef(null);
     const [selectedPart, setSelectedPart] = useState(null);
     const [tempInput, setTempInput] = useState('');
     const [hasFocus, setHasFocus] = useState(false);
     const [shouldReselect, setShouldReselect] = useState(false);
     const [input, setInput] = useState(value);
+    const separator = dateFormat.includes('.') ? '.' : dateFormat.includes('-') ? '-' : '/';
     const positions = {
         day: { start: 0, end: 2 },
         month: { start: 3, end: 5 },
@@ -74,7 +77,7 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
                 selectDatePart('month');
             }
         }
-        else if (e.key === 'ArrowRight' || e.key === '.') {
+        else if (e.key === 'ArrowRight' || e.key === separator) {
             e.preventDefault();
             if (selectedPart === 'day') {
                 selectDatePart('month');
@@ -85,12 +88,13 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
         }
         else if (/^\d$/.test(e.key)) {
             e.preventDefault();
-            if (!/^\d{2}\.\d{2}\.\d{4}$/.test(input)) {
+            const dateRegex = new RegExp(`^\\d{2}\\${separator}\\d{2}\\${separator}\\d{4}$`);
+            if (!dateRegex.test(input)) {
                 const today = new Date();
                 handleDateUpdate(today, e.key);
                 return;
             }
-            const [day, month, year] = input.split('.').map((part) => parseInt(part, 10));
+            const [day, month, year] = input.split(separator).map((part) => parseInt(part, 10));
             const currentDate = new Date(year, month - 1, day);
             handleDateUpdate(currentDate, e.key);
         }
@@ -141,7 +145,7 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
                 updateInputValue(key, positions.month.start);
                 return;
             }
-            updateInputValue(key, positions.day.start + 1);
+            updateInputValue(key, positions.month.start + 1);
             let newMonth = parseInt(newTempInput, 10);
             newDate.setMonth(newMonth - 1);
             onDateChange(newDate);
@@ -189,9 +193,9 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
     useImperativeHandle(ref, () => ({
         removeSelection,
     }), [removeSelection]);
-    return (React.createElement("input", { ref: inputRef, value: input, onClick: handleClick, onKeyDown: handleKeyDown, onFocus: handleFocus, onBlur: handleBlur, readOnly: readOnly, disabled: disabled, className: className }));
+    return (React.createElement("input", { ref: inputRef, value: input, onClick: handleClick, onKeyDown: handleKeyDown, onFocus: handleFocus, onBlur: handleBlur, onChange: () => { }, readOnly: readOnly, disabled: disabled, className: className }));
 });
-export const DateInput = ({ id, label = 'Выберите дату', size = 'lg', value, style, className, disabled = false, readOnly = false, isLeftLabel = false, icon, error = false, helperText, onChange, onBlur, required = false, minDate = new Date('1975-12-31'), maxDate = new Date('2074-12-31'), inputClassName, calendarClassName, dateFormat = 'dd.MM.yyyy', }) => {
+export const DateInput = ({ id, label = 'Выберите дату', size = 'lg', value, style, className, disabled = false, readOnly = false, isLeftLabel = false, icon, error = false, helperText, onChange, onBlur, required = false, lng = 'ru', minDate = new Date('1975-12-31'), maxDate = new Date('2074-12-31'), inputClassName, calendarClassName, dateFormat = 'dd.MM.yyyy', }) => {
     const wrapperClassess = classNames(styles['wrapper--input'], className, {
         [styles['wrapper--left']]: isLeftLabel,
         [styles['wrapper--input-label']]: label && !isLeftLabel && !required,
@@ -212,20 +216,36 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
     const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
     const datePickerRef = useRef(null);
     const inputRef = useRef(null);
-    const months = [
-        'Январь',
-        'Февраль',
-        'Март',
-        'Апрель',
-        'Май',
-        'Июнь',
-        'Июль',
-        'Август',
-        'Сентябрь',
-        'Октябрь',
-        'Ноябрь',
-        'Декабрь',
-    ];
+    const weekDays = lng === 'ru' ? ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] : ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+    const months = lng === 'ru'
+        ? [
+            'Январь',
+            'Февраль',
+            'Март',
+            'Апрель',
+            'Май',
+            'Июнь',
+            'Июль',
+            'Август',
+            'Сентябрь',
+            'Октябрь',
+            'Ноябрь',
+            'Декабрь',
+        ]
+        : [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+        ];
     const years = Array.from({ length: maxDate.getFullYear() - minDate.getFullYear() }, (_, i) => minDate.getFullYear() + i);
     const handleDateChange = (date) => {
         if (date) {
@@ -297,12 +317,12 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
             React.createElement("div", { className: styles.buttonContainer },
                 React.createElement(Button, { condition: "info", onClick: () => {
                         setIsMonthPickerOpen(false);
-                    } }, "\u041E\u0442\u043C\u0435\u043D\u0430"),
+                    } }, lng === 'ru' ? "Отмена" : "Cancel"),
                 React.createElement(Button, { onClick: () => {
                         date.setMonth(currentMonth);
                         date.setFullYear(currentYear);
                         setIsMonthPickerOpen(false);
-                    } }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C"))));
+                    } }, lng === 'ru' ? "Применить" : "Apply"))));
     };
     const getMonthPickerWithDate = (date) => {
         return () => React.createElement(MonthPicker, { date: date });
@@ -326,7 +346,11 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
     return (React.createElement("div", { className: wrapperClassess, style: style },
         label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
         React.createElement("div", { className: styles.icon, onClick: () => { var _a; return (_a = datePickerRef.current) === null || _a === void 0 ? void 0 : _a.setOpen(true); } }, icon || React.createElement(IconCalendar, null)),
-        React.createElement(DatePicker, Object.assign({ id: id, ref: datePickerRef, selected: selectedDate, onChange: handleDateChange, onBlur: onBlur, dateFormat: dateFormat, locale: "ru", readOnly: readOnly, disabled: disabled, showPopperArrow: false, calendarClassName: classNames(styles.calendar, calendarClassName), popperClassName: styles.calendarPopper, onCalendarClose: () => setIsMonthPickerOpen(false), minDate: minDate, maxDate: maxDate, inline: false, calendarStartDay: 1, dayClassName: (date) => {
+        React.createElement(DatePicker, Object.assign({ id: id, ref: datePickerRef, selected: selectedDate, onChange: handleDateChange, onBlur: onBlur, dateFormat: dateFormat, locale: lng === 'ru' ? 'ru' : 'en', readOnly: readOnly, disabled: disabled, showPopperArrow: false, calendarClassName: classNames(styles.calendar, calendarClassName), popperClassName: styles.calendarPopper, onCalendarClose: () => setIsMonthPickerOpen(false), minDate: minDate, maxDate: maxDate, inline: false, calendarStartDay: 1, formatWeekDay: (dayName) => {
+                const dayIndex = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье']
+                    .findIndex(day => day === dayName);
+                return weekDays[dayIndex];
+            }, dayClassName: (date) => {
                 return date.getMonth() === (selectedDate === null || selectedDate === void 0 ? void 0 : selectedDate.getMonth()) && date.getFullYear() === (selectedDate === null || selectedDate === void 0 ? void 0 : selectedDate.getFullYear())
                     ? 'current-month-day'
                     : '';
@@ -335,6 +359,6 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
             : {
                 renderCustomHeader: renderCustomHeader,
                 renderDayContents: renderDayContents,
-            }), { customInput: React.createElement(CustomInput, { ref: inputRef, className: classNames(inputClassess, inputClassName), onDateChange: handleCustomInputChange, onClose: handleCloseDatePicker, disabled: disabled, readOnly: readOnly }) })),
+            }), { customInput: React.createElement(CustomInput, { ref: inputRef, className: classNames(inputClassess, inputClassName), onDateChange: handleCustomInputChange, onClose: handleCloseDatePicker, disabled: disabled, readOnly: readOnly, dateFormat: dateFormat }) })),
         error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]) }, helperText))));
 };
