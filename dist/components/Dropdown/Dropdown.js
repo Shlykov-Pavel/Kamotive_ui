@@ -5,8 +5,13 @@ import { ChevronDown } from '../../Icons/ChevronDown/ChevronDown';
 import { ChevronUp } from '../../Icons/ChevronUp/ChevronUp';
 import { IconClose } from '../../Icons/IconClose/IconClose';
 import { IconCheck } from '../../Icons/IconCheck/IconCheck';
-;
 import { Typography } from '../Typography/Typography';
+import { Tooltip } from '../Tooltip/Tooltip';
+const isTextOverflowing = (element) => {
+    if (!element)
+        return false;
+    return element.scrollWidth > element.clientWidth;
+};
 function checkItem(item, getOptionLabel, disabled, isDivider) {
     if (typeof item === 'object' && item !== null) {
         const itemCopy = Object.assign({}, item);
@@ -53,7 +58,19 @@ function checkItem(item, getOptionLabel, disabled, isDivider) {
     }
 }
 export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedItem, variant, onChange, isActive, activeIndex, index, }) => {
-    var _a;
+    var _a, _b;
+    const itemRef = useRef(null);
+    const [showTooltip, setShowTooltip] = useState(false);
+    useEffect(() => {
+        const checkOverflow = () => {
+            setShowTooltip(isTextOverflowing(itemRef.current));
+        };
+        checkOverflow();
+        window.addEventListener('resize', checkOverflow);
+        return () => {
+            window.removeEventListener('resize', checkOverflow);
+        };
+    }, [item === null || item === void 0 ? void 0 : item.value]);
     const handleItemClick = useCallback((event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -67,7 +84,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
         [styles['item-block--active']]: isActive,
     });
     const itemBlock = classNames(styles[`item-block`], styles[`item-block-${variant}`], { [styles[`item-block-${variant}--selected`]]: (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.value) === (item === null || item === void 0 ? void 0 : item.value) }, { [styles['item-block--disabled']]: item === null || item === void 0 ? void 0 : item.disabled });
-    return (React.createElement("div", { className: itemContainerClasses, onClick: handleItemClick },
+    const itemContent = (React.createElement("div", { className: itemContainerClasses, onClick: handleItemClick },
         React.createElement("div", { className: itemClassess },
             React.createElement("div", { className: itemBlock },
                 variant === 'icons' &&
@@ -75,7 +92,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
                     React.cloneElement(item.icon, {
                         strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
                     }),
-                React.createElement("div", { className: styles.item },
+                React.createElement("div", { className: styles.item, ref: itemRef },
                     React.createElement("span", null, item === null || item === void 0 ? void 0 : item.value)),
                 (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.value) === (item === null || item === void 0 ? void 0 : item.value) && (React.createElement(IconCheck, { strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0', htmlColor: "#0D99FF" }))),
             (item === null || item === void 0 ? void 0 : item.isDivider) && React.createElement("div", { className: styles.divider })),
@@ -83,6 +100,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
             var _a;
             return (React.createElement(DropdownListItem, { key: (_a = child === null || child === void 0 ? void 0 : child.key) !== null && _a !== void 0 ? _a : childIndex, item: child, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, onChange: onChange, isActive: activeIndex === index, activeIndex: activeIndex, index: childIndex }));
         })))));
+    return showTooltip ? (React.createElement(Tooltip, { label: ((_b = item === null || item === void 0 ? void 0 : item.value) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left" }, itemContent)) : (itemContent);
 };
 export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, noOptionsText = 'Нет вариантов для выбора', }) => {
     const [isOpen, setIsOpen] = useState(isOpened);
@@ -244,9 +262,21 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
             setErrorInputHelperText(helperText !== null && helperText !== void 0 ? helperText : 'Поле обязательно для заполнения');
         }
     };
+    const [showSelectedTooltip, setShowSelectedTooltip] = useState(false);
+    const selectedItemRef = useRef(null);
+    useEffect(() => {
+        const checkOverflow = () => {
+            setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
+        };
+        checkOverflow();
+        window.addEventListener('resize', checkOverflow);
+        return () => {
+            window.removeEventListener('resize', checkOverflow);
+        };
+    }, [selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.value]);
     const getTextField = () => {
-        var _a;
-        return (React.createElement("div", { className: selectedItemClassess },
+        var _a, _b;
+        const textFieldContent = (React.createElement("div", { className: selectedItemClassess, ref: selectedItemRef },
             variant === 'icons' &&
                 (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.icon) &&
                 React.cloneElement(selectedItem.icon, {
@@ -266,6 +296,8 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                     e.stopPropagation();
                     onBlur === null || onBlur === void 0 ? void 0 : onBlur(e);
                 }, onKeyDown: handleKeyDown, autoFocus: true })) : selectedItem ? (selectedItem.value) : (searchValue || ((_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : 'Выберите значение'))));
+        return showSelectedTooltip ? (React.createElement("div", { className: styles.textField },
+            React.createElement(Tooltip, { label: ((_b = selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.value) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left", style: { width: '100% !important' } }, textFieldContent))) : (textFieldContent);
     };
     const getDropdownMenu = () => {
         const optionsToRender = enableAutocomplete && searchValue
@@ -340,9 +372,10 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
         React.createElement("button", { className: buttonClassess, onClick: readOnly ? undefined : handleToggle, disabled: disabled, tabIndex: 0, onKeyDown: handleKeyDown },
             getTextField(),
-            clearable && !readOnly && !disabled && (selectedItem || enableAutocomplete && searchValue) && (React.createElement("div", { className: styles.resetButton },
-                React.createElement(IconClose, { strokeWidth: "0.2", htmlColor: "var(--text-light)", onClick: handleReset }))),
-            React.createElement("div", { className: styles.dropdownIcon }, !isOpen ? (React.createElement(ChevronDown, { strokeWidth: size === 'lg' ? '0.5' : '0.3' })) : (React.createElement(ChevronUp, { strokeWidth: size === 'lg' ? '0.5' : '0.3' }))),
+            React.createElement("div", { className: styles.actionButtons },
+                clearable && !readOnly && !disabled && (selectedItem || enableAutocomplete && searchValue) && (React.createElement("div", { className: styles.resetButton },
+                    React.createElement(IconClose, { strokeWidth: "0.2", htmlColor: "var(--text-light)", onClick: handleReset }))),
+                React.createElement("div", { className: styles.dropdownIcon }, !isOpen ? (React.createElement(ChevronDown, { strokeWidth: size === 'lg' ? '0.5' : '0.3' })) : (React.createElement(ChevronUp, { strokeWidth: size === 'lg' ? '0.5' : '0.3' })))),
             getDropdownMenu()),
         errorInput && errorInputHelperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]) }, helperText !== null && helperText !== void 0 ? helperText : errorInputHelperText))));
 };
