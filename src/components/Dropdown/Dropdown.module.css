@@ -145,7 +145,7 @@
   overflow-x: hidden;
 }
 
-.textField{
+.textField {
   width: 100%;
   overflow: hidden;
 }
@@ -313,4 +313,27 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--error-main);
+}
+
+/* Стили для родительских элементов */
+.item-block--parent {
+  font-weight: 600;
+  cursor: default;
+}
+
+.item--container--child {
+  width: 100%;
+}
+.item--container--child:hover {
+  width: 100%;
+}
+
+/* Стили для дочерних элементов */
+.item-block--child {
+  font-weight: 400;
+  cursor: pointer;
+  padding-left: 6px;
+  display: grid;
+  grid-template-columns: 1fr 20px;
+  justify-content: space-between;
 }
