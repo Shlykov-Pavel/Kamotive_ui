@@ -173,16 +173,18 @@
 }
 
 .item--container {
-  padding: 0.5em 0.5em;
-  width: 87%;
-  margin: auto;
+  padding: 6px;
+  width: 89%;
+  /* margin: auto; */
+  margin-left: 10px;
 }
 
 .item--container:hover,
 .item--container--active {
   background-color: rgba(120, 120, 128, 0.08);
   border-radius: 5px;
-  margin: auto;
+  width: 89%;
+  /* margin: auto; */
 }
 
 .item-block {
