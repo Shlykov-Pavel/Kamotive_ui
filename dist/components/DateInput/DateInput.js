@@ -13,7 +13,7 @@ import { ChevronLeft } from '../../Icons/ChevronLeft/ChevronLeft';
 import { Button } from '../Button/Button';
 registerLocale('ru', ru);
 registerLocale('en', enUS);
-const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, className, disabled = false, readOnly = false, dateFormat = 'dd.MM.yyyy' }, ref) => {
+const CustomInput = forwardRef(({ value = '', lng, onClick, onDateChange, onClose, className, disabled = false, readOnly = false, dateFormat = 'dd.MM.yyyy' }, ref) => {
     const inputRef = useRef(null);
     const [selectedPart, setSelectedPart] = useState(null);
     const [tempInput, setTempInput] = useState('');
@@ -26,6 +26,8 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
         month: { start: 3, end: 5 },
         year: { start: 6, end: 10 },
     };
+    const placeholderText = lng === 'ru' ? 'Не выбрано' : 'Not selected';
+    const displayValue = value || placeholderText;
     const selectDatePart = (part) => {
         setSelectedPart(part);
         setTempInput('');
@@ -52,18 +54,20 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
         if (!inputRef.current)
             return;
         setHasFocus(true);
-        const cursorPosition = inputRef.current.selectionStart || 0;
-        let newSelectedPart;
-        if (cursorPosition <= positions.day.end) {
-            newSelectedPart = 'day';
+        if (value) {
+            const cursorPosition = inputRef.current.selectionStart || 0;
+            let newSelectedPart;
+            if (cursorPosition <= positions.day.end) {
+                newSelectedPart = 'day';
+            }
+            else if (cursorPosition <= positions.month.end) {
+                newSelectedPart = 'month';
+            }
+            else {
+                newSelectedPart = 'year';
+            }
+            selectDatePart(newSelectedPart);
         }
-        else if (cursorPosition <= positions.month.end) {
-            newSelectedPart = 'month';
-        }
-        else {
-            newSelectedPart = 'year';
-        }
-        selectDatePart(newSelectedPart);
     };
     const handleKeyDown = (e) => {
         if (!inputRef.current || !onDateChange || selectedPart === null)
@@ -166,7 +170,9 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
     };
     const handleFocus = () => {
         setHasFocus(true);
-        selectDatePart('day');
+        if (value) {
+            selectDatePart('day');
+        }
     };
     const handleBlur = () => {
         setHasFocus(false);
@@ -193,7 +199,7 @@ const CustomInput = forwardRef(({ value = '', onClick, onDateChange, onClose, cl
     useImperativeHandle(ref, () => ({
         removeSelection,
     }), [removeSelection]);
-    return (React.createElement("input", { ref: inputRef, value: input, onClick: handleClick, onKeyDown: handleKeyDown, onFocus: handleFocus, onBlur: handleBlur, onChange: () => { }, readOnly: readOnly, disabled: disabled, className: className }));
+    return (React.createElement("input", { ref: inputRef, value: input || displayValue, onClick: handleClick, onKeyDown: handleKeyDown, onFocus: handleFocus, onBlur: handleBlur, onChange: () => { }, readOnly: !value || readOnly, disabled: disabled, className: className }));
 });
 export const DateInput = ({ id, label = 'Выберите дату', size = 'lg', value, style, className, disabled = false, readOnly = false, isLeftLabel = false, icon, error = false, helperText, onChange, onBlur, required = false, lng = 'ru', minDate = new Date('1975-12-31'), maxDate = new Date('2074-12-31'), inputClassName, calendarClassName, dateFormat = 'dd.MM.yyyy', }) => {
     const wrapperClassess = classNames(styles['wrapper--input'], className, {
@@ -212,7 +218,7 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
         [styles['label--left']]: isLeftLabel,
         [styles['label--required']]: required,
     });
-    const [selectedDate, setSelectedDate] = useState(value ? new Date(value) : new Date());
+    const [selectedDate, setSelectedDate] = useState(value ? new Date(value) : null);
     const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
     const datePickerRef = useRef(null);
     const inputRef = useRef(null);
@@ -359,6 +365,6 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
             : {
                 renderCustomHeader: renderCustomHeader,
                 renderDayContents: renderDayContents,
-            }), { customInput: React.createElement(CustomInput, { ref: inputRef, className: classNames(inputClassess, inputClassName), onDateChange: handleCustomInputChange, onClose: handleCloseDatePicker, disabled: disabled, readOnly: readOnly, dateFormat: dateFormat }) })),
+            }), { customInput: React.createElement(CustomInput, { ref: inputRef, lng: lng, className: classNames(inputClassess, inputClassName), onDateChange: handleCustomInputChange, onClose: handleCloseDatePicker, disabled: disabled, readOnly: readOnly, dateFormat: dateFormat }) })),
         error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]) }, helperText))));
 };

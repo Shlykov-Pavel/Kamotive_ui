@@ -163,15 +163,7 @@ export interface ToggleButtonProps {
     label?: string;
 }
 export type BaseOptions = {
-    id?: string;
-    key?: string | number;
-    name?: string;
-    description?: string;
-    value?: string | number;
-    icon?: React.JSX.Element;
-    disabled?: boolean;
-    isDivider?: boolean;
-    children?: TOptions[];
+    [key: string]: any;
 };
 export type TOptions<T = {}> = BaseOptions & T;
 export interface DropdownProps {
@@ -192,7 +184,7 @@ export interface DropdownProps {
     /** Callback, который будет вызван при изменении значения */
     onChange?: (event: any, value: string | number | TOptions | null) => void;
     /** Функция для получения текста опции */
-    getOptionLabel?: (option: TOptions) => keyof TOptions;
+    getOptionLabel?: (option: TOptions) => string;
     /** Вариaнты выпадающего списка(текст + иконка, текст)' */
     variant?: 'icons' | 'text';
     /** Размер */
@@ -586,4 +578,18 @@ export interface TooltipProps {
     color?: string;
     /** Подсказка, следующая за курсором */
     followCursor?: boolean;
+}
+export interface LinkProps {
+    /**Гипертекстовая ссылка */
+    href: string;
+    /** Дочерние элементы */
+    children: ReactNode;
+    /**Заголовок, содержащий дополнительную информацию о ссылке */
+    title?: string;
+    /** Дополнительный класс */
+    className?: string;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
+    /**Подчеркивание */
+    underline?: 'hover' | 'underline';
 }

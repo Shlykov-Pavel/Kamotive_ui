@@ -26,6 +26,7 @@ export { ListItem as ListItem } from './components/ListItem/ListItem';
 export { Breadcrumb as Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 export { Breadcrumbs as Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
 export { Tooltip as Tooltip } from './components/Tooltip/Tooltip';
-export type { ButtonProps, InputProps, DateInputProps, TagProps, SettingTagProps, ToggleButtonProps, BaseOptions, TOptions, DropdownProps, TypographyProps, ProgressBarProps, ProgressLoaderProps, RadioProps, TabsProps, ColorPickerProps, SnackbarProps, FileAttachProps, FileListAttaсhedProps, FileItemProps, FileLoaderProps, SpinnerProps, DialogProps, IconButtonProps, BaseListProps, ListProps, ListItemProps, BreadcrumbProps, BreadcrumbsProps, TooltipProps, } from './types';
+export { Link as Link } from './components/Link/Link';
+export type { ButtonProps, InputProps, DateInputProps, TagProps, SettingTagProps, ToggleButtonProps, BaseOptions, TOptions, DropdownProps, TypographyProps, ProgressBarProps, ProgressLoaderProps, RadioProps, TabsProps, ColorPickerProps, SnackbarProps, FileAttachProps, FileListAttaсhedProps, FileItemProps, FileLoaderProps, SpinnerProps, DialogProps, IconButtonProps, BaseListProps, ListProps, ListItemProps, BreadcrumbProps, BreadcrumbsProps, TooltipProps, LinkProps, } from './types';
 import './fonts.css';
 import './colors.css';

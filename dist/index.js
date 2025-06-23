@@ -26,5 +26,6 @@ export { ListItem as ListItem } from './components/ListItem/ListItem';
 export { Breadcrumb as Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 export { Breadcrumbs as Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
 export { Tooltip as Tooltip } from './components/Tooltip/Tooltip';
+export { Link as Link } from './components/Link/Link';
 import './fonts.css';
 import './colors.css';

@@ -5,7 +5,7 @@ import { DropdownProps, TOptions } from '../../types';
  */
 export interface DropdownListItemProps {
     item: TOptions | null;
-    getOptionLabel?: ((option: TOptions) => string);
+    getOptionLabel?: (option: TOptions) => string;
     size: 'md' | 'lg';
     selectedItem: TOptions | null;
     variant?: 'icons' | 'text';
@@ -13,6 +13,7 @@ export interface DropdownListItemProps {
     isActive?: boolean;
     activeIndex?: number;
     index?: number;
+    isChild?: boolean;
 }
 export declare const DropdownListItem: FC<DropdownListItemProps>;
 export declare const Dropdown: FC<DropdownProps>;
