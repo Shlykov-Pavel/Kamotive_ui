@@ -621,3 +621,18 @@ export interface TooltipProps {
   /** Подсказка, следующая за курсором */
   followCursor?: boolean;
 }
+
+export interface LinkProps {
+  /**Гипертекстовая ссылка */
+  href: string,
+  /** Дочерние элементы */
+  children: ReactNode,
+  /**Заголовок, содержащий дополнительную информацию о ссылке */
+  title?: string,
+  /** Дополнительный класс */
+  className?: string;
+ /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /**Подчеркивание */
+  underline?: 'hover' | 'underline'
+}
