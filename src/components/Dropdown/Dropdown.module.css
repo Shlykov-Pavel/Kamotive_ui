@@ -145,7 +145,7 @@
   overflow-x: hidden;
 }
 
-.textField{
+.textField {
   width: 100%;
   overflow: hidden;
 }
@@ -173,16 +173,18 @@
 }
 
 .item--container {
-  padding: 0.5em 0.5em;
-  width: 87%;
-  margin: auto;
+  padding: 6px;
+  width: 89%;
+  /* margin: auto; */
+  margin-left: 10px;
 }
 
 .item--container:hover,
 .item--container--active {
   background-color: rgba(120, 120, 128, 0.08);
   border-radius: 5px;
-  margin: auto;
+  width: 89%;
+  /* margin: auto; */
 }
 
 .item-block {
@@ -311,4 +313,27 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--error-main);
+}
+
+/* Стили для родительских элементов */
+.item-block--parent {
+  font-weight: 600;
+  cursor: default;
+}
+
+.item--container--child {
+  width: 100%;
+}
+.item--container--child:hover {
+  width: 100%;
+}
+
+/* Стили для дочерних элементов */
+.item-block--child {
+  font-weight: 400;
+  cursor: pointer;
+  padding-left: 6px;
+  display: grid;
+  grid-template-columns: 1fr 20px;
+  justify-content: space-between;
 }

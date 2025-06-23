@@ -1,80 +1,71 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Meta } from '@storybook/react';
 import { Dropdown } from './Dropdown';
 import { IconAccount, IconAlarm, IconBell, IconBriefcase, IconCalendar } from '../../Icons';
 import { IconEyeOff } from '../../Icons/IconEyeOff/IconEyeOff';
-import { Button } from '../Button/Button';
 
-  export type BaseOptions = {
-    id?: string;
-    key?: string | number;
-    name?: string;
-    description?: string;
-    value?: string | number;
-    icon?: React.JSX.Element;
-    disabled?: boolean;
-    isDivider?: boolean;
-    children?: TOptions[];
-  };
+export type BaseOptions = {
+  [key: string]: any;
+};
 
-  export type TOptions<T = {}> = BaseOptions & T;
+export type TOptions<T = {}> = BaseOptions & T;
 
 export interface DropdownProps {
-    /** Массив элементов для выпадающего списка */
-    options: Array<string | number | TOptions>;
-    /** Идентификатор */
-    id?: string;
-    /** Лейбл */
-    label?: string;
-    /** Подсказик заполнения */
-    placeholder?: string;
-    /** Обязательное поле */
-    required?: boolean;
-    /** Значение */
-    value?: string | number | TOptions | null;
-    /** Значение по умолчанию */
-    defaultValue?: string | number | TOptions | null;
-    /** Callback, который будет вызван при изменении значения */
-    onChange?: (event: any, value: string | number | TOptions | null) => void;
-    /** Функция для получения текста опции */
-    getOptionLabel?: (option: TOptions) => keyof TOptions;
-    /** Вариaнты выпадающего списка(текст + иконка, текст)' */
-    variant?: 'icons' | 'text';
-    /** Размер */
-    size?: 'md' | 'lg';
-    /** Стили передаваемые напрямую */
-    style?: React.CSSProperties;
-    /** Дополнительный класс */
-    className?: string;
-    /** Отображение левой метки */
-    isLeftLabel?: boolean;
-    /** Отображение разделителя */
-    isDivider?: boolean;
-    /** Заблокированный */
-    disabled?: boolean;
-    /** Только для чтения */
-    readOnly?: boolean;
-    /** Открытый */
-    isOpened?: boolean;
-    /** Ошибка */
-    error?: boolean;
-    /** Текст ошибки */
-    helperText?: string;
-    /** Callback, который будет вызван при клике */
-    onClick?: (event: any) => void;
-    /** Callback при потере фокуса */
-    onBlur?: (event: any) => void;
-    /** Callback при получении фокуса */
-    onFocus?: (event: any) => void;
-    /** Callback, который будет вызван при закрытии выпадающего списка */
-    onClose?: (event: any) => void;
-    /** Возможность сброса значения до первоначального */
-    clearable?: boolean;
-    /** Включение автозаполнения */
-    enableAutocomplete?: boolean;
-    /** Текст при отсутствии опций */
-    noOptionsText?: string;
-  }
+  /** Массив элементов для выпадающего списка */
+  options: Array<string | number | TOptions>;
+  /** Идентификатор */
+  id?: string;
+  /** Лейбл */
+  label?: string;
+  /** Подсказик заполнения */
+  placeholder?: string;
+  /** Обязательное поле */
+  required?: boolean;
+  /** Значение */
+  value?: string | number | TOptions | null;
+  /** Значение по умолчанию */
+  defaultValue?: string | number | TOptions | null;
+  /** Callback, который будет вызван при изменении значения */
+  onChange?: (event: any, value: string | number | TOptions | null) => void;
+  /** Функция для получения текста опции */
+  getOptionLabel?: (option: TOptions | string) => string;
+  /** Вариaнты выпадающего списка(текст + иконка, текст)' */
+  variant?: 'icons' | 'text';
+  /** Размер */
+  size?: 'md' | 'lg';
+  /** Стили передаваемые напрямую */
+  style?: React.CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
+  /** Отображение левой метки */
+  isLeftLabel?: boolean;
+  /** Отображение разделителя */
+  isDivider?: boolean;
+  /** Заблокированный */
+  disabled?: boolean;
+  /** Только для чтения */
+  readOnly?: boolean;
+  /** Открытый */
+  isOpened?: boolean;
+  /** Ошибка */
+  error?: boolean;
+  /** Текст ошибки */
+  helperText?: string;
+  /** Callback, который будет вызван при клике */
+  onClick?: (event: any) => void;
+  /** Callback при потере фокуса */
+  onBlur?: (event: any) => void;
+  /** Callback при получении фокуса */
+  onFocus?: (event: any) => void;
+  /** Callback, который будет вызван при закрытии выпадающего списка */
+  onClose?: (event: any) => void;
+  /** Возможность сброса значения до первоначального */
+  clearable?: boolean;
+  /** Включение автозаполнения */
+  enableAutocomplete?: boolean;
+  /** Текст при отсутствии опций */
+  noOptionsText?: string;
+}
 
 const dropdownOptions = [
   { value: 'Выбор_1', icon: <IconAccount /> },
@@ -83,7 +74,7 @@ const dropdownOptions = [
   { value: 'Выбор_4', icon: <IconBell /> },
   { value: 'Выбор_5', icon: <IconBriefcase /> },
   { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar /> },
-] ;
+];
 
 const withWrapper = (Story: React.ComponentType) => (
   <div
@@ -204,7 +195,7 @@ const meta: Meta<typeof Dropdown> = {
     enableAutocomplete: {
       description: 'Позволяет делать поиск по опциям ',
       control: { type: 'boolean' },
-    }
+    },
   },
 };
 
@@ -221,13 +212,13 @@ DropdownDefault.args = {
 // Dropdown с выбором опций
 export const DropdownChange = (argTypes: DropdownProps): JSX.Element => {
   const defaultOptions = [
-    { id: '1', name: 'name 1', description: 'описание 1'},
-    { id: '2', name: 'name 2', description: 'описание 2'},
-    { id: '3', name: 'name 3', description: 'описание 3'},
-  ]
+    { id: '1', name: 'name 1', description: 'описание 1' },
+    { id: '2', name: 'name 2', description: 'описание 2' },
+    { id: '3', name: 'name 3', description: 'описание 3' },
+  ];
   const [value, setValue] = useState<string | number | TOptions | null>(null);
   const [isOpened, setIsOpened] = useState(false);
-  
+
   const handleChange = (e: any, value: string | number | TOptions | null) => {
     setValue(value);
     setIsOpened(false);
@@ -235,16 +226,19 @@ export const DropdownChange = (argTypes: DropdownProps): JSX.Element => {
   useEffect(() => {
     if (argTypes.error) setValue(null);
   }, [argTypes.error]);
-  return <div style={{ display: 'flex', gap: '30px' }}>
-  <Dropdown
-      {...argTypes}
-      options={defaultOptions}
-      getOptionLabel={(option: TOptions) => option.description as keyof TOptions}
-      value={value} 
-      onChange={handleChange} 
-      isOpened={isOpened} 
-      required={true} />
-  </div>
+  return (
+    <div style={{ display: 'flex', gap: '30px' }}>
+      <Dropdown
+        {...argTypes}
+        options={defaultOptions}
+        getOptionLabel={(option: TOptions) => option.description}
+        value={value}
+        onChange={handleChange}
+        isOpened={isOpened}
+        required={true}
+      />
+    </div>
+  );
 };
 DropdownChange.storyName = 'Dropdown изменяемый';
 DropdownChange.parameters = {
@@ -293,7 +287,8 @@ DropdownOpenedDefaultSelected.parameters = {
 export const DropdownOpenedText = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedText.storyName = 'Dropdown открытый без иконок по умолчанию';
 DropdownOpenedText.args = {
-  isOpened: true};
+  isOpened: true,
+};
 DropdownOpenedText.parameters = {
   controls: { disable: true },
 };
@@ -368,9 +363,7 @@ DropdownSelectVariantSelectLeftLabel.parameters = {
 };
 
 // Dropdown с поиском
-export const DropdownAutocomplete = (argTypes: DropdownProps): JSX.Element => (
-  <Dropdown {...argTypes} />
-);
+export const DropdownAutocomplete = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
 DropdownAutocomplete.storyName = 'Dropdown с поиском';
 DropdownAutocomplete.args = {
   isOpened: false,
@@ -381,4 +374,270 @@ DropdownAutocomplete.args = {
 DropdownAutocomplete.parameters = {
   controls: { disable: true },
 };
+// Добавьте этот массив в файл stories после существующих данных
 
+const complexNestedOptions = [
+  {
+    access: {
+      id: '12345678-1234-1234-1234-123456789012',
+      name: 'READ_ONLY',
+      description: 'Только чтение',
+    },
+    active: true,
+    createDate: '2024-02-15',
+    creatorUser: {
+      id: 'creator-002',
+      login: 'petrov',
+      firstName: 'Петр',
+      lastName: 'Петров',
+      middleName: 'Петрович',
+      email: 'petrov@example.com',
+      department: {
+        id: 'dept-002',
+        name: 'Marketing Department',
+        manager: {
+          id: 'mgr-002',
+          name: 'Мария Сидорова',
+          position: 'Marketing Director',
+        },
+      },
+    },
+    description: 'Marketing Space',
+    groupMembers: [
+      {
+        id: 'group-002',
+        name: 'Marketing Team',
+        permissions: ['read', 'comment'],
+      },
+    ],
+    iconName: 'MarketingIcon',
+    id: 'marketing-space-001',
+    key: 'marketing-space-001',
+    name: 'Marketing Workspace',
+    orgUnitMembers: [
+      {
+        id: 'org-unit-001',
+        name: 'Regional Office',
+        location: 'Moscow',
+      },
+    ],
+    organization: {
+      id: 'org-002',
+      name: 'ООО "Маркетинг Плюс"',
+      status: {
+        id: 'status-002',
+        name: 'Active',
+        code: 'ACT',
+      },
+      inn: '7701234567',
+      phoneNumber: '+7-495-123-45-67',
+      address: {
+        country: 'Russia',
+        city: 'Moscow',
+        street: 'Tverskaya',
+        building: '10',
+        coordinates: {
+          lat: 55.7558,
+          lng: 37.6176,
+        },
+      },
+    },
+    updateDate: '2024-04-25',
+    userMembers: [
+      {
+        id: 'user-002',
+        login: 'sidorova',
+        profile: {
+          firstName: 'Мария',
+          lastName: 'Сидорова',
+          avatar: 'avatar2.jpg',
+          settings: {
+            theme: 'light',
+            language: 'ru',
+            notifications: {
+              email: true,
+              push: true,
+              sms: false,
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
+    access: {
+      id: 'access-003',
+      name: 'ADMIN',
+      description: 'Администратор',
+    },
+    active: true,
+    createDate: '2024-01-10',
+    creatorUser: {
+      id: 'creator-003',
+      login: 'admin',
+      firstName: 'Администратор',
+      lastName: 'Системы',
+      middleName: '',
+      email: 'admin@example.com',
+      department: {
+        id: 'dept-003',
+        name: 'System Administration',
+        manager: {
+          id: 'mgr-003',
+          name: 'Системный Администратор',
+          position: 'System Admin',
+        },
+      },
+    },
+    description: 'Admin Control Panel',
+    groupMembers: [],
+    iconName: 'AdminIcon',
+    id: 'admin-space-001',
+    key: 'admin-space-001',
+    name: 'Admin Panel',
+    orgUnitMembers: [],
+    organization: {
+      id: 'org-003',
+      name: 'Системная Организация',
+      status: {
+        id: 'status-003',
+        name: 'System',
+        code: 'SYS',
+      },
+      inn: '0000000000',
+      phoneNumber: '+7-800-555-35-35',
+      address: {
+        country: 'Russia',
+        city: 'System',
+        street: 'Virtual',
+        building: '0',
+        coordinates: {
+          lat: 0,
+          lng: 0,
+        },
+      },
+    },
+    updateDate: '2024-04-28',
+    userMembers: [
+      {
+        id: 'user-003',
+        login: 'sysadmin',
+        profile: {
+          firstName: 'System',
+          lastName: 'Administrator',
+          avatar: 'admin.jpg',
+          settings: {
+            theme: 'system',
+            language: 'en',
+            notifications: {
+              email: true,
+              push: true,
+              sms: true,
+            },
+          },
+        },
+      },
+    ],
+  },
+];
+
+// Dropdown со сложными вложенными объектами
+export const DropdownComplexObjects = (argTypes: DropdownProps): JSX.Element => {
+  const [value, setValue] = useState<string | number | TOptions | null>(null);
+
+  const handleChange = (e: any, value: string | number | TOptions | null) => {
+    setValue(value);
+  };
+  return (
+    <Dropdown
+      {...argTypes}
+      options={complexNestedOptions}
+      getOptionLabel={(option: TOptions) => option.organization.name}
+      value={value}
+      onChange={handleChange}
+      placeholder="Выберите организацию"
+      label="Организация"
+    />
+  );
+};
+
+DropdownComplexObjects.storyName = 'Dropdown со сложными объектами';
+DropdownComplexObjects.parameters = {
+  controls: { disable: true },
+};
+
+const optionsWithNestedValue = [
+  {
+    id: '1',
+    name: 'Option 1',
+    value: [
+      {
+        id: 'nested-1',
+        name: 'Nested Option 1',
+        description: 'This is nested',
+      },
+      {
+        id: 'nested-2',
+        name: 'Nested Option 2',
+        description: 'This is another nested',
+      },
+    ],
+    icon: <IconAccount />,
+  },
+  {
+    id: '2',
+    name: 'Option 2',
+    value: 'Simple string value',
+    icon: <IconAlarm />,
+  },
+  {
+    id: '3',
+    name: 'Option 3',
+    value: [
+      {
+        id: 'nested-3',
+        name: 'Nested Option 3',
+        description: 'Another nested option',
+      },
+      {
+        id: 'nested-4',
+        name: 'Nested Option 4',
+        description: 'Yet another nested option',
+        icon: <IconBell />,
+      },
+      {
+        id: 'nested-5',
+        name: 'Nested Option 5',
+        description: 'Yet another nested option',
+        icon: <IconBell />,
+      },
+    ],
+
+    icon: <IconBell />,
+  },
+];
+
+export const DropdownNestedValue = (argTypes: DropdownProps): JSX.Element => {
+  const [value, setValue] = useState<string | number | TOptions | null>(null);
+
+  const handleChange = (e: any, value: string | number | TOptions | null) => {
+    setValue(value);
+  };
+
+  return (
+    <Dropdown
+      {...argTypes}
+      options={optionsWithNestedValue}
+      value={value}
+      onChange={handleChange}
+      placeholder="Выберите опцию с вложенным заначением"
+      label="Вложенное значение"
+      variant="icons"
+    />
+  );
+};
+
+DropdownNestedValue.storyName = 'Dropdown с вложенным значением';
+DropdownNestedValue.parameters = {
+  controls: { disable: true },
+};
