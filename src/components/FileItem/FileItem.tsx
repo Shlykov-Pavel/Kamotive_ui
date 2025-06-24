@@ -9,6 +9,7 @@ import { IconButton } from '../IconButton/IconButton';
 import { IconClose, IconDownload, IconFile } from '../../Icons';
 import { Tooltip } from '../Tooltip/Tooltip';
 import classNames from 'classnames';
+import { formatFileSize } from '../AttachedFilesPreview/AttachedFilesPreview';
 
 export const FileItem: FC<FileItemProps> = ({
   file,
@@ -143,7 +144,7 @@ export const FileItem: FC<FileItemProps> = ({
             )}
             {file.size !== 0 && (
               <Typography variant="Caption" color="var(--grey-medium)">
-                {`${file.size ? (file.size / 1024).toFixed(1) : 0} кБ`}
+                {formatFileSize(file.size)}
               </Typography>
             )}
           </div>
