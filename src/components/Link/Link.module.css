@@ -1,7 +1,3 @@
-.link {
-    color: var(--text-dark)
-}
-
 .linkHover {
     text-decoration: none;
 }
@@ -9,3 +5,12 @@
 .linkHover:hover {
     text-decoration: underline;
 }
+
+.tooltipStyle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: context-menu;
+    display: inline-block;
+}
+
