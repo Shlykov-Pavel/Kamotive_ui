@@ -132,7 +132,7 @@ export interface DateInputProps {
   /** Обязательное поле */
   required?: boolean;
   /** Язык */
-  lng?: string,
+  lng?: string;
 }
 
 /** @internal */
@@ -174,15 +174,7 @@ export interface ToggleButtonProps {
 }
 
 export type BaseOptions = {
-  id?: string;
-  key?: string | number;
-  name?: string;
-  description?: string;
-  value?: string | number;
-  icon?: React.JSX.Element;
-  disabled?: boolean;
-  isDivider?: boolean;
-  children?: TOptions[];
+  [key: string]: any;
 };
 
 export type TOptions<T = {}> = BaseOptions & T;
@@ -206,7 +198,7 @@ export interface DropdownProps {
   /** Callback, который будет вызван при изменении значения */
   onChange?: (event: any, value: string | number | TOptions | null) => void;
   /** Функция для получения текста опции */
-  getOptionLabel?: (option: TOptions) => keyof TOptions;
+  getOptionLabel?: (option: TOptions) => string;
   /** Вариaнты выпадающего списка(текст + иконка, текст)' */
   variant?: 'icons' | 'text';
   /** Размер */
@@ -338,11 +330,10 @@ export interface TabProps {
   disabled?: boolean;
   /** Табы */
   children?: React.ReactNode;
-   /** Стили передаваемые напрямую */
+  /** Стили передаваемые напрямую */
   style?: CSSProperties;
   /** Дополнительный класс */
   className?: string;
-
 }
 
 export interface TabsProps {
@@ -352,7 +343,7 @@ export interface TabsProps {
   value?: string;
   /** Обработчик изменения значения */
   onChange?: (value: string) => void;
-   /** Стили передаваемые напрямую */
+  /** Стили передаваемые напрямую */
   style?: CSSProperties;
   /** Дополнительный класс */
   className?: string;
@@ -501,7 +492,7 @@ export interface FileLoaderProps {
   className?: string;
   /** Стили передаваемые напрямую */
   style?: React.CSSProperties;
-   /** Функция валидации файла */
+  /** Функция валидации файла */
   fileValidator?: (file: File) => FileError | FileError[] | null;
 }
 
@@ -660,4 +651,19 @@ export interface CommentProps {
   /** Callback при изменении значения */
   onChange?: (value: string, files: FilePreview[]) => void;
   onSubmit?: () => {};
+}
+
+export interface LinkProps {
+  /**Гипертекстовая ссылка */
+  href: string,
+  /** Дочерние элементы */
+  children: ReactNode,
+  /**Заголовок, содержащий дополнительную информацию о ссылке */
+  title?: string,
+  /** Дополнительный класс */
+  className?: string;
+ /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /**Подчеркивание */
+  underline?: 'hover' | 'underline'
 }

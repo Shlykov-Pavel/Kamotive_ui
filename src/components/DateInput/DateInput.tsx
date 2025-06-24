@@ -28,6 +28,7 @@ registerLocale('en', enUS);
 
 interface CustomInputProps {
   value?: string;
+  lng?: string;
   onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
   onClose?: () => void;
   onDateChange?: (date: Date) => void;
@@ -58,7 +59,7 @@ interface MonthPickerProps {
 type DatePart = 'day' | 'month' | 'year';
 
 const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps>(
-  ({ value = '', onClick, onDateChange, onClose, className, disabled=false, readOnly=false, dateFormat='dd.MM.yyyy' }, ref) => {
+  ({ value = '', lng, onClick, onDateChange, onClose, className, disabled=false, readOnly=false, dateFormat='dd.MM.yyyy' }, ref) => {
 
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [selectedPart, setSelectedPart] = useState<DatePart | null>(null);
@@ -74,6 +75,9 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
       month: { start: 3, end: 5 },
       year: { start: 6, end: 10 },
     };
+
+    const placeholderText = lng === 'ru' ? 'Не выбрано' : 'Not selected';
+    const displayValue = value || placeholderText;
 
     const selectDatePart = (part: DatePart): void => {
       setSelectedPart(part);
@@ -104,18 +108,20 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
 
       setHasFocus(true);
 
-      const cursorPosition = inputRef.current.selectionStart || 0;
+      if (value) {
+        const cursorPosition = inputRef.current.selectionStart || 0;
 
-      let newSelectedPart: DatePart;
-      if (cursorPosition <= positions.day.end) {
-        newSelectedPart = 'day';
-      } else if (cursorPosition <= positions.month.end) {
-        newSelectedPart = 'month';
-      } else {
-        newSelectedPart = 'year';
+        let newSelectedPart: DatePart;
+        if (cursorPosition <= positions.day.end) {
+          newSelectedPart = 'day';
+        } else if (cursorPosition <= positions.month.end) {
+          newSelectedPart = 'month';
+        } else {
+          newSelectedPart = 'year';
+        }
+
+        selectDatePart(newSelectedPart);
       }
-
-      selectDatePart(newSelectedPart);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -218,7 +224,9 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
 
     const handleFocus = (): void => {
       setHasFocus(true);
-      selectDatePart('day');
+      if (value) {
+        selectDatePart('day');
+      }
     };
 
     const handleBlur = (): void => {
@@ -259,13 +267,13 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
     return (
       <input
         ref={inputRef}
-        value={input}
+        value={input || displayValue}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={() => {}}
-        readOnly={readOnly}
+        readOnly={!value || readOnly}
         disabled={disabled}
         className={className}
       />
@@ -316,7 +324,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
     [styles['label--required']]: required,
   });
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(value ? new Date(value) : new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(value ? new Date(value) : null);
   const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
 
   const datePickerRef = useRef<any>(null);
@@ -576,6 +584,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
         customInput={
           <CustomInput
             ref={inputRef}
+            lng={lng}
             className={classNames(inputClassess, inputClassName)}
             onDateChange={handleCustomInputChange}
             onClose={handleCloseDatePicker}

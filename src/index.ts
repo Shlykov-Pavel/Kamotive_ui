@@ -28,6 +28,7 @@ export { ListItem as ListItem } from './components/ListItem/ListItem';
 export { Breadcrumb as Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 export { Breadcrumbs as Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
 export { Tooltip as Tooltip } from './components/Tooltip/Tooltip';
+export { Link as Link } from './components/Link/Link';
 
 export type {
   ButtonProps,
@@ -61,6 +62,7 @@ export type {
   BreadcrumbProps,
   BreadcrumbsProps,
   TooltipProps,
+  LinkProps,
 } from './types';
 import './fonts.css';
 import './colors.css';

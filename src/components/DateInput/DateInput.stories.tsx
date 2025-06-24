@@ -11,13 +11,16 @@ const meta: Meta<DateInputProps> = {
   tags: ['autodocs'],
   decorators: [
 	(Story) => (
-	  <div style={{
-		backgroundColor: 'var(--white)',
-		padding: '30px',
-		borderRadius: '10px',
-		width: '900px'}}>
-		<Story />
-	  </div>
+	  	<div 
+			style={{
+				backgroundColor: 'var(--white)',
+				padding: '30px',
+				borderRadius: '10px',
+				width: '300px'
+			}}
+		>
+			<Story />
+	  	</div>
 	),
   ],
   args: {
@@ -26,6 +29,7 @@ const meta: Meta<DateInputProps> = {
   argTypes: {
 	disabled: { description: 'Устанавливает атрибут disabled', control: { type: 'boolean' } },
 	readOnly: { description: 'Устанавливает атрибут readOnly', control: { type: 'boolean' } },
+	value: { description: 'Передает значение даты' }
   },
 };
 
@@ -37,23 +41,32 @@ DateInputDefault.args = {
 	disabled: false
 };
 
+export const DateInputWithValue = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
+DateInputWithValue.storyName = 'Date Input с переданным значением';
+DateInputWithValue.args = {
+	value: new Date()
+};
+
 export const DateInputDisabled = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
 DateInputDisabled.storyName = 'Date Input заблокированный';
 DateInputDisabled.args = {
-	disabled: true
+	disabled: true,
+	value: new Date()
 };
 
 export const DateInputReadOnly = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
 DateInputReadOnly.storyName = 'Date Input только для чтения';
 DateInputReadOnly.args = {
-	readOnly: true
+	readOnly: true,
+	value: new Date()
 };
 
 export const DateInputError = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
 DateInputError.storyName = 'Date Input с ошибкой';
 DateInputError.args = {
 	error: true,
-	helperText: 'Сообщение об ошибке'
+	helperText: 'Сообщение об ошибке',
+	value: new Date()
 };
 
 export const DateInputEn = (argTypes: DateInputProps): JSX.Element => <DateInput {...argTypes} />;
@@ -62,4 +75,5 @@ DateInputEn.args = {
 	lng: 'en',
 	label: 'Select a date',
 	dateFormat: 'dd-MM-yyyy',
+	value: new Date()
 };
