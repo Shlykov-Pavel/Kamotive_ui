@@ -641,7 +641,12 @@ export const Dropdown: FC<DropdownProps> = ({
   useEffect(() => {
     if (options) {
       const modifiedOptions = options.map((option, index) => {
-        const modifiedOption = checkItem?.(option, getOptionLabel, disabled, isDivider) as TOptions;
+        const modifiedOption = checkItem?.(
+          option,
+          getOptionLabel,
+          (option as BaseOptions)?.disabled,
+          isDivider
+        ) as TOptions;
         if (
           modifiedOption &&
           getComparisonValue(modifiedOption, getOptionLabel) === getComparisonValue(selectedItem, getOptionLabel)
