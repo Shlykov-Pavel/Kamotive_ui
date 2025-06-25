@@ -665,5 +665,11 @@ export interface LinkProps {
  /** Стили передаваемые напрямую */
   style?: CSSProperties;
   /**Подчеркивание */
-  underline?: 'hover' | 'underline'
+  underline?: 'hover' | 'underline',
+  /** Вариант шрифта */
+  variant?: `${ETypographyVariants}`;
+   /** Цвет текста */
+  color?: CSSProperties['color'];
+  /**Максимальная ширина - нужна для отображения тултипа */
+  maxWidth?: string
 }

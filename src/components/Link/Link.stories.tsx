@@ -3,7 +3,7 @@ import { Meta } from '@storybook/react';
 import { LinkProps } from '../../types/index';
 
 import { Link } from './Link';
-import { Typography } from '../Typography/Typography';
+import { ETypographyVariants } from '../Typography/enums';
 
 const meta: Meta<LinkProps> = {
   component: Link,
@@ -27,6 +27,8 @@ const meta: Meta<LinkProps> = {
   ],
   args: {
     underline: 'hover',
+    variant: ETypographyVariants.Body1,
+    color: 'var(--text-dark)',
   },
   argTypes: {
     href: { description: 'Гипертекстовая ссылка', type: 'string' },
@@ -35,6 +37,19 @@ const meta: Meta<LinkProps> = {
     className: { description: 'Дополнительный класс' },
     style: { description: 'Дополнительный стиль' },
     underline: { description: 'Подчеркивание', control: { type: 'radio' }, options: ['hover', 'underline'] },
+    variant: {
+      description: 'Вариант шрифта',
+      control: { type: 'select' },
+      options: Object.values(ETypographyVariants),
+    },
+    color: {
+      description: 'Цвет текста',
+      control: { type: 'color' },
+    },
+    maxWidth: {
+      description: 'Максимальная ширина - нужна для отображения тултипа ',
+      control: { type: 'text' },
+    },
   },
 };
 
@@ -44,10 +59,14 @@ export const LinkDefault = (argTypes: LinkProps): JSX.Element => <Link {...argTy
 LinkDefault.storyName = 'Ссылка по умолчанию';
 LinkDefault.args = {
   href: 'http://localhost:6006/?path=/docs/components-link--docs',
-  children: (
-    <>
-      <Typography variant="Body1">Перейти по ссылке</Typography>
-    </>
-  ),
+  children: <> Перейти по ссылке</>,
   title: 'Ссылка на страницу',
+};
+
+export const LinkWithWidth = (argTypes: LinkProps): JSX.Element => <Link {...argTypes} />;
+LinkWithWidth.storyName = 'Ссылка с заданной максимальной шириной и тултипом';
+LinkWithWidth.args = {
+  href: 'http://localhost:6006/?path=/docs/components-link--docs',
+  children: <> Перейти по очень длинной ссылке</>,
+  maxWidth: '180px',
 };
