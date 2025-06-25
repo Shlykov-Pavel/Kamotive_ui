@@ -30,3 +30,18 @@ export { IconDublicate } from './IconDublicate/IconDublicate';
 export { IconSpaceChange } from './IconSpaceChange/IconSpaceChange';
 export { IconGoTo } from './IconGoTo/IconGoTo';
 export { IconHome } from './IconHome/IconHome';
+export { IconHeader2, IconHeader2ToString } from './IconHeader2/IconHeader2'
+export { IconItalic, IconItalicToString } from './IconItalic/IconItalic';
+export { IconBold, IconBoldToString } from './IconBold/IconBold';
+export { IconAttach, IconAttachToString } from './IconAttach/IconAttach';
+export { IconUnderline, IconUnderlineToString } from './IconUnderline/IconUnderline';
+export { IconStrikethrough, IconStrikethroughToString } from './IconStrikethrough/IconStrikethrough';
+export { IconRedo, IconRedoToString } from './IconRedo/IconRedo';
+export { IconUndo, IconUndoToString } from './IconUndo/IconUndo';
+export { IconSubmit, IconSubmitToString } from './IconSubmit/IconSubmit';
+export { IconBulletlist, IconBulletlistToString } from './IconBulletlist/IconBulletlist';
+export { IconFileAudio } from './IconFileAudio/IconFileAudio';
+export { IconFileVideo } from './IconFileVideo/IconFileVideo';
+export { IconFileDefault } from './IconFileDefault/IconFileDefault';
+export { IconPencilFilled } from './IconPencilFilled/IconPencilFilled';
+export { IconDeleteFilled } from './IconDeleteFilled/IconDeleteFilled';
