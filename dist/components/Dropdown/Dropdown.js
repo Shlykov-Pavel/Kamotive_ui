@@ -410,7 +410,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
     useEffect(() => {
         if (options) {
             const modifiedOptions = options.map((option, index) => {
-                const modifiedOption = checkItem === null || checkItem === void 0 ? void 0 : checkItem(option, getOptionLabel, disabled, isDivider);
+                const modifiedOption = checkItem === null || checkItem === void 0 ? void 0 : checkItem(option, getOptionLabel, option === null || option === void 0 ? void 0 : option.disabled, isDivider);
                 if (modifiedOption &&
                     getComparisonValue(modifiedOption, getOptionLabel) === getComparisonValue(selectedItem, getOptionLabel)) {
                     setActiveIndex(index);

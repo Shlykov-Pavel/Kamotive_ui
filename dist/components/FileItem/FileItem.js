@@ -6,6 +6,7 @@ import { IconButton } from '../IconButton/IconButton';
 import { IconClose, IconDownload, IconFile } from '../../Icons';
 import { Tooltip } from '../Tooltip/Tooltip';
 import classNames from 'classnames';
+import { formatFileSize } from '../AttachedFilesPreview/AttachedFilesPreview';
 export const FileItem = ({ file, loading = false, error = '', onDownload, onDelete, canDelete = true, canDownload = true, style, isAddedFile, isRejectedFile, }) => {
     const [isLoadingFinished, setIsLoadingFinished] = useState(false);
     const [animationDuration, setAnimationDuration] = useState(0);
@@ -102,7 +103,7 @@ export const FileItem = ({ file, loading = false, error = '', onDownload, onDele
                 React.createElement("div", { className: styles['fileItemName'], ref: fileNameRef },
                     file.filename.length > maxLength ? (React.createElement(Tooltip, { label: file.filename, position: "bottom-center", displayDelay: 300 },
                         React.createElement(Typography, { variant: "Body1", color: "var(--text-dark)" }, croppedName(file.filename)))) : (React.createElement(Typography, { variant: "Body1", color: "var(--text-dark)" }, croppedName(file.filename))),
-                    file.size !== 0 && (React.createElement(Typography, { variant: "Caption", color: "var(--grey-medium)" }, `${file.size ? (file.size / 1024).toFixed(1) : 0} кБ`)))),
+                    file.size !== 0 && (React.createElement(Typography, { variant: "Caption", color: "var(--grey-medium)" }, formatFileSize(file.size))))),
             React.createElement("div", { className: styles['fileItemActions'] },
                 !(isAddedFile || isRejectedFile) && canDownload && (React.createElement(IconButton, { className: styles.fileIcon, icon: React.createElement(IconDownload, null), onClick: (e) => handleDownloadClick(e, file), color: "var(--icons-grey)", size: "sm" })),
                 canDelete && (React.createElement(IconButton, { className: styles.fileIcon, icon: React.createElement(IconClose, null), onClick: (e) => handleDeleteClick(e, file.id || ''), color: "var(--icons-grey)", size: "sm" })))),
