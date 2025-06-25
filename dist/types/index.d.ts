@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
 import { Accept, FileError } from 'react-dropzone/.';
+import { FilePreview } from '../components/AttachedFilesPreview/AttachedFilesPreview';
 /** @internal */
 export interface BreadcrumbProps {
     /** Обработчик клика */
@@ -579,6 +580,43 @@ export interface TooltipProps {
     /** Подсказка, следующая за курсором */
     followCursor?: boolean;
 }
+export interface TextEditorProps {
+    label?: string;
+    onSubmit?: (value: string, files: FilePreview[]) => void;
+    onChange?: (value: string, files: FilePreview[]) => void;
+    defaultValue?: string;
+    error?: boolean;
+    helperText?: string;
+    files?: FilePreview[];
+    required?: boolean;
+    className?: string;
+    isButtonDisabled?: boolean;
+}
+export interface CommentProps {
+    /** Идентификатор элемента */
+    id?: string;
+    /** Знчение */
+    value?: string;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
+    /** Дополнительный класс */
+    className?: string;
+    username: string;
+    avatar: string;
+    creationDate: string;
+    isEdit?: boolean;
+    /** Лейбл */
+    label?: string;
+    /** Подсказка */
+    placeholder?: string;
+    /** Ошибка */
+    error?: boolean;
+    /** Текст ошибки */
+    helperText?: string;
+    /** Callback при изменении значения */
+    onChange?: (value: string, files: FilePreview[]) => void;
+    onSubmit?: () => {};
+}
 export interface LinkProps {
     /**Гипертекстовая ссылка */
     href: string;
@@ -592,4 +630,10 @@ export interface LinkProps {
     style?: CSSProperties;
     /**Подчеркивание */
     underline?: 'hover' | 'underline';
+    /** Вариант шрифта */
+    variant?: `${ETypographyVariants}`;
+    /** Цвет текста */
+    color?: CSSProperties['color'];
+    /**Максимальная ширина - нужна для отображения тултипа */
+    maxWidth?: string;
 }

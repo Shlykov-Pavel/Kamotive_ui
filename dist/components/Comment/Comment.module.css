@@ -1,0 +1,138 @@
+.wrapper--input {
+	position: relative;
+	width: 100%;
+}
+
+.wrapper--input-label {
+	margin-top: 20px;
+}
+
+.wrapper--input-helperText {
+	margin-bottom: 15px;
+}
+
+.labelWrapper {
+	display: flex;
+	flex-direction: row;
+	gap: 7px;
+}
+
+.infoWrapper {
+	display: flex;
+	flex-direction: column;
+}
+
+.iconsWrapper {
+	display: flex;
+	flex-direction: row;
+	gap: 15px;
+}
+
+.commentWrapper {
+	padding-left: 33px;
+}
+
+.avatar {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.input {
+	font-family: var(--font-family-content);
+	font-style: normal;
+	font-weight: 400;
+	position: relative;
+	color: var(--text-dark);
+	padding: 10px 0;
+	height: fit-content;
+	display: flex;
+	flex-direction: column;
+	background: none;
+	border: none;
+	border-radius: 7px;
+	mix-blend-mode: multiply;
+	width: 100%;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.input--edit {
+	background-color: #F5F5F5;
+}
+
+.label {
+	line-height: 14px;
+	transition: 0.3ms ease-out;
+	font-size: 12px !important;
+}
+
+.label--bold {
+	font-weight: 600 !important;
+}
+
+.label--default {
+	position: absolute;
+	top: -18px;
+	cursor: text;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: calc(100% - 32px);
+	color: var(--text-dark) !important;
+}
+
+/* Стили для обязательного input */
+.label--required::after {
+	content: '*';
+	color: var(--error-main);
+	margin-left: 2px;
+	top: 2px;
+	font-size: 12px;
+}
+
+/* Стили для input с ошибкой */
+.input--error {
+	border-color: var(--error-main);
+	color: var(--error-main);
+}
+
+.input--error:hover,
+.input--error:focus {
+	border-color: var(--error-secondary);
+	box-shadow: none;
+	color: var(--error-secondary);
+}
+
+.helperText.md {
+	font-size: 10px !important;
+}
+
+.helperText.sm {
+	font-size: 8px !important;
+}
+
+.helperText.lg {
+	font-size: 12px !important;
+}
+
+.helperText {
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+	cursor: text;
+	transition: 0.3ms ease-out;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: var(--error-main) !important;
+}
+
+.attachedFilesContainer {
+	margin-top: 5px;
+	display: flex;
+	flex-direction: row;
+	overflow-x: auto;
+	gap: 12px;
+}
