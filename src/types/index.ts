@@ -655,21 +655,26 @@ export interface CommentProps {
 
 export interface LinkProps {
   /**Гипертекстовая ссылка */
-  href: string,
+  href?: string;
+  /** Обработчик клика */
+  onClick?: () => void;
   /** Дочерние элементы */
-  children: ReactNode,
+  children: ReactNode;
   /**Заголовок, содержащий дополнительную информацию о ссылке */
-  title?: string,
+  title?: string;
   /** Дополнительный класс */
   className?: string;
- /** Стили передаваемые напрямую */
+  /** Стили передаваемые напрямую */
   style?: CSSProperties;
   /**Подчеркивание */
-  underline?: 'hover' | 'underline',
+  underline?: 'hover' | 'underline' | 'none';
   /** Вариант шрифта */
   variant?: `${ETypographyVariants}`;
-   /** Цвет текста */
+  /** Цвет текста */
   color?: CSSProperties['color'];
   /**Максимальная ширина - нужна для отображения тултипа */
-  maxWidth?: string
+  maxWidth?: string;
+  /** Размер - для отображения тултипа */
+  size?: number;
+  widthInPixels?: number;
 }
