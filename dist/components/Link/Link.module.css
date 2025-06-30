@@ -1,16 +1,24 @@
+.link {
+  cursor: pointer;
+}
 .linkHover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .linkHover:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+}
+.linkNone {
+  text-decoration: none;
+}
+.linkNone:hover {
+  text-decoration: none;
 }
 
 .tooltipStyle {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: context-menu;
-    display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: context-menu;
+  display: inline-block;
 }
-
