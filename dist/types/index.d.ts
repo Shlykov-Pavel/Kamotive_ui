@@ -619,7 +619,9 @@ export interface CommentProps {
 }
 export interface LinkProps {
     /**Гипертекстовая ссылка */
-    href: string;
+    href?: string;
+    /** Обработчик клика */
+    onClick?: () => void;
     /** Дочерние элементы */
     children: ReactNode;
     /**Заголовок, содержащий дополнительную информацию о ссылке */
@@ -629,11 +631,14 @@ export interface LinkProps {
     /** Стили передаваемые напрямую */
     style?: CSSProperties;
     /**Подчеркивание */
-    underline?: 'hover' | 'underline';
+    underline?: 'hover' | 'underline' | 'none';
     /** Вариант шрифта */
     variant?: `${ETypographyVariants}`;
     /** Цвет текста */
     color?: CSSProperties['color'];
     /**Максимальная ширина - нужна для отображения тултипа */
     maxWidth?: string;
+    /** Размер - для отображения тултипа */
+    size?: number;
+    widthInPixels?: number;
 }
