@@ -308,7 +308,8 @@ export const Dropdown: FC<DropdownProps> = ({
   onClose,
   clearable = true,
   enableAutocomplete = false,
-  noOptionsText = 'Нет вариантов для выбора',
+  noOptionsText,
+  lng = 'ru',
 }) => {
   const [isOpen, setIsOpen] = useState(isOpened);
   const [modifiedOptions, setModifiedOptions] = useState<TOptions[] | null>([]);
@@ -531,7 +532,7 @@ export const Dropdown: FC<DropdownProps> = ({
             placeholder={
               getComparisonValue(selectedItem, getOptionLabel)
                 ? getComparisonValue(selectedItem, getOptionLabel).toString()
-                : 'Поиск...'
+                : lng === 'ru' || lng.includes('ru') ? 'Поиск...' : 'Search...'
             }
             onClick={(e) => {
               e.stopPropagation();
@@ -556,7 +557,7 @@ export const Dropdown: FC<DropdownProps> = ({
         ) : selectedItem ? (
           getComparisonValue(selectedItem, getOptionLabel)
         ) : (
-          searchValue || (placeholder ?? label ?? 'Выберите значение')
+          searchValue || (placeholder ?? label ?? (lng.includes('ru') ? 'Выберите значение' : 'Select option'))
         )}
       </div>
     );
@@ -600,7 +601,7 @@ export const Dropdown: FC<DropdownProps> = ({
           })
         ) : (
           <div className={`${styles['item-container']} ${styles['item-block']}`} style={{ paddingLeft: '15px' }}>
-            {noOptionsText}
+            {lng === 'ru' || lng.includes('ru') ? noOptionsText || 'Нет вариантов для выбора' : noOptionsText || 'No options to select' }
           </div>
         )}
       </div>

@@ -235,6 +235,8 @@ export interface DropdownProps {
   enableAutocomplete?: boolean;
   /** Текст при отсутствии опций */
   noOptionsText?: string;
+  /** Язык */
+  lng?: string;
 }
 
 /** @internal */
