@@ -95,6 +95,8 @@ export interface InputProps {
   helperText?: string;
   /** Callback при изменении значения */
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  /** Callback при потере фокуса */
+  onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
   /** Обязательное поле */
   required?: boolean;
 }
@@ -235,6 +237,8 @@ export interface DropdownProps {
   enableAutocomplete?: boolean;
   /** Текст при отсутствии опций */
   noOptionsText?: string;
+  /** Язык */
+  lng?: string,
 }
 
 /** @internal */
@@ -266,6 +270,8 @@ export interface ProgressBarProps {
   animationDuration?: number;
   /**Для выставления флага окончания загрузки */
   setIsLoadingFinished?: (value: boolean) => void;
+  /** Ширина прогресс бара */
+  width?: string;
 }
 
 export interface ProgressLoaderProps {
@@ -469,6 +475,8 @@ export interface FileItemProps {
   isAddedFile?: boolean;
   /** Флаг отклоненного файла */
   isRejectedFile?: boolean;
+  /** Ширина прогресс бара */
+  progressBarWidth?: string;
 }
 
 export interface FileLoaderProps {
@@ -494,6 +502,8 @@ export interface FileLoaderProps {
   style?: React.CSSProperties;
   /** Функция валидации файла */
   fileValidator?: (file: File) => FileError | FileError[] | null;
+  /** Ширина прогресс бара */
+  progressBarWidth?: string;
 }
 
 export interface DialogProps {

@@ -26,6 +26,7 @@ export const Input: FC<InputProps> = ({
   error = false,
   helperText,
   onChange,
+  onBlur,
   required = false,
 }) => {
 
@@ -44,6 +45,10 @@ export const Input: FC<InputProps> = ({
     }
     
   };
+
+  const handleOnBlur = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    onBlur?.(event);
+  }
 
   const wrapperClassess = classNames(styles['wrapper--input'], className,{
     [styles['wrapper--left']]: isLeftLabel,
@@ -82,6 +87,7 @@ export const Input: FC<InputProps> = ({
           value={value}
           placeholder={placeholder}
           onChange={handleChange}
+          onBlur={handleOnBlur}
           disabled={disabled}
           style={{ height: `${rows * 20}px` }}
         />
@@ -92,6 +98,7 @@ export const Input: FC<InputProps> = ({
           value={value}
           placeholder={placeholder}
           onChange={handleChange}
+          onBlur={handleOnBlur}
           disabled={disabled}
           readOnly={readOnly}
         />

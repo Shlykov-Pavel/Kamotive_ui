@@ -26,7 +26,8 @@ export const FileLoader: FC<FileLoaderProps> = ({
   lng = 'ru',
   className,
   style,
-  fileValidator
+  fileValidator,
+  progressBarWidth
 }) => {
   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
   const [loadingFilesNames, setLoadingFilesNames] = useState<string[]>([]);
@@ -160,6 +161,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
         loading={loadingFilesNames.includes(file.filename)} // Показываем лоадер только для новых файлов
         onDelete={handleDeleteFiles}
         isAddedFile={true}
+        progressBarWidth={progressBarWidth}
       />
     );
   });

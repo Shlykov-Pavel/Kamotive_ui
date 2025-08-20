@@ -45,3 +45,4 @@ export { IconFileVideo } from './IconFileVideo/IconFileVideo';
 export { IconFileDefault } from './IconFileDefault/IconFileDefault';
 export { IconPencilFilled } from './IconPencilFilled/IconPencilFilled';
 export { IconDeleteFilled } from './IconDeleteFilled/IconDeleteFilled';
+export { IconShare } from './IconShare/IconShare';
