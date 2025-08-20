@@ -65,6 +65,26 @@ export const FileLoader: FC<FileLoaderProps> = ({
           lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
       };
     }
+
+    if (acceptedFormats) {
+      const acceptedExtensions = Object.values(acceptedFormats)
+        .reduce((acc, val) => acc.concat(val), []);
+      
+      const fileParts = file.name.split('.');
+      const fileExtension = fileParts.length > 1 
+        ? `.${fileParts.pop()!.toLowerCase()}` 
+        : '';
+
+      if (!acceptedExtensions.includes(fileExtension)) {
+        return {
+          code: 'file-invalid-type',
+          message: lng === 'ru' || lng.includes('ru')
+            ? `Файл должен быть одного из следующих типов: ${acceptedExtensions.join(', ')}`
+            : `File must be one of: ${acceptedExtensions.join(', ')}`,
+        };
+      }
+    }
+
     if (fileValidator) {
       const customValidationResult = fileValidator(file);
        if (customValidationResult) {
@@ -140,7 +160,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
     },
 
     validator: fileValidatorInner,
-    accept: acceptedFormats,
+    accept: undefined,
     maxFiles: maxFileCount,
     disabled: !canAdd,
   });
