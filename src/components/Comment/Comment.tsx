@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useState } from 'react';
+import React, { CSSProperties, FC, useEffect, useState } from 'react';
 import styles from './Comment.module.css';
 import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
@@ -16,16 +16,20 @@ export const Comment: FC<CommentProps> = ({
   username,
   avatar,
   creationDate,
+  canAttachFiles = false,
+  files = [],
+  canEdit = false,
   isEdit = false,
   label,
   error = false,
   helperText,
   onChange,
   onSubmit,
+  onDelete,
 }) => {
   const [commentText, setCommentText] = useState(value || '');
   const [isEditMode, setIsEditMode] = useState(isEdit);
-  const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>([]);
+  const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files);
 
   const wrapperClassess = classNames(styles['wrapper--input'], className, {
     [styles['wrapper--input-label']]: label,
@@ -39,11 +43,13 @@ export const Comment: FC<CommentProps> = ({
     setIsEditMode((prev) => !prev);
   };
 
-  const handleDeleteClick = () => {};
+  const handleDeleteClick = () => {
+    onDelete?.(id);
+  };
 
   const handleSubmit = (value: string, files: FilePreview[]) => {
     if (onSubmit) {
-      onSubmit();
+      onSubmit(value, files);
     }
     setCommentText(value);
     setAttachedFiles(files);
@@ -54,7 +60,7 @@ export const Comment: FC<CommentProps> = ({
     if (onChange) {
       onChange(value, files);
     }
-  }
+  };
 
   return (
     <div className={wrapperClassess} style={style}>
@@ -72,10 +78,12 @@ export const Comment: FC<CommentProps> = ({
             </Typography>
           </div>
         </div>
-        <div className={styles.iconsWrapper}>
-          <IconButton icon={<IconPencilFilled />} onClick={handleEditClick} size="sm" />
-          <IconButton icon={<IconDeleteFilled />} onClick={handleDeleteClick} size="sm" />
-        </div>
+        {canEdit && (
+          <div className={styles.iconsWrapper}>
+            <IconButton icon={<IconPencilFilled />} onClick={handleEditClick} size="sm" style={{ aspectRatio: 0 }} />
+            <IconButton icon={<IconDeleteFilled />} onClick={handleDeleteClick} size="sm" style={{ aspectRatio: 0 }} />
+          </div>
+        )}
       </div>
       {isEditMode ? (
         <TextEditor
@@ -85,6 +93,7 @@ export const Comment: FC<CommentProps> = ({
           error={error}
           helperText={helperText}
           files={attachedFiles}
+          canAttachFiles={canAttachFiles}
         />
       ) : (
         <div className={styles.commentWrapper}>

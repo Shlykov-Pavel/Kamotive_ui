@@ -631,6 +631,7 @@ export interface TextEditorProps {
   defaultValue?: string;
   error?: boolean;
   helperText?: string;
+  canAttachFiles?: boolean;
   files?: FilePreview[];
   required?: boolean;
   className?: string;
@@ -649,6 +650,9 @@ export interface CommentProps {
   username: string;
   avatar: string;
   creationDate: string;
+  canAttachFiles?: boolean,
+  files?: FilePreview[],
+  canEdit?: boolean;
   isEdit?: boolean;
   /** Лейбл */
   label?: string;
@@ -660,7 +664,8 @@ export interface CommentProps {
   helperText?: string;
   /** Callback при изменении значения */
   onChange?: (value: string, files: FilePreview[]) => void;
-  onSubmit?: () => {};
+  onSubmit?: (value: string, files: FilePreview[]) => void;
+  onDelete?: (id?: string) => void;
 }
 
 export interface LinkProps {
