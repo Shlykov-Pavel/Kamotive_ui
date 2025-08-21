@@ -640,7 +640,7 @@ export interface TextEditorProps {
 
 export interface CommentProps {
   /** Идентификатор элемента */
-  id?: string;
+  id: string;
   /** Знчение */
   value?: string;
   /** Стили передаваемые напрямую */
@@ -665,7 +665,7 @@ export interface CommentProps {
   /** Callback при изменении значения */
   onChange?: (value: string, files: FilePreview[]) => void;
   onSubmit?: (value: string, files: FilePreview[]) => void;
-  onDelete?: (id?: string) => void;
+  onDelete?: (id: string) => void;
 }
 
 export interface LinkProps {
