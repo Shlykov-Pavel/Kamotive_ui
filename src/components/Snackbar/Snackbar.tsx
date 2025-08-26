@@ -33,11 +33,12 @@ export const title = {
 
 export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose, style }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [isExiting, setIsExiting] = useState(false);
+
   useEffect(() => {
     if (duration > 0) {
       const timer = setTimeout(() => {
-        setIsVisible(false);
-        onClose?.();
+        handleClose();
       }, duration);
 
       return () => clearTimeout(timer);
@@ -45,11 +46,24 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
   }, [duration, onClose]);
 
   const handleClose = () => {
-    setIsVisible(false);
-    onClose?.();
+    setIsExiting(true);
+  
+    setTimeout(() => {
+      setIsVisible(false);
+      onClose?.();
+    }, 300);
   };
+
   if (!isVisible) return null;
-  const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`]);
+
+  const snackbarClasses = classNames(
+    styles['snackbar-wrapper'], 
+    styles[`snackbar--${type}`],
+    {
+      [styles['snackbar-wrapper--exiting']]: isExiting
+    }
+  );
+
   return (
     <div className={snackbarClasses} style={style}>
       <div className={styles['snackbar-textAndIcon']}>

@@ -648,7 +648,7 @@ export interface CommentProps {
   /** Дополнительный класс */
   className?: string;
   username: string;
-  avatar: string;
+  avatar?: string | null;
   creationDate: string;
   canAttachFiles?: boolean,
   files?: FilePreview[],

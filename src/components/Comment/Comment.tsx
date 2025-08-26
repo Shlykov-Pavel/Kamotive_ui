@@ -67,7 +67,11 @@ export const Comment: FC<CommentProps> = ({
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div className={styles.labelWrapper}>
           <div className="profile">
-            <img src={avatar} alt="Avatar" className={styles.avatar} />
+            {avatar ? (
+              <img src={avatar} alt="Avatar" className={styles.avatar} />
+            ) : (
+              <div className={styles.avatar}>👤</div>
+            )}
           </div>
           <div className={styles.infoWrapper}>
             <Typography variant="Body2-Medium" className={labelClasses}>
