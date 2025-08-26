@@ -24,14 +24,14 @@ export const icons = {
   info: <IconInfo htmlColor="#6F6F6F" />,
 };
 
-export const title = {
-  success: 'Успешно',
-  error: 'Ошибка',
-  warning: 'Внимание',
-  info: 'Информация',
-};
+export const title = (lng: string) => ({
+  success: lng === 'ru' ? 'Успешно' : 'Success',
+  error: lng === 'ru' ? 'Ошибка' : 'Error',
+  warning: lng === 'ru' ? 'Внимание' : 'Warning',
+  info: lng === 'ru' ? 'Информация' : 'Info',
+});
 
-export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose, style }) => {
+export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose, style, lng = 'ru' }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
 
@@ -70,7 +70,7 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
         {icon && icons[type]}
         <div className={styles['snackbar-text']}>
           <Typography variant="Body1-Medium" color={'var(--text-dark)'}>
-            {title[type]}
+            {title(lng)[type]}
           </Typography>
           <Typography variant="Body1" color={'var(--text-btn-light)'}>
             {children}

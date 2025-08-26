@@ -389,6 +389,8 @@ export type SnackbarProps = {
   onClose?: () => void;
   /** Стили передаваемые напрямую */
   style?: CSSProperties;
+  /** Язык */
+  lng?: string;
 };
 
 export type TAttachments = {
