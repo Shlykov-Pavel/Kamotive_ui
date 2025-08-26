@@ -79,8 +79,8 @@ export const IconBulletlistToString = (
     <path
       d="M4.50732 0.886665H12.3508"
       stroke="${htmlColor || "#55534E"}"
-      stroke-width="${strokeWidth || "1.5"}"
-      stroke-linecap="round"
+      strokeWidth="${strokeWidth || "1.5"}"
+      strokeLinecap="round"
       stroke-linejoin="round"
     />
     <path
@@ -90,8 +90,8 @@ export const IconBulletlistToString = (
     <path
       d="M4.50732 5.5H12.3508"
       stroke="${htmlColor || "#55534E"}"
-      stroke-width="${strokeWidth || "1.5"}"
-      stroke-linecap="round"
+      strokeWidth="${strokeWidth || "1.5"}"
+      strokeLinecap="round"
       stroke-linejoin="round"
     />
     <path
@@ -101,8 +101,8 @@ export const IconBulletlistToString = (
     <path
       d="M4.50732 10.1133H12.3508"
       stroke="${htmlColor || "#55534E"}"
-      stroke-width="${strokeWidth || "1.5"}"
-      stroke-linecap="round"
+      strokeWidth="${strokeWidth || "1.5"}"
+      strokeLinecap="round"
       stroke-linejoin="round"
     />
   </svg>`;

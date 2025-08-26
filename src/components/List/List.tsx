@@ -27,6 +27,7 @@ export const List: FC<ListProps> = ({
   customBullet,
   customItemBullet,
   bulletClassName,
+  titleContent,
   children,
   isHeader = false,
   parentChecked = false,
@@ -101,7 +102,7 @@ export const List: FC<ListProps> = ({
 
   return (
     <div className={styles.collapsibleList}>
-      {label && (
+      {label || titleContent && (
         <div className={headerClassNames} onClick={handleClick} style={style}>
           {!isHeader && (
             <div>
@@ -118,7 +119,8 @@ export const List: FC<ListProps> = ({
               {customBullet && <span className={classNames(styles.bullet, bulletClassName)}>{customBullet}</span>}
             </div>
           )}
-          <Typography variant="Body1">{label}</Typography>
+          {label && <Typography variant="Body1">{label}</Typography>}
+          {titleContent}
           {collapsible && (
             <span className={styles.indicator}>{isOpen ? <ChevronDown /> : <ChevronDown rotation={270} />}</span>
           )}

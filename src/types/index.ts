@@ -587,6 +587,8 @@ export interface ListItemProps extends BaseListProps {
 }
 
 export interface ListProps extends BaseListProps {
+  /** Контент заголовка */
+  titleContent?: ReactNode;
   /** Дочерние элементы */
   children: React.ReactElement<ListItemProps> | React.ReactElement<ListItemProps>[];
   /** Возможность раскрытия списка */
