@@ -601,7 +601,7 @@ export const Dropdown: FC<DropdownProps> = ({
           })
         ) : (
           <div className={`${styles['item-container']} ${styles['item-block']}`} style={{ paddingLeft: '15px' }}>
-            {noOptionsText}
+            {lng === 'ru' || lng.includes('ru') ? noOptionsText || 'Нет вариантов для выбора' : noOptionsText || 'No options to select' }
           </div>
         )}
       </div>

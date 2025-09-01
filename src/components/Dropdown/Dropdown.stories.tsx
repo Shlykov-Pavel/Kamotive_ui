@@ -65,6 +65,8 @@ export interface DropdownProps {
   enableAutocomplete?: boolean;
   /** Текст при отсутствии опций */
   noOptionsText?: string;
+  /** Язык */
+  lng?: string;
 }
 
 const dropdownOptions = [
@@ -196,6 +198,11 @@ const meta: Meta<typeof Dropdown> = {
       description: 'Позволяет делать поиск по опциям ',
       control: { type: 'boolean' },
     },
+     lng :{
+      description: 'Язык',
+      control: { type: 'radio' },
+      options: ['ru', 'en'],
+     }
   },
 };
 
@@ -639,5 +646,30 @@ export const DropdownNestedValue = (argTypes: DropdownProps): JSX.Element => {
 
 DropdownNestedValue.storyName = 'Dropdown с вложенным значением';
 DropdownNestedValue.parameters = {
+  controls: { disable: true },
+};
+
+
+
+const englishDropdown = [
+  { value: 'Select 1', icon: <IconAccount /> },
+  { value: 'Select 2', icon: <IconAlarm /> },
+  { value: 'Disabled select', disabled: true, icon: <IconEyeOff /> },
+  { value: 'Select 4', icon: <IconBell /> },
+  { value: 'Select 5', icon: <IconBriefcase /> },
+];
+
+export const DropdownEnglish = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+DropdownEnglish.storyName = 'Dropdown на английском';
+DropdownEnglish.args = {
+  placeholder: 'Select option',
+  isOpened: false,
+  options: englishDropdown,
+  label: 'Label',
+  enableAutocomplete: true,
+  lng: 'en'
+};
+
+DropdownEnglish.parameters = {
   controls: { disable: true },
 };
