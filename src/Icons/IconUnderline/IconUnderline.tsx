@@ -49,9 +49,9 @@ export const IconUnderlineToString = (
     <path
       d="M10.1667 1V6.14286C10.1667 7.05217 9.78036 7.92424 9.09273 8.56722C8.40509 9.21021 7.47246 9.57143 6.5 9.57143C5.52754 9.57143 4.59491 9.21021 3.90728 8.56722C3.21964 7.92424 2.83333 7.05217 2.83333 6.14286V1M1 13H12"
       stroke=${htmlColor || '#55534E'}
-      stroke-linecap="round"
+      strokeLinecap="round"
       stroke-linejoin="round"
-      stroke-width=${strokeWidth || '1'}
+      strokeWidth=${strokeWidth || '1'}
     />
   </svg>`;
 };

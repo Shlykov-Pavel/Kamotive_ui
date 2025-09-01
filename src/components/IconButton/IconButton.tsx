@@ -35,10 +35,15 @@ export const IconButton: React.FC<IconButtonProps> = ({
       style={combinedStyle}
     >
       {renderIcon &&
-        React.cloneElement(renderIcon as React.ReactElement, {
-          htmlColor: color,
-          strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
-        })}
+        (() => {
+          const iconElement = renderIcon as React.ReactElement;
+          const defaultStrokeWidth = size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0';
+
+          return React.cloneElement(iconElement, {
+            htmlColor: color,
+            strokeWidth: iconElement.props.strokeWidth ?? defaultStrokeWidth,
+          });
+        })()}
     </button>
   );
 };

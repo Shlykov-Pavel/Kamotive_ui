@@ -17,6 +17,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   animated = false,
   animationDuration = 8000,
   setIsLoadingFinished,
+  width,
 }) => {
   const [percent, setPercent] = useState(value);
   const validPercentage = Math.min(Math.max(value, 0), max);
@@ -57,6 +58,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
         className={progressBarClasses}
         value={percent}
         max={max}
+        style={{ width: width }}
         //style={{ transition: animated ? 'width 0.8s ease-in-out' : 'none' }}
       />
       <label htmlFor="progress" className={styles['progress-bar-percentage']}>

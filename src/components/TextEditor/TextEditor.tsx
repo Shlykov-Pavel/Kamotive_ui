@@ -44,6 +44,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   defaultValue,
   error,
   helperText,
+  canAttachFiles = false,
   files,
   required,
   className,
@@ -370,51 +371,57 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   };
 
   const getEditorActions = useCallback(
-    () => [
-      {
-        name: 'bold',
-        icon: IconBoldToString('', '', '1.5'),
-        title: 'Bold (Ctrl+B)',
-        result: () => {},
-      },
-      {
-        name: 'italic',
-        icon: IconItalicToString('', '', '1.5'),
-        title: 'Italic (Ctrl+I)',
-        result: () => {},
-      },
-      {
-        name: 'underline',
-        icon: IconUnderlineToString('', '', '1.5'),
-        title: 'Underline (Ctrl+U)',
-        result: () => {},
-      },
-      {
-        name: 'strikethrough',
-        icon: IconStrikethroughToString('', '', '1.5'),
-        title: 'Strike-through',
-        result: () => {},
-      },
-      {
-        name: 'heading2',
-        icon: IconHeader2ToString('', '', '1.5'),
-        title: 'Heading 2',
-        result: () => {},
-      },
-      {
-        name: 'ulist',
-        icon: IconBulletlistToString(),
-        title: 'Bullet List',
-        result: () => {},
-      },
-      {
-        name: 'image',
-        icon: IconAttachToString('', '', '1.5'),
-        title: 'Upload Image',
-        result: () => {},
-      },
-    ],
-    []
+    () => {
+      const baseActions = [
+        {
+          name: 'bold',
+          icon: IconBoldToString('', '', '1.5'),
+          title: 'Bold (Ctrl+B)',
+          result: () => {},
+        },
+        {
+          name: 'italic',
+          icon: IconItalicToString('', '', '1.5'),
+          title: 'Italic (Ctrl+I)',
+          result: () => {},
+        },
+        {
+          name: 'underline',
+          icon: IconUnderlineToString('', '', '1.5'),
+          title: 'Underline (Ctrl+U)',
+          result: () => {},
+        },
+        {
+          name: 'strikethrough',
+          icon: IconStrikethroughToString('', '', '1.5'),
+          title: 'Strike-through',
+          result: () => {},
+        },
+        {
+          name: 'heading2',
+          icon: IconHeader2ToString('', '', '1.5'),
+          title: 'Heading 2',
+          result: () => {},
+        },
+        {
+          name: 'ulist',
+          icon: IconBulletlistToString(),
+          title: 'Bullet List',
+          result: () => {},
+        },
+      ];
+      if (canAttachFiles) {
+        baseActions.push({
+          name: 'image',
+          icon: IconAttachToString('', '', '1.5'),
+          title: 'Upload Image',
+          result: () => {},
+        });
+      }
+  
+      return baseActions;
+    },
+    [canAttachFiles]
   );
 
   const getEditorClasses = useCallback(
@@ -474,12 +481,16 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     }
 
     const buttons = editorRef.current.querySelectorAll(`.${styles.pellButton}`);
-    const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'ulist', 'image'];
+    const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'ulist'];
+    if (canAttachFiles) {
+      commands.push('image');
+    }
 
     buttons.forEach((button: Element, index: number) => {
       const command = commands[index];
       if (command) {
         const htmlButton = button as HTMLElement;
+        buttonRefs.current[command] = htmlButton;
         htmlButton.setAttribute('data-command', command);
         htmlButton.onclick = null;
         htmlButton.addEventListener('mousedown', (e) => {
@@ -515,11 +526,10 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
   const handleEditorChange = useCallback(() => {
     updateActiveStates();
-  }, []);
-
-  if (onChange && editor?.content) {
-    onChange(editor.content.innerHTML, attachedFiles);
-  }
+    if (onChange && editor?.content) {
+      onChange(editor.content.innerHTML, attachedFiles);
+    }
+  }, [onChange, editor, attachedFiles, updateActiveStates]);
 
   const handleSubmit = useCallback(() => {
     if (!editor?.content) {
@@ -556,6 +566,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
   useEffect(() => {
     if (editorRef.current) {
+      editorRef.current.innerHTML = '';
       const pellEditor = initializePellEditor();
 
       pellEditor.content.innerHTML = defaultValue || '';
@@ -580,6 +591,10 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         pellEditorContent.removeEventListener('keyup', handleKeyUp);
         pellEditorContent.removeEventListener('mouseup', handleMouseUp);
         pellEditorContent.removeEventListener('focus', handleFocus);
+
+        if (editorRef.current) {
+          editorRef.current.innerHTML = '';
+        }
       };
     }
 
@@ -640,14 +655,16 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         )}
         <div ref={editorRef}></div>
 
-        <input
-          ref={uploaderRef}
-          type="file"
-          style={{ display: 'none' }}
-          multiple
-          onChange={handleUploadFiles}
-          accept={ACCEPTED_FILE_TYPES}
-        />
+        {canAttachFiles && (
+          <input
+            ref={uploaderRef}
+            type="file"
+            style={{ display: 'none' }}
+            multiple
+            onChange={handleUploadFiles}
+            accept={ACCEPTED_FILE_TYPES}
+          />
+        )}
       </div>
       {error && helperText && (
         <Typography variant="Caption" className={classNames(styles.helperText)}>

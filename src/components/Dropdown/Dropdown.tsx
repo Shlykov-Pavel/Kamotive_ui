@@ -308,7 +308,7 @@ export const Dropdown: FC<DropdownProps> = ({
   onClose,
   clearable = true,
   enableAutocomplete = false,
-  noOptionsText,
+  noOptionsText = 'Нет вариантов для выбора',
   lng = 'ru',
 }) => {
   const [isOpen, setIsOpen] = useState(isOpened);
@@ -496,7 +496,7 @@ export const Dropdown: FC<DropdownProps> = ({
 
     if (required) {
       setErrorInput(true);
-      setErrorInputHelperText(helperText ?? 'Поле обязательно для заполнения');
+      setErrorInputHelperText(helperText ?? lng === 'ru' ? 'Поле обязательно для заполнения' : 'Field is required');
     }
   };
 
@@ -532,7 +532,7 @@ export const Dropdown: FC<DropdownProps> = ({
             placeholder={
               getComparisonValue(selectedItem, getOptionLabel)
                 ? getComparisonValue(selectedItem, getOptionLabel).toString()
-                : lng === 'ru' || lng.includes('ru') ? 'Поиск...' : 'Search...'
+                : lng === 'ru' ? 'Поиск...' : 'Search...'
             }
             onClick={(e) => {
               e.stopPropagation();
@@ -557,7 +557,7 @@ export const Dropdown: FC<DropdownProps> = ({
         ) : selectedItem ? (
           getComparisonValue(selectedItem, getOptionLabel)
         ) : (
-          searchValue || (placeholder ?? label ?? (lng.includes('ru') ? 'Выберите значение' : 'Select option'))
+          searchValue || (placeholder ?? label ?? lng === 'ru' ? 'Выберите значение' : 'Select value')
         )}
       </div>
     );

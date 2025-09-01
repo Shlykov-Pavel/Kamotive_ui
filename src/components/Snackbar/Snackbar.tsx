@@ -24,20 +24,21 @@ export const icons = {
   info: <IconInfo htmlColor="#6F6F6F" />,
 };
 
-export const title = {
-  success: 'Успешно',
-  error: 'Ошибка',
-  warning: 'Внимание',
-  info: 'Информация',
-};
+export const title = (lng: string) => ({
+  success: lng === 'ru' ? 'Успешно' : 'Success',
+  error: lng === 'ru' ? 'Ошибка' : 'Error',
+  warning: lng === 'ru' ? 'Внимание' : 'Warning',
+  info: lng === 'ru' ? 'Информация' : 'Info',
+});
 
-export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose, style }) => {
+export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose, style, lng = 'ru' }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [isExiting, setIsExiting] = useState(false);
+
   useEffect(() => {
     if (duration > 0) {
       const timer = setTimeout(() => {
-        setIsVisible(false);
-        onClose?.();
+        handleClose();
       }, duration);
 
       return () => clearTimeout(timer);
@@ -45,18 +46,31 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
   }, [duration, onClose]);
 
   const handleClose = () => {
-    setIsVisible(false);
-    onClose?.();
+    setIsExiting(true);
+  
+    setTimeout(() => {
+      setIsVisible(false);
+      onClose?.();
+    }, 300);
   };
+
   if (!isVisible) return null;
-  const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`]);
+
+  const snackbarClasses = classNames(
+    styles['snackbar-wrapper'], 
+    styles[`snackbar--${type}`],
+    {
+      [styles['snackbar-wrapper--exiting']]: isExiting
+    }
+  );
+
   return (
     <div className={snackbarClasses} style={style}>
       <div className={styles['snackbar-textAndIcon']}>
         {icon && icons[type]}
         <div className={styles['snackbar-text']}>
           <Typography variant="Body1-Medium" color={'var(--text-dark)'}>
-            {title[type]}
+            {title(lng)[type]}
           </Typography>
           <Typography variant="Body1" color={'var(--text-btn-light)'}>
             {children}
