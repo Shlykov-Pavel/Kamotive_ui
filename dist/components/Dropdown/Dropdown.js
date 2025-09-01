@@ -172,7 +172,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
         })))));
     return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left" }, itemContent)) : (itemContent);
 };
-export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, noOptionsText = 'Нет вариантов для выбора', }) => {
+export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, noOptionsText = 'Нет вариантов для выбора', lng = 'ru', }) => {
     const [isOpen, setIsOpen] = useState(isOpened);
     const [modifiedOptions, setModifiedOptions] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -329,7 +329,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         setActiveIndex(-1);
         if (required) {
             setErrorInput(true);
-            setErrorInputHelperText(helperText !== null && helperText !== void 0 ? helperText : 'Поле обязательно для заполнения');
+            setErrorInputHelperText((helperText !== null && helperText !== void 0 ? helperText : lng === 'ru') ? 'Поле обязательно для заполнения' : 'Field is required');
         }
     };
     const [showSelectedTooltip, setShowSelectedTooltip] = useState(false);
@@ -354,7 +354,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 }),
             isOpen && enableAutocomplete ? (React.createElement("input", { ref: inputRef, type: "text", value: searchValue, className: styles.inlineSearchInput, onChange: handleSearchChange, placeholder: getComparisonValue(selectedItem, getOptionLabel)
                     ? getComparisonValue(selectedItem, getOptionLabel).toString()
-                    : 'Поиск...', onClick: (e) => {
+                    : lng === 'ru' ? 'Поиск...' : 'Search...', onClick: (e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     onClick === null || onClick === void 0 ? void 0 : onClick(e);
@@ -367,7 +367,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 }, onBlur: (e) => {
                     e.stopPropagation();
                     onBlur === null || onBlur === void 0 ? void 0 : onBlur(e);
-                }, onKeyDown: handleKeyDown, autoFocus: true })) : selectedItem ? (getComparisonValue(selectedItem, getOptionLabel)) : (searchValue || ((_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : 'Выберите значение'))));
+                }, onKeyDown: handleKeyDown, autoFocus: true })) : selectedItem ? (getComparisonValue(selectedItem, getOptionLabel)) : (searchValue || (((_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : lng === 'ru') ? 'Выберите значение' : 'Select value'))));
         return showSelectedTooltip ? (React.createElement("div", { className: styles.textField },
             React.createElement(Tooltip, { label: ((_b = getComparisonValue(selectedItem, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left", style: { width: '100% !important' } }, textFieldContent))) : (textFieldContent);
     };
@@ -376,7 +376,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         const menu = isOpen && (React.createElement("div", { className: dropdownClassess }, optionsToRender && optionsToRender.length > 0 ? (optionsToRender.map((optionsToRender, index) => {
             var _a;
             return (React.createElement(DropdownListItem, { key: (_a = optionsToRender === null || optionsToRender === void 0 ? void 0 : optionsToRender.key) !== null && _a !== void 0 ? _a : index, item: optionsToRender, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, variant: variant, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index }));
-        })) : (React.createElement("div", { className: `${styles['item-container']} ${styles['item-block']}`, style: { paddingLeft: '15px' } }, noOptionsText))));
+        })) : (React.createElement("div", { className: `${styles['item-container']} ${styles['item-block']}`, style: { paddingLeft: '15px' } }, lng === 'ru' || lng.includes('ru') ? noOptionsText || 'Нет вариантов для выбора' : noOptionsText || 'No options to select'))));
         return isOpen ? menu : null;
     };
     useEffect(() => {

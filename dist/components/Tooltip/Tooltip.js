@@ -189,7 +189,7 @@ export const Tooltip = ({ label, children, className, style, overlayChildren = f
             updateCoords(e.clientX, e.clientY);
         }
     };
-    const tooltipStyles = Object.assign(Object.assign({}, style), { position: 'fixed', left: `${coords.x}px`, top: `${coords.y}px`, backgroundColor: color ? hexToRgba(color, opacity) : `rgba(0, 0, 0, ${opacity})`, zIndex: 1000 });
+    const tooltipStyles = Object.assign(Object.assign({}, style), { position: 'fixed', left: `${coords.x}px`, top: `${coords.y}px`, backgroundColor: color ? hexToRgba(color, opacity) : `rgba(0, 0, 0, ${opacity})`, zIndex: 1500 });
     const tooltipClassNames = classNames(styles.tooltip, isVisible && styles['tooltip--visible'], className);
     return (React.createElement(React.Fragment, null,
         React.createElement("div", { onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave, onMouseMove: handleMouseMove, className: styles.wrapper, ref: childrenRef }, children),

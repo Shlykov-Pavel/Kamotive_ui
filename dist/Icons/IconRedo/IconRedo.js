@@ -17,8 +17,8 @@ export const IconRedoToString = (color = 'inherit', htmlColor, strokeWidth, onCl
     <path
       d="M1.35059 8C1.35059 4.32927 4.38392 1.34146 8.11059 1.34146C10.3639 1.42683 12.6173 2.62195 13.9173 4.5M14.3506 1V4.41463C14.3506 4.67073 14.1773 4.84146 13.9173 4.84146H10.4506"
       stroke="${htmlColor || "#55534E"}"
-      stroke-linecap="round"
-      stroke-width="${strokeWidth || '1'}"
+      strokeLinecap="round"
+      strokeWidth="${strokeWidth || '1'}"
     />
   </svg>`;
 };

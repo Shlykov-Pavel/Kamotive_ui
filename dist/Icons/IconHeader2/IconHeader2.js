@@ -17,9 +17,9 @@ export const IconHeader2ToString = (color = 'inherit', htmlColor, strokeWidth, o
     <path
       d="M1 1H11M6 1V12"
       stroke="${htmlColor || "#55534E"}"
-      stroke-linecap="round"
+      strokeLinecap="round"
       stroke-linejoin="round"
-      stroke-width="${strokeWidth || '1'}"
+      strokeWidth="${strokeWidth || '1'}"
     />
   </svg>`;
 };

@@ -90,6 +90,8 @@ export interface InputProps {
     helperText?: string;
     /** Callback при изменении значения */
     onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    /** Callback при потере фокуса */
+    onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     /** Обязательное поле */
     required?: boolean;
 }
@@ -222,6 +224,8 @@ export interface DropdownProps {
     enableAutocomplete?: boolean;
     /** Текст при отсутствии опций */
     noOptionsText?: string;
+    /** Язык */
+    lng?: string;
 }
 /** @internal */
 export interface TypographyProps {
@@ -251,6 +255,8 @@ export interface ProgressBarProps {
     animationDuration?: number;
     /**Для выставления флага окончания загрузки */
     setIsLoadingFinished?: (value: boolean) => void;
+    /** Ширина прогресс бара */
+    width?: string;
 }
 export interface ProgressLoaderProps {
     /** Значение */
@@ -360,6 +366,8 @@ export type SnackbarProps = {
     onClose?: () => void;
     /** Стили передаваемые напрямую */
     style?: CSSProperties;
+    /** Язык */
+    lng?: string;
 };
 export type TAttachments = {
     id: string;
@@ -443,6 +451,8 @@ export interface FileItemProps {
     isAddedFile?: boolean;
     /** Флаг отклоненного файла */
     isRejectedFile?: boolean;
+    /** Ширина прогресс бара */
+    progressBarWidth?: string;
 }
 export interface FileLoaderProps {
     /** Максимальный размер файла */
@@ -467,6 +477,8 @@ export interface FileLoaderProps {
     style?: React.CSSProperties;
     /** Функция валидации файла */
     fileValidator?: (file: File) => FileError | FileError[] | null;
+    /** Ширина прогресс бара */
+    progressBarWidth?: string;
 }
 export interface DialogProps {
     /** Флаг открытия окна */
@@ -543,6 +555,8 @@ export interface ListItemProps extends BaseListProps {
     children?: ReactNode;
 }
 export interface ListProps extends BaseListProps {
+    /** Контент заголовка */
+    titleContent?: ReactNode;
     /** Дочерние элементы */
     children: React.ReactElement<ListItemProps> | React.ReactElement<ListItemProps>[];
     /** Возможность раскрытия списка */
@@ -587,6 +601,7 @@ export interface TextEditorProps {
     defaultValue?: string;
     error?: boolean;
     helperText?: string;
+    canAttachFiles?: boolean;
     files?: FilePreview[];
     required?: boolean;
     className?: string;
@@ -594,7 +609,7 @@ export interface TextEditorProps {
 }
 export interface CommentProps {
     /** Идентификатор элемента */
-    id?: string;
+    id: string;
     /** Знчение */
     value?: string;
     /** Стили передаваемые напрямую */
@@ -602,8 +617,11 @@ export interface CommentProps {
     /** Дополнительный класс */
     className?: string;
     username: string;
-    avatar: string;
+    avatar?: string | null;
     creationDate: string;
+    canAttachFiles?: boolean;
+    files?: FilePreview[];
+    canEdit?: boolean;
     isEdit?: boolean;
     /** Лейбл */
     label?: string;
@@ -615,7 +633,8 @@ export interface CommentProps {
     helperText?: string;
     /** Callback при изменении значения */
     onChange?: (value: string, files: FilePreview[]) => void;
-    onSubmit?: () => {};
+    onSubmit?: (value: string, files: FilePreview[]) => void;
+    onDelete?: (id: string) => void;
 }
 export interface LinkProps {
     /**Гипертекстовая ссылка */
