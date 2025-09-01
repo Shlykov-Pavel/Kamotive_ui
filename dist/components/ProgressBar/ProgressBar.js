@@ -5,7 +5,7 @@ import classNames from 'classnames';
 /**
  * Компонент ProgressBar отображает прогресс в виде заполненной полосы.
  */
-export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = true, animated = false, animationDuration = 8000, setIsLoadingFinished, }) => {
+export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = true, animated = false, animationDuration = 8000, setIsLoadingFinished, width, }) => {
     const [percent, setPercent] = useState(value);
     const validPercentage = Math.min(Math.max(value, 0), max);
     const progressBarClasses = classNames(styles['progress-bar'], styles[size], {
@@ -38,7 +38,7 @@ export const ProgressBar = ({ value = 0, max = 100, size = 'md', showValue = tru
         }
     }, [animated, validPercentage, setIsLoadingFinished, animationDuration]);
     return (React.createElement("div", { className: styles['progress-bar--wrapper'] },
-        React.createElement("progress", { id: "linear-progress", className: progressBarClasses, value: percent, max: max }),
+        React.createElement("progress", { id: "linear-progress", className: progressBarClasses, value: percent, max: max, style: { width: width } }),
         React.createElement("label", { htmlFor: "progress", className: styles['progress-bar-percentage'] }, showValue && (React.createElement(Typography, { variant: "Body1", color: '#9CA0A7', className: styles['progress-bar-percentage'] },
             percent,
             "%")))));

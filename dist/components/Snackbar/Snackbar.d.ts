@@ -17,7 +17,7 @@ export declare const icons: {
     warning: React.JSX.Element;
     info: React.JSX.Element;
 };
-export declare const title: {
+export declare const title: (lng: string) => {
     success: string;
     error: string;
     warning: string;

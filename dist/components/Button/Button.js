@@ -92,10 +92,14 @@ export const Button = ({ label, variant = 'fill', size = 'md', style, condition,
             '--button-disabled-color': variant === 'fill' || variant === 'link' ? `color-mix(in srgb, ${color} 80%, white)` : `color-mix(in srgb, ${color} 10%, transparent)`,
             '--button-disabled-textColor': variant === 'fill' ? `color-mix(in srgb, ${color} 80%, white)` : `color-mix(in srgb, ${color} 50%, transparent)`,
         } : {}, onClick: onClick, disabled: disabled, "aria-disabled": disabled, type: type, name: name ? name : label ? `button-${label}` : 'button', form: form },
-        btnIcon && (buttonStyle === 'icon' || buttonStyle === 'default') &&
-            React.cloneElement(btnIcon, {
+        btnIcon && (buttonStyle === 'icon' || buttonStyle === 'default') && (() => {
+            var _a;
+            const iconElement = btnIcon;
+            const defaultStrokeWidth = size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0';
+            return React.cloneElement(iconElement, {
                 htmlColor: iconColorStyle,
-                strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
-            }),
+                strokeWidth: (_a = iconElement.props.strokeWidth) !== null && _a !== void 0 ? _a : defaultStrokeWidth,
+            });
+        })(),
         (buttonStyle === 'text' || buttonStyle === 'default') && (React.createElement(Typography, { variant: "Body1" }, label ? label : typeof children === 'string' && children))));
 };

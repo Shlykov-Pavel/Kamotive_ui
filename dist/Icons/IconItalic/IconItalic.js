@@ -17,9 +17,9 @@ export const IconItalicToString = (color = 'inherit', htmlColor, strokeWidth, on
     <path
       d="M4.9375 1.25L11.5 1.25M1 11.75H7.5625M8.21875 1.25L4.28125 11.75"
       stroke="${htmlColor || "#55534E"}"
-      stroke-linecap="round"
+      strokeLinecap="round"
       stroke-linejoin="round"
-      stroke-width="${strokeWidth || '1'}"
+      strokeWidth="${strokeWidth || '1'}"
     />
   </svg>`;
 };

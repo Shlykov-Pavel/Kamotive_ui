@@ -23,7 +23,7 @@ const getElementFromRange = (range) => {
     const container = range.commonAncestorContainer;
     return container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
 };
-export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, helperText, files, required, className, isButtonDisabled, }) => {
+export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, helperText, canAttachFiles = false, files, required, className, isButtonDisabled, }) => {
     const editorRef = useRef(null);
     const uploaderRef = useRef(null);
     const submitButtonRef = useRef(null);
@@ -306,50 +306,55 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
             return prev.filter((f) => f.id !== fileId);
         });
     };
-    const getEditorActions = useCallback(() => [
-        {
-            name: 'bold',
-            icon: IconBoldToString('', '', '1.5'),
-            title: 'Bold (Ctrl+B)',
-            result: () => { },
-        },
-        {
-            name: 'italic',
-            icon: IconItalicToString('', '', '1.5'),
-            title: 'Italic (Ctrl+I)',
-            result: () => { },
-        },
-        {
-            name: 'underline',
-            icon: IconUnderlineToString('', '', '1.5'),
-            title: 'Underline (Ctrl+U)',
-            result: () => { },
-        },
-        {
-            name: 'strikethrough',
-            icon: IconStrikethroughToString('', '', '1.5'),
-            title: 'Strike-through',
-            result: () => { },
-        },
-        {
-            name: 'heading2',
-            icon: IconHeader2ToString('', '', '1.5'),
-            title: 'Heading 2',
-            result: () => { },
-        },
-        {
-            name: 'ulist',
-            icon: IconBulletlistToString(),
-            title: 'Bullet List',
-            result: () => { },
-        },
-        {
-            name: 'image',
-            icon: IconAttachToString('', '', '1.5'),
-            title: 'Upload Image',
-            result: () => { },
-        },
-    ], []);
+    const getEditorActions = useCallback(() => {
+        const baseActions = [
+            {
+                name: 'bold',
+                icon: IconBoldToString('', '', '1.5'),
+                title: 'Bold (Ctrl+B)',
+                result: () => { },
+            },
+            {
+                name: 'italic',
+                icon: IconItalicToString('', '', '1.5'),
+                title: 'Italic (Ctrl+I)',
+                result: () => { },
+            },
+            {
+                name: 'underline',
+                icon: IconUnderlineToString('', '', '1.5'),
+                title: 'Underline (Ctrl+U)',
+                result: () => { },
+            },
+            {
+                name: 'strikethrough',
+                icon: IconStrikethroughToString('', '', '1.5'),
+                title: 'Strike-through',
+                result: () => { },
+            },
+            {
+                name: 'heading2',
+                icon: IconHeader2ToString('', '', '1.5'),
+                title: 'Heading 2',
+                result: () => { },
+            },
+            {
+                name: 'ulist',
+                icon: IconBulletlistToString(),
+                title: 'Bullet List',
+                result: () => { },
+            },
+        ];
+        if (canAttachFiles) {
+            baseActions.push({
+                name: 'image',
+                icon: IconAttachToString('', '', '1.5'),
+                title: 'Upload Image',
+                result: () => { },
+            });
+        }
+        return baseActions;
+    }, [canAttachFiles]);
     const getEditorClasses = useCallback(() => ({
         actionbar: styles.pellActionbar,
         button: styles.pellButton,
@@ -393,11 +398,15 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
             editorRef.current.appendChild(actionbar);
         }
         const buttons = editorRef.current.querySelectorAll(`.${styles.pellButton}`);
-        const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'ulist', 'image'];
+        const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'ulist'];
+        if (canAttachFiles) {
+            commands.push('image');
+        }
         buttons.forEach((button, index) => {
             const command = commands[index];
             if (command) {
                 const htmlButton = button;
+                buttonRefs.current[command] = htmlButton;
                 htmlButton.setAttribute('data-command', command);
                 htmlButton.onclick = null;
                 htmlButton.addEventListener('mousedown', (e) => {
@@ -432,10 +441,10 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
     };
     const handleEditorChange = useCallback(() => {
         updateActiveStates();
-    }, []);
-    if (onChange && (editor === null || editor === void 0 ? void 0 : editor.content)) {
-        onChange(editor.content.innerHTML, attachedFiles);
-    }
+        if (onChange && (editor === null || editor === void 0 ? void 0 : editor.content)) {
+            onChange(editor.content.innerHTML, attachedFiles);
+        }
+    }, [onChange, editor, attachedFiles, updateActiveStates]);
     const handleSubmit = useCallback(() => {
         if (!(editor === null || editor === void 0 ? void 0 : editor.content)) {
             return;
@@ -469,6 +478,7 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
     };
     useEffect(() => {
         if (editorRef.current) {
+            editorRef.current.innerHTML = '';
             const pellEditor = initializePellEditor();
             pellEditor.content.innerHTML = defaultValue || '';
             setEditor(pellEditor);
@@ -487,6 +497,9 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
                 pellEditorContent.removeEventListener('keyup', handleKeyUp);
                 pellEditorContent.removeEventListener('mouseup', handleMouseUp);
                 pellEditorContent.removeEventListener('focus', handleFocus);
+                if (editorRef.current) {
+                    editorRef.current.innerHTML = '';
+                }
             };
         }
         document.addEventListener('keydown', handleKeyDown);
@@ -524,6 +537,6 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
         React.createElement("div", { className: inputClassess },
             attachedFiles.length > 0 && (React.createElement(AttachedFilesPreview, { files: attachedFiles, onDelete: (id) => removeAttachedFile(id), className: styles.attachedFilesContainer, isEdit: true })),
             React.createElement("div", { ref: editorRef }),
-            React.createElement("input", { ref: uploaderRef, type: "file", style: { display: 'none' }, multiple: true, onChange: handleUploadFiles, accept: ACCEPTED_FILE_TYPES })),
+            canAttachFiles && (React.createElement("input", { ref: uploaderRef, type: "file", style: { display: 'none' }, multiple: true, onChange: handleUploadFiles, accept: ACCEPTED_FILE_TYPES }))),
         error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText) }, helperText))));
 };
