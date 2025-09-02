@@ -30,13 +30,19 @@ const meta: Meta<TextEditorProps> = {
 
 export default meta;
 
-export const TooltipDefault = (argTypes: TextEditorProps): JSX.Element => <TextEditor {...argTypes} />;
-TooltipDefault.storyName = 'TextEditor по умолчанию';
-TooltipDefault.args = {};
+export const TextEditorDefault = (argTypes: TextEditorProps): JSX.Element => <TextEditor {...argTypes} />;
+TextEditorDefault.storyName = 'TextEditor по умолчанию';
+TextEditorDefault.args = {};
 
-export const TooltipWithError = (argTypes: TextEditorProps): JSX.Element => <TextEditor {...argTypes} />;
-TooltipWithError.storyName = 'TextEditor с ошибкой';
-TooltipWithError.args = {
+export const TextEditorWithFileAttach = (argTypes: TextEditorProps): JSX.Element => <TextEditor {...argTypes} />;
+TextEditorWithFileAttach.storyName = 'TextEditor с добавлением файлов';
+TextEditorWithFileAttach.args = {
+  canAttachFiles: true,
+};
+
+export const TextEditorWithError = (argTypes: TextEditorProps): JSX.Element => <TextEditor {...argTypes} />;
+TextEditorWithError.storyName = 'TextEditor с ошибкой';
+TextEditorWithError.args = {
   label: 'Введите текст',
   helperText: 'Текст ошибки',
   error: true,

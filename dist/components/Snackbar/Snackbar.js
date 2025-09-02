@@ -20,35 +20,40 @@ export const icons = {
     warning: React.createElement(IconWarning, { htmlColor: "#ff9500" }),
     info: React.createElement(IconInfo, { htmlColor: "#6F6F6F" }),
 };
-export const title = {
-    success: 'Успешно',
-    error: 'Ошибка',
-    warning: 'Внимание',
-    info: 'Информация',
-};
-export const Snackbar = ({ children, type, duration = 10000, icon = true, onClose, style }) => {
+export const title = (lng) => ({
+    success: lng === 'ru' ? 'Успешно' : 'Success',
+    error: lng === 'ru' ? 'Ошибка' : 'Error',
+    warning: lng === 'ru' ? 'Внимание' : 'Warning',
+    info: lng === 'ru' ? 'Информация' : 'Info',
+});
+export const Snackbar = ({ children, type, duration = 10000, icon = true, onClose, style, lng = 'ru' }) => {
     const [isVisible, setIsVisible] = useState(true);
+    const [isExiting, setIsExiting] = useState(false);
     useEffect(() => {
         if (duration > 0) {
             const timer = setTimeout(() => {
-                setIsVisible(false);
-                onClose === null || onClose === void 0 ? void 0 : onClose();
+                handleClose();
             }, duration);
             return () => clearTimeout(timer);
         }
     }, [duration, onClose]);
     const handleClose = () => {
-        setIsVisible(false);
-        onClose === null || onClose === void 0 ? void 0 : onClose();
+        setIsExiting(true);
+        setTimeout(() => {
+            setIsVisible(false);
+            onClose === null || onClose === void 0 ? void 0 : onClose();
+        }, 300);
     };
     if (!isVisible)
         return null;
-    const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`]);
+    const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`], {
+        [styles['snackbar-wrapper--exiting']]: isExiting
+    });
     return (React.createElement("div", { className: snackbarClasses, style: style },
         React.createElement("div", { className: styles['snackbar-textAndIcon'] },
             icon && icons[type],
             React.createElement("div", { className: styles['snackbar-text'] },
-                React.createElement(Typography, { variant: "Body1-Medium", color: 'var(--text-dark)' }, title[type]),
+                React.createElement(Typography, { variant: "Body1-Medium", color: 'var(--text-dark)' }, title(lng)[type]),
                 React.createElement(Typography, { variant: "Body1", color: 'var(--text-btn-light)' }, children))),
         React.createElement("button", { className: styles.button, onClick: handleClose },
             React.createElement(IconClose, { htmlColor: 'var(--text-btn-light)' }))));

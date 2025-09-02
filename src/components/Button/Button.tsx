@@ -134,11 +134,15 @@ export const Button: React.FC<ButtonProps> = ({
       name={name ? name : label ? `button-${label}` : 'button'}
       form={form}
       >
-      {btnIcon && (buttonStyle === 'icon' || buttonStyle === 'default') &&
-        React.cloneElement(btnIcon as React.ReactElement, {
+      {btnIcon && (buttonStyle === 'icon' || buttonStyle === 'default') && (() => {
+        const iconElement = btnIcon as React.ReactElement;
+        const defaultStrokeWidth = size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0';
+        
+        return React.cloneElement(iconElement, {
           htmlColor: iconColorStyle,
-          strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
-        })}
+          strokeWidth: iconElement.props.strokeWidth ?? defaultStrokeWidth,
+        });
+      })()}
       {(buttonStyle === 'text' || buttonStyle === 'default') && (
         <Typography variant="Body1">{label ? label : typeof children === 'string' && children}</Typography>
       )}

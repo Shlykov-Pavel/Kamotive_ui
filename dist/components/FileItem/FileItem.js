@@ -7,7 +7,7 @@ import { IconClose, IconDownload, IconFile } from '../../Icons';
 import { Tooltip } from '../Tooltip/Tooltip';
 import classNames from 'classnames';
 import { formatFileSize } from '../AttachedFilesPreview/AttachedFilesPreview';
-export const FileItem = ({ file, loading = false, error = '', onDownload, onDelete, canDelete = true, canDownload = true, style, isAddedFile, isRejectedFile, }) => {
+export const FileItem = ({ file, loading = false, error = '', onDownload, onDelete, canDelete = true, canDownload = true, style, isAddedFile, isRejectedFile, progressBarWidth }) => {
     const [isLoadingFinished, setIsLoadingFinished] = useState(false);
     const [animationDuration, setAnimationDuration] = useState(0);
     const [maxLength, setMaxLength] = useState(30);
@@ -107,6 +107,6 @@ export const FileItem = ({ file, loading = false, error = '', onDownload, onDele
             React.createElement("div", { className: styles['fileItemActions'] },
                 !(isAddedFile || isRejectedFile) && canDownload && (React.createElement(IconButton, { className: styles.fileIcon, icon: React.createElement(IconDownload, null), onClick: (e) => handleDownloadClick(e, file), color: "var(--icons-grey)", size: "sm" })),
                 canDelete && (React.createElement(IconButton, { className: styles.fileIcon, icon: React.createElement(IconClose, null), onClick: (e) => handleDeleteClick(e, file.id || ''), color: "var(--icons-grey)", size: "sm" })))),
-        loading && !isLoadingFinished && (React.createElement(ProgressBar, { animated: true, size: "sm", value: 100, setIsLoadingFinished: setIsLoadingFinished, animationDuration: animationDuration })),
+        loading && !isLoadingFinished && (React.createElement(ProgressBar, { animated: true, size: "sm", value: 100, setIsLoadingFinished: setIsLoadingFinished, animationDuration: animationDuration, width: progressBarWidth })),
         error && (React.createElement(Typography, { variant: "Caption", color: "var(--error-main)" }, error))));
 };

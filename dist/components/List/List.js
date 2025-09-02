@@ -5,7 +5,7 @@ import { Typography } from '../Typography/Typography';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { RadioButton } from '../RadioButton/RadioButton';
 import { ChevronDown } from '../../Icons';
-export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selected = false, disabled = false, label, id, style, className, collapsible = false, open = false, withCheckbox = false, checkboxColor, checkboxFilled, withRadioButton = false, customBullet, customItemBullet, bulletClassName, children, isHeader = false, parentChecked = false, }) => {
+export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selected = false, disabled = false, label, id, style, className, collapsible = false, open = false, withCheckbox = false, checkboxColor, checkboxFilled, withRadioButton = false, customBullet, customItemBullet, bulletClassName, titleContent, children, isHeader = false, parentChecked = false, }) => {
     const [isOpen, setIsOpen] = useState(open);
     const [isChecked, setIsChecked] = useState(checked || parentChecked);
     const childIds = [];
@@ -57,14 +57,15 @@ export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selecte
     const headerClassNames = classNames(styles.header, className);
     const contentClassNames = classNames(styles.content, isOpen ? styles['content--expanded'] : styles['content--collapsed']);
     return (React.createElement("div", { className: styles.collapsibleList },
-        label && (React.createElement("div", { className: headerClassNames, onClick: handleClick, style: style },
+        label || titleContent && (React.createElement("div", { className: headerClassNames, onClick: handleClick, style: style },
             !isHeader && (React.createElement("div", null,
                 withCheckbox && (React.createElement("span", { onClick: handleCheckboxClick },
                     React.createElement(Checkbox, { checked: isChecked, color: checkboxColor, filled: checkboxFilled, disabled: disabled }))),
                 withRadioButton && (React.createElement("span", { onClick: handleRadioClick },
                     React.createElement(RadioButton, { checked: selected, value: id, disabled: disabled }))),
                 customBullet && React.createElement("span", { className: classNames(styles.bullet, bulletClassName) }, customBullet))),
-            React.createElement(Typography, { variant: "Body1" }, label),
+            label && React.createElement(Typography, { variant: "Body1" }, label),
+            titleContent,
             collapsible && (React.createElement("span", { className: styles.indicator }, isOpen ? React.createElement(ChevronDown, null) : React.createElement(ChevronDown, { rotation: 270 }))))),
         React.createElement("div", { className: collapsible ? contentClassNames : styles.content, style: { paddingLeft: !label ? 0 : '16px' } }, React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {

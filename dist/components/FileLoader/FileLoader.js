@@ -9,7 +9,7 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx'],
-}, addedFiles, setAddedFiles, filesList = [], canAdd = true, lng = 'ru', className, style, fileValidator }) => {
+}, addedFiles, setAddedFiles, filesList = [], canAdd = true, lng = 'ru', className, style, fileValidator, progressBarWidth }) => {
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [loadingFilesNames, setLoadingFilesNames] = useState([]);
     const [errorFiles, setErrorFiles] = useState([]);
@@ -42,6 +42,22 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                 code: 'files-count-too-large',
                 message: lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
             };
+        }
+        if (acceptedFormats) {
+            const acceptedExtensions = Object.values(acceptedFormats)
+                .reduce((acc, val) => acc.concat(val), []);
+            const fileParts = file.name.split('.');
+            const fileExtension = fileParts.length > 1
+                ? `.${fileParts.pop().toLowerCase()}`
+                : '';
+            if (!acceptedExtensions.includes(fileExtension)) {
+                return {
+                    code: 'file-invalid-type',
+                    message: lng === 'ru' || lng.includes('ru')
+                        ? `Файл должен быть одного из следующих типов: ${acceptedExtensions.join(', ')}`
+                        : `File must be one of: ${acceptedExtensions.join(', ')}`,
+                };
+            }
         }
         if (fileValidator) {
             const customValidationResult = fileValidator(file);
@@ -113,7 +129,7 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
             }
         },
         validator: fileValidatorInner,
-        accept: acceptedFormats,
+        accept: undefined,
         maxFiles: maxFileCount,
         disabled: !canAdd,
     });
@@ -125,7 +141,7 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
         setLoadingFilesNames(loadingFilesNames.filter((id) => id !== id));
     };
     const acceptedFileItems = addedFilesFormated.map((file) => {
-        return (React.createElement(FileItem, { key: file.id, file: file, loading: loadingFilesNames.includes(file.filename), onDelete: handleDeleteFiles, isAddedFile: true }));
+        return (React.createElement(FileItem, { key: file.id, file: file, loading: loadingFilesNames.includes(file.filename), onDelete: handleDeleteFiles, isAddedFile: true, progressBarWidth: progressBarWidth }));
     });
     const handleDeleteRejectedFile = (id) => {
         setErrorFiles(errorFiles.filter((rejection) => rejection.file.id !== id));

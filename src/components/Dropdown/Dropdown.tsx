@@ -308,7 +308,7 @@ export const Dropdown: FC<DropdownProps> = ({
   onClose,
   clearable = true,
   enableAutocomplete = false,
-  noOptionsText,
+  noOptionsText = 'Нет вариантов для выбора',
   lng = 'ru',
 }) => {
   const [isOpen, setIsOpen] = useState(isOpened);
@@ -532,7 +532,7 @@ export const Dropdown: FC<DropdownProps> = ({
             placeholder={
               getComparisonValue(selectedItem, getOptionLabel)
                 ? getComparisonValue(selectedItem, getOptionLabel).toString()
-                : lng === 'ru' || lng.includes('ru') ? 'Поиск...' : 'Search...'
+                : lng === 'ru' ? 'Поиск...' : 'Search...'
             }
             onClick={(e) => {
               e.stopPropagation();

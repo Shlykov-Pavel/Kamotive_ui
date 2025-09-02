@@ -5,7 +5,7 @@
     right: 0;
     bottom: 0;
     background-color: var(--dialog-overlay);
-    z-index: 999;
+    z-index: 1400;
 }
 .dialog {
     border: none;
@@ -13,7 +13,7 @@
     box-shadow: 0px 4px 16px var(--dialog-overlay);
     padding: 30px;
     background-color: var(--white);
-    z-index: 1000;
+    z-index: 1401;
     position: fixed; 
     top: 50%; 
     left: 50%; 
