@@ -496,7 +496,7 @@ export const Dropdown: FC<DropdownProps> = ({
 
     if (required) {
       setErrorInput(true);
-      setErrorInputHelperText(helperText ?? lng === 'ru' ? 'Поле обязательно для заполнения' : 'Field is required');
+      setErrorInputHelperText((helperText ?? lng === 'ru') ? 'Поле обязательно для заполнения' : 'Field is required');
     }
   };
 
@@ -557,7 +557,7 @@ export const Dropdown: FC<DropdownProps> = ({
         ) : selectedItem ? (
           getComparisonValue(selectedItem, getOptionLabel)
         ) : (
-          searchValue || (placeholder ?? label ?? lng === 'ru' ? 'Выберите значение' : 'Select value')
+          searchValue || (placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value'))
         )}
       </div>
     );
@@ -601,7 +601,9 @@ export const Dropdown: FC<DropdownProps> = ({
           })
         ) : (
           <div className={`${styles['item-container']} ${styles['item-block']}`} style={{ paddingLeft: '15px' }}>
-            {lng === 'ru' || lng.includes('ru') ? noOptionsText || 'Нет вариантов для выбора' : noOptionsText || 'No options to select' }
+            {lng === 'ru' || lng.includes('ru')
+              ? noOptionsText || 'Нет вариантов для выбора'
+              : noOptionsText || 'No options to select'}
           </div>
         )}
       </div>
