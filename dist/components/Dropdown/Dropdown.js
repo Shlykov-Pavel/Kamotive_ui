@@ -367,7 +367,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 }, onBlur: (e) => {
                     e.stopPropagation();
                     onBlur === null || onBlur === void 0 ? void 0 : onBlur(e);
-                }, onKeyDown: handleKeyDown, autoFocus: true })) : selectedItem ? (getComparisonValue(selectedItem, getOptionLabel)) : (searchValue || (((_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : lng === 'ru') ? 'Выберите значение' : 'Select value'))));
+                }, onKeyDown: handleKeyDown, autoFocus: true })) : selectedItem ? (getComparisonValue(selectedItem, getOptionLabel)) : (searchValue || ((_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : (lng === 'ru' ? 'Выберите значение' : 'Select value')))));
         return showSelectedTooltip ? (React.createElement("div", { className: styles.textField },
             React.createElement(Tooltip, { label: ((_b = getComparisonValue(selectedItem, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left", style: { width: '100% !important' } }, textFieldContent))) : (textFieldContent);
     };
@@ -376,7 +376,9 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         const menu = isOpen && (React.createElement("div", { className: dropdownClassess }, optionsToRender && optionsToRender.length > 0 ? (optionsToRender.map((optionsToRender, index) => {
             var _a;
             return (React.createElement(DropdownListItem, { key: (_a = optionsToRender === null || optionsToRender === void 0 ? void 0 : optionsToRender.key) !== null && _a !== void 0 ? _a : index, item: optionsToRender, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, variant: variant, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index }));
-        })) : (React.createElement("div", { className: `${styles['item-container']} ${styles['item-block']}`, style: { paddingLeft: '15px' } }, lng === 'ru' || lng.includes('ru') ? noOptionsText || 'Нет вариантов для выбора' : noOptionsText || 'No options to select'))));
+        })) : (React.createElement("div", { className: `${styles['item-container']} ${styles['item-block']}`, style: { paddingLeft: '15px' } }, lng === 'ru' || lng.includes('ru')
+            ? noOptionsText || 'Нет вариантов для выбора'
+            : noOptionsText || 'No options to select'))));
         return isOpen ? menu : null;
     };
     useEffect(() => {
