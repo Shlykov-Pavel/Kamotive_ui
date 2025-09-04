@@ -649,6 +649,8 @@ export interface LinkProps {
     className?: string;
     /** Стили передаваемые напрямую */
     style?: CSSProperties;
+    /** Стили текста */
+    contentStyle?: CSSProperties;
     /**Подчеркивание */
     underline?: 'hover' | 'underline' | 'none';
     /** Вариант шрифта */

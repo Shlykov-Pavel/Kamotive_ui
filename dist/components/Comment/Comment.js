@@ -4,12 +4,13 @@ import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
 import { TextEditor } from '../TextEditor/TextEditor';
 import { AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
-import { IconDeleteFilled, IconPencilFilled } from '../../Icons';
+import { IconAccount, IconDeleteFilled, IconPencilFilled } from '../../Icons';
 import { IconButton } from '../IconButton/IconButton';
 export const Comment = ({ id, value, style, className, username, avatar, creationDate, canAttachFiles = false, files = [], canEdit = false, isEdit = false, label, error = false, helperText, onChange, onSubmit, onDelete, }) => {
     const [commentText, setCommentText] = useState(value || '');
     const [isEditMode, setIsEditMode] = useState(isEdit);
     const [attachedFiles, setAttachedFiles] = useState(files);
+    const [imageError, setImageError] = useState(false);
     const wrapperClassess = classNames(styles['wrapper--input'], className, {
         [styles['wrapper--input-label']]: label,
         [styles['wrapper--input-helperText']]: error,
@@ -38,7 +39,8 @@ export const Comment = ({ id, value, style, className, username, avatar, creatio
     return (React.createElement("div", { className: wrapperClassess, style: style },
         React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between' } },
             React.createElement("div", { className: styles.labelWrapper },
-                React.createElement("div", { className: "profile" }, avatar ? (React.createElement("img", { src: avatar, alt: "Avatar", className: styles.avatar })) : (React.createElement("div", { className: styles.avatar }, "\uD83D\uDC64"))),
+                React.createElement("div", { className: styles.flexBox }, avatar && !imageError ? (React.createElement("img", { src: avatar, alt: "Avatar", className: styles.avatar, onError: () => setImageError(true) })) : (React.createElement("div", { className: `${styles.avatar} ${styles.avatarIcon} ${styles.flexBox}` },
+                    React.createElement(IconAccount, null)))),
                 React.createElement("div", { className: styles.infoWrapper },
                     React.createElement(Typography, { variant: "Body2-Medium", className: labelClasses }, username),
                     React.createElement(Typography, { variant: "Caption", className: styles.label, style: { color: '#8E8E93' } }, creationDate))),
