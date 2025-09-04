@@ -5,6 +5,7 @@ import { Typography } from '../Typography/Typography';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { RadioButton } from '../RadioButton/RadioButton';
 import { ChevronDown } from '../../Icons';
+import { ListItem } from '../ListItem/ListItem';
 export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selected = false, disabled = false, label, id, style, className, collapsible = false, open = false, withCheckbox = false, checkboxColor, checkboxFilled, withRadioButton = false, customBullet, customItemBullet, bulletClassName, titleContent, children, isHeader = false, parentChecked = false, }) => {
     const [isOpen, setIsOpen] = useState(open);
     const [isChecked, setIsChecked] = useState(checked || parentChecked);
@@ -37,7 +38,7 @@ export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selecte
         const newCheckedState = !isChecked;
         setIsChecked(newCheckedState);
         if (onCheck) {
-            onCheck(id || "", newCheckedState);
+            onCheck(id || '', newCheckedState);
         }
         if (childIds.length > 0 && onCheck) {
             childIds.forEach((childId) => {
@@ -69,23 +70,18 @@ export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selecte
             collapsible && (React.createElement("span", { className: styles.indicator }, isOpen ? React.createElement(ChevronDown, null) : React.createElement(ChevronDown, { rotation: 270 }))))),
         React.createElement("div", { className: collapsible ? contentClassNames : styles.content, style: { paddingLeft: !label ? 0 : '16px' } }, React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
-                return React.cloneElement(child, {
-                    bulletClassName: classNames(styles.bullet, child.props.bulletClassName || bulletClassName),
-                    customBullet: child.props.customBullet !== undefined
-                        ? child.props.customBullet
-                        : customItemBullet !== undefined
-                            ? customItemBullet
-                            : customBullet,
-                    withCheckbox: child.props.withCheckbox !== undefined ? child.props.withCheckbox : withCheckbox,
-                    checkboxFilled: child.props.checkboxFilled !== undefined ? child.props.checkboxFilled : checkboxFilled,
-                    withRadioButton: child.props.withRadioButton !== undefined ? child.props.withRadioButton : withRadioButton,
-                    onCheck: handleChildCheck,
-                    onRadioSelect: handleChildRadioSelect,
-                    parentChecked: isChecked,
-                    selected: child.props.selected,
+                const commonProps = {
                     style: child.props.style || style,
                     className: child.props.className,
-                });
+                };
+                if (child.type === ListItem || child.type === List) {
+                    return React.cloneElement(child, Object.assign(Object.assign({}, commonProps), { bulletClassName: classNames(styles.bullet, child.props.bulletClassName || bulletClassName), customBullet: child.props.customBullet !== undefined
+                            ? child.props.customBullet
+                            : customItemBullet !== undefined
+                                ? customItemBullet
+                                : customBullet, withCheckbox: child.props.withCheckbox !== undefined ? child.props.withCheckbox : withCheckbox, checkboxFilled: child.props.checkboxFilled !== undefined ? child.props.checkboxFilled : checkboxFilled, withRadioButton: child.props.withRadioButton !== undefined ? child.props.withRadioButton : withRadioButton, onCheck: handleChildCheck, onRadioSelect: handleChildRadioSelect, parentChecked: isChecked, selected: child.props.selected }));
+                }
+                return React.cloneElement(child, commonProps);
             }
             return child;
         }))));

@@ -39,6 +39,18 @@
 	object-fit: cover;
 }
 
+.avatarIcon {
+	background-color: var(--grey-extraLight);
+	border-radius: 25px;
+	border: none;
+}
+
+.flexBox {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
 .input {
 	font-family: var(--font-family-content);
 	font-style: normal;
