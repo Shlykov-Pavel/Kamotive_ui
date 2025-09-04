@@ -49,26 +49,37 @@ const meta: Meta<typeof Comment> = {
 
 export default meta;
 
+const value =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ipsum erat, vehicula at euismod et, tempor sit amet lacus. Vestibulum ac aliquam ligula, quis auctor massa. Integer dignissim eget mi nec dictum. Praesent posuere sed risus eget luctus. Phasellus nec luctus erat. Nam eu mauris malesuada, congue dui non, pretium nunc. Nunc viverra est et metus malesuada, in semper nisi ultricies. Sed erat lorem, efficitur sit amet ultrices nec, tempor et elit. Maecenas non bibendum mi. Suspendisse rhoncus aliquet nibh a tincidunt. Aenean lobortis faucibus ultricies.';
+
 export const CommentDefault = (argTypes: CommentProps): JSX.Element => {
-  const value = (
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ipsum erat, vehicula at euismod et, tempor sit amet lacus. Vestibulum ac aliquam ligula, quis auctor massa. Integer dignissim eget mi nec dictum. Praesent posuere sed risus eget luctus. Phasellus nec luctus erat. Nam eu mauris malesuada, congue dui non, pretium nunc. Nunc viverra est et metus malesuada, in semper nisi ultricies. Sed erat lorem, efficitur sit amet ultrices nec, tempor et elit. Maecenas non bibendum mi. Suspendisse rhoncus aliquet nibh a tincidunt. Aenean lobortis faucibus ultricies.'
-  );
   return <Comment value={value} {...argTypes} />;
 };
 CommentDefault.storyName = 'Comment по умолчанию';
 
 export const CommentEditable = (argTypes: CommentProps): JSX.Element => {
-  const value = (
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ipsum erat, vehicula at euismod et, tempor sit amet lacus. Vestibulum ac aliquam ligula, quis auctor massa. Integer dignissim eget mi nec dictum. Praesent posuere sed risus eget luctus. Phasellus nec luctus erat. Nam eu mauris malesuada, congue dui non, pretium nunc. Nunc viverra est et metus malesuada, in semper nisi ultricies. Sed erat lorem, efficitur sit amet ultrices nec, tempor et elit. Maecenas non bibendum mi. Suspendisse rhoncus aliquet nibh a tincidunt. Aenean lobortis faucibus ultricies.'
-  );
-  return <Comment value={value} {...argTypes} canEdit />;
+  return <Comment value={value} {...argTypes} />;
+};
+CommentEditable.args = {
+  canEdit: true,
 };
 CommentEditable.storyName = 'Comment с возможностью редактировать';
 
 export const CommentEditableWithFiles = (argTypes: CommentProps): JSX.Element => {
-  const value = (
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ipsum erat, vehicula at euismod et, tempor sit amet lacus. Vestibulum ac aliquam ligula, quis auctor massa. Integer dignissim eget mi nec dictum. Praesent posuere sed risus eget luctus. Phasellus nec luctus erat. Nam eu mauris malesuada, congue dui non, pretium nunc. Nunc viverra est et metus malesuada, in semper nisi ultricies. Sed erat lorem, efficitur sit amet ultrices nec, tempor et elit. Maecenas non bibendum mi. Suspendisse rhoncus aliquet nibh a tincidunt. Aenean lobortis faucibus ultricies.'
-  );
-  return <Comment value={value} {...argTypes} canEdit canAttachFiles />;
+  return <Comment value={value} {...argTypes} />;
+};
+CommentEditableWithFiles.args = {
+  canEdit: true,
+  canAttachFiles: true,
 };
 CommentEditableWithFiles.storyName = 'Comment с возможностью прикреплять файлы';
+
+export const CommentEditableWithoutAvatar = (argTypes: CommentProps): JSX.Element => {
+  return <Comment value={value} {...argTypes} />;
+};
+CommentEditableWithoutAvatar.args = {
+  avatar: '',
+  canEdit: true,
+  canAttachFiles: true,
+};
+CommentEditableWithoutAvatar.storyName = 'Comment без аватара';
