@@ -6,6 +6,7 @@ import { Typography } from '../Typography/Typography';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { RadioButton } from '../RadioButton/RadioButton';
 import { ChevronDown } from '../../Icons';
+import { ListItem } from '../ListItem/ListItem';
 
 export const List: FC<ListProps> = ({
   onClick,
@@ -71,7 +72,7 @@ export const List: FC<ListProps> = ({
     setIsChecked(newCheckedState);
 
     if (onCheck) {
-      onCheck(id || "", newCheckedState);
+      onCheck(id || '', newCheckedState);
     }
 
     if (childIds.length > 0 && onCheck) {
@@ -130,25 +131,33 @@ export const List: FC<ListProps> = ({
       <div className={collapsible ? contentClassNames : styles.content} style={{ paddingLeft: !label ? 0 : '16px' }}>
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
-            return React.cloneElement(child, {
-              bulletClassName: classNames(styles.bullet, child.props.bulletClassName || bulletClassName),
-              customBullet:
-                child.props.customBullet !== undefined
-                  ? child.props.customBullet
-                  : customItemBullet !== undefined
-                    ? customItemBullet
-                    : customBullet,
-              withCheckbox: child.props.withCheckbox !== undefined ? child.props.withCheckbox : withCheckbox,
-              checkboxFilled: child.props.checkboxFilled !== undefined ? child.props.checkboxFilled : checkboxFilled,
-              withRadioButton:
-                child.props.withRadioButton !== undefined ? child.props.withRadioButton : withRadioButton,
-              onCheck: handleChildCheck,
-              onRadioSelect: handleChildRadioSelect,
-              parentChecked: isChecked,
-              selected: child.props.selected,
+            const commonProps = {
               style: child.props.style || style,
               className: child.props.className,
-            });
+            };
+
+            if (child.type === ListItem || child.type === List) {
+              return React.cloneElement(child, {
+                ...commonProps,
+                bulletClassName: classNames(styles.bullet, child.props.bulletClassName || bulletClassName),
+                customBullet:
+                  child.props.customBullet !== undefined
+                    ? child.props.customBullet
+                    : customItemBullet !== undefined
+                      ? customItemBullet
+                      : customBullet,
+                withCheckbox: child.props.withCheckbox !== undefined ? child.props.withCheckbox : withCheckbox,
+                checkboxFilled: child.props.checkboxFilled !== undefined ? child.props.checkboxFilled : checkboxFilled,
+                withRadioButton:
+                  child.props.withRadioButton !== undefined ? child.props.withRadioButton : withRadioButton,
+                onCheck: handleChildCheck,
+                onRadioSelect: handleChildRadioSelect,
+                parentChecked: isChecked,
+                selected: child.props.selected,
+              });
+            }
+
+            return React.cloneElement(child, commonProps);
           }
           return child;
         })}
