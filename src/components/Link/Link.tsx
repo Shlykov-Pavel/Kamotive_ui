@@ -14,6 +14,7 @@ export const Link: FC<LinkProps> = ({
   title,
   className,
   style,
+  contentStyle,
   underline = 'hover',
   variant = ETypographyVariants.Body1,
   color = 'var(--text-dark)',
@@ -51,7 +52,7 @@ export const Link: FC<LinkProps> = ({
   }, [actualSize, widthInPixels, size]);
 
   const linkContent = (
-    <Typography variant={variant} color={color}>
+    <Typography variant={variant} color={color} style={contentStyle}>
       {children}
     </Typography>
   );
