@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
 import { TextEditor } from '../TextEditor/TextEditor';
 import { FilePreview, AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
-import { IconDeleteFilled, IconPencilFilled } from '../../Icons';
+import { IconAccount, IconDeleteFilled, IconPencilFilled } from '../../Icons';
 import { IconButton } from '../IconButton/IconButton';
 import { CommentProps } from '../../types';
 
@@ -30,6 +30,7 @@ export const Comment: FC<CommentProps> = ({
   const [commentText, setCommentText] = useState(value || '');
   const [isEditMode, setIsEditMode] = useState(isEdit);
   const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files);
+  const [imageError, setImageError] = useState(false);
 
   const wrapperClassess = classNames(styles['wrapper--input'], className, {
     [styles['wrapper--input-label']]: label,
@@ -66,11 +67,13 @@ export const Comment: FC<CommentProps> = ({
     <div className={wrapperClassess} style={style}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div className={styles.labelWrapper}>
-          <div className="profile">
-            {avatar ? (
-              <img src={avatar} alt="Avatar" className={styles.avatar} />
+          <div className={styles.flexBox}>
+            {avatar && !imageError ? (
+              <img src={avatar} alt="Avatar" className={styles.avatar} onError={() => setImageError(true)} />
             ) : (
-              <div className={styles.avatar}>👤</div>
+              <div className={`${styles.avatar} ${styles.avatarIcon} ${styles.flexBox}`}>
+                <IconAccount />
+              </div>
             )}
           </div>
           <div className={styles.infoWrapper}>
