@@ -47,3 +47,5 @@ export { IconPencilFilled } from './IconPencilFilled/IconPencilFilled';
 export { IconDeleteFilled } from './IconDeleteFilled/IconDeleteFilled';
 export { IconShare } from './IconShare/IconShare';
 export { IconMultiselect } from './IconMultiselect/IconMultiselect';
+export { IconSearch } from './IconSearch/IconSearch';
+export { IconFilter } from './IconFilter/IconFilter';
