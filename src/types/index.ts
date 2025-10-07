@@ -610,6 +610,8 @@ export interface TooltipProps {
   className?: string;
   /** Стиль подсказки */
   style?: CSSProperties;
+  /** Стиль контейнера */
+  wrapperStyle?: CSSProperties
   /** Положение подсказки */
   overlayChildren?: boolean;
   /** Размер текста */

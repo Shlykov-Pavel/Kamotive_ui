@@ -22,6 +22,7 @@ export const Tooltip: FC<TooltipProps> = ({
 	children,
 	className,
 	style,
+	wrapperStyle,
 	overlayChildren = false,
 	textSize = 'sm',
 	position = 'none',
@@ -265,6 +266,7 @@ export const Tooltip: FC<TooltipProps> = ({
 				onMouseLeave={handleMouseLeave}
 				onMouseMove={handleMouseMove}
 				className={styles.wrapper}
+				style={wrapperStyle}
 				ref={childrenRef}
 			>
 				{children}
