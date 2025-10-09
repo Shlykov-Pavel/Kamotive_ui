@@ -87,8 +87,8 @@ export const Comment: FC<CommentProps> = ({
         </div>
         {canEdit && (
           <div className={styles.iconsWrapper}>
-            <IconButton icon={<IconPencilFilled />} onClick={handleEditClick} size="sm" style={{ aspectRatio: 0 }} />
-            <IconButton icon={<IconDeleteFilled />} onClick={handleDeleteClick} size="sm" style={{ aspectRatio: 0 }} />
+            <IconButton icon={<IconPencilFilled />} onClick={handleEditClick} size="sm" style={{ aspectRatio: 0, width: '30px', height: '30px' }} />
+            <IconButton icon={<IconDeleteFilled />} onClick={handleDeleteClick} size="sm" style={{ aspectRatio: 0, width: '30px', height: '30px' }} />
           </div>
         )}
       </div>
