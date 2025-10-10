@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 
 import styles from './Tabs.module.css';
 
-export const Tabs: FC<TabsProps> = ({ value, onChange, children, style, className }) => {
+export const Tabs: FC<TabsProps> = ({ value, onChange, children, style, className, tabContentStyle }) => {
   const selectedTabContent = children?.find((child) => child.props.value === value)?.props.children;
 
   const handleTabChange = (newValue?: string) => {
@@ -24,7 +24,7 @@ export const Tabs: FC<TabsProps> = ({ value, onChange, children, style, classNam
           })
         )}
       </div>
-      <div role="tabpanel" aria-labelledby={value}>
+      <div role="tabpanel" aria-labelledby={value} style={tabContentStyle}>
         {selectedTabContent}
       </div>
     </>
