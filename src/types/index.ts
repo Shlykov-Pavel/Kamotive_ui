@@ -488,6 +488,8 @@ export interface FileLoaderProps {
   maxFileCount?: number;
   /**Поддерживаемые форматы файлов */
   acceptedFormats?: Accept;
+  /** Неподдерживаемые форматы файлов */
+  rejectedFormats?: Accept;
   /**Добавленные файлы */
   addedFiles: File[];
   /**Сосотояние для добавления файлов */
@@ -506,6 +508,11 @@ export interface FileLoaderProps {
   fileValidator?: (file: File) => FileError | FileError[] | null;
   /** Ширина прогресс бара */
   progressBarWidth?: string;
+}
+
+export interface FileLoaderHandle {
+  clearErrorFiles: () => void;
+  clearAllFiles: () => void;
 }
 
 export interface DialogProps {
