@@ -353,8 +353,6 @@ export interface TabsProps {
   style?: CSSProperties;
   /** Дополнительный класс */
   className?: string;
-  /** Стили для контента */
-  tabContentStyle?: CSSProperties;
 }
 
 export interface ColorPickerProps {
