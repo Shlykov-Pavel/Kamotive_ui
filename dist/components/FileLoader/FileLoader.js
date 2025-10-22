@@ -1,19 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styles from './FileLoader.module.css';
 import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';
 import { FileItem } from '../FileItem/FileItem';
 import classNames from 'classnames';
-export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats = {
+export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx'],
-}, addedFiles, setAddedFiles, filesList = [], canAdd = true, lng = 'ru', className, style, fileValidator, progressBarWidth }) => {
+}, rejectedFormats, addedFiles, setAddedFiles, filesList = [], canAdd = true, lng = 'ru', className, style, fileValidator, progressBarWidth }, ref) => {
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [loadingFilesNames, setLoadingFilesNames] = useState([]);
     const [errorFiles, setErrorFiles] = useState([]);
     const [addedFilesFormated, setAddedFilesFormatted] = useState([]);
+    useImperativeHandle(ref, () => ({
+        clearErrorFiles: () => {
+            setErrorFiles([]);
+        },
+        clearAllFiles: () => {
+            setErrorFiles([]);
+            setAddedFiles([]);
+            setAddedFilesFormatted([]);
+            setLoadingFilesNames([]);
+        }
+    }));
     const fileValidatorInner = (file) => {
         if (file.size > maxFileSize * 1024 * 1024 * 1024) {
             return {
@@ -43,7 +54,7 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                 message: lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
             };
         }
-        if (acceptedFormats) {
+        if (acceptedFormats && !rejectedFormats) {
             const acceptedExtensions = Object.values(acceptedFormats)
                 .reduce((acc, val) => acc.concat(val), []);
             const fileParts = file.name.split('.');
@@ -56,6 +67,22 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                     message: lng === 'ru' || lng.includes('ru')
                         ? `Файл должен быть одного из следующих типов: ${acceptedExtensions.join(', ')}`
                         : `File must be one of: ${acceptedExtensions.join(', ')}`,
+                };
+            }
+        }
+        if (rejectedFormats) {
+            const rejectedExtensions = Object.values(rejectedFormats)
+                .reduce((acc, val) => acc.concat(val), []);
+            const fileParts = file.name.split('.');
+            const fileExtension = fileParts.length > 1
+                ? `.${fileParts.pop().toLowerCase()}`
+                : '';
+            if (rejectedExtensions.includes(fileExtension)) {
+                return {
+                    code: 'file-invalid-type',
+                    message: lng === 'ru' || lng.includes('ru')
+                        ? `Файл не должен быть одного из следующих типов: ${getAcceptedFormatsString(rejectedFormats)}`
+                        : `File must not be one of: ${getAcceptedFormatsString(rejectedFormats)}`,
                 };
             }
         }
@@ -149,13 +176,15 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
     const fileRejectionItems = errorFiles.map(({ file, errors }) => (React.createElement(FileItem, { key: file.id, file: file, error: errors[0].message, onDelete: handleDeleteRejectedFile, isRejectedFile: true })));
     // Функция для получения всех доступных форматов в виде строки
     const getAcceptedFormatsString = (acceptedFormats) => {
-        const formats = [];
+        const uniqueFormats = new Set();
         for (const key in acceptedFormats) {
             if (acceptedFormats.hasOwnProperty(key)) {
-                formats.push(...acceptedFormats[key].map((format) => format.replace('.', '')));
+                acceptedFormats[key].forEach((format) => {
+                    uniqueFormats.add(format.replace('.', ''));
+                });
             }
         }
-        return formats.join(', ');
+        return Array.from(uniqueFormats).join(', ');
     };
     useEffect(() => {
         if (addedFiles.length === 0) {
@@ -189,9 +218,9 @@ export const FileLoader = ({ maxFileSize = 2, maxFileCount = 10, acceptedFormats
                         React.createElement("br", null)))),
                 maxFileCount &&
                     (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`)) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `You can upload ${maxFileCount} ${maxFileCount > 1 ? `files` : `file`}`))))),
-        acceptedFormats &&
-            (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`)) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `Supported formats: ${getAcceptedFormatsString(acceptedFormats)}`))),
+        acceptedFormats && !rejectedFormats && (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `${lng === 'ru' || lng.includes('ru') ? 'Поддерживаемые форматы:' : 'Supported formats:'} ${getAcceptedFormatsString(acceptedFormats)}`)),
+        rejectedFormats && (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `${lng === 'ru' || lng.includes('ru') ? 'Неподдерживаемые форматы:' : 'Unsupported formats:'} ${getAcceptedFormatsString(rejectedFormats)}`)),
         (addedFiles === null || addedFiles === void 0 ? void 0 : addedFiles.length) > 0 || (errorFiles === null || errorFiles === void 0 ? void 0 : errorFiles.length) > 0 ? (React.createElement("div", { className: styles['addedFiles'] },
             acceptedFileItems,
             fileRejectionItems)) : lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, "\u0424\u0430\u0439\u043B\u044B \u043D\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B")) : (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, "Files not added"))));
-};
+});

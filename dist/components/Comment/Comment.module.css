@@ -25,7 +25,7 @@
 .iconsWrapper {
 	display: flex;
 	flex-direction: row;
-	gap: 15px;
+	gap: 5px;
 }
 
 .commentWrapper {
