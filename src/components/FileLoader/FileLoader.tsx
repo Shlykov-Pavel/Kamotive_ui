@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Accept, FileError, FileRejection, useDropzone } from 'react-dropzone';
 
-import { FileLoaderProps, TAttachments } from '../../types';
+import { FileLoaderHandle, FileLoaderProps, TAttachments } from '../../types';
 import styles from './FileLoader.module.css';
 import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';
@@ -11,7 +11,8 @@ import classNames from 'classnames';
 interface CustomFileRejection extends Omit<FileRejection, 'file'> {
   file: TAttachments;
 }
-export const FileLoader: FC<FileLoaderProps> = ({
+
+export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   maxFileSize = 2,
   maxFileCount = 10,
   acceptedFormats = {
@@ -19,6 +20,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx'],
   },
+  rejectedFormats,
   addedFiles,
   setAddedFiles,
   filesList = [],
@@ -28,12 +30,24 @@ export const FileLoader: FC<FileLoaderProps> = ({
   style,
   fileValidator,
   progressBarWidth
-}) => {
+}, ref) => {
   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
   const [loadingFilesNames, setLoadingFilesNames] = useState<string[]>([]);
   const [errorFiles, setErrorFiles] = useState<CustomFileRejection[]>([]);
 
   const [addedFilesFormated, setAddedFilesFormatted] = useState<TAttachments[]>([]);
+
+  useImperativeHandle(ref, () => ({
+    clearErrorFiles: () => {
+      setErrorFiles([]);
+    },
+    clearAllFiles: () => {
+      setErrorFiles([]);
+      setAddedFiles([]);
+      setAddedFilesFormatted([]);
+      setLoadingFilesNames([]);
+    }
+  }));
 
   const fileValidatorInner = (file: File): FileError | FileError[] | null => {
     if (file.size > maxFileSize * 1024 * 1024 * 1024) {
@@ -67,7 +81,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
       };
     }
 
-    if (acceptedFormats) {
+    if (acceptedFormats && !rejectedFormats) {
       const acceptedExtensions = Object.values(acceptedFormats)
         .reduce((acc, val) => acc.concat(val), []);
       
@@ -86,6 +100,25 @@ export const FileLoader: FC<FileLoaderProps> = ({
       }
     }
 
+    if (rejectedFormats) {
+      const rejectedExtensions = Object.values(rejectedFormats)
+        .reduce((acc, val) => acc.concat(val), []);
+      
+      const fileParts = file.name.split('.');
+      const fileExtension = fileParts.length > 1 
+        ? `.${fileParts.pop()!.toLowerCase()}` 
+        : '';
+
+      if (rejectedExtensions.includes(fileExtension)) {
+        return {
+          code: 'file-invalid-type',
+          message: lng === 'ru' || lng.includes('ru')
+            ? `Файл не должен быть одного из следующих типов: ${getAcceptedFormatsString(rejectedFormats)}`
+            : `File must not be one of: ${getAcceptedFormatsString(rejectedFormats)}`,
+        };
+      }
+    }
+
     if (fileValidator) {
       const customValidationResult = fileValidator(file);
        if (customValidationResult) {
@@ -93,7 +126,9 @@ export const FileLoader: FC<FileLoaderProps> = ({
         }
     }
     return null;
-  };  const { getRootProps, getInputProps } = useDropzone({
+  };  
+  
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       setAddedFiles([...addedFiles, ...acceptedFiles]);
       //преобразование типа файлов для отрисовки в списке
@@ -201,13 +236,15 @@ export const FileLoader: FC<FileLoaderProps> = ({
 
   // Функция для получения всех доступных форматов в виде строки
   const getAcceptedFormatsString = (acceptedFormats: Accept) => {
-    const formats = [];
+    const uniqueFormats = new Set<string>();
     for (const key in acceptedFormats) {
       if (acceptedFormats.hasOwnProperty(key)) {
-        formats.push(...acceptedFormats[key].map((format) => format.replace('.', '')));
+        acceptedFormats[key].forEach((format) => {
+          uniqueFormats.add(format.replace('.', ''));
+        });
       }
     }
-    return formats.join(', ');
+    return Array.from(uniqueFormats).join(', ');
   };
 
   useEffect(()=>{
@@ -254,7 +291,7 @@ export const FileLoader: FC<FileLoaderProps> = ({
               </Typography>
             ))}
           {maxFileCount &&
-            (lng === 'ru'|| lng.includes('ru') ? (
+            (lng === 'ru' || lng.includes('ru') ? (
               <Typography variant="Body2" color="var(--grey-medium)">
                 {`За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`}
               </Typography>
@@ -265,16 +302,16 @@ export const FileLoader: FC<FileLoaderProps> = ({
             ))}
         </div>
       </div>
-      {acceptedFormats &&
-        (lng === 'ru' || lng.includes('ru') ? (
-          <Typography variant="Body2" color="var(--grey-medium)">
-            {`Поддерживаемые форматы: ${getAcceptedFormatsString(acceptedFormats)}`}
-          </Typography>
-        ) : (
-          <Typography variant="Body2" color="var(--grey-medium)">
-            {`Supported formats: ${getAcceptedFormatsString(acceptedFormats)}`}
-          </Typography>
-        ))}
+      {acceptedFormats && !rejectedFormats && (
+        <Typography variant="Body2" color="var(--grey-medium)">
+          {`${lng === 'ru' || lng.includes('ru') ? 'Поддерживаемые форматы:' : 'Supported formats:'} ${getAcceptedFormatsString(acceptedFormats)}`}
+        </Typography>
+      )}
+      {rejectedFormats && (
+        <Typography variant="Body2" color="var(--grey-medium)">
+          {`${lng === 'ru' || lng.includes('ru') ? 'Неподдерживаемые форматы:' : 'Unsupported formats:'} ${getAcceptedFormatsString(rejectedFormats)}`}
+        </Typography>
+      )}
       {addedFiles?.length > 0 || errorFiles?.length > 0 ? (
         <div className={styles['addedFiles']}>
           {acceptedFileItems}
@@ -291,4 +328,4 @@ export const FileLoader: FC<FileLoaderProps> = ({
       )}
     </section>
   );
-};
+});
