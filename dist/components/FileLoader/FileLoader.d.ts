@@ -1,3 +1,3 @@
-import { FC } from 'react';
-import { FileLoaderProps } from '../../types';
-export declare const FileLoader: FC<FileLoaderProps>;
+import React from 'react';
+import { FileLoaderHandle, FileLoaderProps } from '../../types';
+export declare const FileLoader: React.ForwardRefExoticComponent<FileLoaderProps & React.RefAttributes<FileLoaderHandle>>;
