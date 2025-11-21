@@ -18,7 +18,7 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
-    'application/msword': ['.doc', '.docx'],
+    'application/msword': ['.doc', '.docx', '.log', '.syslog', '.txt'],
   },
   rejectedFormats,
   addedFiles,
