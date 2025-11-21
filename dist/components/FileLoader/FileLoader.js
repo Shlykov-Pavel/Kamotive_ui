@@ -8,7 +8,7 @@ import classNames from 'classnames';
 export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
-    'application/msword': ['.doc', '.docx'],
+    'application/msword': ['.doc', '.docx', '.log', '.syslog', '.txt'],
 }, rejectedFormats, addedFiles, setAddedFiles, filesList = [], canAdd = true, lng = 'ru', className, style, fileValidator, progressBarWidth }, ref) => {
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [loadingFilesNames, setLoadingFilesNames] = useState([]);
