@@ -290,6 +290,8 @@ export const Dropdown: FC<DropdownProps> = ({
   value,
   defaultValue,
   onChange,
+  showLoadMore = false,
+  loadMore,
   getOptionLabel,
   variant = 'text',
   size = 'lg',
@@ -585,6 +587,8 @@ export const Dropdown: FC<DropdownProps> = ({
         {optionsToRender && optionsToRender.length > 0 ? (
           optionsToRender.map((optionsToRender, index) => {
             return (
+              <>
+              
               <DropdownListItem
                 key={optionsToRender?.key ?? index}
                 item={optionsToRender}
@@ -597,6 +601,8 @@ export const Dropdown: FC<DropdownProps> = ({
                 activeIndex={activeIndex}
                 index={index}
               />
+       
+              </>
             );
           })
         ) : (
@@ -606,6 +612,13 @@ export const Dropdown: FC<DropdownProps> = ({
               : noOptionsText || 'No options to select'}
           </div>
         )}
+        {showLoadMore && loadMore && <div className={styles[`loadMore`]} onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          loadMore();
+        }}>
+          {'Загрузить еще'}
+        </div>}
       </div>
     );
     return isOpen ? menu : null;

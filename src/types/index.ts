@@ -199,6 +199,10 @@ export interface DropdownProps {
   defaultValue?: string | number | TOptions | null;
   /** Callback, который будет вызван при изменении значения */
   onChange?: (event: any, value: string | number | TOptions | null) => void;
+  /** Флаг, является ли выпадающий список пагинированным */
+  showLoadMore?: boolean
+  /** Функция для загрузки списка при пагинированных данных */
+  loadMore?: () => void;
   /** Функция для получения текста опции */
   getOptionLabel?: (option: TOptions) => string;
   /** Вариaнты выпадающего списка(текст + иконка, текст)' */
