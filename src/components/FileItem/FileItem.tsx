@@ -22,7 +22,8 @@ export const FileItem: FC<FileItemProps> = ({
   style,
   isAddedFile,
   isRejectedFile,
-  progressBarWidth
+  progressBarWidth,
+  lng
 }) => {
   const [isLoadingFinished, setIsLoadingFinished] = useState(false);
   const [animationDuration, setAnimationDuration] = useState(0);
@@ -145,7 +146,7 @@ export const FileItem: FC<FileItemProps> = ({
             )}
             {file.size !== 0 && (
               <Typography variant="Caption" color="var(--grey-medium)">
-                {formatFileSize(file.size)}
+                {formatFileSize(file.size, lng)}
               </Typography>
             )}
           </div>

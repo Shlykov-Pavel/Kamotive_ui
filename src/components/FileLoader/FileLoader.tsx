@@ -217,6 +217,7 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
         onDelete={handleDeleteFiles}
         isAddedFile={true}
         progressBarWidth={progressBarWidth}
+        lng={lng}
       />
     );
   });
@@ -231,6 +232,7 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
       error={errors[0].message}
       onDelete={handleDeleteRejectedFile}
       isRejectedFile={true}
+      lng={lng}
     />
   ));
 

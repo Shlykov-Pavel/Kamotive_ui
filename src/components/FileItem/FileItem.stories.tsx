@@ -34,6 +34,8 @@ interface FileItemProps {
   isAddedFile?: boolean;
   /** Флаг отклоненного файла */
   isRejectedFile?: boolean;
+  /** Язык интерфейса для типов данных*/
+  lng?: string;
 }
 
 const meta: Meta<FileItemProps> = {
@@ -93,6 +95,12 @@ const meta: Meta<FileItemProps> = {
       description: 'Флаг отклоненного файла',
       type: 'boolean',
     },
+    lng: {
+      description: 'Язык интерфейса',
+      type: 'string',
+      control: { type: 'select' },
+      options: ['ru', 'en'],
+    },
   },
 };
 
@@ -116,6 +124,7 @@ FileItemDefault.args = {
   file: createMockFile('file123.docx', 10240),
   onDownload: action('download-clicked'),
   onDelete: action('delete-clicked'),
+  lng: 'ru',
 };
 
 export const FileItemProgress = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} />;
@@ -125,6 +134,7 @@ FileItemProgress.storyName = 'FileItem c progress bar';
 FileItemProgress.args = {
   file: createMockFile('file123.docx', 10240),
   loading: true,
+  lng: 'ru',
 };
 
 export const FileItemError = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} />;
@@ -134,4 +144,16 @@ FileItemError.storyName = 'FileItem c ошибкой загрузки';
 FileItemError.args = {
   file: createMockFile('file123.docx', 10240),
   error: 'Произошла ошибка. Попробуйте снова',
+  lng: 'ru',
+};
+
+export const FileItemEnglish = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} />;
+
+FileItemEnglish.storyName = 'FileItem на английском';
+
+FileItemEnglish.args = {
+  file: createMockFile('file123.docx', 10240),
+  onDownload: action('download-clicked'),
+  onDelete: action('delete-clicked'),
+  lng: 'en',
 };
