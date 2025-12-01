@@ -10,5 +10,5 @@ export const FileListAttaсhed = ({ filesList, onDelete, onDownload, canDelete, 
     return (React.createElement("div", { className: classNames(styles['fileList'], className), style: style },
         isInfoShown &&
             (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--text-dark)", style: { lineHeight: '20px' }, className: styles['fileListHeader'] }, `Прикрепленные файлы (${filesList.length})`)) : (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--text-dark)", style: { lineHeight: '20px' }, className: styles['fileListHeader'] }, `Attached files (${filesList.length})`))),
-        React.createElement("div", { className: styles['fileListFiles'] }, filesList.map((file) => (React.createElement(FileItem, { key: file.id, file: file, onDownload: onDownload, onDelete: onDelete, canDelete: canDelete, canDownload: canDownload }))))));
+        React.createElement("div", { className: styles['fileListFiles'] }, filesList.map((file) => (React.createElement(FileItem, { key: file.id, file: file, onDownload: onDownload, onDelete: onDelete, canDelete: canDelete, canDownload: canDownload, lng: lng }))))));
 };

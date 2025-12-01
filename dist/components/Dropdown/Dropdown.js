@@ -168,11 +168,11 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
             (item === null || item === void 0 ? void 0 : item.isDivider) && React.createElement("div", { className: styles.divider })),
         hasChildren && (React.createElement("div", { className: styles.nestedMenu }, (_a = item.children) === null || _a === void 0 ? void 0 : _a.map((child, childIndex) => {
             var _a;
-            return (React.createElement(DropdownListItem, { key: (_a = child === null || child === void 0 ? void 0 : child.key) !== null && _a !== void 0 ? _a : `${index}-${childIndex}`, item: child, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, onChange: onChange, isActive: false, activeIndex: activeIndex, index: childIndex, isChild: true }));
+            return (React.createElement(DropdownListItem, { key: (_a = child === null || child === void 0 ? void 0 : child.id) !== null && _a !== void 0 ? _a : `${index}-${childIndex}`, item: child, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, onChange: onChange, isActive: false, activeIndex: activeIndex, index: childIndex, isChild: true }));
         })))));
     return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left" }, itemContent)) : (itemContent);
 };
-export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, noOptionsText = 'Нет вариантов для выбора', lng = 'ru', }) => {
+export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, noOptionsText = 'Нет вариантов для выбора', lng = 'ru', }) => {
     const [isOpen, setIsOpen] = useState(isOpened);
     const [modifiedOptions, setModifiedOptions] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -373,12 +373,18 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
     };
     const getDropdownMenu = () => {
         const optionsToRender = enableAutocomplete && searchValue ? filteredOptions : modifiedOptions;
-        const menu = isOpen && (React.createElement("div", { className: dropdownClassess }, optionsToRender && optionsToRender.length > 0 ? (optionsToRender.map((optionsToRender, index) => {
-            var _a;
-            return (React.createElement(DropdownListItem, { key: (_a = optionsToRender === null || optionsToRender === void 0 ? void 0 : optionsToRender.key) !== null && _a !== void 0 ? _a : index, item: optionsToRender, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, variant: variant, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index }));
-        })) : (React.createElement("div", { className: `${styles['item-container']} ${styles['item-block']}`, style: { paddingLeft: '15px' } }, lng === 'ru' || lng.includes('ru')
-            ? noOptionsText || 'Нет вариантов для выбора'
-            : noOptionsText || 'No options to select'))));
+        const menu = isOpen && (React.createElement("div", { className: dropdownClassess },
+            optionsToRender && optionsToRender.length > 0 ? (optionsToRender.map((optionsToRender, index) => {
+                var _a;
+                return (React.createElement(DropdownListItem, { key: (_a = optionsToRender === null || optionsToRender === void 0 ? void 0 : optionsToRender.id) !== null && _a !== void 0 ? _a : index, item: optionsToRender, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, variant: variant, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index }));
+            })) : (React.createElement("div", { className: `${styles['item-container']} ${styles['item-block']}`, style: { paddingLeft: '15px' } }, lng === 'ru' || lng.includes('ru')
+                ? noOptionsText || 'Нет вариантов для выбора'
+                : noOptionsText || 'No options to select')),
+            showLoadMore && loadMore && React.createElement("div", { className: styles[`loadMore`], onClick: (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    loadMore();
+                } }, 'Загрузить еще')));
         return isOpen ? menu : null;
     };
     useEffect(() => {

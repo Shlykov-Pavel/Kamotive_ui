@@ -23,7 +23,7 @@ const getElementFromRange = (range) => {
     const container = range.commonAncestorContainer;
     return container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
 };
-export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, helperText, canAttachFiles = false, files, required, className, isButtonDisabled, }) => {
+export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, helperText, canAttachFiles = false, files, required, className, isButtonDisabled, lng = 'ru', }) => {
     const editorRef = useRef(null);
     const uploaderRef = useRef(null);
     const submitButtonRef = useRef(null);
@@ -293,6 +293,7 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
             file,
             id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+            lng,
         }));
         setAttachedFiles((prev) => [...prev, ...newAttachedFiles]);
         event.target.value = '';
@@ -535,7 +536,7 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
     return (React.createElement("div", { className: wrapperClassess },
         label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
         React.createElement("div", { className: inputClassess },
-            attachedFiles.length > 0 && (React.createElement(AttachedFilesPreview, { files: attachedFiles, onDelete: (id) => removeAttachedFile(id), className: styles.attachedFilesContainer, isEdit: true })),
+            attachedFiles.length > 0 && (React.createElement(AttachedFilesPreview, { files: attachedFiles, onDelete: (id) => removeAttachedFile(id), className: styles.attachedFilesContainer, isEdit: true, lng: lng })),
             React.createElement("div", { ref: editorRef }),
             canAttachFiles && (React.createElement("input", { ref: uploaderRef, type: "file", style: { display: 'none' }, multiple: true, onChange: handleUploadFiles, accept: ACCEPTED_FILE_TYPES }))),
         error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText) }, helperText))));

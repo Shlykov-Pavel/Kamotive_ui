@@ -26,6 +26,7 @@ export const Comment: FC<CommentProps> = ({
   onChange,
   onSubmit,
   onDelete,
+  lng = 'ru',
 }) => {
   const [commentText, setCommentText] = useState(value || '');
   const [isEditMode, setIsEditMode] = useState(isEdit);
@@ -101,11 +102,12 @@ export const Comment: FC<CommentProps> = ({
           helperText={helperText}
           files={attachedFiles}
           canAttachFiles={canAttachFiles}
+          lng={lng}
         />
       ) : (
         <div className={styles.commentWrapper}>
           {attachedFiles.length > 0 && (
-            <AttachedFilesPreview files={attachedFiles} className={styles.attachedFilesContainer} />
+            <AttachedFilesPreview files={attachedFiles} className={styles.attachedFilesContainer} lng={lng} />
           )}
           <div id={id} className={inputClassess} dangerouslySetInnerHTML={{ __html: commentText || '' }} />
         </div>
