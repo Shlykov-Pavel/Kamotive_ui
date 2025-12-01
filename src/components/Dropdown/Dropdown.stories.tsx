@@ -725,9 +725,9 @@ export const DropdownWithPaginatedData = (argTypes: DropdownProps): JSX.Element 
   return (
     <Dropdown
       {...argTypes}
-      isOpened={isOpen}
       options={currentOptions}
       value={value}
+      isOpened={true}
       onChange={handleChange}
       onClose={handleClose}
       onClick={handleClick}

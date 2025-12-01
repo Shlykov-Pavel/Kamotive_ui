@@ -339,11 +339,12 @@
 }
 /* Кнопка Загрузить еще  */
 .loadMore {
-    align-self: flex-end;
+    /* align-self: flex-end; */
     padding: 6px;
-    margin-right: 10px;
+    margin-left: 10px;
     font-size: 12px;
     color: var(--blue-secondary);
+    cursor: pointer;
 
 }
 .loadMore:hover {
