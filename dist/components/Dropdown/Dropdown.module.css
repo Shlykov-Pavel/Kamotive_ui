@@ -337,3 +337,16 @@
   grid-template-columns: 1fr 20px;
   justify-content: space-between;
 }
+/* Кнопка Загрузить еще  */
+.loadMore {
+    /* align-self: flex-end; */
+    padding: 6px;
+    margin-left: 10px;
+    font-size: 12px;
+    color: var(--blue-secondary);
+    cursor: pointer;
+
+}
+.loadMore:hover {
+  color: var(--blue-dark);
+}

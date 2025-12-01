@@ -7,20 +7,7 @@ import { IconClose, IconDownload, IconFile } from '../../Icons';
 import { Tooltip } from '../Tooltip/Tooltip';
 import classNames from 'classnames';
 import { formatFileSize } from '../AttachedFilesPreview/AttachedFilesPreview';
-export const FileItem = ({ 
-    file, 
-    loading = false, 
-    error = '', 
-    onDownload, 
-    onDelete, 
-    canDelete = true, 
-    canDownload = true, 
-    style, 
-    isAddedFile, 
-    isRejectedFile, 
-    progressBarWidth, 
-    lng = 'ru'
-}) => {
+export const FileItem = ({ file, loading = false, error = '', onDownload, onDelete, canDelete = true, canDownload = true, style, isAddedFile, isRejectedFile, progressBarWidth, lng }) => {
     const [isLoadingFinished, setIsLoadingFinished] = useState(false);
     const [animationDuration, setAnimationDuration] = useState(0);
     const [maxLength, setMaxLength] = useState(30);

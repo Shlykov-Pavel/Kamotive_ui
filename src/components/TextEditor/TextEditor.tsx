@@ -49,6 +49,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   required,
   className,
   isButtonDisabled,
+  lng = 'ru',
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const uploaderRef = useRef<HTMLInputElement>(null);
@@ -353,6 +354,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       file,
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+      lng,
     }));
 
     setAttachedFiles((prev) => [...prev, ...newAttachedFiles]);
@@ -651,6 +653,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
             onDelete={(id) => removeAttachedFile(id)}
             className={styles.attachedFilesContainer}
             isEdit={true}
+            lng={lng}
           />
         )}
         <div ref={editorRef}></div>

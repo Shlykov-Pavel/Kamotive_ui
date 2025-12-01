@@ -33,17 +33,16 @@ export const getFileIcon = (file) => {
 // Функция для форматирования размера файла
 export const formatFileSize = (bytes, lng) => {
     if (!bytes || bytes === 0) {
-        return lng === 'ru' || lng?.includes('ru') ? '0 Байт' : '0 Bytes';
+        return lng === 'ru' || (lng === null || lng === void 0 ? void 0 : lng.includes('ru')) ? '0 Байт' : '0 Bytes';
     }
     const k = 1024;
     const sizesEn = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     const sizesRu = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ'];
-
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    const sizes = lng === 'ru' || lng?.includes('ru') ? sizesRu : sizesEn;
+    const sizes = lng === 'ru' || (lng === null || lng === void 0 ? void 0 : lng.includes('ru')) ? sizesRu : sizesEn;
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
-export const AttachedFilesPreview = ({ files, onDelete, onDownload, style, className, isEdit, allowDownload = true, }) => {
+export const AttachedFilesPreview = ({ files, onDelete, onDownload, style, className, isEdit, allowDownload = true, lng, }) => {
     const handleDelete = (event, id) => {
         event.stopPropagation();
         if (onDelete) {
@@ -69,5 +68,5 @@ export const AttachedFilesPreview = ({ files, onDelete, onDownload, style, class
         React.createElement("div", { onClick: allowDownload ? () => handleDownload(file.file) : undefined, className: styles.filePreview },
             file.preview ? (React.createElement("img", { src: file.preview, alt: file.file.name, className: styles.previewImage })) : (React.createElement("div", { className: styles.previewImage }, getFileIcon(file.file))),
             isEdit && (React.createElement("button", { className: styles.removeFileButton, onClick: (event) => handleDelete(event, file.id) }, "\u2715")),
-            React.createElement("div", { className: styles.fileSize }, formatFileSize(file.file.size, lng.lng))))))));
+            React.createElement("div", { className: styles.fileSize }, formatFileSize(file.file.size, lng))))))));
 };

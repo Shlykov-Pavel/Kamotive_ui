@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
-import { Accept, FileError } from 'react-dropzone';
+import { Accept, FileError } from 'react-dropzone/.';
 import { FilePreview } from '../components/AttachedFilesPreview/AttachedFilesPreview';
 /** @internal */
 export interface BreadcrumbProps {
@@ -186,6 +186,10 @@ export interface DropdownProps {
     defaultValue?: string | number | TOptions | null;
     /** Callback, который будет вызван при изменении значения */
     onChange?: (event: any, value: string | number | TOptions | null) => void;
+    /** Флаг, является ли выпадающий список пагинированным */
+    showLoadMore?: boolean;
+    /** Функция для загрузки списка при пагинированных данных */
+    loadMore?: () => void;
     /** Функция для получения текста опции */
     getOptionLabel?: (option: TOptions) => string;
     /** Вариaнты выпадающего списка(текст + иконка, текст)' */
@@ -453,8 +457,8 @@ export interface FileItemProps {
     isRejectedFile?: boolean;
     /** Ширина прогресс бара */
     progressBarWidth?: string;
-    /**fff */
-    lng?: string; 
+    /** Язык интерфейса для типов данных*/
+    lng?: string;
 }
 export interface FileLoaderProps {
     /** Максимальный размер файла */
@@ -614,6 +618,8 @@ export interface TextEditorProps {
     required?: boolean;
     className?: string;
     isButtonDisabled?: boolean;
+    /** Язык */
+    lng?: string;
 }
 export interface CommentProps {
     /** Идентификатор элемента */
@@ -643,6 +649,8 @@ export interface CommentProps {
     onChange?: (value: string, files: FilePreview[]) => void;
     onSubmit?: (value: string, files: FilePreview[]) => void;
     onDelete?: (id: string) => void;
+    /** Язык */
+    lng?: string;
 }
 export interface LinkProps {
     /**Гипертекстовая ссылка */

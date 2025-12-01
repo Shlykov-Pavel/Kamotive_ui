@@ -653,6 +653,8 @@ export interface TextEditorProps {
   required?: boolean;
   className?: string;
   isButtonDisabled?: boolean;
+  /** Язык */
+  lng?: string;
 }
 
 export interface CommentProps {
@@ -683,6 +685,8 @@ export interface CommentProps {
   onChange?: (value: string, files: FilePreview[]) => void;
   onSubmit?: (value: string, files: FilePreview[]) => void;
   onDelete?: (id: string) => void;
+  /** Язык */
+  lng?: string;
 }
 
 export interface LinkProps {
