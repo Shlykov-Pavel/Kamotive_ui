@@ -7,7 +7,20 @@ import { IconClose, IconDownload, IconFile } from '../../Icons';
 import { Tooltip } from '../Tooltip/Tooltip';
 import classNames from 'classnames';
 import { formatFileSize } from '../AttachedFilesPreview/AttachedFilesPreview';
-export const FileItem = ({ file, loading = false, error = '', onDownload, onDelete, canDelete = true, canDownload = true, style, isAddedFile, isRejectedFile, progressBarWidth }) => {
+export const FileItem = ({ 
+    file, 
+    loading = false, 
+    error = '', 
+    onDownload, 
+    onDelete, 
+    canDelete = true, 
+    canDownload = true, 
+    style, 
+    isAddedFile, 
+    isRejectedFile, 
+    progressBarWidth, 
+    lng = 'ru'
+}) => {
     const [isLoadingFinished, setIsLoadingFinished] = useState(false);
     const [animationDuration, setAnimationDuration] = useState(0);
     const [maxLength, setMaxLength] = useState(30);
@@ -103,7 +116,7 @@ export const FileItem = ({ file, loading = false, error = '', onDownload, onDele
                 React.createElement("div", { className: styles['fileItemName'], ref: fileNameRef },
                     file.filename.length > maxLength ? (React.createElement(Tooltip, { label: file.filename, position: "bottom-center", displayDelay: 300 },
                         React.createElement(Typography, { variant: "Body1", color: "var(--text-dark)" }, croppedName(file.filename)))) : (React.createElement(Typography, { variant: "Body1", color: "var(--text-dark)" }, croppedName(file.filename))),
-                    file.size !== 0 && (React.createElement(Typography, { variant: "Caption", color: "var(--grey-medium)" }, formatFileSize(file.size))))),
+                    file.size !== 0 && (React.createElement(Typography, { variant: "Caption", color: "var(--grey-medium)" }, formatFileSize(file.size, lng))))),
             React.createElement("div", { className: styles['fileItemActions'] },
                 !(isAddedFile || isRejectedFile) && canDownload && (React.createElement(IconButton, { className: styles.fileIcon, icon: React.createElement(IconDownload, null), onClick: (e) => handleDownloadClick(e, file), color: "var(--icons-grey)", size: "sm" })),
                 canDelete && (React.createElement(IconButton, { className: styles.fileIcon, icon: React.createElement(IconClose, null), onClick: (e) => handleDeleteClick(e, file.id || ''), color: "var(--icons-grey)", size: "sm" })))),

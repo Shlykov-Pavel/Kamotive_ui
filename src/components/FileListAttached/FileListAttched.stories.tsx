@@ -79,6 +79,7 @@ const meta: Meta<FileListAttaсhedProps> = {
     isInfoShown: true,
     className: '',
     style: {},
+    lng: 'ru',
   },
   argTypes: {
     filesList: {
@@ -105,6 +106,8 @@ const meta: Meta<FileListAttaсhedProps> = {
     lng: {
       description: 'Язык',
       type: 'string',
+      control: { type: 'select' },
+      options: ['ru', 'en'],
     },
     className: {
       description: 'Дополнительный класс',
@@ -150,6 +153,7 @@ export const FileListAttaсhedDefault = (argTypes: FileListAttaсhedProps): JSX.
         onDelete={deleteFile}
         canDelete={true}
         canDownload={true}
+        lng={argTypes.lng}
       />
 
       {showSnackbar && (
@@ -164,7 +168,7 @@ export const FileListAttaсhedDefault = (argTypes: FileListAttaсhedProps): JSX.
 FileListAttaсhedDefault.storyName = 'FileListAttaсhed по умолчанию';
 
 export const FileListAttaсhedBlockedDownload = (argTypes: FileListAttaсhedProps): JSX.Element => {
-  return <FileListAttaсhed {...argTypes} />;
+  return <FileListAttaсhed {...argTypes} lng={argTypes.lng} />;
 };
 
 FileListAttaсhedBlockedDownload.storyName = 'FileListAttaсhed c заблокированным скачиванием';
@@ -175,7 +179,7 @@ FileListAttaсhedBlockedDownload.args = {
 };
 
 export const FileListAttaсhedBlockedDelete = (argTypes: FileListAttaсhedProps): JSX.Element => {
-  return <FileListAttaсhed {...argTypes} />;
+  return <FileListAttaсhed {...argTypes} lng={argTypes.lng} />;
 };
 
 FileListAttaсhedBlockedDelete.storyName = 'FileListAttaсhed c заблокированным удалением';
@@ -193,13 +197,14 @@ export const FileListAttaсhedWithoutText = (argTypes: FileListAttaсhedProps): 
       canDelete={true}
       canDownload={true}
       isInfoShown={false}
+      lng={argTypes.lng}
     />
   );
 };
 FileListAttaсhedWithoutText.storyName = 'FileListAttaсhed без текста';
 
 export const FileListAttaсhedEnglish = (argTypes: FileListAttaсhedProps): JSX.Element => {
-  return <FileListAttaсhed {...argTypes} />;
+  return <FileListAttaсhed {...argTypes} lng={argTypes.lng} />;
 };
 FileListAttaсhedEnglish.storyName = 'FileListAttaсhed на английском';
 FileListAttaсhedEnglish.args = {

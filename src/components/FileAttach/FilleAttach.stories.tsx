@@ -148,6 +148,8 @@ const meta: Meta<FileAttachProps> = {
     lng: {
       description: 'Язык',
       type: 'string',
+      control: { type: 'select' },
+      options: ['ru', 'en'],
     },
     className: {
       description: 'Дополнительный класс',
@@ -175,6 +177,7 @@ export const FileAttachDefault = (argTypes: FileAttachProps): JSX.Element => {
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
       style={{ width: '360px' }}
+      lng={argTypes.lng}
     />
   );
 };
@@ -193,6 +196,7 @@ export const FileAttachWithExistingFiles = (argTypes: FileAttachProps): JSX.Elem
       style={{
         width: '360px',
       }}
+      lng={argTypes.lng}
     />
   );
 };
@@ -235,6 +239,7 @@ export const FileAttchLeftPosition = (argTypes: FileAttachProps): JSX.Element =>
       setAddedFiles={setAddedFiles}
       position="left"
       style={{ height: '400px', width: '680px' }}
+      lng={argTypes.lng}
     />
   );
 };
@@ -250,6 +255,7 @@ export const FileAttchRightPosition = (argTypes: FileAttachProps): JSX.Element =
       setAddedFiles={setAddedFiles}
       position="right"
       style={{ width: '680px' }}
+      lng={argTypes.lng}
     />
   );
 };
@@ -268,6 +274,7 @@ export const FileAttachDisabled = (argTypes: FileAttachProps): JSX.Element => {
       style={{
         width: '360px',
       }}
+      lng={argTypes.lng}
     />
   );
 };
@@ -287,6 +294,7 @@ export const FileAttachDisabledDownload = (argTypes: FileAttachProps): JSX.Eleme
       style={{
         width: '360px',
       }}
+      lng={argTypes.lng}
     />
   );
 };
@@ -307,6 +315,7 @@ export const FileAttachDisabledDelete = (argTypes: FileAttachProps): JSX.Element
       style={{
         width: '360px',
       }}
+      lng={argTypes.lng}
     />
   );
 };
@@ -321,7 +330,7 @@ export const FileAttachEnglish = (argTypes: FileAttachProps): JSX.Element => {
       filesList={mockFiles}
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
-      lng="en"
+      lng={argTypes.lng}
       style={{
         width: '360px',
       }}

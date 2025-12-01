@@ -483,6 +483,8 @@ export interface FileItemProps {
   isRejectedFile?: boolean;
   /** Ширина прогресс бара */
   progressBarWidth?: string;
+  /** Язык интерфейса для типов данных*/
+  lng?: string;
 }
 
 export interface FileLoaderProps {

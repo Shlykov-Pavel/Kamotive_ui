@@ -6,6 +6,7 @@ export interface FilePreview {
   file: File;
   id: string;
   preview?: string;
+  lng: string;
 }
 
 export const getFileIcon = (file: File) => {
@@ -48,12 +49,17 @@ export const getFileIcon = (file: File) => {
 };
 
 // Функция для форматирования размера файла
-export const formatFileSize = (bytes?: number): string => {
-  if (!bytes || bytes === 0) return '0 Bytes';
+export const formatFileSize = (bytes?: number, lng?:string): string => {
+  if (!bytes || bytes === 0) {
+    return lng === 'ru' || lng?.includes('ru') ? '0 Байт' : '0 Bytes';
+  }
 
   const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const sizesEn = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const sizesRu = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ'];
+  
   const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const sizes = lng === 'ru' || lng?.includes('ru') ? sizesRu : sizesEn;
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
@@ -66,6 +72,7 @@ interface AttachedFilesProps {
   className?: string;
   isEdit?: boolean;
   allowDownload?: boolean;
+  lng: string;
 }
 
 export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
@@ -76,6 +83,7 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
   className,
   isEdit,
   allowDownload = true,
+  lng,
 }) => {
   const handleDelete = (event: React.MouseEvent, id: string) => {
     event.stopPropagation();
@@ -114,7 +122,7 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
                 ✕
               </button>
             )}
-            <div className={styles.fileSize}>{formatFileSize(file.file.size)}</div>
+            <div className={styles.fileSize}>{formatFileSize(file.file.size, lng)}</div>
           </div>
         </div>
       ))}

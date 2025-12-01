@@ -59,6 +59,7 @@ export const FileListAttaсhed: FC<FileListAttaсhedProps> = ({
             onDelete={onDelete}
             canDelete={canDelete}
             canDownload={canDownload}
+            lng={lng}
           />
         ))}
       </div>

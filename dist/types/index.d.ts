@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
-import { Accept, FileError } from 'react-dropzone/.';
+import { Accept, FileError } from 'react-dropzone';
 import { FilePreview } from '../components/AttachedFilesPreview/AttachedFilesPreview';
 /** @internal */
 export interface BreadcrumbProps {
@@ -453,6 +453,8 @@ export interface FileItemProps {
     isRejectedFile?: boolean;
     /** Ширина прогресс бара */
     progressBarWidth?: string;
+    /**fff */
+    lng?: string; 
 }
 export interface FileLoaderProps {
     /** Максимальный размер файла */

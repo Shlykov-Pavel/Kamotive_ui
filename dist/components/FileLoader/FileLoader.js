@@ -168,12 +168,12 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, acce
         setLoadingFilesNames(loadingFilesNames.filter((id) => id !== id));
     };
     const acceptedFileItems = addedFilesFormated.map((file) => {
-        return (React.createElement(FileItem, { key: file.id, file: file, loading: loadingFilesNames.includes(file.filename), onDelete: handleDeleteFiles, isAddedFile: true, progressBarWidth: progressBarWidth }));
+        return (React.createElement(FileItem, { key: file.id, file: file, loading: loadingFilesNames.includes(file.filename), onDelete: handleDeleteFiles, isAddedFile: true, progressBarWidth: progressBarWidth, lng:lng}));
     });
     const handleDeleteRejectedFile = (id) => {
         setErrorFiles(errorFiles.filter((rejection) => rejection.file.id !== id));
     };
-    const fileRejectionItems = errorFiles.map(({ file, errors }) => (React.createElement(FileItem, { key: file.id, file: file, error: errors[0].message, onDelete: handleDeleteRejectedFile, isRejectedFile: true })));
+    const fileRejectionItems = errorFiles.map(({ file, errors }) => (React.createElement(FileItem, { key: file.id, file: file, error: errors[0].message, onDelete: handleDeleteRejectedFile, isRejectedFile: true, lng:lng})));
     // Функция для получения всех доступных форматов в виде строки
     const getAcceptedFormatsString = (acceptedFormats) => {
         const uniqueFormats = new Set();
