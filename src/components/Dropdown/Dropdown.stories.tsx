@@ -27,6 +27,10 @@ export interface DropdownProps {
   defaultValue?: string | number | TOptions | null;
   /** Callback, который будет вызван при изменении значения */
   onChange?: (event: any, value: string | number | TOptions | null) => void;
+  /** Флаг, является ли выпадающий список пагинированным */
+  showLoadMore?: boolean
+  /** Функция для загрузки списка при пагинированных данныч */
+  loadMore?: () => void;
   /** Функция для получения текста опции */
   getOptionLabel?: (option: TOptions | string) => string;
   /** Вариaнты выпадающего списка(текст + иконка, текст)' */
@@ -169,6 +173,14 @@ const meta: Meta<typeof Dropdown> = {
     onChange: {
       description: 'Callback, который будет вызван при изменении значения',
       action: 'changed',
+    },
+    showLoadMore: {
+      description: 'Флаг, является ли выпадающий список пагинированным',
+      control: { type: 'boolean' },
+    },
+    loadMore: {
+      description: 'Callback для загрузки списка при пагинированных данных',
+      action: 'loaded',
     },
     onClose: {
       description: 'Callback, который будет вызван при закрытии выпадающего списка',
@@ -649,6 +661,89 @@ DropdownNestedValue.parameters = {
   controls: { disable: true },
 };
 
+const optionsPaginated = [
+  { value: 'Элемент 1', icon: <IconAccount /> },
+  { value: 'Элемент 2', icon: <IconAlarm /> },
+  { value: 'Элемент 3', icon: <IconBell /> },
+  { value: 'Элемент 4', icon: <IconBriefcase /> },
+  { value: 'Элемент 5', icon: <IconAccount /> },
+  { value: 'Элемент 6', icon: <IconAlarm /> },
+  { value: 'Элемент 7', icon: <IconBell /> },
+  { value: 'Элемент 8', icon: <IconBriefcase /> },
+  { value: 'Элемент 9', icon: <IconAccount /> },
+  { value: 'Элемент 10', icon: <IconAlarm /> },
+  { value: 'Элемент 11', icon: <IconBell /> },
+  { value: 'Элемент 12', icon: <IconBriefcase /> },
+  { value: 'Элемент 13', icon: <IconAccount /> },
+  { value: 'Элемент 14', icon: <IconAlarm /> },
+  { value: 'Элемент 15', icon: <IconBell /> },
+  { value: 'Элемент 16', icon: <IconBriefcase /> },
+  { value: 'Элемент 17', icon: <IconAccount /> },
+  { value: 'Элемент 18', icon: <IconAlarm /> },
+  { value: 'Элемент 19', icon: <IconBell /> },
+  { value: 'Элемент 20', icon: <IconBriefcase /> },
+  { value: 'Элемент 21', icon: <IconAccount /> },
+  { value: 'Элемент 22', icon: <IconAlarm /> },
+  { value: 'Элемент 23', icon: <IconBell /> },
+  { value: 'Элемент 24', icon: <IconBriefcase /> },
+  { value: 'Элемент 25', icon: <IconAccount /> },
+  { value: 'Элемент 26', icon: <IconAlarm /> },
+  { value: 'Элемент 27', icon: <IconBell /> },
+  { value: 'Элемент 28', icon: <IconBriefcase /> },
+  { value: 'Элемент 29', icon: <IconAccount /> },
+  { value: 'Элемент 30', icon: <IconAlarm /> }
+]
+// Dropdown с подгрузкой значений
+export const DropdownWithPaginatedData = (argTypes: DropdownProps): JSX.Element => {
+  const [value, setValue] = useState<string | number | TOptions | null>(null);
+  const [currentOptions, setCurrentOptions] = useState(optionsPaginated.slice(0, 10));
+  const [hasMore, setHasMore] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
+
+  const handleChange = (e: any, value: string | number | TOptions | null) => {
+    setValue(value);
+  };
+
+  const handleLoadMore = () => {
+    const nextBatch = optionsPaginated.slice(currentOptions.length, currentOptions.length + 10);
+    if (nextBatch.length > 0) {
+      setCurrentOptions(prev => [...prev, ...nextBatch]);
+      if (currentOptions.length + nextBatch.length >= optionsPaginated.length) {
+        setHasMore(false);
+      }
+    }
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleClick = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <Dropdown
+      {...argTypes}
+      options={currentOptions}
+      value={value}
+      isOpened={true}
+      onChange={handleChange}
+      onClose={handleClose}
+      onClick={handleClick}
+      showLoadMore={hasMore}
+      loadMore={handleLoadMore}
+      placeholder="Выберите элемент"
+      label="Пагинированный список"
+      variant="icons"
+    />
+  );
+};
+DropdownWithPaginatedData.storyName = 'Dropdown с пагинацией';
+
+DropdownWithPaginatedData.parameters = {
+  controls: { disable: true },
+};
 
 
 const englishDropdown = [

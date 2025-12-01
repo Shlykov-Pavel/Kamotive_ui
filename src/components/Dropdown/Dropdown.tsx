@@ -255,7 +255,7 @@ export const DropdownListItem: FC<DropdownListItemProps> = ({
           {item.children?.map((child: any, childIndex: number) => {
             return (
               <DropdownListItem
-                key={child?.key ?? `${index}-${childIndex}`}
+                key={child?.id ?? `${index}-${childIndex}`}
                 item={child}
                 getOptionLabel={getOptionLabel}
                 size={size}
@@ -290,6 +290,8 @@ export const Dropdown: FC<DropdownProps> = ({
   value,
   defaultValue,
   onChange,
+  showLoadMore = false,
+  loadMore,
   getOptionLabel,
   variant = 'text',
   size = 'lg',
@@ -585,8 +587,9 @@ export const Dropdown: FC<DropdownProps> = ({
         {optionsToRender && optionsToRender.length > 0 ? (
           optionsToRender.map((optionsToRender, index) => {
             return (
+  
               <DropdownListItem
-                key={optionsToRender?.key ?? index}
+                key={optionsToRender?.id ?? index}
                 item={optionsToRender}
                 getOptionLabel={getOptionLabel}
                 size={size}
@@ -597,6 +600,7 @@ export const Dropdown: FC<DropdownProps> = ({
                 activeIndex={activeIndex}
                 index={index}
               />
+  
             );
           })
         ) : (
@@ -606,6 +610,13 @@ export const Dropdown: FC<DropdownProps> = ({
               : noOptionsText || 'No options to select'}
           </div>
         )}
+        {showLoadMore && loadMore && <div className={styles[`loadMore`]} onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          loadMore();
+        }}>
+          {'Загрузить еще'}
+        </div>}
       </div>
     );
     return isOpen ? menu : null;
