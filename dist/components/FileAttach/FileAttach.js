@@ -7,6 +7,9 @@ export const FileAttach = ({ filesList = [], maxFileSize = 2, maxFileCount = 10,
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx'],
+    'model/gltf-binary': ['.glb'],
+    'application/octet-stream': ['.prt', '.step', '.stp'],
+    'text/plain': ['.syslog'],
 }, addedFiles, setAddedFiles, onDownload, onDelete, canAdd = true, canDelete = true, canDownload = true, position = 'bottom', lng = 'ru', className, style, fileValidator, }) => {
     const fileAttachClasses = classNames(styles['fileAttach'], className, {
         [styles[`fileAttach_position_${position}`]]: position,
