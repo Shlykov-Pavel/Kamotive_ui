@@ -18,6 +18,8 @@ export interface FileLoaderProps {
   maxFileSize?: number;
   /** Максимальное количество файлов */
   maxFileCount?: number;
+  /** Максимальное количество символов в названии файла */
+  maxFileName?: number
   /**Поддерживаемые форматы файлов */
   acceptedFormats?: Accept;
   /**Добавленные файлы */
@@ -66,6 +68,10 @@ const meta: Meta<FileLoaderProps> = {
     },
     maxFileCount: {
       description: 'Максимальное допустимое количество файлов',
+      type: 'number',
+    },
+    maxFileName: {
+      description: 'Максимальное допустимое количество символов в названии файла',
       type: 'number',
     },
     addedFiles: {
@@ -128,6 +134,17 @@ export const FileLoaderDisabled = (argTypes: FileLoaderProps): JSX.Element => {
 FileLoaderDisabled.storyName = 'FileLoader заблокированный';
 FileLoaderDisabled.args = {
   canAdd: false,
+};
+
+export const FileLoaderWithMaxFileName = (argTypes: FileLoaderProps): JSX.Element => {
+  const [addedFiles, setAddedFiles] = useState<File[]>([]);
+
+  return <FileLoader {...argTypes} addedFiles={addedFiles} setAddedFiles={setAddedFiles} />;
+};
+
+FileLoaderWithMaxFileName.storyName = 'FileLoader c ограничением длины символов в названии файлов до 20 символов';
+FileLoaderWithMaxFileName.args = {
+  maxFileName: 20
 };
 
 export const FileLoaderEnglish = (argTypes: FileLoaderProps): JSX.Element => {
