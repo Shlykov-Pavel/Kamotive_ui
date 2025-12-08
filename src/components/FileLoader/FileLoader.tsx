@@ -15,6 +15,7 @@ interface CustomFileRejection extends Omit<FileRejection, 'file'> {
 export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   maxFileSize = 2,
   maxFileCount = 10,
+  maxFileName = 0,
   acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
@@ -52,7 +53,7 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   const fileValidatorInner = (file: File): FileError | FileError[] | null => {
     if (file.size > maxFileSize * 1024 * 1024 * 1024) {
       return {
-        code: 'name-too-large',
+        code: 'size-too-large',
         message:
           lng === 'ru' || lng.includes('ru')
             ? `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`
@@ -79,6 +80,13 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
         message:
           lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
       };
+    }
+
+    if(maxFileName && file.name.length > maxFileName){      
+      return {
+        code: 'name-too-large',
+        message: lng === 'ru' || lng.includes('ru') ? `Имя файла не может превышать ${maxFileName} символов` : `File name must be under ${maxFileName} symbols`,
+      }
     }
 
     if (acceptedFormats && !rejectedFormats) {

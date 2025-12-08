@@ -21,6 +21,8 @@ interface FileAttachProps {
   maxFileSize?: number;
   /** Максимальное количество файлов */
   maxFileCount?: number;
+  /** Максимальное количество символов в названии файла */
+  maxFileName?: number;
   /**Поддерживаемые форматы файлов */
   acceptedFormats?: Accept;
   /**Добавленные файлы */
@@ -123,6 +125,10 @@ const meta: Meta<FileAttachProps> = {
     },
     maxFileCount: {
       description: 'Максимальное допустимое количество файлов',
+      type: 'number',
+    },
+    maxFileName: {
+      description: 'Максимальное допустимое количество символов в названии файла',
       type: 'number',
     },
     acceptedFormats: {

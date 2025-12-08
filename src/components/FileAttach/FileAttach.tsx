@@ -10,6 +10,7 @@ export const FileAttach: FC<FileAttachProps> = ({
   filesList = [],
   maxFileSize = 2,
   maxFileCount = 10,
+  maxFileName = 0,
   acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
@@ -40,6 +41,7 @@ export const FileAttach: FC<FileAttachProps> = ({
       <FileLoader
         maxFileSize={maxFileSize}
         maxFileCount={maxFileCount}
+        maxFileName={maxFileName}
         acceptedFormats={acceptedFormats}
         addedFiles={addedFiles}
         setAddedFiles={setAddedFiles}
