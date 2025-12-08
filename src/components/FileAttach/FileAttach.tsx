@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, forwardRef } from 'react';
 
-import { FileAttachProps } from '../../types';
+import { FileAttachProps, FileLoaderHandle } from '../../types';
 import styles from './FileAttach.module.css';
 import classNames from 'classnames';
 import { FileLoader } from '../FileLoader/FileLoader';
 import { FileListAttaсhed } from '../FileListAttached/FileListAttaсhed';
 
-export const FileAttach: FC<FileAttachProps> = ({
+export const FileAttach = forwardRef<FileLoaderHandle, FileAttachProps> (({
   filesList = [],
   maxFileSize = 2,
   maxFileCount = 10,
@@ -31,7 +31,7 @@ export const FileAttach: FC<FileAttachProps> = ({
   className,
   style,
   fileValidator,
-}) => {
+}, ref) => {
   const fileAttachClasses = classNames(styles['fileAttach'], className, {
     [styles[`fileAttach_position_${position}`]]: position,
   });
@@ -39,6 +39,7 @@ export const FileAttach: FC<FileAttachProps> = ({
   return (
     <div className={fileAttachClasses} style={style}>
       <FileLoader
+        ref={ref}
         maxFileSize={maxFileSize}
         maxFileCount={maxFileCount}
         maxFileName={maxFileName}
@@ -49,7 +50,6 @@ export const FileAttach: FC<FileAttachProps> = ({
         canAdd={canAdd}
         lng={lng}
         fileValidator={fileValidator}
-
       />
       <FileListAttaсhed
         filesList={filesList}
@@ -61,4 +61,4 @@ export const FileAttach: FC<FileAttachProps> = ({
       />
     </div>
   );
-};
+});
