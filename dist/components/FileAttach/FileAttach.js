@@ -3,7 +3,7 @@ import styles from './FileAttach.module.css';
 import classNames from 'classnames';
 import { FileLoader } from '../FileLoader/FileLoader';
 import { FileListAttaсhed } from '../FileListAttached/FileListAttaсhed';
-export const FileAttach = ({ filesList = [], maxFileSize = 2, maxFileCount = 10, acceptedFormats = {
+export const FileAttach = ({ filesList = [], maxFileSize = 2, maxFileCount = 10, maxFileName = 0, acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx'],
@@ -15,6 +15,6 @@ export const FileAttach = ({ filesList = [], maxFileSize = 2, maxFileCount = 10,
         [styles[`fileAttach_position_${position}`]]: position,
     });
     return (React.createElement("div", { className: fileAttachClasses, style: style },
-        React.createElement(FileLoader, { maxFileSize: maxFileSize, maxFileCount: maxFileCount, acceptedFormats: acceptedFormats, addedFiles: addedFiles, setAddedFiles: setAddedFiles, filesList: filesList, canAdd: canAdd, lng: lng, fileValidator: fileValidator }),
+        React.createElement(FileLoader, { maxFileSize: maxFileSize, maxFileCount: maxFileCount, maxFileName: maxFileName, acceptedFormats: acceptedFormats, addedFiles: addedFiles, setAddedFiles: setAddedFiles, filesList: filesList, canAdd: canAdd, lng: lng, fileValidator: fileValidator }),
         React.createElement(FileListAttaсhed, { filesList: filesList, onDelete: onDelete, onDownload: onDownload, canDelete: canDelete, canDownload: canDownload, lng: lng })));
 };

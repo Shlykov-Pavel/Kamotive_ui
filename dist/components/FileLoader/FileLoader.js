@@ -5,7 +5,7 @@ import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';
 import { FileItem } from '../FileItem/FileItem';
 import classNames from 'classnames';
-export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, acceptedFormats = {
+export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxFileName = 0, acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx', '.log', '.syslog', '.txt'],
@@ -28,7 +28,7 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, acce
     const fileValidatorInner = (file) => {
         if (file.size > maxFileSize * 1024 * 1024 * 1024) {
             return {
-                code: 'name-too-large',
+                code: 'size-too-large',
                 message: lng === 'ru' || lng.includes('ru')
                     ? `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`
                     : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
@@ -52,6 +52,12 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, acce
             return {
                 code: 'files-count-too-large',
                 message: lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
+            };
+        }
+        if (maxFileName && file.name.length > maxFileName) {
+            return {
+                code: 'name-too-large',
+                message: lng === 'ru' || lng.includes('ru') ? `Имя файла не может превышать ${maxFileName} символов` : `File name must be under ${maxFileName} symbols`,
             };
         }
         if (acceptedFormats && !rejectedFormats) {
