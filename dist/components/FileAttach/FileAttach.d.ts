@@ -1,3 +1,3 @@
-import { FC } from 'react';
-import { FileAttachProps } from '../../types';
-export declare const FileAttach: FC<FileAttachProps>;
+import React from 'react';
+import { FileAttachProps, FileLoaderHandle } from '../../types';
+export declare const FileAttach: React.ForwardRefExoticComponent<FileAttachProps & React.RefAttributes<FileLoaderHandle>>;
