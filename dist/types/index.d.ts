@@ -387,6 +387,8 @@ export interface FileAttachProps {
     maxFileSize?: number;
     /** Максимальное количество файлов */
     maxFileCount?: number;
+    /** Максимальное количество символов в названии файла */
+    maxFileName?: number;
     /**Поддерживаемые форматы файлов */
     acceptedFormats?: Accept;
     /**Добавленные файлы */
@@ -465,6 +467,8 @@ export interface FileLoaderProps {
     maxFileSize?: number;
     /** Максимальное количество файлов */
     maxFileCount?: number;
+    /** Максимальное количество символов в названии файла */
+    maxFileName?: number;
     /**Поддерживаемые форматы файлов */
     acceptedFormats?: Accept;
     /** Неподдерживаемые форматы файлов */
