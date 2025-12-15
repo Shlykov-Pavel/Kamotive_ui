@@ -26,8 +26,6 @@ export interface FileLoaderProps {
   addedFiles: File[];
   /**Сосотояние для добавления файлов */
   setAddedFiles: (addedFiles: File[]) => void;
-  /** Список прикрепленных файлов */
-  filesList?: TAttachments[] | [] | undefined;
   /**Заблокировано добавление файлов*/
   canAdd?: boolean;
   /** Язык */
@@ -80,9 +78,6 @@ const meta: Meta<FileLoaderProps> = {
     setAddedFiles: {
       description: 'Состояние для добавления файлов'
     },
-    filesList: {
-      description: 'Список прикрепленных файлов',
-    },
     acceptedFormats: {
       description: 'Поддерживаемые форматы файлов',
     },
@@ -121,8 +116,8 @@ export const FileLoaderDownload = (argTypes: FileLoaderProps): JSX.Element => {
 
 FileLoaderDownload.storyName = 'FileLoader с загрузкой файлов';
 FileLoaderDownload.args = {
-  maxFileSize: 2,
-  maxFileCount: 2,
+  maxFileSize: 10,
+  maxFileCount: 10,
   onDownload: action('download-clicked'),
 };
 

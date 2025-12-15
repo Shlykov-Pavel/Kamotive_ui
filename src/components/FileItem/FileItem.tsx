@@ -22,7 +22,6 @@ export const FileItem: FC<FileItemProps> = ({
   style,
   isAddedFile,
   isRejectedFile,
-  progressBarWidth,
   lng
 }) => {
   const [isLoadingFinished, setIsLoadingFinished] = useState(false);
@@ -173,16 +172,15 @@ export const FileItem: FC<FileItemProps> = ({
         </div>
       </div>
 
-      {loading && !isLoadingFinished && (
+      {/* {loading && !isLoadingFinished && (
         <ProgressBar
           animated
           size="sm"
           value={100}
           setIsLoadingFinished={setIsLoadingFinished}
           animationDuration={animationDuration}
-          width={progressBarWidth}
         />
-      )}
+      )} */}
       {error && (
         <Typography variant="Caption" color="var(--error-main)">
           {error}

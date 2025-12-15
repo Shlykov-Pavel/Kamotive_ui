@@ -19,6 +19,7 @@ export const FileAttach = forwardRef<FileLoaderHandle, FileAttachProps> (({
     'application/octet-stream': ['.prt', '.step', '.stp'],
     'text/plain': ['.syslog'],
   },
+  rejectedFormats,
   addedFiles,
   setAddedFiles,
   onDownload,
@@ -44,9 +45,9 @@ export const FileAttach = forwardRef<FileLoaderHandle, FileAttachProps> (({
         maxFileCount={maxFileCount}
         maxFileName={maxFileName}
         acceptedFormats={acceptedFormats}
+        rejectedFormats={rejectedFormats}
         addedFiles={addedFiles}
         setAddedFiles={setAddedFiles}
-        filesList={filesList}
         canAdd={canAdd}
         lng={lng}
         fileValidator={fileValidator}

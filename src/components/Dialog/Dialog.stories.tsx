@@ -22,6 +22,8 @@ export interface DialogProps {
   overlay?: boolean;
   /**Окно растягивается до максимальной ширины*/
   fullWidth?: boolean;
+  /**Показ лоадера сверху диалогового окна*/
+  isLoading?:boolean
  }
 
 const meta: Meta<DialogProps> = {
@@ -62,6 +64,7 @@ const meta: Meta<DialogProps> = {
     className: { description: 'Дополнительные классы для компонента' },
     overlay: { description: 'Задний фон окна', control: { type: 'boolean' } },
     fullWidth: { description: 'Окно растягивается до максимальной ширины', control: { type: 'boolean' } },
+    isLoading: {description: 'Показ лоадера сверху диалогового окна', control: {type: 'boolean'}}
   },
 };
 
@@ -107,3 +110,24 @@ export const DialogExample = (argTypes: DialogProps): JSX.Element => {
   );
 };
 DialogExample.storyName = 'Модальное окно с состоянием';
+
+export const DialogLoading = (argTypes: DialogProps): JSX.Element => <Dialog {...argTypes} />;
+DialogLoading.args = {
+  open: true,
+  isLoading: true,
+  onClose: () => {console.log('close')},
+  children: (
+    <>
+      <Typography variant="Heading4"> Модальное окно</Typography>
+      <Typography variant="Body1">
+        Компонент Dialog реализован как пустой контейнер, который можно наполнить любым контентом
+      </Typography>
+    </>
+  ),
+};
+
+DialogLoading.parameters = {
+  controls: { disable: true },
+};
+
+DialogLoading.storyName = 'Модальное окно с лоадером';

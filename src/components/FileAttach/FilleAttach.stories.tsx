@@ -25,6 +25,8 @@ interface FileAttachProps {
   maxFileName?: number;
   /**Поддерживаемые форматы файлов */
   acceptedFormats?: Accept;
+  /** Неподдерживаемые форматы файлов */
+  rejectedFormats?: Accept;
   /**Добавленные файлы */
   addedFiles: File[];
   /**Сосотояние для добавления файлов */
@@ -133,6 +135,9 @@ const meta: Meta<FileAttachProps> = {
     },
     acceptedFormats: {
       description: 'Поддерживаемые форматы файлов',
+    },
+    rejectedFormats: {
+      description: 'Неподдерживаемые форматы файлов',
     },
     canAdd: {
       description: 'Устанавливает атрибут disabled добавления файла. Передаются разрешения на добавление файлов.',
