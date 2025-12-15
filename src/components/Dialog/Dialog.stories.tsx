@@ -10,6 +10,8 @@ import { IconClose } from '../../Icons';
 export interface DialogProps {
   /** Флаг открытия окна */
   open: boolean;
+  /** Функция обработки закрытия окна */
+  onClose?: () => void;
   /** Максимальная ширина окна */
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
   /** Содержимое окна */
@@ -54,6 +56,7 @@ const meta: Meta<DialogProps> = {
   },
   argTypes: {
     open: { description: 'Флаг открытия окна', control: { type: 'boolean' } },
+    onClose: { description: 'Функция обработки закрытия окна' },
     maxWidth: {
       description: 'Максимальная ширина окна ',
       control: {  type: 'text' },
