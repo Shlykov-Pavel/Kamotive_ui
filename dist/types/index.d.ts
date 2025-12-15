@@ -391,6 +391,8 @@ export interface FileAttachProps {
     maxFileName?: number;
     /**Поддерживаемые форматы файлов */
     acceptedFormats?: Accept;
+    /** Неподдерживаемые форматы файлов */
+    rejectedFormats?: Accept;
     /**Добавленные файлы */
     addedFiles: File[];
     /**Сосотояние для добавления файлов */
@@ -457,8 +459,6 @@ export interface FileItemProps {
     isAddedFile?: boolean;
     /** Флаг отклоненного файла */
     isRejectedFile?: boolean;
-    /** Ширина прогресс бара */
-    progressBarWidth?: string;
     /** Язык интерфейса для типов данных*/
     lng?: string;
 }
@@ -479,8 +479,6 @@ export interface FileLoaderProps {
     setAddedFiles: (addedFiles: File[]) => void;
     /**Разрешени на добавление файлов*/
     canAdd?: boolean;
-    /** Список прикрепленных файлов */
-    filesList?: TAttachments[] | [] | undefined;
     /** Язык */
     lng?: string;
     /** Дополнительный класс */
@@ -489,8 +487,6 @@ export interface FileLoaderProps {
     style?: React.CSSProperties;
     /** Функция валидации файла */
     fileValidator?: (file: File) => FileError | FileError[] | null;
-    /** Ширина прогресс бара */
-    progressBarWidth?: string;
 }
 export interface FileLoaderHandle {
     clearErrorFiles: () => void;
@@ -499,6 +495,8 @@ export interface FileLoaderHandle {
 export interface DialogProps {
     /** Флаг открытия окна */
     open: boolean;
+    /** Функция обработки закрытия окна */
+    onClose?: () => void;
     /** Максимальная ширина окна */
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
     /** Содержимое окна */
@@ -511,6 +509,8 @@ export interface DialogProps {
     overlay?: boolean;
     /**Окно растягивается до максимальной ширины*/
     fullWidth?: boolean;
+    /**Показ лоадера сверху диалогового окна*/
+    isLoading?: boolean;
 }
 export interface IconButtonProps {
     /** Иконка кнопки */

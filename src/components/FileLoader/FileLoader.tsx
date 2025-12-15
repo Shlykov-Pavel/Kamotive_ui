@@ -24,13 +24,11 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   rejectedFormats,
   addedFiles,
   setAddedFiles,
-  filesList = [],
   canAdd = true,
   lng = 'ru',
   className,
   style,
-  fileValidator,
-  progressBarWidth
+  fileValidator
 }, ref) => {
   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
   const [loadingFilesNames, setLoadingFilesNames] = useState<string[]>([]);
@@ -61,19 +59,19 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
       };
     }
     // Проверка на дубликаты в filesList
-    if (filesList.find((existingFile: TAttachments) => existingFile.filename === file.name)) {
-      return {
-        code: 'repeating-file-name',
-        message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке прикрепленных файлов` : `File already exists in the list of attached files`,
-      };
-    }
+    // if (filesList.find((existingFile: TAttachments) => existingFile.filename === file.name)) {
+    //   return {
+    //     code: 'repeating-file-name',
+    //     message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке прикрепленных файлов` : `File already exists in the list of attached files`,
+    //   };
+    // }
     // Проверка на дубликаты в addedFiles
-    if (addedFiles.find((addedFile: File) => addedFile.name === file.name)) {
-      return {
-        code: 'repeating-file-name',
-        message: lng === 'ru' || lng.includes('ru') ? `Файл уже добавлен` : `File already added`,
-      };
-    }
+    // if (addedFiles.find((addedFile: File) => addedFile.name === file.name)) {
+    //   return {
+    //     code: 'repeating-file-name',
+    //     message: lng === 'ru' || lng.includes('ru') ? `Файл уже добавлен` : `File already added`,
+    //   };
+    // }
     if (addedFiles.length > maxFileCount - 1) {
       return {
         code: 'files-count-too-large',
@@ -138,9 +136,13 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      setAddedFiles([...addedFiles, ...acceptedFiles]);
-      //преобразование типа файлов для отрисовки в списке
-      const newFormatAttachments: TAttachments[] = acceptedFiles.map((file) => {
+      const existingFileNames =  new Set(addedFiles.map(file => file.name));
+      const filteredRepeatedFileName = acceptedFiles.filter((newFile) =>
+        !existingFileNames.has(newFile.name)
+      );
+      setAddedFiles([...addedFiles, ...filteredRepeatedFileName]);
+      //преобразование типа файлов для отрисовки в списке      
+      const newFormatAttachments: TAttachments[] = filteredRepeatedFileName.map((file) => {
         return {
           id: `file-${file.name}`,
           filename: file.name,
@@ -221,10 +223,9 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
       <FileItem
         key={file.id}
         file={file}
-        loading={loadingFilesNames.includes(file.filename)} // Показываем лоадер только для новых файлов
+        //loading={loadingFilesNames.includes(file.filename)} // Показываем лоадер только для новых файлов
         onDelete={handleDeleteFiles}
         isAddedFile={true}
-        progressBarWidth={progressBarWidth}
         lng={lng}
       />
     );

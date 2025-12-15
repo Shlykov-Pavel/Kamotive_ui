@@ -9,7 +9,7 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx', '.log', '.syslog', '.txt'],
-}, rejectedFormats, addedFiles, setAddedFiles, filesList = [], canAdd = true, lng = 'ru', className, style, fileValidator, progressBarWidth }, ref) => {
+}, rejectedFormats, addedFiles, setAddedFiles, canAdd = true, lng = 'ru', className, style, fileValidator }, ref) => {
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [loadingFilesNames, setLoadingFilesNames] = useState([]);
     const [errorFiles, setErrorFiles] = useState([]);
@@ -35,19 +35,19 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
             };
         }
         // Проверка на дубликаты в filesList
-        if (filesList.find((existingFile) => existingFile.filename === file.name)) {
-            return {
-                code: 'repeating-file-name',
-                message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке прикрепленных файлов` : `File already exists in the list of attached files`,
-            };
-        }
+        // if (filesList.find((existingFile: TAttachments) => existingFile.filename === file.name)) {
+        //   return {
+        //     code: 'repeating-file-name',
+        //     message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке прикрепленных файлов` : `File already exists in the list of attached files`,
+        //   };
+        // }
         // Проверка на дубликаты в addedFiles
-        if (addedFiles.find((addedFile) => addedFile.name === file.name)) {
-            return {
-                code: 'repeating-file-name',
-                message: lng === 'ru' || lng.includes('ru') ? `Файл уже добавлен` : `File already added`,
-            };
-        }
+        // if (addedFiles.find((addedFile: File) => addedFile.name === file.name)) {
+        //   return {
+        //     code: 'repeating-file-name',
+        //     message: lng === 'ru' || lng.includes('ru') ? `Файл уже добавлен` : `File already added`,
+        //   };
+        // }
         if (addedFiles.length > maxFileCount - 1) {
             return {
                 code: 'files-count-too-large',
@@ -102,9 +102,11 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
     };
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles, fileRejections) => {
-            setAddedFiles([...addedFiles, ...acceptedFiles]);
-            //преобразование типа файлов для отрисовки в списке
-            const newFormatAttachments = acceptedFiles.map((file) => {
+            const existingFileNames = new Set(addedFiles.map(file => file.name));
+            const filteredRepeatedFileName = acceptedFiles.filter((newFile) => !existingFileNames.has(newFile.name));
+            setAddedFiles([...addedFiles, ...filteredRepeatedFileName]);
+            //преобразование типа файлов для отрисовки в списке      
+            const newFormatAttachments = filteredRepeatedFileName.map((file) => {
                 return {
                     id: `file-${file.name}`,
                     filename: file.name,
@@ -174,7 +176,9 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
         setLoadingFilesNames(loadingFilesNames.filter((id) => id !== id));
     };
     const acceptedFileItems = addedFilesFormated.map((file) => {
-        return (React.createElement(FileItem, { key: file.id, file: file, loading: loadingFilesNames.includes(file.filename), onDelete: handleDeleteFiles, isAddedFile: true, progressBarWidth: progressBarWidth, lng: lng }));
+        return (React.createElement(FileItem, { key: file.id, file: file, 
+            //loading={loadingFilesNames.includes(file.filename)} // Показываем лоадер только для новых файлов
+            onDelete: handleDeleteFiles, isAddedFile: true, lng: lng }));
     });
     const handleDeleteRejectedFile = (id) => {
         setErrorFiles(errorFiles.filter((rejection) => rejection.file.id !== id));
