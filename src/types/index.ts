@@ -646,12 +646,14 @@ export interface TooltipProps {
 }
 
 export interface TextEditorProps {
+  defaultValue?: string;
   label?: string;
   onSubmit?: (value: string, files: FilePreview[]) => void;
   onChange?: (value: string, files: FilePreview[]) => void;
-  defaultValue?: string;
+  onCancel?: () => void;
   error?: boolean;
   helperText?: string;
+  isEditMode?:boolean;
   canAttachFiles?: boolean;
   files?: FilePreview[];
   required?: boolean;
@@ -670,9 +672,9 @@ export interface CommentProps {
   style?: CSSProperties;
   /** Дополнительный класс */
   className?: string;
-  username: string;
+  username?: string;
   avatar?: string | null;
-  creationDate: string;
+  creationDate?: string;
   canAttachFiles?: boolean,
   files?: FilePreview[],
   canEdit?: boolean;
@@ -688,6 +690,8 @@ export interface CommentProps {
   /** Callback при изменении значения */
   onChange?: (value: string, files: FilePreview[]) => void;
   onSubmit?: (value: string, files: FilePreview[]) => void;
+  onEdit?: (value:boolean) => void;
+  onCancel?: () => void;
   onDelete?: (id: string) => void;
   /** Язык */
   lng?: string;

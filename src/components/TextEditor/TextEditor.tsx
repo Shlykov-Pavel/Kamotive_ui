@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { init, exec, PellEditor } from 'pell';
 import {
   IconAttachToString,
@@ -9,12 +10,18 @@ import {
   IconStrikethroughToString,
   IconSubmitToString,
   IconUnderlineToString,
+  IconCancelToString,
+  IconCancel,
+  IconSubmit,
+  IconClose,
 } from '../../Icons';
 import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
 import { FilePreview, AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
 import { TextEditorProps } from '../../types';
 import styles from './TextEditor.module.css';
+import { Tooltip } from '../Tooltip/Tooltip';
+import { IconButton } from '../IconButton/IconButton';
 
 const ACCEPTED_FILE_TYPES =
   'image/*,audio/*,video/*,.doc,.docx,.html,.htm,.odt,.pdf,.xls,.xlsx,.ods,.ppt,.pptx,.txt,.zip,.djvu';
@@ -38,34 +45,44 @@ const getElementFromRange = (range: Range): Element | null => {
 };
 
 export const TextEditor: React.FC<TextEditorProps> = ({
+  defaultValue,
   label,
   onSubmit,
   onChange,
-  defaultValue,
+  onCancel,
   error,
   helperText,
+  isEditMode,
   canAttachFiles = false,
   files,
   required,
   className,
   isButtonDisabled,
-  lng = 'ru',
+  lng = 'en',
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
+  const pellRef = useRef<PellEditor | null>(null);
   const uploaderRef = useRef<HTMLInputElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const buttonRefs = useRef<{ [key: string]: HTMLElement }>({});
 
   const [editor, setEditor] = useState<PellEditor | null>(null);
   const [temporaryFiles, setTemporaryFiles] = useState<File[]>([]);
   const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files || []);
+
+  const [editorHtml, setEditorHtml] = useState(defaultValue || ''); 
+  
+  // console.log('temporaryFiles',temporaryFiles);
+  // console.log('attachedFiles',attachedFiles);
+
   const [activeStates, setActiveStates] = useState({
     bold: false,
     italic: false,
     underline: false,
     strikethrough: false,
     heading2: false,
-    ulist: false,
+    olist: false,
   });
 
   const checkFormatting = useCallback(
@@ -190,7 +207,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         underline: false,
         strikethrough: false,
         heading2: false,
-        ulist: false,
+        olist: false,
       };
 
       setActiveStates(defaultStates);
@@ -209,7 +226,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       underline: isFormatActive(element, ['U'], 'text-decoration', ['underline']),
       strikethrough: isFormatActive(element, ['S', 'STRIKE', 'DEL'], 'text-decoration', ['line-through']),
       heading2: checkFormatting(element, ['H2']),
-      ulist: checkFormatting(element, ['UL']) || !!element.closest('ul'),
+      olist: checkFormatting(element, ['OL']) || !!element.closest('ol'),
     };
 
     setActiveStates(newStates);
@@ -286,8 +303,8 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
     if (!currentElement) return;
 
-    const isInList = !!currentElement.closest('ul');
-    exec('insertUnorderedList');
+    const isInList = !!currentElement.closest('ol');
+    exec('insertOrderedList');
     if (isInList) {
       const contentElement = editorRef.current?.querySelector(`.${styles.pellContent}`) as HTMLElement;
       if (!contentElement) return;
@@ -347,8 +364,14 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     event.stopPropagation();
     event.preventDefault();
 
-    const newTemporaryFiles = [...temporaryFiles, ...Array.from(files)];
+    const newTemporaryFiles = [...temporaryFiles, ...Array.from(files)];    
     setTemporaryFiles(newTemporaryFiles);
+    // if(cancelButtonRef.current){
+    //   cancelButtonRef.current.disabled = false
+    // }
+    // if(submitButtonRef.current){
+    //   submitButtonRef.current.disabled = false
+    // }
 
     const newAttachedFiles: FilePreview[] = Array.from(files).map((file) => ({
       file,
@@ -370,6 +393,9 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       }
       return prev.filter((f) => f.id !== fileId);
     });
+    // if(submitButtonRef.current){
+    //   submitButtonRef.current.disabled = true
+    // }
   };
 
   const getEditorActions = useCallback(
@@ -406,7 +432,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
           result: () => {},
         },
         {
-          name: 'ulist',
+          name: 'olist',
           icon: IconBulletlistToString(),
           title: 'Bullet List',
           result: () => {},
@@ -446,44 +472,106 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     });
   };
 
-  const createSubmitButton = useCallback(() => {
-    const submitButton = document.createElement('button');
-    submitButton.className = styles.submitButton;
-    submitButton.disabled = !!error || !!isButtonDisabled;
-    submitButton.innerHTML = IconSubmitToString('', '', '1.5');
-    submitButton.type = 'button';
 
-    (submitButtonRef as React.MutableRefObject<HTMLButtonElement | null>).current = submitButton;
+  const handleSubmit = useCallback(() => {
+    const currentPell = pellRef.current; 
+    
+    if (!currentPell?.content) {
+      return;
+    }
+    if (onSubmit) {
+      onSubmit(currentPell.content.innerHTML, attachedFiles);
+      currentPell.content.innerHTML = '';
+      setAttachedFiles([]);
+      setEditorHtml(''); 
+  
+    }
+  }, [onSubmit, attachedFiles]);
 
-    return submitButton;
-  }, [error, isButtonDisabled]);
+  const handleCancel = useCallback(() => {
+    const currentPell = pellRef.current;
+    if (!currentPell?.content) {
+      return;
+    }
+    currentPell.content.innerHTML = defaultValue || '';
+    setEditorHtml(defaultValue || ''); 
+    setAttachedFiles([]);
+
+    if (onCancel) {
+      onCancel?.();
+    }
+  }, [defaultValue, onCancel]); 
+
+
 
   const setupToolbar = (pellEditor: PellEditor) => {
     if (!editorRef.current) return;
     const actionbar = editorRef.current.querySelector(`.${styles.pellActionbar}`);
     const content = editorRef.current.querySelector(`.${styles.pellContent}`);
 
-    if (actionbar && content && editorRef.current) {
-      const toolbarContainer = document.createElement('div');
-      toolbarContainer.className = styles.toolbarContainer;
-
+    if (actionbar && content) {
+      // 1. Контейнер для кнопок форматирования
       const buttonsContainer = document.createElement('div');
       buttonsContainer.className = styles.buttonsContainer;
-
       while (actionbar.firstChild) {
         buttonsContainer.appendChild(actionbar.firstChild);
       }
-
-      const submitButton = createSubmitButton();
+     
+      // 2. Контейнер для Отменить/Добавить
+      const actionsWrapper = document.createElement('div');
+      actionsWrapper.className = styles.actionsWrapper || 'actions-container';
+      actionsWrapper.style.display = 'flex';
+      actionsWrapper.style.alignItems = 'center';
+      actionsWrapper.style.gap = '8px';
+      actionsWrapper.style.marginLeft = 'auto'; 
 
       actionbar.appendChild(buttonsContainer);
-      actionbar.appendChild(submitButton);
+      actionbar.appendChild(actionsWrapper);
 
-      editorRef.current.appendChild(actionbar);
+      const root = createRoot(actionsWrapper);
+      root.render(
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {isEditMode && (
+            <Tooltip key={`cancel-btn-${isEditMode}`} label={lng === 'ru' ? 'Отменить' : 'Cancel'} position="bottom-center" hideDelay={ 0 }  style= {{ width: 'max-content', whiteSpace: 'nowrap' }}>
+                <IconButton
+                  ref={cancelButtonRef}
+                  icon={<IconClose/>} 
+                  onClick={handleCancel} 
+                   style={{ 
+                    width: '25px', 
+                    height: '25px', 
+                    padding:'5px', 
+                    backgroundColor: 'white',
+                    cursor: 'pointer'
+                  }} 
+                   color="var(--blue-main)"
+                />
+            </Tooltip>
+          )}  
+          
+          <Tooltip key={`submit-btn-${isEditMode}`} label={lng === 'ru' ? 'Отправить' : 'Submit'} position="bottom-center" hideDelay={ 0 }  style= {{ width: 'max-content', whiteSpace: 'nowrap' }}>
+                <IconButton
+                  ref={submitButtonRef}
+                  icon={<IconSubmit width={'10'} height={'10'} htmlColor='blue' strokeWidth={'1'}/>} 
+                  onClick={handleSubmit} 
+                  style={{ 
+                    width: '25px', 
+                    height: '25px', 
+                    padding:'5px', 
+                    backgroundColor: 'var(--blue-main)',
+                    opacity: 0.5,
+                    cursor: 'pointer'
+                  }} 
+                  color="white"
+                />
+             
+          </Tooltip>
+        </div>
+      );
     }
-
+    
     const buttons = editorRef.current.querySelectorAll(`.${styles.pellButton}`);
-    const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'ulist'];
+    const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'olist'];
     if (canAttachFiles) {
       commands.push('image');
     }
@@ -501,7 +589,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
           if (command === 'heading2') {
             toggleHeading2();
-          } else if (command === 'ulist') {
+          } else if (command === 'olist') {
             toggleBulletList();
           } else if (command === 'image') {
             handleAttachFiles();
@@ -519,30 +607,64 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         });
       }
     });
-  };
+  }
+
 
   // Функция для открытия диалога выбора файлов
   const handleAttachFiles = () => {
     uploaderRef.current?.click();
   };
 
-  const handleEditorChange = useCallback(() => {
-    updateActiveStates();
-    if (onChange && editor?.content) {
-      onChange(editor.content.innerHTML, attachedFiles);
-    }
-  }, [onChange, editor, attachedFiles, updateActiveStates]);
+  const handleEditorChange = useCallback((html: string) => {
+  setEditorHtml(html);
+  updateActiveStates();
+  if (onChange) {
+    onChange(html, attachedFiles);
+  }
+}, [onChange, attachedFiles, updateActiveStates]);
 
-  const handleSubmit = useCallback(() => {
-    if (!editor?.content) {
-      return;
-    }
-    if (onSubmit) {
-      onSubmit(editor.content.innerHTML, attachedFiles);
-      editor.content.innerHTML = '';
-      setAttachedFiles([]);
-    }
-  }, [editor, attachedFiles]);
+useEffect(() => {
+  if (!submitButtonRef.current) return;
+  
+  const normalizeHtml = (html: string | undefined | null) => {
+    if (!html) return '';
+    return html
+      .replace(/&nbsp;/g, ' ')      // неразрывные пробелы
+      .replace(/\s+/g, ' ')         // лишние пробелы и переносы
+      .replace(/>\s+</g, '><')      // пробелы между тегами
+      .trim();
+  };
+
+  const normalizedEditor = normalizeHtml(editorHtml);
+  const normalizedDefault = normalizeHtml(defaultValue);
+  console.log('normalizedEditor',normalizedEditor);
+  console.log('normalizedDefault',normalizedDefault);
+
+  const contentOnly = normalizedEditor
+    .replace(/<[^>]*>/g, '') // все теги
+    .replace(/\s/g, '')      // все пробелов
+    .trim();
+  const isTextEmpty = contentOnly.length === 0
+  const hasNoNewFiles = temporaryFiles.length === 0; 
+  const hasNoTextChanges = normalizedEditor === normalizedDefault;
+  const hasNoChanges = hasNoTextChanges && hasNoNewFiles;
+  
+   if (submitButtonRef.current) {
+    submitButtonRef.current.disabled = hasNoChanges || isTextEmpty;
+    submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty ? '0.5' : '1';
+    submitButtonRef.current.style.cursor = hasNoChanges || isTextEmpty ? 'not-allowed' : 'default';
+
+  }
+  console.log(' submitButtonRef.current.disabled', submitButtonRef.current.disabled);
+  
+  // submitButtonRef.current.disabled = hasNoChanges || isTextEmpty
+  
+  if (cancelButtonRef.current) {
+    cancelButtonRef.current.disabled = hasNoChanges;
+  }
+
+}, [editorHtml, temporaryFiles, attachedFiles, defaultValue]);
+
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.ctrlKey || e.metaKey) {
@@ -570,10 +692,10 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     if (editorRef.current) {
       editorRef.current.innerHTML = '';
       const pellEditor = initializePellEditor();
+      pellRef.current = pellEditor;
 
       pellEditor.content.innerHTML = defaultValue || '';
       setEditor(pellEditor);
-
       setupToolbar(pellEditor);
 
       const pellEditorContent = pellEditor.content;
@@ -607,17 +729,6 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    const button = submitButtonRef.current;
-    if (button) {
-      button.removeEventListener('click', handleSubmit);
-      button.addEventListener('click', handleSubmit);
-
-      return () => {
-        button.removeEventListener('click', handleSubmit);
-      };
-    }
-  }, [handleSubmit, submitButtonRef.current]);
 
   useEffect(() => {
     if (editor) {
@@ -656,7 +767,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
             lng={lng}
           />
         )}
-        <div ref={editorRef}></div>
+        <div className={styles.editorContainer} ref={editorRef}></div>
 
         {canAttachFiles && (
           <input

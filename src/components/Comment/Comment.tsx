@@ -4,8 +4,9 @@ import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
 import { TextEditor } from '../TextEditor/TextEditor';
 import { FilePreview, AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
-import { IconAccount, IconDeleteFilled, IconPencilFilled } from '../../Icons';
+import { IconAccount, IconDelete, IconPencil, IconPencilCancel } from '../../Icons';
 import { IconButton } from '../IconButton/IconButton';
+import { Tooltip } from '../Tooltip/Tooltip';
 import { CommentProps } from '../../types';
 
 export const Comment: FC<CommentProps> = ({
@@ -26,8 +27,11 @@ export const Comment: FC<CommentProps> = ({
   onChange,
   onSubmit,
   onDelete,
+  onCancel,
+  onEdit,
   lng = 'ru',
 }) => {
+  
   const [commentText, setCommentText] = useState(value || '');
   const [isEditMode, setIsEditMode] = useState(isEdit);
   const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files);
@@ -64,6 +68,15 @@ export const Comment: FC<CommentProps> = ({
     }
   };
 
+  const handleCancel = () => {
+        setIsEditMode((prev) => !prev);
+        onCancel?.();
+    };
+  
+    useEffect(() => {
+      onEdit?.(isEditMode)
+  }, [isEditMode]);
+
   return (
     <div className={wrapperClassess} style={style}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -88,8 +101,35 @@ export const Comment: FC<CommentProps> = ({
         </div>
         {canEdit && (
           <div className={styles.iconsWrapper}>
-            <IconButton icon={<IconPencilFilled />} onClick={handleEditClick} size="sm" style={{ aspectRatio: 0, width: '30px', height: '30px' }} />
-            <IconButton icon={<IconDeleteFilled />} onClick={handleDeleteClick} size="sm" style={{ aspectRatio: 0, width: '30px', height: '30px' }} />
+            <Tooltip label={isEditMode ? (lng === 'ru' ? 'Закрыть редактирование' : 'Close edit') : (lng === 'ru' ? 'Редактировать' : 'Edit')}
+            key={`edit-btn-${isEditMode}`}
+            position={"top-center"}
+            style= {{ width: 'max-content', whiteSpace: 'nowrap' }}
+            hideDelay={ 0 }
+            >
+              <IconButton
+              icon={isEditMode ? <IconPencilCancel width={'14'} height={'14'}/>: <IconPencil  width={'14'} height={'14'}/>} 
+              onClick={handleEditClick}
+              style={{ width: '30px', height: '30px', padding:'5px' }} 
+              color= "var(--icons-grey)" 
+              />
+            </Tooltip>
+            <Tooltip 
+              label={lng === 'ru' ? 'Удалить' : 'Delete'}
+              key={`delete-btn-${id}`}
+              position={"top-center"}
+              style= {{ width: 'max-content', whiteSpace: 'nowrap' }}
+              hideDelay={ 0 }
+            >
+              <IconButton 
+                icon={<IconDelete width={'14'} height={'14'} />} 
+                onClick={handleDeleteClick} 
+                size="sm" 
+                style={{ width: '30px', height: '30px', padding:'5px'  }} 
+                color= "var(--icons-grey)" 
+            />
+            </Tooltip>
+            
           </div>
         )}
       </div>
@@ -98,8 +138,10 @@ export const Comment: FC<CommentProps> = ({
           defaultValue={commentText}
           onSubmit={handleSubmit}
           onChange={handleChange}
+          onCancel={handleCancel}
           error={error}
           helperText={helperText}
+          isEditMode={isEditMode}
           files={attachedFiles}
           canAttachFiles={canAttachFiles}
           lng={lng}

@@ -87,6 +87,9 @@ export const Tooltip: FC<TooltipProps> = ({
 		return () => {
 			window.removeEventListener('resize', updateContainerRect);
 			window.removeEventListener('scroll', updateContainerRect);
+			setIsVisible(false);
+        	setIsOpen(false);
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 		};
 	}, []);
 
@@ -247,6 +250,12 @@ export const Tooltip: FC<TooltipProps> = ({
             updateCoords(e.clientX, e.clientY);
         }
 	};
+	
+	const handlePointerDown = () => {
+		setIsVisible(false);
+		setIsOpen(false);
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+	};
 
 	const tooltipStyles = {
 		...style,
@@ -264,6 +273,7 @@ export const Tooltip: FC<TooltipProps> = ({
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				onMouseMove={handleMouseMove}
+				onMouseDown={handlePointerDown}
 				className={styles.wrapper}
 				ref={childrenRef}
 			>

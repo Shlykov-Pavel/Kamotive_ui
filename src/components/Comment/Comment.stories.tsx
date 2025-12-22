@@ -1,7 +1,8 @@
 import type { Meta } from '@storybook/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { Comment } from './Comment';
 import { CommentProps } from '../../types';
+import { TextEditor } from '../TextEditor/TextEditor';
 
 const withWrapper = (Story: React.ComponentType) => (
   <div
@@ -15,7 +16,7 @@ const withWrapper = (Story: React.ComponentType) => (
 );
 
 const meta: Meta<typeof Comment> = {
-  title: 'Components/Comment',
+  title: 'Components/Comment/Comment',
   component: Comment,
   tags: ['autodocs'],
   parameters: {
@@ -72,7 +73,9 @@ CommentEditableWithFiles.args = {
   canEdit: true,
   canAttachFiles: true,
 };
+
 CommentEditableWithFiles.storyName = 'Comment с возможностью прикреплять файлы';
+
 
 export const CommentEditableWithoutAvatar = (argTypes: CommentProps): JSX.Element => {
   return <Comment value={value} {...argTypes} />;
@@ -83,3 +86,56 @@ CommentEditableWithoutAvatar.args = {
   canAttachFiles: true,
 };
 CommentEditableWithoutAvatar.storyName = 'Comment без аватара';
+
+
+export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
+  const initialComment =  { id: '1', 
+    value: 'Это текст комментария, который будет скрыт при редактировании.',
+    username: 'Александр Пушкин',
+    creationDate: '19.12.2025',
+    canEdit: true,
+    lng: 'ru',
+    files: []
+  }
+  const [comments, setComments] = React.useState<CommentProps[]>([initialComment]);
+  const [isEdit, setIsEdit] = useState<boolean>(false)
+  const handleAddComment = (value: string) => {
+    console.log('__handleAddComment__', value);
+    
+    const newComment = {
+      id: Math.random().toString(),
+      value: value,
+      username: 'Михаил Лермонтов',
+      creationDate: '22.12.2025', // Сегодняшняя дата
+      canEdit: true,
+      lng: 'ru',
+      files: []
+    } as CommentProps;
+    
+    setComments((prev) => [...prev, newComment]);
+  };
+  const handleOpenEdit = (edit: boolean) => {
+    setIsEdit(edit)
+  } 
+
+  return (
+    <div style={{display: 'flex', flexDirection: 'column', gap:'10px'}}>
+      {comments.map((comment, index) => (
+        <Comment
+        key={comment.id}
+        {...comment}  
+        canEdit={index === comments.length - 1}
+        isEdit={isEdit}
+        onEdit={handleOpenEdit}
+        lng={comment.lng}
+        />
+      ))}
+
+        {!isEdit && <TextEditor 
+          onSubmit={handleAddComment} 
+          lng="ru" 
+        />}
+    </div>
+  );
+};
+

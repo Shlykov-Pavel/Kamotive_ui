@@ -115,8 +115,10 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
             {file.preview ? (
               <img src={file.preview} alt={file.file.name} className={styles.previewImage} />
             ) : (
-              <div className={styles.previewImage}>{getFileIcon(file.file)}</div>
+              // <div className={styles.previewImage}>{getFileIcon(file.file)}</div>
+              <div className={styles.previewImage}>{file.file.name}</div>
             )}
+
             {isEdit && (
               <button className={styles.removeFileButton} onClick={(event) => handleDelete(event, file.id)}>
                 ✕
