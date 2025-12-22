@@ -73,8 +73,6 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
   const [editorHtml, setEditorHtml] = useState(defaultValue || ''); 
   
-  // console.log('temporaryFiles',temporaryFiles);
-  // console.log('attachedFiles',attachedFiles);
 
   const [activeStates, setActiveStates] = useState({
     bold: false,
@@ -404,37 +402,37 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         {
           name: 'bold',
           icon: IconBoldToString('', '', '1.5'),
-          title: 'Bold (Ctrl+B)',
+           title: lng === 'ru' ? 'Жирный (Ctrl+B)' : 'Bold (Ctrl+B)',
           result: () => {},
         },
         {
           name: 'italic',
           icon: IconItalicToString('', '', '1.5'),
-          title: 'Italic (Ctrl+I)',
+          title: lng === 'ru' ? 'Курсив (Ctrl+I)' : 'Italic (Ctrl+I)',
           result: () => {},
         },
         {
           name: 'underline',
           icon: IconUnderlineToString('', '', '1.5'),
-          title: 'Underline (Ctrl+U)',
+          title: lng === 'ru' ? 'Подчеркнутый (Ctrl+U)' : 'Underline (Ctrl+U)',
           result: () => {},
         },
         {
           name: 'strikethrough',
           icon: IconStrikethroughToString('', '', '1.5'),
-          title: 'Strike-through',
+          title: lng === 'ru' ? 'Зачеркнутый' : 'Strike-through',
           result: () => {},
         },
         {
           name: 'heading2',
           icon: IconHeader2ToString('', '', '1.5'),
-          title: 'Heading 2',
+          title: lng === 'ru' ? 'Заголовок' : 'Heading 2',
           result: () => {},
         },
         {
           name: 'olist',
           icon: IconBulletlistToString(),
-          title: 'Bullet List',
+          title: lng === 'ru' ? 'Список' : 'Bullet List',
           result: () => {},
         },
       ];
@@ -442,14 +440,14 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         baseActions.push({
           name: 'image',
           icon: IconAttachToString('', '', '1.5'),
-          title: 'Upload Image',
+          title: lng === 'ru' ? 'Прикрепить изображение' : 'Upload Image',
           result: () => {},
         });
       }
   
       return baseActions;
     },
-    [canAttachFiles]
+    [canAttachFiles,lng]
   );
 
   const getEditorClasses = useCallback(
