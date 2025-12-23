@@ -102,13 +102,10 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
     };
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles, fileRejections) => {
-            const existingFileNames = new Set(addedFiles.map(file => file.name));
-            const filteredRepeatedFileName = acceptedFiles.filter((newFile) => !existingFileNames.has(newFile.name));
-            setAddedFiles([...addedFiles, ...filteredRepeatedFileName]);
-            //преобразование типа файлов для отрисовки в списке      
-            const newFormatAttachments = filteredRepeatedFileName.map((file) => {
+            setAddedFiles([...addedFiles, ...acceptedFiles]);
+            const newFormatAttachments = acceptedFiles.map((file) => {
                 return {
-                    id: `file-${file.name}`,
+                    id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
                     filename: file.name,
                     size: file.size,
                     type: file.type,
@@ -169,11 +166,15 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
         disabled: !canAdd,
     });
     const handleDeleteFiles = (id) => {
-        var _a;
-        const filename = (_a = addedFilesFormated.find((file) => file.id === id)) === null || _a === void 0 ? void 0 : _a.filename;
-        setAddedFiles(addedFiles.filter((file) => file.name !== filename));
-        setAddedFilesFormatted(addedFilesFormated.filter((file) => file.filename !== filename));
-        setLoadingFilesNames(loadingFilesNames.filter((id) => id !== id));
+        const fileIndex = addedFilesFormated.findIndex((file) => file.id === id);
+        if (fileIndex !== -1) {
+            const newAddedFiles = [...addedFiles];
+            newAddedFiles.splice(fileIndex, 1);
+            setAddedFiles(newAddedFiles);
+            const fileToDelete = addedFilesFormated[fileIndex];
+            setAddedFilesFormatted(addedFilesFormated.filter((file) => file.id !== id));
+            setLoadingFilesNames(loadingFilesNames.filter((name) => name !== fileToDelete.filename));
+        }
     };
     const acceptedFileItems = addedFilesFormated.map((file) => {
         return (React.createElement(FileItem, { key: file.id, file: file, 
