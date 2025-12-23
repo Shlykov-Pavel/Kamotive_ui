@@ -14,6 +14,8 @@ import {
   IconCancel,
   IconSubmit,
   IconClose,
+  IconRedoToString,
+  IconUndoToString,
 } from '../../Icons';
 import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
@@ -66,12 +68,21 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const buttonRefs = useRef<{ [key: string]: HTMLElement }>({});
+  const redoContentRef = useRef<string>('');
 
   const [editor, setEditor] = useState<PellEditor | null>(null);
   const [temporaryFiles, setTemporaryFiles] = useState<File[]>([]);
   const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files || []);
 
+
+  // console.log('temporaryFiles',temporaryFiles);
+  // console.log('attachedFiles',attachedFiles);
+  
+  
+
   const [editorHtml, setEditorHtml] = useState(defaultValue || ''); 
+  console.log('editorHtml',editorHtml);
+  
   
 
   const [activeStates, setActiveStates] = useState({
@@ -125,48 +136,30 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   );
 
   const setCursorToEnd = () => {
+    console.log('-setCursorToEnd-');
+    
     try {
-      if (!editor?.content) return;
-
-      const content = editor.content;
+      const content = pellRef.current?.content;
+      if (!content) return;
       content.focus();
 
       const selection = window.getSelection();
       if (!selection) return;
-
       const range = document.createRange();
-
-      if (content.childNodes.length === 0) {
-        const textNode = document.createTextNode('');
-        content.appendChild(textNode);
-        range.setStart(textNode, 0);
-        range.setEnd(textNode, 0);
-      } else {
-        const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, null);
-
-        let lastTextNode = null;
-        let node;
-        while ((node = walker.nextNode())) {
-          lastTextNode = node;
-        }
-
-        if (lastTextNode) {
-          range.setStart(lastTextNode, lastTextNode.textContent?.length || 0);
-          range.setEnd(lastTextNode, lastTextNode.textContent?.length || 0);
-        } else {
-          range.selectNodeContents(content);
-          range.collapse(false);
-        }
-      }
+      range.selectNodeContents(content);
+      range.collapse(false);
 
       selection.removeAllRanges();
       selection.addRange(range);
+       content.scrollTop = content.scrollHeight;
     } catch (error) {
       console.warn('Error setting cursor to end:', error);
     }
   };
 
   const getSafeRange = () => {
+    console.log('getSafeRange');
+    
     try {
       const selection = getSafeSelection();
       if (!selection || selection.rangeCount === 0) {
@@ -391,9 +384,9 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       }
       return prev.filter((f) => f.id !== fileId);
     });
-    // if(submitButtonRef.current){
-    //   submitButtonRef.current.disabled = true
-    // }
+    if(submitButtonRef.current){
+      submitButtonRef.current.disabled = true
+    }
   };
 
   const getEditorActions = useCallback(
@@ -435,6 +428,19 @@ export const TextEditor: React.FC<TextEditorProps> = ({
           title: lng === 'ru' ? 'Список' : 'Bullet List',
           result: () => {},
         },
+        {
+          name: 'undo',
+          icon: IconUndoToString('', '', '1.5'),
+          title: lng === 'ru' ? 'Возврат последнего действия' : 'Return last action',
+          result: () => {},
+        },
+        {
+          name: 'redo',
+          icon: IconRedoToString('', '', '1.5'),
+          title: lng === 'ru' ? 'Отмена последнего действия' : 'Cancel last action',
+          result: () => {},
+        },
+        
       ];
       if (canAttachFiles) {
         baseActions.push({
@@ -500,7 +506,28 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     }
   }, [defaultValue, onCancel]); 
 
+const hadleRedo = useCallback(()=>{
+  const currentPell = pellRef.current;
+  const contentToRestore = redoContentRef.current;  
+  if (!currentPell?.content || !contentToRestore) {
+      return;
+    }
+  currentPell.content.innerHTML = contentToRestore;
+  setEditorHtml(contentToRestore);
+  setTimeout(setCursorToEnd, 0); 
+  
+},[])
 
+  const handleUndo = useCallback(()=>{
+    const currentPell = pellRef.current;
+    if (!currentPell?.content) {
+        return;
+    }
+    redoContentRef.current = currentPell.content.innerHTML
+    currentPell.content.innerHTML = defaultValue || '';
+    setEditorHtml(defaultValue || '');
+    setTimeout(setCursorToEnd, 0); 
+  },[defaultValue])
 
   const setupToolbar = (pellEditor: PellEditor) => {
     if (!editorRef.current) return;
@@ -569,7 +596,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     }
     
     const buttons = editorRef.current.querySelectorAll(`.${styles.pellButton}`);
-    const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'olist'];
+    const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'olist', 'undo','redo'];
     if (canAttachFiles) {
       commands.push('image');
     }
@@ -589,6 +616,10 @@ export const TextEditor: React.FC<TextEditorProps> = ({
             toggleHeading2();
           } else if (command === 'olist') {
             toggleBulletList();
+          } else if (command === 'undo'){
+             handleUndo()
+          } else if (command === 'redo'){
+            hadleRedo()
           } else if (command === 'image') {
             handleAttachFiles();
           } else {
@@ -614,7 +645,10 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   };
 
   const handleEditorChange = useCallback((html: string) => {
+    console.log('___handleEditorChange__');
+    
   setEditorHtml(html);
+  redoContentRef.current = html;
   updateActiveStates();
   if (onChange) {
     onChange(html, attachedFiles);
@@ -635,33 +669,27 @@ useEffect(() => {
 
   const normalizedEditor = normalizeHtml(editorHtml);
   const normalizedDefault = normalizeHtml(defaultValue);
-  console.log('normalizedEditor',normalizedEditor);
-  console.log('normalizedDefault',normalizedDefault);
 
   const contentOnly = normalizedEditor
     .replace(/<[^>]*>/g, '') // все теги
     .replace(/\s/g, '')      // все пробелов
     .trim();
   const isTextEmpty = contentOnly.length === 0
-  const hasNoNewFiles = temporaryFiles.length === 0; 
+  const hasNoNewFiles = attachedFiles.length === 0; 
   const hasNoTextChanges = normalizedEditor === normalizedDefault;
   const hasNoChanges = hasNoTextChanges && hasNoNewFiles;
   
-   if (submitButtonRef.current) {
+  if (submitButtonRef.current) {
     submitButtonRef.current.disabled = hasNoChanges || isTextEmpty;
     submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty ? '0.5' : '1';
-    submitButtonRef.current.style.cursor = hasNoChanges || isTextEmpty ? 'not-allowed' : 'default';
-
   }
-  console.log(' submitButtonRef.current.disabled', submitButtonRef.current.disabled);
-  
-  // submitButtonRef.current.disabled = hasNoChanges || isTextEmpty
-  
-  if (cancelButtonRef.current) {
-    cancelButtonRef.current.disabled = hasNoChanges;
-  }
+ 
+  // if (cancelButtonRef.current) {
+  //   cancelButtonRef.current.disabled = hasNoChanges;
+  // }
 
-}, [editorHtml, temporaryFiles, attachedFiles, defaultValue]);
+
+}, [editorHtml, attachedFiles, defaultValue]);
 
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -707,6 +735,7 @@ useEffect(() => {
       pellEditorContent.addEventListener('keyup', handleKeyUp);
       pellEditorContent.addEventListener('mouseup', handleMouseUp);
       pellEditorContent.addEventListener('focus', handleFocus);
+      setTimeout(setCursorToEnd, 0); 
 
       return () => {
         pellEditorContent.removeEventListener('input', handleInput);

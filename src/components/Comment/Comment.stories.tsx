@@ -126,13 +126,16 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
         {...comment}  
         canEdit={index === comments.length - 1}
         isEdit={isEdit}
+        canAttachFiles={true}
         onEdit={handleOpenEdit}
         lng={comment.lng}
+        
         />
       ))}
 
         {!isEdit && <TextEditor 
           onSubmit={handleAddComment} 
+          canAttachFiles={true}
           lng="ru" 
         />}
     </div>
