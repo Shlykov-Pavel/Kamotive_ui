@@ -41,10 +41,32 @@ const getSafeSelection = () => {
   }
 };
 
-const getElementFromRange = (range: Range): Element | null => {
-  const container = range.commonAncestorContainer;
-  return container.nodeType === Node.TEXT_NODE ? container.parentElement : (container as Element);
+
+const getElementFromRange = (range: Range): HTMLElement | null => {
+  let node = range.startContainer;
+
+  if (node.nodeType === Node.ELEMENT_NODE) {
+    const element = node as HTMLElement;
+    
+    if (element.childNodes.length > 0) {
+      const childIndex = range.startOffset > 0 ? range.startOffset - 1 : 0;
+      let lastChild = element.childNodes[childIndex];
+
+      while (lastChild && lastChild.hasChildNodes()) {
+        lastChild = lastChild.lastChild!;
+      }
+
+      return lastChild.nodeType === Node.ELEMENT_NODE 
+        ? (lastChild as HTMLElement) 
+        : lastChild.parentElement;
+    }
+    return element;
+  }
+
+  return node.parentElement;
 };
+
+
 
 export const TextEditor: React.FC<TextEditorProps> = ({
   defaultValue,
@@ -71,20 +93,16 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   const redoContentRef = useRef<string>('');
 
   const [editor, setEditor] = useState<PellEditor | null>(null);
+  const [editorHtml, setEditorHtml] = useState(defaultValue || ''); 
   const [temporaryFiles, setTemporaryFiles] = useState<File[]>([]);
   const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files || []);
+  
 
 
   // console.log('temporaryFiles',temporaryFiles);
   // console.log('attachedFiles',attachedFiles);
   
   
-
-  const [editorHtml, setEditorHtml] = useState(defaultValue || ''); 
-  console.log('editorHtml',editorHtml);
-  
-  
-
   const [activeStates, setActiveStates] = useState({
     bold: false,
     italic: false,
@@ -92,7 +110,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     strikethrough: false,
     heading2: false,
     olist: false,
-  });
+  }); 
 
   const checkFormatting = useCallback(
     (element: Element, tagNames: string[]): boolean => {
@@ -136,8 +154,6 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   );
 
   const setCursorToEnd = () => {
-    console.log('-setCursorToEnd-');
-    
     try {
       const content = pellRef.current?.content;
       if (!content) return;
@@ -148,7 +164,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       const range = document.createRange();
       range.selectNodeContents(content);
       range.collapse(false);
-
+      
       selection.removeAllRanges();
       selection.addRange(range);
        content.scrollTop = content.scrollHeight;
@@ -157,9 +173,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     }
   };
 
-  const getSafeRange = () => {
-    console.log('getSafeRange');
-    
+  const getSafeRange = () => {    
     try {
       const selection = getSafeSelection();
       if (!selection || selection.rangeCount === 0) {
@@ -188,7 +202,8 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   }, []);
 
   const updateActiveStates = useCallback(() => {
-    if (!editor?.content) return;
+    const contentElement = pellRef.current?.content;
+    if (!contentElement) return;
 
     const selection = window.getSelection();
     if (!selection?.rangeCount) {
@@ -205,6 +220,9 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       updateButtonStates(defaultStates);
       return;
     }
+    if (!contentElement.contains(selection.anchorNode)) {
+      return;
+    }
 
     const range = selection.getRangeAt(0);
     const element = getElementFromRange(range);
@@ -219,12 +237,14 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       heading2: checkFormatting(element, ['H2']),
       olist: checkFormatting(element, ['OL']) || !!element.closest('ol'),
     };
-
     setActiveStates(newStates);
     updateButtonStates(newStates);
-  }, [editor, isFormatActive, checkFormatting, updateButtonStates]);
+    
+  }, [isFormatActive, checkFormatting, updateButtonStates]);
 
   const toggleHeading2 = () => {
+    console.log('toggleHeading2');
+    
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
 
@@ -506,16 +526,19 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     }
   }, [defaultValue, onCancel]); 
 
-const hadleRedo = useCallback(()=>{
+const hadleRedo = useCallback(()=>{  
+  
   const currentPell = pellRef.current;
   const contentToRestore = redoContentRef.current;  
   if (!currentPell?.content || !contentToRestore) {
       return;
     }
+
   currentPell.content.innerHTML = contentToRestore;
   setEditorHtml(contentToRestore);
-  setTimeout(setCursorToEnd, 0); 
-  
+  currentPell.content.focus();
+   setTimeout(setCursorToEnd, 0); 
+
 },[])
 
   const handleUndo = useCallback(()=>{
@@ -600,9 +623,11 @@ const hadleRedo = useCallback(()=>{
     if (canAttachFiles) {
       commands.push('image');
     }
-
+ console.log('----command----0');
     buttons.forEach((button: Element, index: number) => {
       const command = commands[index];
+     
+      
       if (command) {
         const htmlButton = button as HTMLElement;
         buttonRefs.current[command] = htmlButton;
@@ -627,7 +652,11 @@ const hadleRedo = useCallback(()=>{
           }
 
           pellEditor.content.focus();
+           console.log('----command----1',command);
+          console.log('1 - update');
+          
           updateActiveStates();
+          
         });
 
         htmlButton.addEventListener('click', (e) => {
@@ -645,14 +674,13 @@ const hadleRedo = useCallback(()=>{
   };
 
   const handleEditorChange = useCallback((html: string) => {
-    console.log('___handleEditorChange__');
-    
-  setEditorHtml(html);
-  redoContentRef.current = html;
-  updateActiveStates();
-  if (onChange) {
-    onChange(html, attachedFiles);
-  }
+    setEditorHtml(html);
+    redoContentRef.current = html;
+    console.log('2 - update');
+    updateActiveStates();
+    if (onChange) {
+      onChange(html, attachedFiles);
+    }
 }, [onChange, attachedFiles, updateActiveStates]);
 
 useEffect(() => {
@@ -725,7 +753,6 @@ useEffect(() => {
       setupToolbar(pellEditor);
 
       const pellEditorContent = pellEditor.content;
-
       const handleInput = () => updateActiveStates();
       const handleKeyUp = () => setTimeout(updateActiveStates, 10);
       const handleMouseUp = () => setTimeout(updateActiveStates, 10);
@@ -759,6 +786,7 @@ useEffect(() => {
 
   useEffect(() => {
     if (editor) {
+      console.log('5 - update');
       setTimeout(updateActiveStates, 100);
     }
   }, [editor]);
