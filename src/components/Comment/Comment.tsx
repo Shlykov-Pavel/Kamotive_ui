@@ -7,38 +7,32 @@ import { FilePreview, AttachedFilesPreview } from '../AttachedFilesPreview/Attac
 import { IconAccount, IconDelete, IconPencil, IconPencilCancel } from '../../Icons';
 import { IconButton } from '../IconButton/IconButton';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { CommentProps } from '../../types';
+import { CommentProps, TAttachments } from '../../types';
+import { FileItem } from '../FileItem/FileItem';
 
 export const Comment: FC<CommentProps> = ({
-  id,
-  value,
-  style,
-  className,
-  username,
+  comment,
   avatar,
   creationDate,
-  canAttachFiles = false,
-  files = [],
+  canAttachFiles = true,
   canEdit = false,
   isEdit = false,
-  label,
   error = false,
   helperText,
-  onChange,
   onSubmit,
   onDelete,
-  onCancel,
   onEdit,
   lng = 'ru',
+  style,
+  className,
 }) => {
   
-  const [commentText, setCommentText] = useState(value || '');
+  // const [commentText, setCommentText] = useState(comment.text || '');
   const [isEditMode, setIsEditMode] = useState(isEdit);
-  const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files);
+  // const [attachedFiles, setAttachedFiles] = useState<TAttachments[]>(files);
   const [imageError, setImageError] = useState(false);
 
   const wrapperClassess = classNames(styles['wrapper--input'], className, {
-    [styles['wrapper--input-label']]: label,
     [styles['wrapper--input-helperText']]: error,
   });
 
@@ -50,31 +44,26 @@ export const Comment: FC<CommentProps> = ({
   };
 
   const handleDeleteClick = () => {
-    onDelete?.(id);
+    onDelete?.(comment.id);
   };
 
-  const handleSubmit = (value: string, files: FilePreview[]) => {
+  const handleSubmit = (value: string, files: File[]) => {
+    // console.log('Comment - handleSubmit', value, '--', files);
+    
     if (onSubmit) {
       onSubmit(value, files);
     }
-    setCommentText(value);
-    setAttachedFiles(files);
+    // setCommentText(value);
+    // setAttachedFiles(files);
     setIsEditMode((prev) => !prev);
   };
 
-  const handleChange = (value: string, files: FilePreview[]) => {
-    if (onChange) {
-      onChange(value, files);
-    }
-  };
-
   const handleCancel = () => {
-        setIsEditMode((prev) => !prev);
-        onCancel?.();
-    };
+    setIsEditMode((prev) => !prev);
+  };
   
-    useEffect(() => {
-      onEdit?.(isEditMode)
+  useEffect(() => {
+    onEdit?.(isEditMode)
   }, [isEditMode]);
 
   return (
@@ -92,7 +81,7 @@ export const Comment: FC<CommentProps> = ({
           </div>
           <div className={styles.infoWrapper}>
             <Typography variant="Body2-Medium" className={labelClasses}>
-              {username}
+              {comment.authorUser.fullName}
             </Typography>
             <Typography variant="Caption" className={styles.label} style={{ color: '#8E8E93' }}>
               {creationDate}
@@ -101,58 +90,52 @@ export const Comment: FC<CommentProps> = ({
         </div>
         {canEdit && (
           <div className={styles.iconsWrapper}>
-            <Tooltip label={isEditMode ? (lng === 'ru' ? 'Закрыть редактирование' : 'Close edit') : (lng === 'ru' ? 'Редактировать' : 'Edit')}
-            key={`edit-btn-${isEditMode}`}
-            position={"top-center"}
-            style= {{ width: 'max-content', whiteSpace: 'nowrap' }}
-            hideDelay={ 0 }
-            >
               <IconButton
               icon={isEditMode ? <IconPencilCancel width={'14'} height={'14'}/>: <IconPencil  width={'14'} height={'14'}/>} 
+              title={lng === 'ru' ? 'Закрыть редактирование' : 'Close edit'}
               onClick={handleEditClick}
               style={{ width: '30px', height: '30px', padding:'5px' }} 
               color= "var(--icons-grey)" 
               />
-            </Tooltip>
-            <Tooltip 
-              label={lng === 'ru' ? 'Удалить' : 'Delete'}
-              key={`delete-btn-${id}`}
-              position={"top-center"}
-              style= {{ width: 'max-content', whiteSpace: 'nowrap' }}
-              hideDelay={ 0 }
-            >
+          
               <IconButton 
                 icon={<IconDelete width={'14'} height={'14'} />} 
+                title={lng === 'ru' ? 'Удалить' : 'Delete'}
                 onClick={handleDeleteClick} 
                 size="sm" 
                 style={{ width: '30px', height: '30px', padding:'5px'  }} 
                 color= "var(--icons-grey)" 
             />
-            </Tooltip>
-            
           </div>
         )}
       </div>
       {isEditMode ? (
         <TextEditor
-          defaultValue={commentText}
+          defaultValue={comment.text}
+          attachedFiles={comment.attachFiles}
           onSubmit={handleSubmit}
-          onChange={handleChange}
           onCancel={handleCancel}
           error={error}
           helperText={helperText}
           isEditMode={isEditMode}
-          files={attachedFiles}
+          // files={attachedFiles}
           canAttachFiles={canAttachFiles}
           lng={lng}
         />
       ) : (
         <div className={styles.commentWrapper}>
-          {attachedFiles.length > 0 && (
-            <AttachedFilesPreview files={attachedFiles} className={styles.attachedFilesContainer} lng={lng} />
+          {comment.attachFiles && comment.attachFiles?.length > 0 && (
+            <AttachedFilesPreview 
+              files={comment.attachFiles} 
+              className={styles.attachedFilesContainer} 
+              lng={lng} />
           )}
-          <div id={id} className={inputClassess} dangerouslySetInnerHTML={{ __html: commentText || '' }} />
+          <div 
+            id={`comment-${comment.id}`}
+            className={inputClassess} 
+            dangerouslySetInnerHTML={{ __html: comment.text || '' }} />
         </div>
+     
       )}
       {error && helperText && (
         <Typography variant="Caption" className={classNames(styles.helperText)}>

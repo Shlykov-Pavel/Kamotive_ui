@@ -56,7 +56,9 @@
 }
 .editorContainer {
   display: flex;
-  flex-direction: column-reverse; /* Разворачивает порядок элементов */
+  flex-direction: column-reverse;
+  max-height: 50vh;
+	overflow: scroll;
 }
 .pellActionbar {
 	border: none;
@@ -151,7 +153,9 @@
 }
 
 .pellContent {
-	max-height: 250px;
+	/* max-height: 250px; */
+	max-height: 30vh;
+	overflow: scroll;
 	outline: none;
 	line-height: 1.6;
 	font-family: var(--font-family-content);
@@ -232,6 +236,8 @@
 }
 
 .attachedFilesContainer {
+	max-height: 20vh;
+    overflow: scroll;
 	margin-top: 5px;
 	background-color: none;
 	border: none;

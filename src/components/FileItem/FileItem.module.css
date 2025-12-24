@@ -46,7 +46,7 @@
   transition: all 0.15s ease-in-out;
 }
 
-.fileItem_attached:hover {
+.fileItem_attached:not(.noHover):hover {
   background-color: rgba(0, 0, 0, 0.03);
   transform: translateY(-1px);
 }

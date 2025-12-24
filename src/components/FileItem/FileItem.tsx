@@ -102,6 +102,7 @@ export const FileItem: FC<FileItemProps> = ({
   const fileItemClasses = classNames(styles['fileItem'], {
     [styles['loading']]: loading,
     [styles['error']]: error,
+    [styles.noHover]: !canDownload, 
     [styles[`fileItem_attached`]]: !(isAddedFile || isRejectedFile),
   });
 

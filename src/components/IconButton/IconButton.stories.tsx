@@ -30,6 +30,7 @@ export interface IconButtonProps {
   children?: React.ReactNode;
   /** Дополнительный класс */
   className?: string;
+  title?:string;
 }
 
 const withWrapper = (Story: React.ComponentType) => (
@@ -66,6 +67,7 @@ const meta: Meta<IconButtonProps> = {
     size: 'md',
     disabled: false,
     color: '#0d99ff',
+    title:'Button'
   },
   argTypes: {
     size: {

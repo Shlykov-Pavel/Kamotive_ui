@@ -3,7 +3,8 @@ import { IconFileDefault, IconFileVideo, IconFileAudio, IconClose, IconFile } fr
 import styles from './AttachedFilesPreview.module.css';
 import { Typography } from '../Typography/Typography';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { IconButton } from '../..';
+import { FileItem, IconButton } from '../..';
+import { TAttachments } from '../../types';
 
 export interface FilePreview {
   file: File;
@@ -12,42 +13,7 @@ export interface FilePreview {
   lng: string;
 }
 
-export const getFileIcon = (file: File) => {
-  const fileType = file.type.toLowerCase();
-  const fileName = file.name.toLowerCase();
-
-  // if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
-  //   return < IconFile htmlColor="#dc2626" text="PDF" />;
-  // }
-
-  // if (fileType.includes('word') || fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
-  //   return < IconFile htmlColor="#2563eb" text="DOC" />;
-  // }
-
-  // if (fileType.includes('sheet') || fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
-  //   return <IconFile htmlColor="#16a34a" text="XLS" />;
-  // }
-
-  // if (fileType.includes('presentation') || fileName.endsWith('.ppt') || fileName.endsWith('.pptx')) {
-  //   return <IconFile htmlColor="#ea580c" text="PPT" />;
-  // }
-
-  // if (fileType.includes('text') || fileName.endsWith('.txt')) {
-  //   return <IconFile htmlColor="#6b7280" text="TXT" />;
-  // }
-
-  // if (fileType.includes('zip') || fileType.includes('rar') || fileName.endsWith('.zip') || fileName.endsWith('.rar')) {
-  //   return <IconFile htmlColor="#7c3aed" text="ZIP" />;
-  // }
-
-  if (fileType.includes('video')) {
-    return <IconFileVideo htmlColor={'var(--text-btn-light)'} color={'var(--text-btn-light)'}/>;
-  }
-
-  if (fileType.includes('audio')) {
-    return <IconFileAudio htmlColor={'var(--text-btn-light)'} color={'var(--text-btn-light)'}/>;
-  }
-
+export const getFileIcon = (file: TAttachments) => {
   return <IconFile htmlColor={'var(--text-btn-light)'} color={'var(--text-btn-light)'}/>;
 };
 
@@ -68,14 +34,15 @@ export const formatFileSize = (bytes?: number, lng?:string): string => {
 };
 
 interface AttachedFilesProps {
-  files: FilePreview[];
+  files: TAttachments[];
+  lng: string;
   onDelete?: (id: string) => void;
-  onDownload?: (file: File) => void;
+  onDownload?: (file: TAttachments) => void;
   style?: CSSProperties;
   className?: string;
   isEdit?: boolean;
   allowDownload?: boolean;
-  lng: string;
+  error?: string;
 }
 
 export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
@@ -87,67 +54,91 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
   isEdit,
   allowDownload = true,
   lng,
+  error = '',
 }) => {
 
-   const deleteButtonRef = useRef<HTMLButtonElement>(null);
-  const handleDelete = (event: React.MouseEvent, id: string) => {
-    event.stopPropagation();
-    if (onDelete) {
-      onDelete(id);
-    }
-  };
+  console.log('files',files);
+  
 
-  const handleDownload = (file: File) => {
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
+
+  const handleDownload = (file: TAttachments) => {
     if (onDownload) {
       onDownload(file);
     } else {
-      const url = URL.createObjectURL(file);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = file.name;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // const url = URL.createObjectURL(file);
+      // const link = document.createElement('a');
+      // link.href = url;
+      // link.download = file.filename;
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
+      // URL.revokeObjectURL(url);
     }
   };
 
-   return (
+  console.log('canDownload',!isEdit);
+  
+
+  
+  
+  return (
     <div className={className} style={style} title="">
-      {files.map((file) => (
-          <div  className={styles.attachedFileItem}>
-            <div key={file.id} className={styles.nameContainer} title="">
-              <div className={styles.previewImage} title="">
-                  {getFileIcon(file.file)}</div>
-              <div className={styles.name} onClick={allowDownload ? () => handleDownload(file.file) : undefined} style={{cursor:'pointer'}}>
-                <Typography variant='Body2-Medium' color='var(--text-dark)'>{file.file.name}</Typography>
-                {/* <div className={styles.fileSize}>{formatFileSize(file.file.size, lng)}</div> */}
-              </div>
-            </div>
-            {isEdit && (
-              // <button className={styles.removeFileButton} onClick={(event) => handleDelete(event, file.id)}>
-              //   ✕
-              // </button>
-                <Tooltip key={`delete-btn-${isEdit}`} label={lng === 'ru' ? 'Удалить' : 'Delete'} position="bottom-center" hideDelay={ 0 }>
-                  <IconButton
-                    ref={deleteButtonRef}
-                    icon={<IconClose/>} 
-                    onClick={(event) => handleDelete(event, file.id)}
-                      style={{ 
-                      width: '30px', 
-                      height: '30px', 
-                      padding:'5px', 
-                      background: 'none',
-                      cursor: 'pointer'
-                    }} 
-                      color="var(--text-btn-light)"
-                  />
-              </Tooltip>
-            )}
-          </div>
+      {files.map((file, index) => (
+        <FileItem
+          key={`${index + file.filename}`}
+          file={file}
+          error={error}
+          canDelete={isEdit ?? false}
+          canDownload={!isEdit}
+          onDelete={(id:string)=>isEdit && onDelete?.(id)}
+          onDownload={(file: TAttachments)=> allowDownload && onDownload?.(file)}
+          style={{
+            border:'none',
+            padding:'5px 0px',
+            borderRadius:'5px'
+          }}
+          lng={lng}
+        />
       ))}
     </div>
   );
+
+  //  return (
+  //   <div className={className} style={style} title="">
+  //     {files.map((file, index) => (
+  //         <div  className={styles.attachedFileItem}>
+  //           <div key={`${index + file.filename}` } className={styles.nameContainer} title="">
+  //             <div className={styles.previewImage} title="">
+  //                 {getFileIcon(file)}</div>
+  //             <div className={styles.name} onClick={allowDownload ? () => handleDownload(file) : undefined} style={{cursor:'pointer'}}>
+  //               <Typography variant='Body2-Medium' color='var(--text-dark)'>{file.filename}</Typography>
+  //               {/* <div className={styles.fileSize}>{formatFileSize(file.file.size, lng)}</div> */}
+  //             </div>
+  //           </div>
+  //           {isEdit && (
+  //             // <button className={styles.removeFileButton} onClick={(event) => handleDelete(event, file.id)}>
+  //             //   ✕
+  //             // </button>
+  //                 <IconButton
+  //                   ref={deleteButtonRef}
+  //                   title={lng === 'ru' ? 'Удалить' : 'Delete'}
+  //                   icon={<IconClose/>} 
+  //                   onClick={(event) => handleDelete(event, file.id)}
+  //                     style={{ 
+  //                     width: '30px', 
+  //                     height: '30px', 
+  //                     padding:'5px', 
+  //                     background: 'transparent',
+  //                     cursor: 'pointer'
+  //                   }} 
+  //                     color="var(--text-btn-light)"
+  //                 />
+  //           )}
+  //         </div>
+  //     ))}
+  //   </div>
+  // );
 
   // return (
   //   <div className={className} style={style}>

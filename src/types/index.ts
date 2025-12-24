@@ -377,7 +377,7 @@ export interface ColorPickerProps {
   /** Callback функция при изменении цвета */
   onChange?: (color: string) => void;
   /** Функция обработки изменения цвета */
-  onColorChange: (color: string) => void;
+  onColorChange?: (color: string) => void;
 }
 
 export type SnackbarProps = {
@@ -404,6 +404,9 @@ export type TAttachments = {
   size?: number;
   createDateTime?: string;
   updateDateTime?: string;
+  file?:File[],
+  preview?: string;
+  lng?: string;
 };
 
 export interface FileAttachProps {
@@ -559,6 +562,7 @@ export interface IconButtonProps {
   children?: ReactNode;
   /** Дополнительный класс */
   className?: string;
+  title?: string;
 }
 
 export interface BaseListProps {
@@ -647,15 +651,15 @@ export interface TooltipProps {
 
 export interface TextEditorProps {
   defaultValue?: string;
+  attachedFiles?: TAttachments[];
   label?: string;
-  onSubmit?: (value: string, files: FilePreview[]) => void;
-  onChange?: (value: string, files: FilePreview[]) => void;
+  onSubmit?: (value: string, files: File[]) => void;
   onCancel?: () => void;
   error?: boolean;
   helperText?: string;
   isEditMode?:boolean;
   canAttachFiles?: boolean;
-  files?: FilePreview[];
+  files?: TAttachments[];
   required?: boolean;
   className?: string;
   isButtonDisabled?: boolean;
@@ -663,38 +667,45 @@ export interface TextEditorProps {
   lng?: string;
 }
 
-export interface CommentProps {
-  /** Идентификатор элемента */
+export interface ChildCommentProps {
   id: string;
-  /** Знчение */
-  value?: string;
-  /** Стили передаваемые напрямую */
-  style?: CSSProperties;
-  /** Дополнительный класс */
-  className?: string;
-  username?: string;
+  text: string; 
+  attachFiles?: TAttachments[];
+  authorUser: {
+    id?: string | null | undefined;
+    login?: string | null | undefined;
+    firstName?: string | null | undefined;
+    lastName?: string | null | undefined;
+    middleName?: string | null | undefined;
+    fullName?: string | null | undefined;
+    admin?: boolean | null | undefined;
+    [key: string]: any; 
+  }
+  createDate?: string;
+
+}
+export interface CommentProps {
+  comment: ChildCommentProps; 
   avatar?: string | null;
   creationDate?: string;
   canAttachFiles?: boolean,
-  files?: FilePreview[],
+  files?: TAttachments[],
   canEdit?: boolean;
   isEdit?: boolean;
-  /** Лейбл */
-  label?: string;
-  /** Подсказка */
-  placeholder?: string;
   /** Ошибка */
   error?: boolean;
   /** Текст ошибки */
   helperText?: string;
   /** Callback при изменении значения */
-  onChange?: (value: string, files: FilePreview[]) => void;
-  onSubmit?: (value: string, files: FilePreview[]) => void;
+  onSubmit?: (value: string, files: File[]) => void;
   onEdit?: (value:boolean) => void;
-  onCancel?: () => void;
   onDelete?: (id: string) => void;
   /** Язык */
   lng?: string;
+  /** Стили передаваемые напрямую */
+  style?: CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
 }
 
 export interface LinkProps {

@@ -12,6 +12,7 @@ export const IconButton= forwardRef<HTMLButtonElement, IconButtonProps>(({
   onClick,
   children,
   className,
+  title,
 },ref) => {
   const validChildren = React.Children.toArray(children).filter((child) => React.isValidElement(child));
   const renderIcon = icon || validChildren[0];
@@ -34,6 +35,7 @@ export const IconButton= forwardRef<HTMLButtonElement, IconButtonProps>(({
       type="button"
       onClick={(e) => onClick(e)}
       style={combinedStyle}
+      title={title}
     >
       {renderIcon &&
         (() => {

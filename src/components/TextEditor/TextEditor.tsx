@@ -8,10 +8,7 @@ import {
   IconHeader2ToString,
   IconItalicToString,
   IconStrikethroughToString,
-  IconSubmitToString,
   IconUnderlineToString,
-  IconCancelToString,
-  IconCancel,
   IconSubmit,
   IconClose,
   IconRedoToString,
@@ -20,10 +17,10 @@ import {
 import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
 import { FilePreview, AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
-import { TextEditorProps } from '../../types';
+import { TAttachments, TextEditorProps } from '../../types';
 import styles from './TextEditor.module.css';
-import { Tooltip } from '../Tooltip/Tooltip';
 import { IconButton } from '../IconButton/IconButton';
+import { set } from 'react-datepicker/dist/date_utils';
 
 const ACCEPTED_FILE_TYPES =
   'image/*,audio/*,video/*,.doc,.docx,.html,.htm,.odt,.pdf,.xls,.xlsx,.ods,.ppt,.pptx,.txt,.zip,.djvu';
@@ -65,19 +62,51 @@ const getElementFromRange = (range: Range): HTMLElement | null => {
 
   return node.parentElement;
 };
+//изменение формата File на TAttachments
+export const formatFileSize = (bytes?: number, lng?:string): string => {
+  if (!bytes || bytes === 0) {
+    return lng === 'ru' || lng?.includes('ru') ? '0 Байт' : '0 Bytes';
+  }
+
+  const k = 1024;
+  const sizesEn = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const sizesRu = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ'];
+  
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const sizes = lng === 'ru' || lng?.includes('ru') ? sizesRu : sizesEn;
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
+
+const converFileToAttachment = (files: File[])=>{
+  return files.map((file) => ({
+        id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`, // Генерируем ID
+        filename: file.name,
+        size: file.size,
+        file: [file],  // Сохраняем сам файл внутри
+        preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+    }))
+}
+
+const convertAttacmentsToFile = (files: TAttachments[])=>{
+  return files
+      .map(att => att.file)
+      .filter((f): f is File[] => !!f)
+      .reduce((acc, val) => acc.concat(val), []);
+}
 
 
 
 export const TextEditor: React.FC<TextEditorProps> = ({
   defaultValue,
+  attachedFiles, 
   label,
   onSubmit,
-  onChange,
   onCancel,
   error,
   helperText,
   isEditMode,
-  canAttachFiles = false,
+  canAttachFiles = true,
   files,
   required,
   className,
@@ -94,15 +123,17 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
   const [editor, setEditor] = useState<PellEditor | null>(null);
   const [editorHtml, setEditorHtml] = useState(defaultValue || ''); 
-  const [temporaryFiles, setTemporaryFiles] = useState<File[]>([]);
-  const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files || []);
+  const [temporaryFiles, setTemporaryFiles] = useState<TAttachments[]>(attachedFiles ?? []);
+  const tempFilesRef = useRef(temporaryFiles);
+  tempFilesRef.current = temporaryFiles; 
+  // console.log('__temporaryFiles__',temporaryFiles);
+  
+  // const [attachedFiles, setAttachedFiles] = useState<any>(files || []);
+  // console.log('___attachedFiles___',attachedFiles);
+  
+  const [filesErrorText, setFilesErrorText] = useState('');
   
 
-
-  // console.log('temporaryFiles',temporaryFiles);
-  // console.log('attachedFiles',attachedFiles);
-  
-  
   const [activeStates, setActiveStates] = useState({
     bold: false,
     italic: false,
@@ -363,49 +394,41 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
-    // Проверка размера файла (2 ГБ)
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].size > MAX_FILE_SIZE) {
-        return;
-      }
+    const filesArray = Array.from(files);
+    const incomingFiles = filesArray.filter(file => file.size <= MAX_FILE_SIZE);
+    const oversizedFiles = filesArray.filter(file => file.size > MAX_FILE_SIZE);
+    if (oversizedFiles.length > 0) {
+      const fileNames = oversizedFiles.map(f => f.name).join(', ');
+      const message = lng === 'ru' 
+        ? `Файлы ${fileNames} превышают ${formatFileSize(MAX_FILE_SIZE)}`
+        : `Files exceed ${fileNames} ${formatFileSize(MAX_FILE_SIZE)}`;
+        
+      setFilesErrorText(message);
     }
 
-    event.stopPropagation();
-    event.preventDefault();
-
-    const newTemporaryFiles = [...temporaryFiles, ...Array.from(files)];    
-    setTemporaryFiles(newTemporaryFiles);
-    // if(cancelButtonRef.current){
-    //   cancelButtonRef.current.disabled = false
-    // }
-    // if(submitButtonRef.current){
-    //   submitButtonRef.current.disabled = false
-    // }
-
-    const newAttachedFiles: FilePreview[] = Array.from(files).map((file) => ({
-      file,
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-      lng,
-    }));
-
-    setAttachedFiles((prev) => [...prev, ...newAttachedFiles]);
-
-    event.target.value = '';
-  };
-
-  const removeAttachedFile = (fileId: string) => {
-    setAttachedFiles((prev) => {
-      const fileToRemove = prev.find((f) => f.id === fileId);
-      if (fileToRemove?.preview) {
-        URL.revokeObjectURL(fileToRemove.preview);
-      }
-      return prev.filter((f) => f.id !== fileId);
+    const newAttachments: TAttachments[] = converFileToAttachment(incomingFiles)
+    
+    const uniqueFiles = newAttachments.filter((newFile) => {
+      return !temporaryFiles.some(
+        (existing) => existing.filename === newFile.filename && existing.size === newFile.size
+      );
     });
-    if(submitButtonRef.current){
-      submitButtonRef.current.disabled = true
+    
+    if (uniqueFiles.length > 0) {
+      setTemporaryFiles((prev) => [...prev, ...uniqueFiles]);
     }
-  };
+    event.target.value = '';
+};
+  
+const removeAttachedFile = (id: string) => {
+  setTemporaryFiles((prev) => {
+    const fileToRemove = prev.find(f => f.id === id);
+    if (fileToRemove?.preview) {
+      URL.revokeObjectURL(fileToRemove.preview);
+    }
+    return prev.filter((file) => file.id !== id);
+  });
+};
 
   const getEditorActions = useCallback(
     () => {
@@ -497,18 +520,20 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
   const handleSubmit = useCallback(() => {
     const currentPell = pellRef.current; 
-    
     if (!currentPell?.content) {
       return;
     }
     if (onSubmit) {
-      onSubmit(currentPell.content.innerHTML, attachedFiles);
+      const filesToSend: File[] = convertAttacmentsToFile(tempFilesRef.current)
+      console.log('filesToSend',filesToSend);
+      // const filesToSend = tempFilesRef.current;
+      // console.log('Отправляем файлы:', filesToSend);
+      onSubmit(currentPell.content.innerHTML, filesToSend);
       currentPell.content.innerHTML = '';
-      setAttachedFiles([]);
-      setEditorHtml(''); 
-  
+      setTemporaryFiles([]);
+      setEditorHtml('');
     }
-  }, [onSubmit, attachedFiles]);
+  }, [onSubmit]);
 
   const handleCancel = useCallback(() => {
     const currentPell = pellRef.current;
@@ -517,7 +542,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     }
     currentPell.content.innerHTML = defaultValue || '';
     setEditorHtml(defaultValue || ''); 
-    setAttachedFiles([]);
+    // setAttachedFiles([]);
 
     if (onCancel) {
       onCancel?.();
@@ -578,9 +603,9 @@ const hadleRedo = useCallback(()=>{
       root.render(
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {isEditMode && (
-            <Tooltip key={`cancel-btn-${isEditMode}`} label={lng === 'ru' ? 'Отменить' : 'Cancel'} position="bottom-center" hideDelay={ 0 }  style= {{ width: 'max-content', whiteSpace: 'nowrap' }}>
                 <IconButton
                   ref={cancelButtonRef}
+                  title={lng === 'ru' ? 'Отменить' : 'Cancel'}
                   icon={<IconClose/>} 
                   onClick={handleCancel} 
                    style={{ 
@@ -592,12 +617,11 @@ const hadleRedo = useCallback(()=>{
                   }} 
                    color="var(--blue-main)"
                 />
-            </Tooltip>
-          )}  
+            )}  
           
-          <Tooltip key={`submit-btn-${isEditMode}`} label={lng === 'ru' ? 'Отправить' : 'Submit'} position="bottom-center" hideDelay={ 0 }  style= {{ width: 'max-content', whiteSpace: 'nowrap' }}>
                 <IconButton
                   ref={submitButtonRef}
+                  title={lng === 'ru' ? 'Отправить' : 'Submit'}
                   icon={<IconSubmit width={'10'} height={'10'} htmlColor='blue' strokeWidth={'1'}/>} 
                   onClick={handleSubmit} 
                   style={{ 
@@ -609,9 +633,7 @@ const hadleRedo = useCallback(()=>{
                     cursor: 'pointer'
                   }} 
                   color="white"
-                />
-             
-          </Tooltip>
+                />             
         </div>
       );
     }
@@ -670,10 +692,10 @@ const hadleRedo = useCallback(()=>{
     setEditorHtml(html);
     redoContentRef.current = html;
     updateActiveStates();
-    if (onChange) {
-      onChange(html, attachedFiles);
-    }
-}, [onChange, attachedFiles, updateActiveStates]);
+    // if (onChange) {
+    //   onChange(html, attachedFiles);
+    // }
+}, [updateActiveStates]);
 
 useEffect(() => {
   if (!submitButtonRef.current) return;
@@ -695,7 +717,7 @@ useEffect(() => {
     .replace(/\s/g, '')      // все пробелов
     .trim();
   const isTextEmpty = contentOnly.length === 0
-  const hasNoNewFiles = attachedFiles.length === 0; 
+  const hasNoNewFiles = temporaryFiles.length === 0; 
   const hasNoTextChanges = normalizedEditor === normalizedDefault;
   const hasNoChanges = hasNoTextChanges && hasNoNewFiles;
   
@@ -709,7 +731,7 @@ useEffect(() => {
   // }
 
 
-}, [editorHtml, attachedFiles, defaultValue]);
+}, [editorHtml, defaultValue]);
 
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -803,14 +825,15 @@ useEffect(() => {
         </Typography>
       )}
 
-      <div className={inputClassess}>
-        {attachedFiles.length > 0 && (
+      <div className={inputClassess} title=''>
+        {temporaryFiles.length > 0 && (
           <AttachedFilesPreview
-            files={attachedFiles}
-            onDelete={(id) => removeAttachedFile(id)}
+            files={temporaryFiles}
+            onDelete={removeAttachedFile}
             className={styles.attachedFilesContainer}
             isEdit={true}
             lng={lng}
+            error={filesErrorText}
           />
         )}
         <div className={styles.editorContainer} ref={editorRef}></div>
@@ -826,7 +849,7 @@ useEffect(() => {
           />
         )}
       </div>
-      {error && helperText && (
+      {(error && helperText) && (
         <Typography variant="Caption" className={classNames(styles.helperText)}>
           {helperText}
         </Typography>

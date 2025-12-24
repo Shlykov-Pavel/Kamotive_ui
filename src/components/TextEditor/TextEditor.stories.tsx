@@ -8,23 +8,35 @@ export interface FilePreview {
   preview?: string;
   lng: string;
 }
+
+export type TAttachments = {
+  id: string;
+  filename: string;
+  uri?: string;
+  size?: number;
+  createDateTime?: string;
+  updateDateTime?: string;
+  file?:File[],
+  preview?: string;
+  lng?: string;
+};
 export interface TextEditorProps {
-  label?: string;
-  onSubmit?: (value: string, files: FilePreview[]) => void;
-  onChange?: (value: string, files: FilePreview[]) => void;
-  onCancel?: () => void;
   defaultValue?: string;
+  label?: string;
+  onSubmit?: (value: string, files: File[]) => void;
+  onCancel?: () => void;
   error?: boolean;
   helperText?: string;
   isEditMode?:boolean;
   canAttachFiles?: boolean;
-  files?: FilePreview[];
+  files?: TAttachments[];
   required?: boolean;
   className?: string;
   isButtonDisabled?: boolean;
   /** Язык */
   lng?: string;
 }
+
 
 
 const meta: Meta<TextEditorProps> = {
@@ -75,22 +87,10 @@ TextEditorWithError.args = {
 
 
 export const TextEditorWithEdit = (argTypes: TextEditorProps): JSX.Element => {
-  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true)
-  const handleChangeInput = (value: string, files:any)=>{
-    console.log('value',value);
-    console.log('files', files);
-    
-    // const cleanText = value.replace(/<[^>]*>/g, '').trim();
-    // setIsButtonDisabled(cleanText.length === 0);
-  }
-  return <TextEditor {...argTypes} onChange={handleChangeInput} canAttachFiles={true}/>
+
+  return <TextEditor {...argTypes} canAttachFiles={true}/>
 };
 TextEditorWithEdit.storyName = 'TextEditor c проверкой на пустоту в комментарии';
-// TextEditorWithEdit.args = {
-//   label: 'Введите текст',
-//   helperText: 'Текст ошибки',
-//   error: true,
-// };
 TextEditorWithEdit.parameters = {
   controls: { disable: true },
 };

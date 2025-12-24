@@ -150,5 +150,6 @@
 	display: flex;
 	flex-direction: column;
 	overflow-x: auto;
-	gap: 52px;
+	max-height: 20vh;
+    overflow: scroll;
 }
