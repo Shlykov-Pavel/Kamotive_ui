@@ -136,15 +136,10 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      const existingFileNames =  new Set(addedFiles.map(file => file.name));
-      const filteredRepeatedFileName = acceptedFiles.filter((newFile) =>
-        !existingFileNames.has(newFile.name)
-      );
-      setAddedFiles([...addedFiles, ...filteredRepeatedFileName]);
-      //преобразование типа файлов для отрисовки в списке      
-      const newFormatAttachments: TAttachments[] = filteredRepeatedFileName.map((file) => {
+      setAddedFiles([...addedFiles, ...acceptedFiles]);  
+      const newFormatAttachments: TAttachments[] = acceptedFiles.map((file) => {
         return {
-          id: `file-${file.name}`,
+          id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
           filename: file.name,
           size: file.size,
           type: file.type,
@@ -212,10 +207,16 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   });
 
   const handleDeleteFiles = (id: string) => {
-    const filename = addedFilesFormated.find((file: TAttachments) => file.id === id)?.filename;
-    setAddedFiles(addedFiles.filter((file: File) => file.name !== filename));
-    setAddedFilesFormatted(addedFilesFormated.filter((file: TAttachments) => file.filename !== filename));
-    setLoadingFilesNames(loadingFilesNames.filter((id) => id !== id));
+    const fileIndex = addedFilesFormated.findIndex((file: TAttachments) => file.id === id);
+    if (fileIndex !== -1) {
+      const newAddedFiles = [...addedFiles];
+      newAddedFiles.splice(fileIndex, 1);
+      setAddedFiles(newAddedFiles);
+      
+      const fileToDelete = addedFilesFormated[fileIndex];
+      setAddedFilesFormatted(addedFilesFormated.filter((file: TAttachments) => file.id !== id));
+      setLoadingFilesNames(loadingFilesNames.filter((name) => name !== fileToDelete.filename));
+    }
   };
 
   const acceptedFileItems = addedFilesFormated.map((file: TAttachments) => {
