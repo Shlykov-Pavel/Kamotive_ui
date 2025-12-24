@@ -243,8 +243,6 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   }, [isFormatActive, checkFormatting, updateButtonStates]);
 
   const toggleHeading2 = () => {
-    console.log('toggleHeading2');
-    
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
 
@@ -623,11 +621,9 @@ const hadleRedo = useCallback(()=>{
     if (canAttachFiles) {
       commands.push('image');
     }
- console.log('----command----0');
+
     buttons.forEach((button: Element, index: number) => {
-      const command = commands[index];
-     
-      
+      const command = commands[index];  
       if (command) {
         const htmlButton = button as HTMLElement;
         buttonRefs.current[command] = htmlButton;
@@ -652,9 +648,6 @@ const hadleRedo = useCallback(()=>{
           }
 
           pellEditor.content.focus();
-           console.log('----command----1',command);
-          console.log('1 - update');
-          
           updateActiveStates();
           
         });
@@ -676,7 +669,6 @@ const hadleRedo = useCallback(()=>{
   const handleEditorChange = useCallback((html: string) => {
     setEditorHtml(html);
     redoContentRef.current = html;
-    console.log('2 - update');
     updateActiveStates();
     if (onChange) {
       onChange(html, attachedFiles);
@@ -786,7 +778,6 @@ useEffect(() => {
 
   useEffect(() => {
     if (editor) {
-      console.log('5 - update');
       setTimeout(updateActiveStates, 100);
     }
   }, [editor]);

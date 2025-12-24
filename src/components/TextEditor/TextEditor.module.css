@@ -236,9 +236,9 @@
 	background-color: none;
 	border: none;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	border-bottom: 1px solid #e0e0e0;
 	overflow-x: auto;
-	gap: 12px;
+	gap: 5px;
 	padding: 5px 12px;
 }

@@ -148,7 +148,7 @@
 .attachedFilesContainer {
 	margin-top: 5px;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	overflow-x: auto;
-	gap: 12px;
+	gap: 52px;
 }
