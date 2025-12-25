@@ -24,6 +24,9 @@ export const FileItem: FC<FileItemProps> = ({
   isRejectedFile,
   lng
 }) => {
+
+  console.log('FileItem -error', error);
+  
   const [isLoadingFinished, setIsLoadingFinished] = useState(false);
   const [animationDuration, setAnimationDuration] = useState(0);
 
@@ -133,7 +136,7 @@ export const FileItem: FC<FileItemProps> = ({
             <IconFile htmlColor={'var(--icons-grey)'} />
           </div>
           <div className={styles['fileItemName']} ref={fileNameRef}>
-            {file.filename.length > maxLength ? (
+            {file?.filename && file?.filename.length > maxLength ? (
               <Tooltip label={file.filename} position="bottom-center" displayDelay={300}>
                 <Typography variant="Body1" color="var(--text-dark)">
                   {croppedName(file.filename)}
@@ -141,7 +144,7 @@ export const FileItem: FC<FileItemProps> = ({
               </Tooltip>
             ) : (
               <Typography variant="Body1" color="var(--text-dark)">
-                {croppedName(file.filename)}
+                {file.filename && croppedName(file.filename)}
               </Typography>
             )}
             {file.size !== 0 && (

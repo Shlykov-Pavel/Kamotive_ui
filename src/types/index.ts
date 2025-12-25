@@ -398,8 +398,8 @@ export type SnackbarProps = {
 };
 
 export type TAttachments = {
-  id: string;
-  filename: string;
+  id?: string | null;
+  filename?: string | null;
   uri?: string;
   size?: number;
   createDateTime?: string;
@@ -407,6 +407,7 @@ export type TAttachments = {
   file?:File[],
   preview?: string;
   lng?: string;
+  [key: string]: any; 
 };
 
 export interface FileAttachProps {
@@ -651,27 +652,26 @@ export interface TooltipProps {
 
 export interface TextEditorProps {
   defaultValue?: string;
-  attachedFiles?: TAttachments[];
+  attachedFiles?: TAttachments[] | null;
   label?: string;
   onSubmit?: (value: string, files: File[]) => void;
   onCancel?: () => void;
   error?: boolean;
+  setError?: (value:boolean) => void;
   helperText?: string;
   isEditMode?:boolean;
   canAttachFiles?: boolean;
-  files?: TAttachments[];
+  maxFileSize?:string;
   required?: boolean;
   className?: string;
-  isButtonDisabled?: boolean;
   /** Язык */
   lng?: string;
 }
 
 export interface ChildCommentProps {
-  id: string;
-  text: string; 
-  attachFiles?: TAttachments[];
-  authorUser: {
+  id?: string | null;
+  text?: string | null; 
+  authorUser?: {
     id?: string | null | undefined;
     login?: string | null | undefined;
     firstName?: string | null | undefined;
@@ -680,9 +680,9 @@ export interface ChildCommentProps {
     fullName?: string | null | undefined;
     admin?: boolean | null | undefined;
     [key: string]: any; 
-  }
-  createDate?: string;
-
+  } | null;
+  createDate?: string | null;
+  [key: string]: any; 
 }
 export interface CommentProps {
   comment: ChildCommentProps; 
@@ -694,12 +694,14 @@ export interface CommentProps {
   isEdit?: boolean;
   /** Ошибка */
   error?: boolean;
+  setError?: (value:boolean) => void;
   /** Текст ошибки */
   helperText?: string;
   /** Callback при изменении значения */
   onSubmit?: (value: string, files: File[]) => void;
   onEdit?: (value:boolean) => void;
   onDelete?: (id: string) => void;
+  maxFileSize?: string;
   /** Язык */
   lng?: string;
   /** Стили передаваемые напрямую */

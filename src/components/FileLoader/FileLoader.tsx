@@ -145,7 +145,7 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
           type: file.type,
         };
       });
-      setLoadingFilesNames(newFormatAttachments.map((file) => file.filename));
+      setLoadingFilesNames(newFormatAttachments.map((file) => file?.filename ?? 'Без названия'));
 
       setIsLoadingFiles(true);
       setAddedFilesFormatted([...addedFilesFormated, ...newFormatAttachments]);

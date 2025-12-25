@@ -236,7 +236,7 @@
 }
 
 .attachedFilesContainer {
-	max-height: 20vh;
+	max-height: 25vh;
     overflow: scroll;
 	margin-top: 5px;
 	background-color: none;

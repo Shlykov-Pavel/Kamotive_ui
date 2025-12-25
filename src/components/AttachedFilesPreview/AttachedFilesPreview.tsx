@@ -57,36 +57,14 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
   error = '',
 }) => {
 
-  console.log('files',files);
-  
 
   const deleteButtonRef = useRef<HTMLButtonElement>(null);
 
-  const handleDownload = (file: TAttachments) => {
-    if (onDownload) {
-      onDownload(file);
-    } else {
-      // const url = URL.createObjectURL(file);
-      // const link = document.createElement('a');
-      // link.href = url;
-      // link.download = file.filename;
-      // document.body.appendChild(link);
-      // link.click();
-      // document.body.removeChild(link);
-      // URL.revokeObjectURL(url);
-    }
-  };
-
-  console.log('canDownload',!isEdit);
-  
-
-  
-  
   return (
     <div className={className} style={style} title="">
       {files.map((file, index) => (
         <FileItem
-          key={`${index + file.filename}`}
+          key={`${index + (file.filename ?? '')}`}
           file={file}
           error={error}
           canDelete={isEdit ?? false}
@@ -104,63 +82,4 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
     </div>
   );
 
-  //  return (
-  //   <div className={className} style={style} title="">
-  //     {files.map((file, index) => (
-  //         <div  className={styles.attachedFileItem}>
-  //           <div key={`${index + file.filename}` } className={styles.nameContainer} title="">
-  //             <div className={styles.previewImage} title="">
-  //                 {getFileIcon(file)}</div>
-  //             <div className={styles.name} onClick={allowDownload ? () => handleDownload(file) : undefined} style={{cursor:'pointer'}}>
-  //               <Typography variant='Body2-Medium' color='var(--text-dark)'>{file.filename}</Typography>
-  //               {/* <div className={styles.fileSize}>{formatFileSize(file.file.size, lng)}</div> */}
-  //             </div>
-  //           </div>
-  //           {isEdit && (
-  //             // <button className={styles.removeFileButton} onClick={(event) => handleDelete(event, file.id)}>
-  //             //   ✕
-  //             // </button>
-  //                 <IconButton
-  //                   ref={deleteButtonRef}
-  //                   title={lng === 'ru' ? 'Удалить' : 'Delete'}
-  //                   icon={<IconClose/>} 
-  //                   onClick={(event) => handleDelete(event, file.id)}
-  //                     style={{ 
-  //                     width: '30px', 
-  //                     height: '30px', 
-  //                     padding:'5px', 
-  //                     background: 'transparent',
-  //                     cursor: 'pointer'
-  //                   }} 
-  //                     color="var(--text-btn-light)"
-  //                 />
-  //           )}
-  //         </div>
-  //     ))}
-  //   </div>
-  // );
-
-  // return (
-  //   <div className={className} style={style}>
-  //     {files.map((file) => (
-  //       <div key={file.id} className={styles.attachedFileItem}>
-  //         <div onClick={allowDownload ? () => handleDownload(file.file) : undefined} className={styles.filePreview}>
-  //           {/* {file.preview ? (
-  //             <img src={file.preview} alt={file.file.name} className={styles.previewImage} />
-  //           ) : ( */}
-  //              <div className={styles.previewImage}>{getFileIcon(file.file)}</div>
-  //             <div>{file.file.name}</div>
-  //           {/* )} */}
-
-  //           {isEdit && (
-  //             <button className={styles.removeFileButton} onClick={(event) => handleDelete(event, file.id)}>
-  //               ✕
-  //             </button>
-  //           )}
-  //           <div className={styles.fileSize}>{formatFileSize(file.file.size, lng)}</div>
-  //         </div>
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
 };

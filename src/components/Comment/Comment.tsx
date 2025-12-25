@@ -1,14 +1,13 @@
-import React, { CSSProperties, FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styles from './Comment.module.css';
 import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
 import { TextEditor } from '../TextEditor/TextEditor';
-import { FilePreview, AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
+import { AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
 import { IconAccount, IconDelete, IconPencil, IconPencilCancel } from '../../Icons';
 import { IconButton } from '../IconButton/IconButton';
-import { Tooltip } from '../Tooltip/Tooltip';
-import { CommentProps, TAttachments } from '../../types';
-import { FileItem } from '../FileItem/FileItem';
+import { CommentProps } from '../../types';
+
 
 export const Comment: FC<CommentProps> = ({
   comment,
@@ -18,18 +17,18 @@ export const Comment: FC<CommentProps> = ({
   canEdit = false,
   isEdit = false,
   error = false,
+  setError,
   helperText,
   onSubmit,
   onDelete,
   onEdit,
+  maxFileSize,
   lng = 'ru',
   style,
   className,
 }) => {
   
-  // const [commentText, setCommentText] = useState(comment.text || '');
   const [isEditMode, setIsEditMode] = useState(isEdit);
-  // const [attachedFiles, setAttachedFiles] = useState<TAttachments[]>(files);
   const [imageError, setImageError] = useState(false);
 
   const wrapperClassess = classNames(styles['wrapper--input'], className, {
@@ -44,17 +43,13 @@ export const Comment: FC<CommentProps> = ({
   };
 
   const handleDeleteClick = () => {
-    onDelete?.(comment.id);
+    comment.id && onDelete?.(comment.id);
   };
 
-  const handleSubmit = (value: string, files: File[]) => {
-    // console.log('Comment - handleSubmit', value, '--', files);
-    
+  const handleSubmit = (value: string, files: File[]) => {    
     if (onSubmit) {
       onSubmit(value, files);
     }
-    // setCommentText(value);
-    // setAttachedFiles(files);
     setIsEditMode((prev) => !prev);
   };
 
@@ -65,6 +60,8 @@ export const Comment: FC<CommentProps> = ({
   useEffect(() => {
     onEdit?.(isEditMode)
   }, [isEditMode]);
+  console.log('1 - maxFileSize',maxFileSize);
+  
 
   return (
     <div className={wrapperClassess} style={style}>
@@ -81,7 +78,7 @@ export const Comment: FC<CommentProps> = ({
           </div>
           <div className={styles.infoWrapper}>
             <Typography variant="Body2-Medium" className={labelClasses}>
-              {comment.authorUser.fullName}
+              {comment?.authorUser?.fullName ?? ''}
             </Typography>
             <Typography variant="Caption" className={styles.label} style={{ color: '#8E8E93' }}>
               {creationDate}
@@ -111,15 +108,16 @@ export const Comment: FC<CommentProps> = ({
       </div>
       {isEditMode ? (
         <TextEditor
-          defaultValue={comment.text}
+          defaultValue={comment?.text ?? ''}
           attachedFiles={comment.attachFiles}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
           error={error}
+          setError={setError}
           helperText={helperText}
           isEditMode={isEditMode}
-          // files={attachedFiles}
           canAttachFiles={canAttachFiles}
+          maxFileSize={maxFileSize}
           lng={lng}
         />
       ) : (

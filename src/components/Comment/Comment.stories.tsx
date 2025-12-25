@@ -174,6 +174,9 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
   }]
   const [comments, setComments] = React.useState<ChildCommentProps[]>(initialComments);
   const [isEdit, setIsEdit] = useState<boolean>(false)
+      const [error, setError] = useState<boolean>(false)
+  
+  
   const handleAddComment = (value: string) => {    
     
   };
@@ -216,6 +219,9 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
           key={comment.id}
           comment={comment}
           isEdit={isEdit}
+          error={error}
+          setError={setError}
+          maxFileSize='100Мб'
           onEdit={handleOpenEdit}
           onSubmit={handleSubmit}
           onDelete={handleDelete}
@@ -225,6 +231,9 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
 
         {!isEdit && 
         <TextEditor
+          error={error}
+          setError={setError}
+          maxFileSize='100Мб'
           onSubmit={handleSubmit} 
           lng={"ru"} 
 
