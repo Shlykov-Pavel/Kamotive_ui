@@ -114,42 +114,48 @@ const meta: Meta<typeof Comment> = {
 
 export default meta;
 
-// const value =
-//   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ipsum erat, vehicula at euismod et, tempor sit amet lacus. Vestibulum ac aliquam ligula, quis auctor massa. Integer dignissim eget mi nec dictum. Praesent posuere sed risus eget luctus. Phasellus nec luctus erat. Nam eu mauris malesuada, congue dui non, pretium nunc. Nunc viverra est et metus malesuada, in semper nisi ultricies. Sed erat lorem, efficitur sit amet ultrices nec, tempor et elit. Maecenas non bibendum mi. Suspendisse rhoncus aliquet nibh a tincidunt. Aenean lobortis faucibus ultricies.';
+ const value =  { 
+    id: '11', 
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ipsum erat, vehicula at euismod et, tempor sit amet lacus. Vestibulum ac aliquam ligula, quis auctor massa. Integer dignissim eget mi nec dictum. Praesent posuere sed risus eget luctus. Phasellus nec luctus erat. Nam eu mauris malesuada, congue dui non, pretium nunc. Nunc viverra est et metus malesuada, in semper nisi ultricies. Sed erat lorem, efficitur sit amet ultrices nec, tempor et elit. Maecenas non bibendum mi. Suspendisse rhoncus aliquet nibh a tincidunt. Aenean lobortis faucibus ultricies.',
+    authorUser: {
+      fullName: 'Александр Пушкин'
+    },
+    creationDate: '19.12.2025',
+  }
 
-// export const CommentDefault = (argTypes: CommentProps): JSX.Element => {
-//   return <Comment value={value} {...argTypes} />;
-// };
-// CommentDefault.storyName = 'Comment по умолчанию';
+export const CommentDefault = (argTypes: CommentProps): JSX.Element => {
+  return <Comment {...argTypes} comment={value}/>;
+};
+CommentDefault.storyName = 'Comment по умолчанию';
 
-// export const CommentEditable = (argTypes: CommentProps): JSX.Element => {
-//   return <Comment value={value} {...argTypes} />;
-// };
-// CommentEditable.args = {
-//   canEdit: true,
-// };
-// CommentEditable.storyName = 'Comment с возможностью редактировать';
+export const CommentEditable = (argTypes: CommentProps): JSX.Element => {
+  return <Comment  {...argTypes} comment={value}/>;
+};
+CommentEditable.args = {
+  canEdit: true,
+};
+CommentEditable.storyName = 'Comment с возможностью редактировать';
 
-// export const CommentEditableWithFiles = (argTypes: CommentProps): JSX.Element => {
-//   return <Comment value={value} {...argTypes} />;
-// };
-// CommentEditableWithFiles.args = {
-//   canEdit: true,
-//   canAttachFiles: true,
-// };
+export const CommentEditableWithFiles = (argTypes: CommentProps): JSX.Element => {
+  return <Comment {...argTypes} comment={value} />;
+};
+CommentEditableWithFiles.args = {
+  canEdit: true,
+  canAttachFiles: true,
+};
 
-// CommentEditableWithFiles.storyName = 'Comment с возможностью прикреплять файлы';
+CommentEditableWithFiles.storyName = 'Comment с возможностью прикреплять файлы';
 
 
-// export const CommentEditableWithoutAvatar = (argTypes: CommentProps): JSX.Element => {
-//   return <Comment value={value} {...argTypes} />;
-// };
-// CommentEditableWithoutAvatar.args = {
-//   avatar: '',
-//   canEdit: true,
-//   canAttachFiles: true,
-// };
-// CommentEditableWithoutAvatar.storyName = 'Comment без аватара';
+export const CommentEditableWithoutAvatar = (argTypes: CommentProps): JSX.Element => {
+  return <Comment {...argTypes} comment={value}/>;
+};
+CommentEditableWithoutAvatar.args = {
+  avatar: '',
+  canEdit: true,
+  canAttachFiles: true,
+};
+CommentEditableWithoutAvatar.storyName = 'Comment без аватара';
 
 
 export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
@@ -174,18 +180,16 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
   }]
   const [comments, setComments] = React.useState<ChildCommentProps[]>(initialComments);
   const [isEdit, setIsEdit] = useState<boolean>(false)
-      const [error, setError] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false)
+
   
   
-  const handleAddComment = (value: string) => {    
-    
-  };
   const handleOpenEdit = (edit: boolean) => {
     setIsEdit(edit)
   } 
 
-  const handleSubmit=(value: string, files: File[])=>{
-    const newAttachments: TAttachments[] = files.map((file) => ({
+  const handleSubmit=(value: string, files: File[], commentId?:string)=>{
+     const newAttachments: TAttachments[] = files.map((file) => ({
            id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`, // Генерируем ID
            filename: file.name,
            size: file.size,
@@ -193,16 +197,33 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
            preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
        }));
 
-    const newComment = {
-      id: Math.random().toString(),
-      text: value,
-      authorUser:{fullName:'Михаил Лермонтов'},
-      creationDate: '22.12.2025',
-      canEdit: true,
-      attachFiles: newAttachments
-    };
+
+    if(commentId){
+     setComments((prev) =>
+      prev.map((c) =>
+        c.id === commentId
+          ? { ...c, text: value,
+             attachFiles: [...(c.attachFiles || []), ...newAttachments]
+            }
+          : c
+      )
+    );
+
+    } else {
+        const newComment = {
+        id: Math.random().toString(),
+        text: value,
+        authorUser:{fullName:'Михаил Лермонтов'},
+        creationDate: '22.12.2025',
+        canEdit: true,
+        attachFiles: newAttachments
+      };
     
-  setComments((prev) => [...prev, newComment]);
+      setComments((prev) => [...prev, newComment]);
+    }
+
+   
+    
     console.log('handleSubmit',value, files);
     setIsEdit(false)
      
@@ -219,6 +240,7 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
           key={comment.id}
           comment={comment}
           isEdit={isEdit}
+          canEdit={index === comments.length - 1}
           error={error}
           setError={setError}
           maxFileSize='100Мб'
@@ -236,7 +258,6 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
           maxFileSize='100Мб'
           onSubmit={handleSubmit} 
           lng={"ru"} 
-
         />}
     </div>
   );

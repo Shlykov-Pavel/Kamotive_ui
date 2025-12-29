@@ -1,9 +1,7 @@
-import React, { CSSProperties, useRef } from 'react';
-import { IconFileDefault, IconFileVideo, IconFileAudio, IconClose, IconFile } from '../../Icons';
+import React, { CSSProperties} from 'react';
+import {  IconFile } from '../../Icons';
 import styles from './AttachedFilesPreview.module.css';
-import { Typography } from '../Typography/Typography';
-import { Tooltip } from '../Tooltip/Tooltip';
-import { FileItem, IconButton } from '../..';
+import { FileItem } from '../..';
 import { TAttachments } from '../../types';
 
 export interface FilePreview {
@@ -57,16 +55,13 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
   error = '',
 }) => {
 
-
-  const deleteButtonRef = useRef<HTMLButtonElement>(null);
-
   return (
     <div className={className} style={style} title="">
       {files.map((file, index) => (
         <FileItem
           key={`${index + (file.filename ?? '')}`}
           file={file}
-          error={error}
+          error={file.hasError ? error : ''} 
           canDelete={isEdit ?? false}
           canDownload={!isEdit}
           onDelete={(id:string)=>isEdit && onDelete?.(id)}

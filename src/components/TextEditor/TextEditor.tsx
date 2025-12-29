@@ -62,7 +62,7 @@ const getElementFromRange = (range: Range): HTMLElement | null => {
 
   return node.parentElement;
 };
-//изменение формата File на TAttachments
+
 export const formatFileSize = (bytes?: number, lng?:string): string => {
   if (!bytes || bytes === 0) {
     return lng === 'ru' || lng?.includes('ru') ? '0 Байт' : '0 Bytes';
@@ -78,6 +78,7 @@ export const formatFileSize = (bytes?: number, lng?:string): string => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
+//изменение формата File на TAttachments
 const converFileToAttachment = (files: File[])=>{
   return files.map((file) => ({
         id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`, // Генерируем ID
@@ -95,6 +96,24 @@ const convertAttacmentsToFile = (files: TAttachments[])=>{
       .reduce((acc, val) => acc.concat(val), []);
 }
 
+const parseFileSize = (sizeStr: string): number => {
+  const units: { [key: string]: number } = {
+    'б': 1, 'байты': 1, 'bytes': 1,
+    'кб': 1024, 'kb': 1024,
+    'мб': 1024 * 1024, 'mb': 1024 * 1024,
+    'гб': 1024 * 1024 * 1024, 'gb': 1024 * 1024 * 1024
+  };
+  
+  const match = sizeStr.toLowerCase().match(/^(\d+(?:\.\d+)?)\s*([a-zа-я]+)$/);
+  if (!match) return 0;
+  
+  const value = parseFloat(match[1]);
+  const unit = match[2];
+  
+  return value * (units[unit] || 0);
+};
+
+
 
 
 export const TextEditor: React.FC<TextEditorProps> = ({
@@ -107,10 +126,9 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   helperText,
   isEditMode,
   canAttachFiles = true,
-  files,
+  maxFileSize = '1Гб', 
   required,
   className,
-  isButtonDisabled,
   lng = 'en',
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
@@ -391,23 +409,35 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
   // Функция обработки загрузки файлов
   const handleUploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
     const filesArray = Array.from(files);
-    const incomingFiles = filesArray.filter(file => file.size <= MAX_FILE_SIZE);
-    const oversizedFiles = filesArray.filter(file => file.size > MAX_FILE_SIZE);
+    console.log('handleUploadFiles - filesArray',filesArray);
+    
+    // const incomingFiles = filesArray.filter(file => file.size <= parseFileSize(maxFileSize));
+    const oversizedFiles = filesArray.filter(file => file.size > parseFileSize(maxFileSize));
+
+    console.log('oversizedFiles',oversizedFiles);
+    
     if (oversizedFiles.length > 0) {
       const fileNames = oversizedFiles.map(f => f.name).join(', ');
       const message = lng === 'ru' 
-        ? `Файлы ${fileNames} превышают ${formatFileSize(MAX_FILE_SIZE)}`
-        : `Files exceed ${fileNames} ${formatFileSize(MAX_FILE_SIZE)}`;
+        ? `Файлы ${fileNames} превышают ${maxFileSize}`
+        : `Files exceed ${fileNames} ${maxFileSize}`;
+      
+        console.log('message',message);
         
       setFilesErrorText(message);
     }
+    //const newAttachments: TAttachments[] = converFileToAttachment(filesArray)
+       const newAttachments: TAttachments[] = converFileToAttachment(filesArray).map(attachment => ({
+        ...attachment,
+        hasError: attachment.size > parseFileSize(maxFileSize)
+    }));
 
-    const newAttachments: TAttachments[] = converFileToAttachment(incomingFiles)
-    
+
     const uniqueFiles = newAttachments.filter((newFile) => {
       return !temporaryFiles.some(
         (existing) => existing.filename === newFile.filename && existing.size === newFile.size
@@ -525,9 +555,7 @@ const removeAttachedFile = (id: string) => {
     }
     if (onSubmit) {
       const filesToSend: File[] = convertAttacmentsToFile(tempFilesRef.current)
-      console.log('filesToSend',filesToSend);
       // const filesToSend = tempFilesRef.current;
-      // console.log('Отправляем файлы:', filesToSend);
       onSubmit(currentPell.content.innerHTML, filesToSend);
       currentPell.content.innerHTML = '';
       setTemporaryFiles([]);

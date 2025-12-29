@@ -48,7 +48,7 @@ export const Comment: FC<CommentProps> = ({
 
   const handleSubmit = (value: string, files: File[]) => {    
     if (onSubmit) {
-      onSubmit(value, files);
+      onSubmit(value, files, comment?.id ?? '');
     }
     setIsEditMode((prev) => !prev);
   };

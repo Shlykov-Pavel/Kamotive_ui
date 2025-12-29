@@ -698,7 +698,7 @@ export interface CommentProps {
   /** Текст ошибки */
   helperText?: string;
   /** Callback при изменении значения */
-  onSubmit?: (value: string, files: File[]) => void;
+  onSubmit?: (value: string, files: File[], commentId?:string) => void;
   onEdit?: (value:boolean) => void;
   onDelete?: (id: string) => void;
   maxFileSize?: string;
