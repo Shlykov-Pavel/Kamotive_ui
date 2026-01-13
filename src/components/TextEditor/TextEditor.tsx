@@ -122,10 +122,12 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   label,
   onSubmit,
   onCancel,
+  onDelete,
   error,
   helperText,
   isEditMode,
   canAttachFiles = true,
+  maxFileCount = 5,
   maxFileSize = '1Гб', 
   required,
   className,
@@ -142,14 +144,14 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   const [editor, setEditor] = useState<PellEditor | null>(null);
   const [editorHtml, setEditorHtml] = useState(defaultValue || ''); 
   const [temporaryFiles, setTemporaryFiles] = useState<TAttachments[]>(attachedFiles ?? []);
-  const tempFilesRef = useRef(temporaryFiles);
-  tempFilesRef.current = temporaryFiles; 
-  // console.log('__temporaryFiles__',temporaryFiles);
+
+ 
+  const tempFilesRef = useRef<TAttachments[]>(attachedFiles ?? []);
+
   
-  // const [attachedFiles, setAttachedFiles] = useState<any>(files || []);
-  // console.log('___attachedFiles___',attachedFiles);
-  
-  const [filesErrorText, setFilesErrorText] = useState('');
+  useEffect(() => {
+    tempFilesRef.current = temporaryFiles;
+  }, [temporaryFiles]); 
   
 
   const [activeStates, setActiveStates] = useState({
@@ -407,6 +409,8 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     }
   };
 
+
+
   // Функция обработки загрузки файлов
   const handleUploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -414,29 +418,8 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     if (!files || files.length === 0) return;
 
     const filesArray = Array.from(files);
-    console.log('handleUploadFiles - filesArray',filesArray);
     
-    // const incomingFiles = filesArray.filter(file => file.size <= parseFileSize(maxFileSize));
-    const oversizedFiles = filesArray.filter(file => file.size > parseFileSize(maxFileSize));
-
-    console.log('oversizedFiles',oversizedFiles);
-    
-    if (oversizedFiles.length > 0) {
-      const fileNames = oversizedFiles.map(f => f.name).join(', ');
-      const message = lng === 'ru' 
-        ? `Файлы ${fileNames} превышают ${maxFileSize}`
-        : `Files exceed ${fileNames} ${maxFileSize}`;
-      
-        console.log('message',message);
-        
-      setFilesErrorText(message);
-    }
-    //const newAttachments: TAttachments[] = converFileToAttachment(filesArray)
-       const newAttachments: TAttachments[] = converFileToAttachment(filesArray).map(attachment => ({
-        ...attachment,
-        hasError: attachment.size > parseFileSize(maxFileSize)
-    }));
-
+    const newAttachments: TAttachments[] = converFileToAttachment(filesArray);
 
     const uniqueFiles = newAttachments.filter((newFile) => {
       return !temporaryFiles.some(
@@ -445,10 +428,55 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     });
     
     if (uniqueFiles.length > 0) {
-      setTemporaryFiles((prev) => [...prev, ...uniqueFiles]);
+      setTemporaryFiles((prev) => {
+        const updatedFiles = [...prev, ...uniqueFiles];
+        // Проверяем ошибки для новых файлов и добавляем в newFilesAdded
+        const validatedFiles = updatedFiles.map((file, index) => {
+          // Если это старый файл, оставляем его как есть
+          if (index < prev.length) {
+            return file;
+          }
+          // Для новых файлов проверяем ошибки
+          const isSizeError = (file.size ?? 0) > parseFileSize(maxFileSize);
+          const isCountError = (attachedFiles?.length ?? 0) + index + 1 > maxFileCount;
+          return {
+            ...file,
+            error: isSizeError 
+              ? lng === 'ru' ? `Файл превышает ${maxFileSize}` : `File exceed ${maxFileSize}`
+              : isCountError 
+                ? true
+                : ''
+          };
+        });
+        
+        
+        return validatedFiles;
+      });
     }
     event.target.value = '';
 };
+
+// const removeAttachedFile = (id: string) => {
+//   setTemporaryFiles((prev) => {
+//     const fileToRemove = prev.find(f => f.id === id);
+//     if (fileToRemove?.preview) {
+//       URL.revokeObjectURL(fileToRemove.preview);
+//     }
+//     const updatedFiles = prev.filter((file) => file.id !== id);
+    
+//     // Пересчитываем ошибки для оставшихся файлов
+//     return updatedFiles.map((file, index) => {
+//       // const isSizeError = (file.size ?? 0) > parseFileSize(maxFileSize);
+//       const isCountError = (attachedFiles?.length ?? 0) + index + 1 > maxFileCount;
+//       return {
+//         ...file,
+//         error: isCountError 
+//             ? true
+//             : ''
+//       };
+//     });
+//   });
+// };
   
 const removeAttachedFile = (id: string) => {
   setTemporaryFiles((prev) => {
@@ -458,6 +486,9 @@ const removeAttachedFile = (id: string) => {
     }
     return prev.filter((file) => file.id !== id);
   });
+  if(attachedFiles?.some((file) => file.id === id)) {
+    onDelete?.(id)
+  }
 };
 
   const getEditorActions = useCallback(
@@ -517,7 +548,7 @@ const removeAttachedFile = (id: string) => {
         baseActions.push({
           name: 'image',
           icon: IconAttachToString('', '', '1.5'),
-          title: lng === 'ru' ? 'Прикрепить изображение' : 'Upload Image',
+          title: lng === 'ru' ? 'Прикрепить файл' : 'Upload file',
           result: () => {},
         });
       }
@@ -554,8 +585,9 @@ const removeAttachedFile = (id: string) => {
       return;
     }
     if (onSubmit) {
-      const filesToSend: File[] = convertAttacmentsToFile(tempFilesRef.current)
-      // const filesToSend = tempFilesRef.current;
+      const filesToSend: File[] = convertAttacmentsToFile(
+        tempFilesRef.current.filter(file => !Boolean(file.error) && file.file)
+      );    
       onSubmit(currentPell.content.innerHTML, filesToSend);
       currentPell.content.innerHTML = '';
       setTemporaryFiles([]);
@@ -570,7 +602,6 @@ const removeAttachedFile = (id: string) => {
     }
     currentPell.content.innerHTML = defaultValue || '';
     setEditorHtml(defaultValue || ''); 
-    // setAttachedFiles([]);
 
     if (onCancel) {
       onCancel?.();
@@ -720,9 +751,6 @@ const hadleRedo = useCallback(()=>{
     setEditorHtml(html);
     redoContentRef.current = html;
     updateActiveStates();
-    // if (onChange) {
-    //   onChange(html, attachedFiles);
-    // }
 }, [updateActiveStates]);
 
 useEffect(() => {
@@ -745,13 +773,15 @@ useEffect(() => {
     .replace(/\s/g, '')      // все пробелов
     .trim();
   const isTextEmpty = contentOnly.length === 0
-  const hasNoNewFiles = temporaryFiles.length === 0; 
+  const hasNoNewFiles = temporaryFiles.filter(file => file.file).length === 0 && 
+                         temporaryFiles.length === (attachedFiles?.length ?? 0);
+  const hasErrorsInFiles = temporaryFiles.some(file => Boolean(file.error));    
   const hasNoTextChanges = normalizedEditor === normalizedDefault;
   const hasNoChanges = hasNoTextChanges && hasNoNewFiles;
   
   if (submitButtonRef.current) {
-    submitButtonRef.current.disabled = hasNoChanges || isTextEmpty;
-    submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty ? '0.5' : '1';
+    submitButtonRef.current.disabled = hasNoChanges || isTextEmpty || hasErrorsInFiles
+    submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty || hasErrorsInFiles ? '0.5' : '1';
   }
  
   // if (cancelButtonRef.current) {
@@ -759,7 +789,7 @@ useEffect(() => {
   // }
 
 
-}, [editorHtml, defaultValue]);
+}, [editorHtml, defaultValue, temporaryFiles]);
 
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -857,11 +887,11 @@ useEffect(() => {
         {temporaryFiles.length > 0 && (
           <AttachedFilesPreview
             files={temporaryFiles}
+            allowDelete={true}
             onDelete={removeAttachedFile}
             className={styles.attachedFilesContainer}
-            isEdit={true}
             lng={lng}
-            error={filesErrorText}
+            maxFileCount={maxFileCount}
           />
         )}
         <div className={styles.editorContainer} ref={editorRef}></div>

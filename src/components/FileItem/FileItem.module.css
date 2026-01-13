@@ -59,9 +59,11 @@
   height: 28px;
 }
 
+
 .fileItemActions {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 3px;
+  padding-right: 5px;
 }

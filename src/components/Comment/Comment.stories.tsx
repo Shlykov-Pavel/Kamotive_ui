@@ -2,59 +2,7 @@ import type { Meta } from '@storybook/react';
 import React, { CSSProperties, useState } from 'react';
 import { Comment } from './Comment';
 import { TextEditor } from '../TextEditor/TextEditor';
-
-export type TAttachments = {
-  id: string;
-  filename: string;
-  uri?: string;
-  size?: number;
-  createDateTime?: string;
-  updateDateTime?: string;
-  file?:File[],
-  preview?: string;
-  lng?: string;
-};
-
-export interface ChildCommentProps {
-  id: string;
-  text: string; 
-  attachFiles?: TAttachments[];
-  authorUser: {
-    id?: string | null | undefined;
-    login?: string | null | undefined;
-    firstName?: string | null | undefined;
-    lastName?: string | null | undefined;
-    middleName?: string | null | undefined;
-    fullName?: string | null | undefined;
-    admin?: boolean | null | undefined;
-    [key: string]: any; 
-  }
-  createDate?: string;
-
-}
-export interface CommentProps {
-  comment: ChildCommentProps; 
-  avatar?: string | null;
-  creationDate?: string;
-  canAttachFiles?: boolean,
-  files?: TAttachments[],
-  canEdit?: boolean;
-  isEdit?: boolean;
-
-  error?: boolean;
-  helperText?: string;
-  /** Callback при изменении значения */
-  onChange?: (value: string, files: File[]) => void;
-  onSubmit?: (value: string, files: File[]) => void;
-  onEdit?: (value:boolean) => void;
-  onDelete?: (id: string) => void;
-  /** Язык */
-  lng?: string;
-  /** Стили передаваемые напрямую */
-  style?: CSSProperties;
-  /** Дополнительный класс */
-  className?: string;
-}
+import { TAttachments, ChildCommentProps, CommentProps } from '../../types';
 
 const withWrapper = (Story: React.ComponentType) => (
   <div
@@ -100,6 +48,8 @@ const meta: Meta<typeof Comment> = {
     onSubmit: {description: 'Callback при изменении значения', action: 'clicked'},
     onDelete: {description: 'Callback при удалении комментария', action: 'clicked'},
     onEdit: {description: 'Callback при редактировании комментария', action: 'clicked'},
+    onDownload: {description: 'Callback при скачивании файла', action: 'clicked'},
+    onFileDelete: {description: 'Callback при удалении файла', action: 'clicked'},
     lng: {
       description: 'Язык',
       control: { type: 'radio' },
@@ -170,11 +120,25 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
     attachFiles: [
       { 
         id: '1',
-        filename: "Файл1",
+        filename: "Файл 1",
         size: 424876,
     }, { 
-        id: '1',
-        filename: "Файл еще один",
+        id: '2',
+        filename: "Файл 2",
+        size: 624876,
+    },{ 
+        id: '3',
+        filename: "Файл 3",
+        size: 624876,
+    },
+  { 
+        id: '4',
+        filename: "Файл 4",
+        size: 624876,
+    },
+  { 
+        id: '5',
+        filename: "Файл 5",
         size: 624876,
     }]
   }]
@@ -221,15 +185,14 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
     
       setComments((prev) => [...prev, newComment]);
     }
-
-   
-    
-    console.log('handleSubmit',value, files);
     setIsEdit(false)
      
   }
-  const handleDelete = (id: string) => {
-    setComments((prev) => prev.filter((comment) => comment.id !== id));
+  const handleDelete = (deletecomment: any) => {
+    setComments((prev) => prev.filter((comment) => comment.id !== deletecomment.id));
+  };
+  const handleDownload = (file: TAttachments) => {
+    confirm('Скачивание файла: ' + file.filename)
   };
 
   return (
@@ -247,6 +210,8 @@ export const CommentBlockDefault = (argTypes: CommentProps): JSX.Element => {
           onEdit={handleOpenEdit}
           onSubmit={handleSubmit}
           onDelete={handleDelete}
+          onDownload={handleDownload}
+          canDeleteFile={true}
           lng={'ru'}
           />
       ))}

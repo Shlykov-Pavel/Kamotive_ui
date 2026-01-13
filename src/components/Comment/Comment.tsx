@@ -22,6 +22,10 @@ export const Comment: FC<CommentProps> = ({
   onSubmit,
   onDelete,
   onEdit,
+  onDownload,
+  canDeleteFile,
+  onFileDelete,
+  maxFileCount,
   maxFileSize,
   lng = 'ru',
   style,
@@ -43,7 +47,8 @@ export const Comment: FC<CommentProps> = ({
   };
 
   const handleDeleteClick = () => {
-    comment.id && onDelete?.(comment.id);
+    // comment.id && onDelete?.(comment.id);
+    onDelete?.(comment)
   };
 
   const handleSubmit = (value: string, files: File[]) => {    
@@ -60,8 +65,7 @@ export const Comment: FC<CommentProps> = ({
   useEffect(() => {
     onEdit?.(isEditMode)
   }, [isEditMode]);
-  console.log('1 - maxFileSize',maxFileSize);
-  
+
 
   return (
     <div className={wrapperClassess} style={style}>
@@ -112,11 +116,13 @@ export const Comment: FC<CommentProps> = ({
           attachedFiles={comment.attachFiles}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
+          onDelete={onFileDelete}
           error={error}
           setError={setError}
           helperText={helperText}
           isEditMode={isEditMode}
           canAttachFiles={canAttachFiles}
+          maxFileCount={maxFileCount}
           maxFileSize={maxFileSize}
           lng={lng}
         />
@@ -125,8 +131,13 @@ export const Comment: FC<CommentProps> = ({
           {comment.attachFiles && comment.attachFiles?.length > 0 && (
             <AttachedFilesPreview 
               files={comment.attachFiles} 
-              className={styles.attachedFilesContainer} 
-              lng={lng} />
+              onDownload={onDownload}
+              allowDelete={canDeleteFile}
+              onDelete={onFileDelete}
+              className={styles.attachedFilesContainer}
+              maxFileCount={maxFileCount} 
+              lng={lng}
+            />
           )}
           <div 
             id={`comment-${comment.id}`}

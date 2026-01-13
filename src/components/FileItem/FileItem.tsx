@@ -24,8 +24,6 @@ export const FileItem: FC<FileItemProps> = ({
   isRejectedFile,
   lng
 }) => {
-
-  console.log('FileItem -error', error);
   
   const [isLoadingFinished, setIsLoadingFinished] = useState(false);
   const [animationDuration, setAnimationDuration] = useState(0);
@@ -159,6 +157,7 @@ export const FileItem: FC<FileItemProps> = ({
             <IconButton
               className={styles.fileIcon}
               icon={<IconDownload />}
+              title={lng === 'ru'? 'Скачать' : 'Download'}
               onClick={(e: React.MouseEvent) => handleDownloadClick(e, file)}
               color="var(--icons-grey)"
               size="sm"
@@ -167,7 +166,9 @@ export const FileItem: FC<FileItemProps> = ({
           {canDelete && (
             <IconButton
               className={styles.fileIcon}
+              style={{backgroundColor:"transparent"}}
               icon={<IconClose />}
+              title={lng === 'ru'? 'Удалить' : 'Delete'}
               onClick={(e: React.MouseEvent) => handleDeleteClick(e, file.id || '')}
               color="var(--icons-grey)"
               size="sm"
@@ -186,7 +187,7 @@ export const FileItem: FC<FileItemProps> = ({
         />
       )} */}
       {error && (
-        <Typography variant="Caption" color="var(--error-main)">
+        <Typography variant="Caption" color="var(--error-main)" style={{paddingLeft:"5px"}}>
           {error}
         </Typography>
       )}

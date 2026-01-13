@@ -474,7 +474,7 @@ export interface FileItemProps {
   /** Флаг загрузки файла */
   loading?: boolean;
   /** Текст ошибки загрузки файла */
-  error?: string;
+  error?: string | boolean;
   /** Функция обработки скачивания файла */
   onDownload?: (file: TAttachments) => void;
   /** Функция обработки удаления файла */
@@ -656,11 +656,13 @@ export interface TextEditorProps {
   label?: string;
   onSubmit?: (value: string, files: File[]) => void;
   onCancel?: () => void;
+  onDelete?: (id: string) => void;
   error?: boolean;
   setError?: (value:boolean) => void;
   helperText?: string;
   isEditMode?:boolean;
   canAttachFiles?: boolean;
+  maxFileCount?:number;
   maxFileSize?:string;
   required?: boolean;
   className?: string;
@@ -669,7 +671,7 @@ export interface TextEditorProps {
 }
 
 export interface ChildCommentProps {
-  id?: string | null;
+  id: string;
   text?: string | null; 
   authorUser?: {
     id?: string | null | undefined;
@@ -700,7 +702,11 @@ export interface CommentProps {
   /** Callback при изменении значения */
   onSubmit?: (value: string, files: File[], commentId?:string) => void;
   onEdit?: (value:boolean) => void;
-  onDelete?: (id: string) => void;
+  onDelete?: (comment: ChildCommentProps) => void;
+  onDownload?: (file: TAttachments) => void;
+  canDeleteFile?: boolean;
+  onFileDelete?: (id: string) => void;
+  maxFileCount?: number;
   maxFileSize?: string;
   /** Язык */
   lng?: string;

@@ -1,7 +1,7 @@
 import React, { CSSProperties} from 'react';
 import {  IconFile } from '../../Icons';
 import styles from './AttachedFilesPreview.module.css';
-import { FileItem } from '../..';
+import { FileItem, Typography } from '../..';
 import { TAttachments } from '../../types';
 
 export interface FilePreview {
@@ -33,26 +33,24 @@ export const formatFileSize = (bytes?: number, lng?:string): string => {
 
 interface AttachedFilesProps {
   files: TAttachments[];
-  lng: string;
-  onDelete?: (id: string) => void;
   onDownload?: (file: TAttachments) => void;
+  allowDelete?: boolean;
+  onDelete?: (id: string) => void;
   style?: CSSProperties;
   className?: string;
-  isEdit?: boolean;
-  allowDownload?: boolean;
-  error?: string;
+  maxFileCount?: number;
+  lng: string;
 }
 
 export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
   files,
-  onDelete,
   onDownload,
+  allowDelete = false,
+  onDelete,
   style,
   className,
-  isEdit,
-  allowDownload = true,
+  maxFileCount = 5,
   lng,
-  error = '',
 }) => {
 
   return (
@@ -61,19 +59,25 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
         <FileItem
           key={`${index + (file.filename ?? '')}`}
           file={file}
-          error={file.hasError ? error : ''} 
-          canDelete={isEdit ?? false}
-          canDownload={!isEdit}
-          onDelete={(id:string)=>isEdit && onDelete?.(id)}
-          onDownload={(file: TAttachments)=> allowDownload && onDownload?.(file)}
+          error={file.error} 
+          canDelete={allowDelete}
+          canDownload={Boolean(onDownload)}
+          onDelete={(id:string)=> allowDelete && onDelete?.(id)}
+          onDownload={(file: TAttachments)=> onDownload?.(file)}
           style={{
-            border:'none',
-            padding:'5px 0px',
+            border:!file.error ? 'none' : undefined,
+            padding:!file.error ? '5px 0px' : '5px 5px',
             borderRadius:'5px'
           }}
+          isRejectedFile={file.error}
           lng={lng}
         />
       ))}
+       {files.length > maxFileCount && (
+            <Typography variant="Caption" color="var(--error-main)">
+          {(lng === 'ru' || lng.includes('ru')) ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`}
+        </Typography>
+        )}
     </div>
   );
 
