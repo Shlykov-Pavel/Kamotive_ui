@@ -66,10 +66,11 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
           onDownload={(file: TAttachments)=> onDownload?.(file)}
           style={{
             border:!file.error ? 'none' : undefined,
-            padding:!file.error ? '5px 0px' : '5px 5px',
+            padding:!file.error ? '5px 5px' : '5px 5px',
             borderRadius:'5px'
           }}
           isRejectedFile={file.error}
+          isComment={true}
           lng={lng}
         />
       ))}

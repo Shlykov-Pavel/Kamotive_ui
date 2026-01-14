@@ -28,6 +28,7 @@
 .iconsWrapper {
 	display: flex;
 	flex-direction: row;
+	padding-right: 12px;
 }
 
 .commentWrapper {

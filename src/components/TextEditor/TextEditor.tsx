@@ -589,12 +589,16 @@ const removeAttachedFile = (id: string) => {
     if (!currentPell?.content) {
       return;
     }
-    currentPell.content.innerHTML = defaultValue || '';
-    setEditorHtml(defaultValue || ''); 
+    if(currentPell.content.innerHTML || tempFilesRef.current.length) {
+      currentPell.content.innerHTML = defaultValue || '';
+      setEditorHtml(defaultValue || ''); 
+      setTemporaryFiles(attachedFiles ? attachedFiles.map(file => ({...file})) : [])
 
-    if (onCancel) {
-      onCancel?.();
+      if (onCancel) {
+        onCancel?.();
+      }
     }
+    
   }, [defaultValue, onCancel]); 
 
 const hadleRedo = useCallback(()=>{  
@@ -650,7 +654,7 @@ const hadleRedo = useCallback(()=>{
       const root = createRoot(actionsWrapper);
       root.render(
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {isEditMode && (
+          {/* {isEditMode && ( */}
                 <IconButton
                   ref={cancelButtonRef}
                   title={lng === 'ru' ? 'Отменить' : 'Cancel'}
@@ -661,11 +665,13 @@ const hadleRedo = useCallback(()=>{
                     height: '25px', 
                     padding:'5px', 
                     backgroundColor: 'white',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    opacity: 0.5,
+
                   }} 
                    color="var(--blue-main)"
                 />
-            )}  
+            {/* )}   */}
           
                 <IconButton
                   ref={submitButtonRef}
@@ -773,9 +779,9 @@ useEffect(() => {
     submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty || hasErrorsInFiles ? '0.5' : '1';
   }
  
-  // if (cancelButtonRef.current) {
-  //   cancelButtonRef.current.disabled = hasNoChanges;
-  // }
+  if (cancelButtonRef.current) {
+    cancelButtonRef.current.style.opacity = hasNoChanges ? '0.5' : '1';
+  }
 
 
 }, [editorHtml, defaultValue, temporaryFiles]);

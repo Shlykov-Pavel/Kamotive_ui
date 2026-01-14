@@ -22,6 +22,7 @@ export const FileItem: FC<FileItemProps> = ({
   style,
   isAddedFile,
   isRejectedFile,
+  isComment = false,
   lng
 }) => {
   
@@ -107,6 +108,10 @@ export const FileItem: FC<FileItemProps> = ({
     [styles[`fileItem_attached`]]: !(isAddedFile),
   });
 
+  const fileIcons = classNames(styles['fileIcon'], {
+    [styles['fileIcons_comment']]: isComment,
+  });
+
   const handleDeleteClick = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     if (onDelete && id) {
@@ -153,9 +158,9 @@ export const FileItem: FC<FileItemProps> = ({
           </div>
         </div>
         <div className={styles['fileItemActions']}>
-          {!(isAddedFile || isRejectedFile) && canDownload && (
+          {!(isAddedFile || isRejectedFile) && canDownload && !isComment && (
             <IconButton
-              className={styles.fileIcon}
+              className={fileIcons}
               icon={<IconDownload />}
               title={lng === 'ru'? 'Скачать' : 'Download'}
               onClick={(e: React.MouseEvent) => handleDownloadClick(e, file)}
@@ -165,11 +170,11 @@ export const FileItem: FC<FileItemProps> = ({
           )}
           {canDelete && (
             <IconButton
-              className={styles.fileIcon}
+              className={fileIcons}
               icon={<IconClose />}
               title={lng === 'ru'? 'Удалить' : 'Delete'}
               onClick={(e: React.MouseEvent) => handleDeleteClick(e, file.id || '')}
-              color="var(--icons-grey)"
+              // color="var(--icons-grey)"
               size="sm"
             />
           )}

@@ -99,11 +99,12 @@ export const Comment: FC<CommentProps> = ({
               />
           
               <IconButton 
-                icon={<IconDelete width={'14'} height={'14'} />} 
+                icon={<IconDelete width={'14'} height={'14'} strokeWidth='0.5'/>} 
                 title={lng === 'ru' ? 'Удалить' : 'Delete'}
                 onClick={handleDeleteClick} 
                 size="sm" 
-                style={{ width: '30px', height: '30px', padding:'5px'  }} 
+                style={{ width: '30px', height: '30px', padding:'5px'}} 
+                
                 color= "var(--icons-grey)" 
             />
           </div>

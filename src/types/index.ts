@@ -489,6 +489,8 @@ export interface FileItemProps {
   isAddedFile?: boolean;
   /** Флаг отклоненного файла */
   isRejectedFile?: boolean;
+  /** Флаг для файлов комментариев */
+  isComment?:boolean;
   /** Язык интерфейса для типов данных*/
   lng?: string;
 }

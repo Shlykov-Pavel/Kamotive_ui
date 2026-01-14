@@ -65,5 +65,15 @@
   justify-content: center;
   align-items: center;
   gap: 3px;
-  padding-right: 5px;
+  /* padding-right: 5px; */
+}
+
+.fileIcons_comment {
+  color: var(--icons-grey);
+}
+
+.fileIcons_comment:hover {
+  color: var(--text-dark);
+  background-color: rgba(0, 0, 0, 0.03);
+  transition: background-color 0.15s ease-in-out;
 }
