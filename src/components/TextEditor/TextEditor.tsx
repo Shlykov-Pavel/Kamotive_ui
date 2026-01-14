@@ -16,11 +16,10 @@ import {
 } from '../../Icons';
 import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
-import { FilePreview, AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
+import { AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
 import { TAttachments, TextEditorProps } from '../../types';
 import styles from './TextEditor.module.css';
 import { IconButton } from '../IconButton/IconButton';
-import { set } from 'react-datepicker/dist/date_utils';
 
 const ACCEPTED_FILE_TYPES =
   'image/*,audio/*,video/*,.doc,.docx,.html,.htm,.odt,.pdf,.xls,.xlsx,.ods,.ppt,.pptx,.txt,.zip,.djvu';
@@ -417,7 +416,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
-    const filesArray = Array.from(files);
+    const filesArray = Array.from(files);    
     
     const newAttachments: TAttachments[] = converFileToAttachment(filesArray);
 
@@ -425,71 +424,61 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       return !temporaryFiles.some(
         (existing) => existing.filename === newFile.filename && existing.size === newFile.size
       );
-    });
+    });    
     
     if (uniqueFiles.length > 0) {
       setTemporaryFiles((prev) => {
         const updatedFiles = [...prev, ...uniqueFiles];
-        // Проверяем ошибки для новых файлов и добавляем в newFilesAdded
-        const validatedFiles = updatedFiles.map((file, index) => {
-          // Если это старый файл, оставляем его как есть
-          if (index < prev.length) {
-            return file;
-          }
-          // Для новых файлов проверяем ошибки
+        return updatedFiles.map((file, index) => {
           const isSizeError = (file.size ?? 0) > parseFileSize(maxFileSize);
-          const isCountError = (attachedFiles?.length ?? 0) + index + 1 > maxFileCount;
+          const isCountError = index + 1 > maxFileCount;          
+          let errorMessage = '';
+          if (isSizeError) {
+              errorMessage = lng === 'ru' ? `Файл превышает ${maxFileSize}` : `File exceed ${maxFileSize}`;
+          } 
           return {
-            ...file,
-            error: isSizeError 
-              ? lng === 'ru' ? `Файл превышает ${maxFileSize}` : `File exceed ${maxFileSize}`
-              : isCountError 
-                ? true
-                : ''
+              ...file,
+              error: errorMessage || (isCountError ? true : ''),
           };
-        });
-        
-        
-        return validatedFiles;
+      });
+          
+      
       });
     }
     event.target.value = '';
 };
 
-// const removeAttachedFile = (id: string) => {
-//   setTemporaryFiles((prev) => {
-//     const fileToRemove = prev.find(f => f.id === id);
-//     if (fileToRemove?.preview) {
-//       URL.revokeObjectURL(fileToRemove.preview);
-//     }
-//     const updatedFiles = prev.filter((file) => file.id !== id);
-    
-//     // Пересчитываем ошибки для оставшихся файлов
-//     return updatedFiles.map((file, index) => {
-//       // const isSizeError = (file.size ?? 0) > parseFileSize(maxFileSize);
-//       const isCountError = (attachedFiles?.length ?? 0) + index + 1 > maxFileCount;
-//       return {
-//         ...file,
-//         error: isCountError 
-//             ? true
-//             : ''
-//       };
-//     });
-//   });
-// };
-  
+
 const removeAttachedFile = (id: string) => {
   setTemporaryFiles((prev) => {
-    const fileToRemove = prev.find(f => f.id === id);
-    if (fileToRemove?.preview) {
-      URL.revokeObjectURL(fileToRemove.preview);
-    }
-    return prev.filter((file) => file.id !== id);
+    const filteredFiles = prev.filter((file) => {
+      if (file.id === id) {
+        if (file.preview) URL.revokeObjectURL(file.preview);
+        return false;
+      }
+      return true;
+    });
+    return filteredFiles.map((file, index) => {
+      const isSizeError = (file.size ?? 0) > parseFileSize(maxFileSize);
+      const isCountError = (index + 1) > maxFileCount;
+
+      let errorMessage = '';
+      if (isSizeError) {
+        errorMessage = lng === 'ru' ? `Файл превышает ${maxFileSize}` : `File exceed ${maxFileSize}`;
+      }
+
+      return {
+        ...file,
+        error: errorMessage || (isCountError ? true : ''),
+      };
+    });
   });
-  if(attachedFiles?.some((file) => file.id === id)) {
-    onDelete?.(id)
+
+  if (attachedFiles?.some((file) => file.id === id)) {
+    onDelete?.(id);
   }
 };
+
 
   const getEditorActions = useCallback(
     () => {
@@ -584,10 +573,10 @@ const removeAttachedFile = (id: string) => {
     if (!currentPell?.content) {
       return;
     }
-    if (onSubmit) {
+    if (onSubmit && currentPell.content.innerHTML) {
       const filesToSend: File[] = convertAttacmentsToFile(
         tempFilesRef.current.filter(file => !Boolean(file.error) && file.file)
-      );    
+      );  
       onSubmit(currentPell.content.innerHTML, filesToSend);
       currentPell.content.innerHTML = '';
       setTemporaryFiles([]);
