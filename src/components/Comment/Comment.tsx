@@ -1,40 +1,41 @@
-import React, { CSSProperties, FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styles from './Comment.module.css';
 import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
 import { TextEditor } from '../TextEditor/TextEditor';
-import { FilePreview, AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
-import { IconAccount, IconDeleteFilled, IconPencilFilled } from '../../Icons';
+import { AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
+import { IconAccount, IconDelete, IconPencil, IconPencilCancel } from '../../Icons';
 import { IconButton } from '../IconButton/IconButton';
 import { CommentProps } from '../../types';
 
+
 export const Comment: FC<CommentProps> = ({
-  id,
-  value,
-  style,
-  className,
-  username,
+  comment,
   avatar,
   creationDate,
-  canAttachFiles = false,
-  files = [],
+  canAttachFiles = true,
   canEdit = false,
   isEdit = false,
-  label,
   error = false,
+  setError,
   helperText,
-  onChange,
   onSubmit,
   onDelete,
+  onEdit,
+  onDownload,
+  canDeleteFile,
+  onFileDelete,
+  maxFileCount,
+  maxFileSize,
   lng = 'ru',
+  style,
+  className,
 }) => {
-  const [commentText, setCommentText] = useState(value || '');
+  
   const [isEditMode, setIsEditMode] = useState(isEdit);
-  const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files);
   const [imageError, setImageError] = useState(false);
 
   const wrapperClassess = classNames(styles['wrapper--input'], className, {
-    [styles['wrapper--input-label']]: label,
     [styles['wrapper--input-helperText']]: error,
   });
 
@@ -46,23 +47,24 @@ export const Comment: FC<CommentProps> = ({
   };
 
   const handleDeleteClick = () => {
-    onDelete?.(id);
+    onDelete?.(comment)
   };
 
-  const handleSubmit = (value: string, files: FilePreview[]) => {
+  const handleSubmit = (value: string, files: File[]) => {    
     if (onSubmit) {
-      onSubmit(value, files);
+      onSubmit(value, files, comment?.id ?? '');
     }
-    setCommentText(value);
-    setAttachedFiles(files);
     setIsEditMode((prev) => !prev);
   };
 
-  const handleChange = (value: string, files: FilePreview[]) => {
-    if (onChange) {
-      onChange(value, files);
-    }
+  const handleCancel = () => {
+    setIsEditMode((prev) => !prev);
   };
+  
+  useEffect(() => {
+    onEdit?.(isEditMode)
+  }, [isEditMode]);
+
 
   return (
     <div className={wrapperClassess} style={style}>
@@ -79,7 +81,7 @@ export const Comment: FC<CommentProps> = ({
           </div>
           <div className={styles.infoWrapper}>
             <Typography variant="Body2-Medium" className={labelClasses}>
-              {username}
+              {comment?.authorUser?.fullName ?? ''}
             </Typography>
             <Typography variant="Caption" className={styles.label} style={{ color: '#8E8E93' }}>
               {creationDate}
@@ -88,29 +90,61 @@ export const Comment: FC<CommentProps> = ({
         </div>
         {canEdit && (
           <div className={styles.iconsWrapper}>
-            <IconButton icon={<IconPencilFilled />} onClick={handleEditClick} size="sm" style={{ aspectRatio: 0, width: '30px', height: '30px' }} />
-            <IconButton icon={<IconDeleteFilled />} onClick={handleDeleteClick} size="sm" style={{ aspectRatio: 0, width: '30px', height: '30px' }} />
+              <IconButton
+              icon={isEditMode ? <IconPencilCancel width={'14'} height={'14'}/>: <IconPencil  width={'14'} height={'14'}/>} 
+              title={isEditMode ? lng === 'ru' ? 'Закрыть редактирование' : 'Close edit' : lng === 'ru' ? 'Редактировать' : 'Edit'}
+              onClick={handleEditClick}
+              style={{ width: '30px', height: '30px', padding:'5px' }} 
+              color= "var(--icons-grey)" 
+              />
+          
+              <IconButton 
+                icon={<IconDelete width={'14'} height={'14'} strokeWidth='0.5'/>} 
+                title={lng === 'ru' ? 'Удалить' : 'Delete'}
+                onClick={handleDeleteClick} 
+                size="sm" 
+                style={{ width: '30px', height: '30px', padding:'5px'}} 
+                
+                color= "var(--icons-grey)" 
+            />
           </div>
         )}
       </div>
       {isEditMode ? (
         <TextEditor
-          defaultValue={commentText}
+          defaultValue={comment?.text ?? ''}
+          attachedFiles={comment.attachFiles}
           onSubmit={handleSubmit}
-          onChange={handleChange}
+          onCancel={handleCancel}
+          onDelete={onFileDelete}
           error={error}
+          setError={setError}
           helperText={helperText}
-          files={attachedFiles}
+          isEditMode={isEditMode}
           canAttachFiles={canAttachFiles}
+          maxFileCount={maxFileCount}
+          maxFileSize={maxFileSize}
           lng={lng}
         />
       ) : (
         <div className={styles.commentWrapper}>
-          {attachedFiles.length > 0 && (
-            <AttachedFilesPreview files={attachedFiles} className={styles.attachedFilesContainer} lng={lng} />
+          {comment.attachFiles && comment.attachFiles?.length > 0 && (
+            <AttachedFilesPreview 
+              files={comment.attachFiles} 
+              onDownload={onDownload}
+              allowDelete={canDeleteFile}
+              onDelete={onFileDelete}
+              className={styles.attachedFilesContainer}
+              maxFileCount={maxFileCount} 
+              lng={lng}
+            />
           )}
-          <div id={id} className={inputClassess} dangerouslySetInnerHTML={{ __html: commentText || '' }} />
+          <div 
+            id={`comment-${comment.id}`}
+            className={inputClassess} 
+            dangerouslySetInnerHTML={{ __html: comment.text || '' }} />
         </div>
+     
       )}
       {error && helperText && (
         <Typography variant="Caption" className={classNames(styles.helperText)}>

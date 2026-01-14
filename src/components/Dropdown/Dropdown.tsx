@@ -615,7 +615,7 @@ export const Dropdown: FC<DropdownProps> = ({
           e.preventDefault();
           loadMore();
         }}>
-          {'Загрузить еще'}
+        {lng === 'ru' ? 'Загрузить еще' : 'Load more'}
         </div>}
       </div>
     );

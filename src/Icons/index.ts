@@ -39,6 +39,7 @@ export { IconStrikethrough, IconStrikethroughToString } from './IconStrikethroug
 export { IconRedo, IconRedoToString } from './IconRedo/IconRedo';
 export { IconUndo, IconUndoToString } from './IconUndo/IconUndo';
 export { IconSubmit, IconSubmitToString } from './IconSubmit/IconSubmit';
+export { IconCancel, IconCancelToString} from './IconCancel/IconCancel'; 
 export { IconBulletlist, IconBulletlistToString } from './IconBulletlist/IconBulletlist';
 export { IconFileAudio } from './IconFileAudio/IconFileAudio';
 export { IconFileVideo } from './IconFileVideo/IconFileVideo';
@@ -49,3 +50,4 @@ export { IconShare } from './IconShare/IconShare';
 export { IconMultiselect } from './IconMultiselect/IconMultiselect';
 export { IconSearch } from './IconSearch/IconSearch';
 export { IconFilter } from './IconFilter/IconFilter';
+export {IconPencilCancel} from './IconPencilCancel/IconPencilCancel';

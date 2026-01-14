@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { init, exec, PellEditor } from 'pell';
 import {
   IconAttachToString,
@@ -7,14 +8,18 @@ import {
   IconHeader2ToString,
   IconItalicToString,
   IconStrikethroughToString,
-  IconSubmitToString,
   IconUnderlineToString,
+  IconSubmit,
+  IconClose,
+  IconRedoToString,
+  IconUndoToString,
 } from '../../Icons';
 import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
-import { FilePreview, AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
-import { TextEditorProps } from '../../types';
+import { AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
+import { TAttachments, TextEditorProps } from '../../types';
 import styles from './TextEditor.module.css';
+import { IconButton } from '../IconButton/IconButton';
 
 const ACCEPTED_FILE_TYPES =
   'image/*,audio/*,video/*,.doc,.docx,.html,.htm,.odt,.pdf,.xls,.xlsx,.ods,.ppt,.pptx,.txt,.zip,.djvu';
@@ -32,41 +37,130 @@ const getSafeSelection = () => {
   }
 };
 
-const getElementFromRange = (range: Range): Element | null => {
-  const container = range.commonAncestorContainer;
-  return container.nodeType === Node.TEXT_NODE ? container.parentElement : (container as Element);
+
+const getElementFromRange = (range: Range): HTMLElement | null => {
+  let node = range.startContainer;
+
+  if (node.nodeType === Node.ELEMENT_NODE) {
+    const element = node as HTMLElement;
+    
+    if (element.childNodes.length > 0) {
+      const childIndex = range.startOffset > 0 ? range.startOffset - 1 : 0;
+      let lastChild = element.childNodes[childIndex];
+
+      while (lastChild && lastChild.hasChildNodes()) {
+        lastChild = lastChild.lastChild!;
+      }
+
+      return lastChild.nodeType === Node.ELEMENT_NODE 
+        ? (lastChild as HTMLElement) 
+        : lastChild.parentElement;
+    }
+    return element;
+  }
+
+  return node.parentElement;
 };
 
+export const formatFileSize = (bytes?: number, lng?:string): string => {
+  if (!bytes || bytes === 0) {
+    return lng === 'ru' || lng?.includes('ru') ? '0 Байт' : '0 Bytes';
+  }
+
+  const k = 1024;
+  const sizesEn = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const sizesRu = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ'];
+  
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const sizes = lng === 'ru' || lng?.includes('ru') ? sizesRu : sizesEn;
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
+
+//изменение формата File на TAttachments
+const converFileToAttachment = (files: File[])=>{
+  return files.map((file) => ({
+        id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`, // Генерируем ID
+        filename: file.name,
+        size: file.size,
+        file: [file],  // Сохраняем сам файл внутри
+        preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+    }))
+}
+
+const convertAttacmentsToFile = (files: TAttachments[])=>{
+  return files
+      .map(att => att.file)
+      .filter((f): f is File[] => !!f)
+      .reduce((acc, val) => acc.concat(val), []);
+}
+
+const parseFileSize = (sizeStr: string): number => {
+  const units: { [key: string]: number } = {
+    'б': 1, 'байты': 1, 'bytes': 1,
+    'кб': 1024, 'kb': 1024,
+    'мб': 1024 * 1024, 'mb': 1024 * 1024,
+    'гб': 1024 * 1024 * 1024, 'gb': 1024 * 1024 * 1024
+  };
+  
+  const match = sizeStr.toLowerCase().match(/^(\d+(?:\.\d+)?)\s*([a-zа-я]+)$/);
+  if (!match) return 0;
+  
+  const value = parseFloat(match[1]);
+  const unit = match[2];
+  
+  return value * (units[unit] || 0);
+};
+
+
+
+
 export const TextEditor: React.FC<TextEditorProps> = ({
+  defaultValue,
+  attachedFiles, 
   label,
   onSubmit,
-  onChange,
-  defaultValue,
+  onCancel,
+  onDelete,
   error,
   helperText,
-  canAttachFiles = false,
-  files,
+  isEditMode,
+  canAttachFiles = true,
+  maxFileCount = 5,
+  maxFileSize = '1Гб', 
   required,
   className,
-  isButtonDisabled,
-  lng = 'ru',
+  lng = 'en',
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
+  const pellRef = useRef<PellEditor | null>(null);
   const uploaderRef = useRef<HTMLInputElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const buttonRefs = useRef<{ [key: string]: HTMLElement }>({});
+  const redoContentRef = useRef<string>('');
 
   const [editor, setEditor] = useState<PellEditor | null>(null);
-  const [temporaryFiles, setTemporaryFiles] = useState<File[]>([]);
-  const [attachedFiles, setAttachedFiles] = useState<FilePreview[]>(files || []);
+  const [editorHtml, setEditorHtml] = useState(defaultValue || ''); 
+  const [temporaryFiles, setTemporaryFiles] = useState<TAttachments[]>(attachedFiles ?? []);
+
+ 
+  const tempFilesRef = useRef<TAttachments[]>(attachedFiles ?? []);
+
+  
+  useEffect(() => {
+    tempFilesRef.current = temporaryFiles;
+  }, [temporaryFiles]); 
+  
+
   const [activeStates, setActiveStates] = useState({
     bold: false,
     italic: false,
     underline: false,
     strikethrough: false,
     heading2: false,
-    ulist: false,
-  });
+    olist: false,
+  }); 
 
   const checkFormatting = useCallback(
     (element: Element, tagNames: string[]): boolean => {
@@ -111,47 +205,25 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
   const setCursorToEnd = () => {
     try {
-      if (!editor?.content) return;
-
-      const content = editor.content;
+      const content = pellRef.current?.content;
+      if (!content) return;
       content.focus();
 
       const selection = window.getSelection();
       if (!selection) return;
-
       const range = document.createRange();
-
-      if (content.childNodes.length === 0) {
-        const textNode = document.createTextNode('');
-        content.appendChild(textNode);
-        range.setStart(textNode, 0);
-        range.setEnd(textNode, 0);
-      } else {
-        const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, null);
-
-        let lastTextNode = null;
-        let node;
-        while ((node = walker.nextNode())) {
-          lastTextNode = node;
-        }
-
-        if (lastTextNode) {
-          range.setStart(lastTextNode, lastTextNode.textContent?.length || 0);
-          range.setEnd(lastTextNode, lastTextNode.textContent?.length || 0);
-        } else {
-          range.selectNodeContents(content);
-          range.collapse(false);
-        }
-      }
-
+      range.selectNodeContents(content);
+      range.collapse(false);
+      
       selection.removeAllRanges();
       selection.addRange(range);
+       content.scrollTop = content.scrollHeight;
     } catch (error) {
       console.warn('Error setting cursor to end:', error);
     }
   };
 
-  const getSafeRange = () => {
+  const getSafeRange = () => {    
     try {
       const selection = getSafeSelection();
       if (!selection || selection.rangeCount === 0) {
@@ -180,7 +252,8 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   }, []);
 
   const updateActiveStates = useCallback(() => {
-    if (!editor?.content) return;
+    const contentElement = pellRef.current?.content;
+    if (!contentElement) return;
 
     const selection = window.getSelection();
     if (!selection?.rangeCount) {
@@ -190,11 +263,14 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         underline: false,
         strikethrough: false,
         heading2: false,
-        ulist: false,
+        olist: false,
       };
 
       setActiveStates(defaultStates);
       updateButtonStates(defaultStates);
+      return;
+    }
+    if (!contentElement.contains(selection.anchorNode)) {
       return;
     }
 
@@ -209,12 +285,12 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       underline: isFormatActive(element, ['U'], 'text-decoration', ['underline']),
       strikethrough: isFormatActive(element, ['S', 'STRIKE', 'DEL'], 'text-decoration', ['line-through']),
       heading2: checkFormatting(element, ['H2']),
-      ulist: checkFormatting(element, ['UL']) || !!element.closest('ul'),
+      olist: checkFormatting(element, ['OL']) || !!element.closest('ol'),
     };
-
     setActiveStates(newStates);
     updateButtonStates(newStates);
-  }, [editor, isFormatActive, checkFormatting, updateButtonStates]);
+    
+  }, [isFormatActive, checkFormatting, updateButtonStates]);
 
   const toggleHeading2 = () => {
     const selection = window.getSelection();
@@ -286,8 +362,8 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
     if (!currentElement) return;
 
-    const isInList = !!currentElement.closest('ul');
-    exec('insertUnorderedList');
+    const isInList = !!currentElement.closest('ol');
+    exec('insertOrderedList');
     if (isInList) {
       const contentElement = editorRef.current?.querySelector(`.${styles.pellContent}`) as HTMLElement;
       if (!contentElement) return;
@@ -332,45 +408,77 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     }
   };
 
+
+
   // Функция обработки загрузки файлов
   const handleUploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
-    // Проверка размера файла (2 ГБ)
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].size > MAX_FILE_SIZE) {
-        return;
-      }
+    const filesArray = Array.from(files);    
+    
+    const newAttachments: TAttachments[] = converFileToAttachment(filesArray);
+
+    const uniqueFiles = newAttachments.filter((newFile) => {
+      return !temporaryFiles.some(
+        (existing) => existing.filename === newFile.filename && existing.size === newFile.size
+      );
+    });    
+    
+    if (uniqueFiles.length > 0) {
+      setTemporaryFiles((prev) => {
+        const updatedFiles = [...prev, ...uniqueFiles];
+        return updatedFiles.map((file, index) => {
+          const isSizeError = (file.size ?? 0) > parseFileSize(maxFileSize);
+          const isCountError = index + 1 > maxFileCount;          
+          let errorMessage = '';
+          if (isSizeError) {
+              errorMessage = lng === 'ru' ? `Файл превышает ${maxFileSize}` : `File exceed ${maxFileSize}`;
+          } 
+          return {
+              ...file,
+              error: errorMessage || (isCountError ? true : ''),
+          };
+      });
+          
+      
+      });
     }
-
-    event.stopPropagation();
-    event.preventDefault();
-
-    const newTemporaryFiles = [...temporaryFiles, ...Array.from(files)];
-    setTemporaryFiles(newTemporaryFiles);
-
-    const newAttachedFiles: FilePreview[] = Array.from(files).map((file) => ({
-      file,
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-      lng,
-    }));
-
-    setAttachedFiles((prev) => [...prev, ...newAttachedFiles]);
-
     event.target.value = '';
-  };
+};
 
-  const removeAttachedFile = (fileId: string) => {
-    setAttachedFiles((prev) => {
-      const fileToRemove = prev.find((f) => f.id === fileId);
-      if (fileToRemove?.preview) {
-        URL.revokeObjectURL(fileToRemove.preview);
+
+const removeAttachedFile = (id: string) => {
+  setTemporaryFiles((prev) => {
+    const filteredFiles = prev.filter((file) => {
+      if (file.id === id) {
+        if (file.preview) URL.revokeObjectURL(file.preview);
+        return false;
       }
-      return prev.filter((f) => f.id !== fileId);
+      return true;
     });
-  };
+    return filteredFiles.map((file, index) => {
+      const isSizeError = (file.size ?? 0) > parseFileSize(maxFileSize);
+      const isCountError = (index + 1) > maxFileCount;
+
+      let errorMessage = '';
+      if (isSizeError) {
+        errorMessage = lng === 'ru' ? `Файл превышает ${maxFileSize}` : `File exceed ${maxFileSize}`;
+      }
+
+      return {
+        ...file,
+        error: errorMessage || (isCountError ? true : ''),
+      };
+    });
+  });
+
+  if (attachedFiles?.some((file) => file.id === id)) {
+    onDelete?.(id);
+  }
+};
+
 
   const getEditorActions = useCallback(
     () => {
@@ -378,52 +486,65 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         {
           name: 'bold',
           icon: IconBoldToString('', '', '1.5'),
-          title: 'Bold (Ctrl+B)',
+           title: lng === 'ru' ? 'Жирный (Ctrl+B)' : 'Bold (Ctrl+B)',
           result: () => {},
         },
         {
           name: 'italic',
           icon: IconItalicToString('', '', '1.5'),
-          title: 'Italic (Ctrl+I)',
+          title: lng === 'ru' ? 'Курсив (Ctrl+I)' : 'Italic (Ctrl+I)',
           result: () => {},
         },
         {
           name: 'underline',
           icon: IconUnderlineToString('', '', '1.5'),
-          title: 'Underline (Ctrl+U)',
+          title: lng === 'ru' ? 'Подчеркнутый (Ctrl+U)' : 'Underline (Ctrl+U)',
           result: () => {},
         },
         {
           name: 'strikethrough',
           icon: IconStrikethroughToString('', '', '1.5'),
-          title: 'Strike-through',
+          title: lng === 'ru' ? 'Зачеркнутый' : 'Strike-through',
           result: () => {},
         },
         {
           name: 'heading2',
           icon: IconHeader2ToString('', '', '1.5'),
-          title: 'Heading 2',
+          title: lng === 'ru' ? 'Заголовок' : 'Heading 2',
           result: () => {},
         },
         {
-          name: 'ulist',
+          name: 'olist',
           icon: IconBulletlistToString(),
-          title: 'Bullet List',
+          title: lng === 'ru' ? 'Список' : 'Bullet List',
           result: () => {},
         },
+        {
+          name: 'undo',
+          icon: IconUndoToString('', '', '1.5'),
+          title: lng === 'ru' ? 'Возврат последнего действия' : 'Return last action',
+          result: () => {},
+        },
+        {
+          name: 'redo',
+          icon: IconRedoToString('', '', '1.5'),
+          title: lng === 'ru' ? 'Отмена последнего действия' : 'Cancel last action',
+          result: () => {},
+        },
+        
       ];
       if (canAttachFiles) {
         baseActions.push({
           name: 'image',
           icon: IconAttachToString('', '', '1.5'),
-          title: 'Upload Image',
+          title: lng === 'ru' ? 'Прикрепить файл' : 'Upload file',
           result: () => {},
         });
       }
   
       return baseActions;
     },
-    [canAttachFiles]
+    [canAttachFiles,lng]
   );
 
   const getEditorClasses = useCallback(
@@ -446,50 +567,139 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     });
   };
 
-  const createSubmitButton = useCallback(() => {
-    const submitButton = document.createElement('button');
-    submitButton.className = styles.submitButton;
-    submitButton.disabled = !!error || !!isButtonDisabled;
-    submitButton.innerHTML = IconSubmitToString('', '', '1.5');
-    submitButton.type = 'button';
 
-    (submitButtonRef as React.MutableRefObject<HTMLButtonElement | null>).current = submitButton;
+  const handleSubmit = useCallback(() => {
+    const currentPell = pellRef.current; 
+    if (!currentPell?.content) {
+      return;
+    }
+    if (onSubmit && currentPell.content.innerHTML) {
+      const filesToSend: File[] = convertAttacmentsToFile(
+        tempFilesRef.current.filter(file => !Boolean(file.error) && file.file)
+      );  
+      onSubmit(currentPell.content.innerHTML, filesToSend);
+      currentPell.content.innerHTML = '';
+      setTemporaryFiles([]);
+      setEditorHtml('');
+    }
+  }, [onSubmit]);
 
-    return submitButton;
-  }, [error, isButtonDisabled]);
+  const handleCancel = useCallback(() => {
+    const currentPell = pellRef.current;
+    if (!currentPell?.content) {
+      return;
+    }
+    if(currentPell.content.innerHTML || tempFilesRef.current.length) {
+      currentPell.content.innerHTML = defaultValue || '';
+      setEditorHtml(defaultValue || ''); 
+      setTemporaryFiles(attachedFiles ? attachedFiles.map(file => ({...file})) : [])
+
+      if (onCancel) {
+        onCancel?.();
+      }
+    }
+    
+  }, [defaultValue, onCancel]); 
+
+const hadleRedo = useCallback(()=>{  
+  
+  const currentPell = pellRef.current;
+  const contentToRestore = redoContentRef.current;  
+  if (!currentPell?.content || !contentToRestore) {
+      return;
+    }
+
+  currentPell.content.innerHTML = contentToRestore;
+  setEditorHtml(contentToRestore);
+  currentPell.content.focus();
+   setTimeout(setCursorToEnd, 0); 
+
+},[])
+
+  const handleUndo = useCallback(()=>{
+    const currentPell = pellRef.current;
+    if (!currentPell?.content) {
+        return;
+    }
+    redoContentRef.current = currentPell.content.innerHTML
+    currentPell.content.innerHTML = defaultValue || '';
+    setEditorHtml(defaultValue || '');
+    setTimeout(setCursorToEnd, 0); 
+  },[defaultValue])
 
   const setupToolbar = (pellEditor: PellEditor) => {
     if (!editorRef.current) return;
     const actionbar = editorRef.current.querySelector(`.${styles.pellActionbar}`);
     const content = editorRef.current.querySelector(`.${styles.pellContent}`);
 
-    if (actionbar && content && editorRef.current) {
-      const toolbarContainer = document.createElement('div');
-      toolbarContainer.className = styles.toolbarContainer;
-
+    if (actionbar && content) {
+      // 1. Контейнер для кнопок форматирования
       const buttonsContainer = document.createElement('div');
       buttonsContainer.className = styles.buttonsContainer;
-
       while (actionbar.firstChild) {
         buttonsContainer.appendChild(actionbar.firstChild);
       }
-
-      const submitButton = createSubmitButton();
+     
+      // 2. Контейнер для Отменить/Добавить
+      const actionsWrapper = document.createElement('div');
+      actionsWrapper.className = styles.actionsWrapper || 'actions-container';
+      actionsWrapper.style.display = 'flex';
+      actionsWrapper.style.alignItems = 'center';
+      actionsWrapper.style.gap = '8px';
+      actionsWrapper.style.marginLeft = 'auto'; 
 
       actionbar.appendChild(buttonsContainer);
-      actionbar.appendChild(submitButton);
+      actionbar.appendChild(actionsWrapper);
 
-      editorRef.current.appendChild(actionbar);
+      const root = createRoot(actionsWrapper);
+      root.render(
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* {isEditMode && ( */}
+                <IconButton
+                  ref={cancelButtonRef}
+                  title={lng === 'ru' ? 'Отменить' : 'Cancel'}
+                  icon={<IconClose/>} 
+                  onClick={handleCancel} 
+                   style={{ 
+                    width: '25px', 
+                    height: '25px', 
+                    padding:'5px', 
+                    backgroundColor: 'white',
+                    cursor: 'pointer',
+                    opacity: 0.5,
+
+                  }} 
+                   color="var(--blue-main)"
+                />
+            {/* )}   */}
+          
+                <IconButton
+                  ref={submitButtonRef}
+                  title={lng === 'ru' ? 'Отправить' : 'Submit'}
+                  icon={<IconSubmit width={'10'} height={'10'} htmlColor='blue' strokeWidth={'1'}/>} 
+                  onClick={handleSubmit} 
+                  style={{ 
+                    width: '25px', 
+                    height: '25px', 
+                    padding:'5px', 
+                    backgroundColor: 'var(--blue-main)',
+                    opacity: 0.5,
+                    cursor: 'pointer'
+                  }} 
+                  color="white"
+                />             
+        </div>
+      );
     }
-
+    
     const buttons = editorRef.current.querySelectorAll(`.${styles.pellButton}`);
-    const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'ulist'];
+    const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'olist', 'undo','redo'];
     if (canAttachFiles) {
       commands.push('image');
     }
 
     buttons.forEach((button: Element, index: number) => {
-      const command = commands[index];
+      const command = commands[index];  
       if (command) {
         const htmlButton = button as HTMLElement;
         buttonRefs.current[command] = htmlButton;
@@ -501,8 +711,12 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
           if (command === 'heading2') {
             toggleHeading2();
-          } else if (command === 'ulist') {
+          } else if (command === 'olist') {
             toggleBulletList();
+          } else if (command === 'undo'){
+             handleUndo()
+          } else if (command === 'redo'){
+            hadleRedo()
           } else if (command === 'image') {
             handleAttachFiles();
           } else {
@@ -511,6 +725,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
           pellEditor.content.focus();
           updateActiveStates();
+          
         });
 
         htmlButton.addEventListener('click', (e) => {
@@ -519,30 +734,58 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         });
       }
     });
-  };
+  }
+
 
   // Функция для открытия диалога выбора файлов
   const handleAttachFiles = () => {
     uploaderRef.current?.click();
   };
 
-  const handleEditorChange = useCallback(() => {
+  const handleEditorChange = useCallback((html: string) => {
+    setEditorHtml(html);
+    redoContentRef.current = html;
     updateActiveStates();
-    if (onChange && editor?.content) {
-      onChange(editor.content.innerHTML, attachedFiles);
-    }
-  }, [onChange, editor, attachedFiles, updateActiveStates]);
+}, [updateActiveStates]);
 
-  const handleSubmit = useCallback(() => {
-    if (!editor?.content) {
-      return;
-    }
-    if (onSubmit) {
-      onSubmit(editor.content.innerHTML, attachedFiles);
-      editor.content.innerHTML = '';
-      setAttachedFiles([]);
-    }
-  }, [editor, attachedFiles]);
+useEffect(() => {
+  if (!submitButtonRef.current) return;
+  
+  const normalizeHtml = (html: string | undefined | null) => {
+    if (!html) return '';
+    return html
+      .replace(/&nbsp;/g, ' ')      // неразрывные пробелы
+      .replace(/\s+/g, ' ')         // лишние пробелы и переносы
+      .replace(/>\s+</g, '><')      // пробелы между тегами
+      .trim();
+  };
+
+  const normalizedEditor = normalizeHtml(editorHtml);
+  const normalizedDefault = normalizeHtml(defaultValue);
+
+  const contentOnly = normalizedEditor
+    .replace(/<[^>]*>/g, '') // все теги
+    .replace(/\s/g, '')      // все пробелов
+    .trim();
+  const isTextEmpty = contentOnly.length === 0
+  const hasNoNewFiles = temporaryFiles.filter(file => file.file).length === 0 && 
+                         temporaryFiles.length === (attachedFiles?.length ?? 0);
+  const hasErrorsInFiles = temporaryFiles.some(file => Boolean(file.error));    
+  const hasNoTextChanges = normalizedEditor === normalizedDefault;
+  const hasNoChanges = hasNoTextChanges && hasNoNewFiles;
+  
+  if (submitButtonRef.current) {
+    submitButtonRef.current.disabled = hasNoChanges || isTextEmpty || hasErrorsInFiles
+    submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty || hasErrorsInFiles ? '0.5' : '1';
+  }
+ 
+  if (cancelButtonRef.current) {
+    cancelButtonRef.current.style.opacity = hasNoChanges ? '0.5' : '1';
+  }
+
+
+}, [editorHtml, defaultValue, temporaryFiles]);
+
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.ctrlKey || e.metaKey) {
@@ -570,14 +813,13 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     if (editorRef.current) {
       editorRef.current.innerHTML = '';
       const pellEditor = initializePellEditor();
+      pellRef.current = pellEditor;
 
       pellEditor.content.innerHTML = defaultValue || '';
       setEditor(pellEditor);
-
       setupToolbar(pellEditor);
 
       const pellEditorContent = pellEditor.content;
-
       const handleInput = () => updateActiveStates();
       const handleKeyUp = () => setTimeout(updateActiveStates, 10);
       const handleMouseUp = () => setTimeout(updateActiveStates, 10);
@@ -587,6 +829,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       pellEditorContent.addEventListener('keyup', handleKeyUp);
       pellEditorContent.addEventListener('mouseup', handleMouseUp);
       pellEditorContent.addEventListener('focus', handleFocus);
+      setTimeout(setCursorToEnd, 0); 
 
       return () => {
         pellEditorContent.removeEventListener('input', handleInput);
@@ -607,17 +850,6 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    const button = submitButtonRef.current;
-    if (button) {
-      button.removeEventListener('click', handleSubmit);
-      button.addEventListener('click', handleSubmit);
-
-      return () => {
-        button.removeEventListener('click', handleSubmit);
-      };
-    }
-  }, [handleSubmit, submitButtonRef.current]);
 
   useEffect(() => {
     if (editor) {
@@ -646,17 +878,18 @@ export const TextEditor: React.FC<TextEditorProps> = ({
         </Typography>
       )}
 
-      <div className={inputClassess}>
-        {attachedFiles.length > 0 && (
+      <div className={inputClassess} title=''>
+        {temporaryFiles.length > 0 && (
           <AttachedFilesPreview
-            files={attachedFiles}
-            onDelete={(id) => removeAttachedFile(id)}
+            files={temporaryFiles}
+            allowDelete={true}
+            onDelete={removeAttachedFile}
             className={styles.attachedFilesContainer}
-            isEdit={true}
             lng={lng}
+            maxFileCount={maxFileCount}
           />
         )}
-        <div ref={editorRef}></div>
+        <div className={styles.editorContainer} ref={editorRef}></div>
 
         {canAttachFiles && (
           <input
@@ -669,7 +902,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
           />
         )}
       </div>
-      {error && helperText && (
+      {(error && helperText) && (
         <Typography variant="Caption" className={classNames(styles.helperText)}>
           {helperText}
         </Typography>

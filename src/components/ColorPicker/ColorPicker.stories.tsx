@@ -35,6 +35,8 @@ export interface ColorPickerProps {
    * @description Функция обработки изменения цвета
    */
   onChange?: (color: string) => void;
+  /** Функция обработки изменения цвета */
+  onColorChange?: (color: string) => void;
 }
 
 const withWrapper = (Story: React.ComponentType) => <div style={{

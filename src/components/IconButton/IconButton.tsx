@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import classNames from 'classnames';
 import { IconButtonProps } from '../../types';
 import styles from './IconButton.module.css';
 
-export const IconButton: React.FC<IconButtonProps> = ({
+export const IconButton= forwardRef<HTMLButtonElement, IconButtonProps>(({
   icon,
   size = 'md',
   color,
@@ -12,7 +12,8 @@ export const IconButton: React.FC<IconButtonProps> = ({
   onClick,
   children,
   className,
-}) => {
+  title,
+},ref) => {
   const validChildren = React.Children.toArray(children).filter((child) => React.isValidElement(child));
   const renderIcon = icon || validChildren[0];
   const combinedStyle = {
@@ -27,12 +28,14 @@ export const IconButton: React.FC<IconButtonProps> = ({
 
   return (
     <button
+      ref={ref}
       className={classNames(styles['iconButton'], styles[`iconButton--${size}`], className)}
       disabled={disabled}
       aria-disabled={disabled}
       type="button"
       onClick={(e) => onClick(e)}
       style={combinedStyle}
+      title={title}
     >
       {renderIcon &&
         (() => {
@@ -46,4 +49,4 @@ export const IconButton: React.FC<IconButtonProps> = ({
         })()}
     </button>
   );
-};
+});

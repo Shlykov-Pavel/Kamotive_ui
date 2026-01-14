@@ -22,8 +22,10 @@ export const FileItem: FC<FileItemProps> = ({
   style,
   isAddedFile,
   isRejectedFile,
+  isComment = false,
   lng
 }) => {
+  
   const [isLoadingFinished, setIsLoadingFinished] = useState(false);
   const [animationDuration, setAnimationDuration] = useState(0);
 
@@ -102,7 +104,12 @@ export const FileItem: FC<FileItemProps> = ({
   const fileItemClasses = classNames(styles['fileItem'], {
     [styles['loading']]: loading,
     [styles['error']]: error,
-    [styles[`fileItem_attached`]]: !(isAddedFile || isRejectedFile),
+    [styles.noHover]: !canDownload, 
+    [styles[`fileItem_attached`]]: !(isAddedFile),
+  });
+
+  const fileIcons = classNames(styles['fileIcon'], {
+    [styles['fileIcons_comment']]: isComment,
   });
 
   const handleDeleteClick = (e: React.MouseEvent, id: string) => {
@@ -132,7 +139,7 @@ export const FileItem: FC<FileItemProps> = ({
             <IconFile htmlColor={'var(--icons-grey)'} />
           </div>
           <div className={styles['fileItemName']} ref={fileNameRef}>
-            {file.filename.length > maxLength ? (
+            {file?.filename && file?.filename.length > maxLength ? (
               <Tooltip label={file.filename} position="bottom-center" displayDelay={300}>
                 <Typography variant="Body1" color="var(--text-dark)">
                   {croppedName(file.filename)}
@@ -140,7 +147,7 @@ export const FileItem: FC<FileItemProps> = ({
               </Tooltip>
             ) : (
               <Typography variant="Body1" color="var(--text-dark)">
-                {croppedName(file.filename)}
+                {file.filename && croppedName(file.filename)}
               </Typography>
             )}
             {file.size !== 0 && (
@@ -151,10 +158,11 @@ export const FileItem: FC<FileItemProps> = ({
           </div>
         </div>
         <div className={styles['fileItemActions']}>
-          {!(isAddedFile || isRejectedFile) && canDownload && (
+          {!(isAddedFile || isRejectedFile) && canDownload && !isComment && (
             <IconButton
-              className={styles.fileIcon}
+              className={fileIcons}
               icon={<IconDownload />}
+              title={lng === 'ru'? 'Скачать' : 'Download'}
               onClick={(e: React.MouseEvent) => handleDownloadClick(e, file)}
               color="var(--icons-grey)"
               size="sm"
@@ -162,10 +170,11 @@ export const FileItem: FC<FileItemProps> = ({
           )}
           {canDelete && (
             <IconButton
-              className={styles.fileIcon}
+              className={fileIcons}
               icon={<IconClose />}
+              title={lng === 'ru'? 'Удалить' : 'Delete'}
               onClick={(e: React.MouseEvent) => handleDeleteClick(e, file.id || '')}
-              color="var(--icons-grey)"
+              // color="var(--icons-grey)"
               size="sm"
             />
           )}
@@ -182,7 +191,7 @@ export const FileItem: FC<FileItemProps> = ({
         />
       )} */}
       {error && (
-        <Typography variant="Caption" color="var(--error-main)">
+        <Typography variant="Caption" color="var(--error-main)" style={{paddingLeft:"5px"}}>
           {error}
         </Typography>
       )}

@@ -1,10 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Meta } from '@storybook/react';
 import { TextEditor } from './TextEditor';
-import { TextEditorProps } from '../../types/index';
+
+export interface FilePreview {
+  file: File;
+  id: string;
+  preview?: string;
+  lng: string;
+}
+
+export type TAttachments = {
+  id: string;
+  filename: string;
+  uri?: string;
+  size?: number;
+  createDateTime?: string;
+  updateDateTime?: string;
+  file?:File[],
+  preview?: string;
+  lng?: string;
+};
+export interface TextEditorProps {
+  defaultValue?: string;
+  label?: string;
+  onSubmit?: (value: string, files: File[]) => void;
+  onCancel?: () => void;
+  error?: boolean;
+  helperText?: string;
+  isEditMode?:boolean;
+  canAttachFiles?: boolean;
+  files?: TAttachments[];
+  required?: boolean;
+  className?: string;
+  isButtonDisabled?: boolean;
+  /** Язык */
+  lng?: string;
+}
+
+
 
 const meta: Meta<TextEditorProps> = {
   component: TextEditor,
+  title: 'Components/Comment/TextEditor',
   parameters: {
     layout: 'centered',
   },
@@ -46,4 +83,14 @@ TextEditorWithError.args = {
   label: 'Введите текст',
   helperText: 'Текст ошибки',
   error: true,
+};
+
+
+export const TextEditorWithEdit = (argTypes: TextEditorProps): JSX.Element => {
+
+  return <TextEditor {...argTypes} canAttachFiles={true}/>
+};
+TextEditorWithEdit.storyName = 'TextEditor c проверкой на пустоту в комментарии';
+TextEditorWithEdit.parameters = {
+  controls: { disable: true },
 };

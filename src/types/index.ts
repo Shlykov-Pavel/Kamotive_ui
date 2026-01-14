@@ -377,7 +377,7 @@ export interface ColorPickerProps {
   /** Callback функция при изменении цвета */
   onChange?: (color: string) => void;
   /** Функция обработки изменения цвета */
-  onColorChange: (color: string) => void;
+  onColorChange?: (color: string) => void;
 }
 
 export type SnackbarProps = {
@@ -398,12 +398,16 @@ export type SnackbarProps = {
 };
 
 export type TAttachments = {
-  id: string;
-  filename: string;
+  id?: string | null;
+  filename?: string | null;
   uri?: string;
   size?: number;
   createDateTime?: string;
   updateDateTime?: string;
+  file?:File[],
+  preview?: string;
+  lng?: string;
+  [key: string]: any; 
 };
 
 export interface FileAttachProps {
@@ -470,7 +474,7 @@ export interface FileItemProps {
   /** Флаг загрузки файла */
   loading?: boolean;
   /** Текст ошибки загрузки файла */
-  error?: string;
+  error?: string | boolean;
   /** Функция обработки скачивания файла */
   onDownload?: (file: TAttachments) => void;
   /** Функция обработки удаления файла */
@@ -485,6 +489,8 @@ export interface FileItemProps {
   isAddedFile?: boolean;
   /** Флаг отклоненного файла */
   isRejectedFile?: boolean;
+  /** Флаг для файлов комментариев */
+  isComment?:boolean;
   /** Язык интерфейса для типов данных*/
   lng?: string;
 }
@@ -559,6 +565,7 @@ export interface IconButtonProps {
   children?: ReactNode;
   /** Дополнительный класс */
   className?: string;
+  title?: string;
 }
 
 export interface BaseListProps {
@@ -646,51 +653,69 @@ export interface TooltipProps {
 }
 
 export interface TextEditorProps {
-  label?: string;
-  onSubmit?: (value: string, files: FilePreview[]) => void;
-  onChange?: (value: string, files: FilePreview[]) => void;
   defaultValue?: string;
+  attachedFiles?: TAttachments[] | null;
+  label?: string;
+  onSubmit?: (value: string, files: File[]) => void;
+  onCancel?: () => void;
+  onDelete?: (id: string) => void;
   error?: boolean;
+  setError?: (value:boolean) => void;
   helperText?: string;
+  isEditMode?:boolean;
   canAttachFiles?: boolean;
-  files?: FilePreview[];
+  maxFileCount?:number;
+  maxFileSize?:string;
   required?: boolean;
   className?: string;
-  isButtonDisabled?: boolean;
   /** Язык */
   lng?: string;
 }
 
-export interface CommentProps {
-  /** Идентификатор элемента */
+export interface ChildCommentProps {
   id: string;
-  /** Знчение */
-  value?: string;
+  text?: string | null; 
+  authorUser?: {
+    id?: string | null | undefined;
+    login?: string | null | undefined;
+    firstName?: string | null | undefined;
+    lastName?: string | null | undefined;
+    middleName?: string | null | undefined;
+    fullName?: string | null | undefined;
+    admin?: boolean | null | undefined;
+    [key: string]: any; 
+  } | null;
+  createDate?: string | null;
+  [key: string]: any; 
+}
+export interface CommentProps {
+  comment: ChildCommentProps; 
+  avatar?: string | null;
+  creationDate?: string;
+  canAttachFiles?: boolean,
+  files?: TAttachments[],
+  canEdit?: boolean;
+  isEdit?: boolean;
+  /** Ошибка */
+  error?: boolean;
+  setError?: (value:boolean) => void;
+  /** Текст ошибки */
+  helperText?: string;
+  /** Callback при изменении значения */
+  onSubmit?: (value: string, files: File[], commentId?:string) => void;
+  onEdit?: (value:boolean) => void;
+  onDelete?: (comment: ChildCommentProps) => void;
+  onDownload?: (file: TAttachments) => void;
+  canDeleteFile?: boolean;
+  onFileDelete?: (id: string) => void;
+  maxFileCount?: number;
+  maxFileSize?: string;
+  /** Язык */
+  lng?: string;
   /** Стили передаваемые напрямую */
   style?: CSSProperties;
   /** Дополнительный класс */
   className?: string;
-  username: string;
-  avatar?: string | null;
-  creationDate: string;
-  canAttachFiles?: boolean,
-  files?: FilePreview[],
-  canEdit?: boolean;
-  isEdit?: boolean;
-  /** Лейбл */
-  label?: string;
-  /** Подсказка */
-  placeholder?: string;
-  /** Ошибка */
-  error?: boolean;
-  /** Текст ошибки */
-  helperText?: string;
-  /** Callback при изменении значения */
-  onChange?: (value: string, files: FilePreview[]) => void;
-  onSubmit?: (value: string, files: FilePreview[]) => void;
-  onDelete?: (id: string) => void;
-  /** Язык */
-  lng?: string;
 }
 
 export interface LinkProps {

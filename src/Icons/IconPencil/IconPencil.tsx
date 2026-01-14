@@ -1,19 +1,23 @@
 import React, { CSSProperties, FC } from 'react';
 
-export const IconPencil: FC<{ color?: string; htmlColor?: string; strokeWidth?: string; style?: CSSProperties }> = ({
+export const IconPencil: FC<{  width?: string | number; height?: string | number; color?: string; htmlColor?: string; strokeWidth?: string; onClick?: (event: React.MouseEvent<SVGSVGElement>) => void; style?: CSSProperties }> = ({
+  width = '100%', 
+  height = '100%', 
   color = 'inherit',
   htmlColor,
   strokeWidth,
+  onClick,
   style
 }) => {
   return (
     <svg
-      width="20"
-      height="20"
+      width={width}
+      height={height}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={color}
+      onClick={onClick}
       style={style}
     >
       <path

@@ -161,7 +161,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
     setIsColorChanged(true);
     setColorValue(newColor);
     setSelectedColor(newColor);
-    onColorChange(newColor);
+    onColorChange?.(newColor);
   };
   
   return (
