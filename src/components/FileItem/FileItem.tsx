@@ -104,7 +104,7 @@ export const FileItem: FC<FileItemProps> = ({
     [styles['loading']]: loading,
     [styles['error']]: error,
     [styles.noHover]: !canDownload, 
-    [styles[`fileItem_attached`]]: !(isAddedFile || isRejectedFile),
+    [styles[`fileItem_attached`]]: !(isAddedFile),
   });
 
   const handleDeleteClick = (e: React.MouseEvent, id: string) => {
@@ -166,7 +166,6 @@ export const FileItem: FC<FileItemProps> = ({
           {canDelete && (
             <IconButton
               className={styles.fileIcon}
-              style={{backgroundColor:"transparent"}}
               icon={<IconClose />}
               title={lng === 'ru'? 'Удалить' : 'Delete'}
               onClick={(e: React.MouseEvent) => handleDeleteClick(e, file.id || '')}

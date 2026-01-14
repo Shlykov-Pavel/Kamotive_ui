@@ -47,7 +47,6 @@ export const Comment: FC<CommentProps> = ({
   };
 
   const handleDeleteClick = () => {
-    // comment.id && onDelete?.(comment.id);
     onDelete?.(comment)
   };
 
@@ -93,7 +92,7 @@ export const Comment: FC<CommentProps> = ({
           <div className={styles.iconsWrapper}>
               <IconButton
               icon={isEditMode ? <IconPencilCancel width={'14'} height={'14'}/>: <IconPencil  width={'14'} height={'14'}/>} 
-              title={lng === 'ru' ? 'Закрыть редактирование' : 'Close edit'}
+              title={isEditMode ? lng === 'ru' ? 'Закрыть редактирование' : 'Close edit' : lng === 'ru' ? 'Редактировать' : 'Edit'}
               onClick={handleEditClick}
               style={{ width: '30px', height: '30px', padding:'5px' }} 
               color= "var(--icons-grey)" 
