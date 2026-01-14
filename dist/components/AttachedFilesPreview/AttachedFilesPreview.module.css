@@ -1,42 +1,54 @@
-.attachedFileItem {
-	display: flex;
-	align-items: center;
-	width: fit-content;
-	border: none;
-}
 
+.attachedFileItem {
+	/* flex-shrink: 0;
+	position: relative;
+	cursor: pointer; */
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	justify-content: space-between;
+}
+.icon{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+}
 .fileSize {
-	position: absolute;
+	/* position: absolute; */
 	font-family: var(--font-family-content);
 	bottom: 0;
-	margin: 5px;
 	font-size: 10px;
 	color: var(--text-dark);
 }
-
-.filePreview {
-	flex-shrink: 0;
-	position: relative;
-	cursor: pointer;
+.nameContainer {
+	display: flex;
+	gap: 6px;
+	align-items: center
+}
+.name {
+	display: flex;
+	gap: 12px;
+	align-items: flex-end;
 }
 
 .previewImage {
-	width: 50px;
-	height: 50px;
+	/* width: 50px;
+	height: 50px; */
 	object-fit: cover;
-	border-radius: 4px;
-	border: 1px solid #e0e0e0;
+	/* border-radius: 4px; */
+	/* border: 1px solid #e0e0e0; */
 }
 
 .removeFileButton {
-	position: absolute;
+	/* position: absolute;
 	right: 0;
-	top: 0;
+	top: 0;  */
 	background: none;
 	border: none;
 	color: var(--text-btn-light);
 	cursor: pointer;
-	font-size: 16px;
+	font-size: 12px;
 	padding: 2px 4px;
 	margin-left: 8px;
 	border-radius: 4px;

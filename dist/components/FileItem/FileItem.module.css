@@ -46,7 +46,7 @@
   transition: all 0.15s ease-in-out;
 }
 
-.fileItem_attached:hover {
+.fileItem_attached:not(.noHover):hover {
   background-color: rgba(0, 0, 0, 0.03);
   transform: translateY(-1px);
 }
@@ -59,9 +59,21 @@
   height: 28px;
 }
 
+
 .fileItemActions {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 3px;
+  /* padding-right: 5px; */
+}
+
+.fileIcons_comment {
+  color: var(--icons-grey);
+}
+
+.fileIcons_comment:hover {
+  color: var(--text-dark);
+  background-color: rgba(0, 0, 0, 0.03);
+  transition: background-color 0.15s ease-in-out;
 }

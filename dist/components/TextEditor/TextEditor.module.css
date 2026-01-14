@@ -4,6 +4,7 @@
 	flex-direction: column;
 	background-color: var(--fills-disabled);
 	border-radius: 7px;
+	margin-top: 4px; 
 }
 
 .input--error {
@@ -14,6 +15,7 @@
 .wrapper--input {
 	position: relative;
 	width: 100%;
+	margin-top: 0 !important; 
 }
 
 .wrapper--input-label {
@@ -52,13 +54,19 @@
 	color: var(--error-main) !important;
 	font-size: 12px !important;
 }
-
+.editorContainer {
+  display: flex;
+  flex-direction: column-reverse;
+  max-height: 50vh;
+	overflow-y: scroll;
+}
 .pellActionbar {
 	border: none;
 	display: flex;
 	width: 100%;
 	box-sizing: border-box;
-	padding: 8px;
+	/* padding: 8px; */
+	padding: 4px 8px; 
 	justify-content: space-between;
 }
 
@@ -78,6 +86,18 @@
 .submitButton {
 	background-color: var(--blue-main);
 	color: var(--white);
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 100%;
+	cursor: pointer;
+}
+.cancelButton {
+	background-color: var(--icons-light);
+	color: var(--blue-main);
 	width: 24px;
 	height: 24px;
 	display: flex;
@@ -133,7 +153,9 @@
 }
 
 .pellContent {
-	max-height: 250px;
+	/* max-height: 250px; */
+	max-height: 30vh;
+	overflow: scroll;
 	outline: none;
 	line-height: 1.6;
 	font-family: var(--font-family-content);
@@ -141,8 +163,10 @@
 	color: var(--text-dark);
 	overflow-y: auto;
 	resize: none;
-	padding: 16px;
-	padding-bottom: 0;
+	/* padding: 16px; */
+	padding: 10px 12px;
+	outline: none;
+	/* padding-bottom: 0; */
 }
 
 .pellContent h2 {
@@ -212,13 +236,15 @@
 }
 
 .attachedFilesContainer {
+	max-height: 25vh;
+    overflow: scroll;
 	margin-top: 5px;
 	background-color: none;
 	border: none;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	border-bottom: 1px solid #e0e0e0;
 	overflow-x: auto;
-	gap: 12px;
+	gap: 5px;
 	padding: 5px 12px;
 }

@@ -1,0 +1,8 @@
+import React from 'react';
+export const IconPencilCancel = ({ width = '100%', height = '100%', color = 'inherit', htmlColor, strokeWidth = '0.1', onClick, style }) => {
+    const finalColor = htmlColor || 'currentColor';
+    return (React.createElement("svg", { width: width, height: height, viewBox: "0 0 24 24", fill: "none", xmlns: "www.w3.org", className: color, onClick: onClick, style: style },
+        React.createElement("path", { fill: finalColor, stroke: finalColor, style: { strokeWidth: strokeWidth }, d: "M19.71,8.04L17.37,10.37L13.62,6.62L15.96,4.29C16.35,3.9 17,3.9 17.37,4.29L19.71,6.63C20.1,7 20.1,7.65 19.71,8.04M3,17.25L13.06,7.18L16.81,10.93L6.75,21H3V17.25M16.62,5.04L15.08,6.58L17.42,8.92L18.96,7.38L16.62,5.04M15.36,11L13,8.64L4,17.66V20H6.34L15.36,11Z" }),
+        React.createElement("circle", { cx: "16.5", cy: "16.5", r: "5.5", fill: "white" }),
+        React.createElement("path", { d: "M19.5 13.5L13.5 19.5M13.5 13.5L19.5 19.5", stroke: finalColor, strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" })));
+};

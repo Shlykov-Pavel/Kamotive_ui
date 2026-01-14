@@ -1,20 +1,21 @@
 import React, { CSSProperties } from 'react';
+import { TAttachments } from '../../types';
 export interface FilePreview {
     file: File;
     id: string;
     preview?: string;
     lng: string;
 }
-export declare const getFileIcon: (file: File) => React.JSX.Element;
+export declare const getFileIcon: (file: TAttachments) => React.JSX.Element;
 export declare const formatFileSize: (bytes?: number, lng?: string) => string;
 interface AttachedFilesProps {
-    files: FilePreview[];
+    files: TAttachments[];
+    onDownload?: (file: TAttachments) => void;
+    allowDelete?: boolean;
     onDelete?: (id: string) => void;
-    onDownload?: (file: File) => void;
     style?: CSSProperties;
     className?: string;
-    isEdit?: boolean;
-    allowDownload?: boolean;
+    maxFileCount?: number;
     lng: string;
 }
 export declare const AttachedFilesPreview: React.FC<AttachedFilesProps>;

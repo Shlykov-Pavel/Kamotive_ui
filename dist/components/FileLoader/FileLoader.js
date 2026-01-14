@@ -111,7 +111,7 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
                     type: file.type,
                 };
             });
-            setLoadingFilesNames(newFormatAttachments.map((file) => file.filename));
+            setLoadingFilesNames(newFormatAttachments.map((file) => { var _a; return (_a = file === null || file === void 0 ? void 0 : file.filename) !== null && _a !== void 0 ? _a : 'Без названия'; }));
             setIsLoadingFiles(true);
             setAddedFilesFormatted([...addedFilesFormated, ...newFormatAttachments]);
             let formattedRejections = [];
