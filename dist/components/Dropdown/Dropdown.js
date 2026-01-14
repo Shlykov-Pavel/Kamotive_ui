@@ -384,7 +384,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                     e.stopPropagation();
                     e.preventDefault();
                     loadMore();
-                } }, 'Загрузить еще')));
+                } }, lng === 'ru' ? 'Загрузить еще' : 'Load more')));
         return isOpen ? menu : null;
     };
     useEffect(() => {

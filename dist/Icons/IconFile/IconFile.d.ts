@@ -4,4 +4,5 @@ export declare const IconFile: FC<{
     htmlColor?: string;
     strokeWidth?: string;
     style?: CSSProperties;
+    text?: string;
 }>;

@@ -5,6 +5,9 @@
 
 .wrapper--input-label {
 	margin-top: 20px;
+	display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .wrapper--input-helperText {
@@ -25,11 +28,13 @@
 .iconsWrapper {
 	display: flex;
 	flex-direction: row;
-	gap: 5px;
+	padding-right: 12px;
 }
 
 .commentWrapper {
 	padding-left: 33px;
+	width: 100%;
+    box-sizing: border-box;
 }
 
 .avatar {
@@ -144,7 +149,8 @@
 .attachedFilesContainer {
 	margin-top: 5px;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	overflow-x: auto;
-	gap: 12px;
+	max-height: 25vh;
+    overflow: scroll;
 }

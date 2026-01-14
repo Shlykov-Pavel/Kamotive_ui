@@ -54,6 +54,10 @@ export const Tooltip = ({ label, children, className, style, overlayChildren = f
         return () => {
             window.removeEventListener('resize', updateContainerRect);
             window.removeEventListener('scroll', updateContainerRect);
+            setIsVisible(false);
+            setIsOpen(false);
+            if (timeoutRef.current)
+                clearTimeout(timeoutRef.current);
         };
     }, []);
     const adjustToViewPort = (posX, posY) => {
@@ -189,10 +193,16 @@ export const Tooltip = ({ label, children, className, style, overlayChildren = f
             updateCoords(e.clientX, e.clientY);
         }
     };
+    const handlePointerDown = () => {
+        setIsVisible(false);
+        setIsOpen(false);
+        if (timeoutRef.current)
+            clearTimeout(timeoutRef.current);
+    };
     const tooltipStyles = Object.assign(Object.assign({}, style), { position: 'fixed', left: `${coords.x}px`, top: `${coords.y}px`, backgroundColor: color ? hexToRgba(color, opacity) : `rgba(0, 0, 0, ${opacity})`, zIndex: 1500 });
     const tooltipClassNames = classNames(styles.tooltip, isVisible && styles['tooltip--visible'], className);
     return (React.createElement(React.Fragment, null,
-        React.createElement("div", { onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave, onMouseMove: handleMouseMove, className: styles.wrapper, ref: childrenRef }, children),
+        React.createElement("div", { onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave, onMouseMove: handleMouseMove, onMouseDown: handlePointerDown, className: styles.wrapper, ref: childrenRef }, children),
         isOpen && ReactDOM.createPortal(React.createElement("div", { ref: tooltipElementRef, className: tooltipClassNames, style: tooltipStyles },
             React.createElement(Typography, { variant: textSize === 'sm' ? "Caption-Medium" : textSize === 'md' ? "Body2-Medium" : "Body1-Medium" }, label)), document.body)));
 };

@@ -1,5 +1,5 @@
-import React, { CSSProperties, FC } from 'react';
-export declare const IconDelete: FC<{
+import React, { FC, CSSProperties } from 'react';
+export declare const IconPencilCancel: FC<{
     width?: string | number;
     height?: string | number;
     color?: string;

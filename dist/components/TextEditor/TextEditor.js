@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { init, exec } from 'pell';
-import { IconAttachToString, IconBoldToString, IconBulletlistToString, IconHeader2ToString, IconItalicToString, IconStrikethroughToString, IconSubmitToString, IconUnderlineToString, } from '../../Icons';
+import { IconAttachToString, IconBoldToString, IconBulletlistToString, IconHeader2ToString, IconItalicToString, IconStrikethroughToString, IconUnderlineToString, IconSubmit, IconClose, IconRedoToString, IconUndoToString, } from '../../Icons';
 import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
 import { AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
 import styles from './TextEditor.module.css';
+import { IconButton } from '../IconButton/IconButton';
 const ACCEPTED_FILE_TYPES = 'image/*,audio/*,video/*,.doc,.docx,.html,.htm,.odt,.pdf,.xls,.xlsx,.ods,.ppt,.pptx,.txt,.zip,.djvu';
 const MAX_FILE_SIZE = 2147483648; // 2 ГБ
 const getSafeSelection = () => {
@@ -20,24 +22,86 @@ const getSafeSelection = () => {
     }
 };
 const getElementFromRange = (range) => {
-    const container = range.commonAncestorContainer;
-    return container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
+    let node = range.startContainer;
+    if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node;
+        if (element.childNodes.length > 0) {
+            const childIndex = range.startOffset > 0 ? range.startOffset - 1 : 0;
+            let lastChild = element.childNodes[childIndex];
+            while (lastChild && lastChild.hasChildNodes()) {
+                lastChild = lastChild.lastChild;
+            }
+            return lastChild.nodeType === Node.ELEMENT_NODE
+                ? lastChild
+                : lastChild.parentElement;
+        }
+        return element;
+    }
+    return node.parentElement;
 };
-export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, helperText, canAttachFiles = false, files, required, className, isButtonDisabled, lng = 'ru', }) => {
+export const formatFileSize = (bytes, lng) => {
+    if (!bytes || bytes === 0) {
+        return lng === 'ru' || (lng === null || lng === void 0 ? void 0 : lng.includes('ru')) ? '0 Байт' : '0 Bytes';
+    }
+    const k = 1024;
+    const sizesEn = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const sizesRu = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const sizes = lng === 'ru' || (lng === null || lng === void 0 ? void 0 : lng.includes('ru')) ? sizesRu : sizesEn;
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
+//изменение формата File на TAttachments
+const converFileToAttachment = (files) => {
+    return files.map((file) => ({
+        id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`, // Генерируем ID
+        filename: file.name,
+        size: file.size,
+        file: [file], // Сохраняем сам файл внутри
+        preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+    }));
+};
+const convertAttacmentsToFile = (files) => {
+    return files
+        .map(att => att.file)
+        .filter((f) => !!f)
+        .reduce((acc, val) => acc.concat(val), []);
+};
+const parseFileSize = (sizeStr) => {
+    const units = {
+        'б': 1, 'байты': 1, 'bytes': 1,
+        'кб': 1024, 'kb': 1024,
+        'мб': 1024 * 1024, 'mb': 1024 * 1024,
+        'гб': 1024 * 1024 * 1024, 'gb': 1024 * 1024 * 1024
+    };
+    const match = sizeStr.toLowerCase().match(/^(\d+(?:\.\d+)?)\s*([a-zа-я]+)$/);
+    if (!match)
+        return 0;
+    const value = parseFloat(match[1]);
+    const unit = match[2];
+    return value * (units[unit] || 0);
+};
+export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCancel, onDelete, error, helperText, isEditMode, canAttachFiles = true, maxFileCount = 5, maxFileSize = '1Гб', required, className, lng = 'en', }) => {
     const editorRef = useRef(null);
+    const pellRef = useRef(null);
     const uploaderRef = useRef(null);
     const submitButtonRef = useRef(null);
+    const cancelButtonRef = useRef(null);
     const buttonRefs = useRef({});
+    const redoContentRef = useRef('');
     const [editor, setEditor] = useState(null);
-    const [temporaryFiles, setTemporaryFiles] = useState([]);
-    const [attachedFiles, setAttachedFiles] = useState(files || []);
+    const [editorHtml, setEditorHtml] = useState(defaultValue || '');
+    const [temporaryFiles, setTemporaryFiles] = useState(attachedFiles !== null && attachedFiles !== void 0 ? attachedFiles : []);
+    const tempFilesRef = useRef(attachedFiles !== null && attachedFiles !== void 0 ? attachedFiles : []);
+    useEffect(() => {
+        tempFilesRef.current = temporaryFiles;
+    }, [temporaryFiles]);
     const [activeStates, setActiveStates] = useState({
         bold: false,
         italic: false,
         underline: false,
         strikethrough: false,
         heading2: false,
-        ulist: false,
+        olist: false,
     });
     const checkFormatting = useCallback((element, tagNames) => {
         let current = element;
@@ -66,40 +130,21 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
             (styleProperty && styleValues ? hasStyle(element, styleProperty, styleValues) : false));
     }, [checkFormatting, hasStyle]);
     const setCursorToEnd = () => {
-        var _a, _b;
+        var _a;
         try {
-            if (!(editor === null || editor === void 0 ? void 0 : editor.content))
+            const content = (_a = pellRef.current) === null || _a === void 0 ? void 0 : _a.content;
+            if (!content)
                 return;
-            const content = editor.content;
             content.focus();
             const selection = window.getSelection();
             if (!selection)
                 return;
             const range = document.createRange();
-            if (content.childNodes.length === 0) {
-                const textNode = document.createTextNode('');
-                content.appendChild(textNode);
-                range.setStart(textNode, 0);
-                range.setEnd(textNode, 0);
-            }
-            else {
-                const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, null);
-                let lastTextNode = null;
-                let node;
-                while ((node = walker.nextNode())) {
-                    lastTextNode = node;
-                }
-                if (lastTextNode) {
-                    range.setStart(lastTextNode, ((_a = lastTextNode.textContent) === null || _a === void 0 ? void 0 : _a.length) || 0);
-                    range.setEnd(lastTextNode, ((_b = lastTextNode.textContent) === null || _b === void 0 ? void 0 : _b.length) || 0);
-                }
-                else {
-                    range.selectNodeContents(content);
-                    range.collapse(false);
-                }
-            }
+            range.selectNodeContents(content);
+            range.collapse(false);
             selection.removeAllRanges();
             selection.addRange(range);
+            content.scrollTop = content.scrollHeight;
         }
         catch (error) {
             console.warn('Error setting cursor to end:', error);
@@ -132,7 +177,9 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
         });
     }, []);
     const updateActiveStates = useCallback(() => {
-        if (!(editor === null || editor === void 0 ? void 0 : editor.content))
+        var _a;
+        const contentElement = (_a = pellRef.current) === null || _a === void 0 ? void 0 : _a.content;
+        if (!contentElement)
             return;
         const selection = window.getSelection();
         if (!(selection === null || selection === void 0 ? void 0 : selection.rangeCount)) {
@@ -142,10 +189,13 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
                 underline: false,
                 strikethrough: false,
                 heading2: false,
-                ulist: false,
+                olist: false,
             };
             setActiveStates(defaultStates);
             updateButtonStates(defaultStates);
+            return;
+        }
+        if (!contentElement.contains(selection.anchorNode)) {
             return;
         }
         const range = selection.getRangeAt(0);
@@ -158,11 +208,11 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
             underline: isFormatActive(element, ['U'], 'text-decoration', ['underline']),
             strikethrough: isFormatActive(element, ['S', 'STRIKE', 'DEL'], 'text-decoration', ['line-through']),
             heading2: checkFormatting(element, ['H2']),
-            ulist: checkFormatting(element, ['UL']) || !!element.closest('ul'),
+            olist: checkFormatting(element, ['OL']) || !!element.closest('ol'),
         };
         setActiveStates(newStates);
         updateButtonStates(newStates);
-    }, [editor, isFormatActive, checkFormatting, updateButtonStates]);
+    }, [isFormatActive, checkFormatting, updateButtonStates]);
     const toggleHeading2 = () => {
         var _a;
         const selection = window.getSelection();
@@ -231,8 +281,8 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
         const currentElement = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
         if (!currentElement)
             return;
-        const isInList = !!currentElement.closest('ul');
-        exec('insertUnorderedList');
+        const isInList = !!currentElement.closest('ol');
+        exec('insertOrderedList');
         if (isInList) {
             const contentElement = (_a = editorRef.current) === null || _a === void 0 ? void 0 : _a.querySelector(`.${styles.pellContent}`);
             if (!contentElement)
@@ -279,70 +329,101 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
         const files = event.target.files;
         if (!files || files.length === 0)
             return;
-        // Проверка размера файла (2 ГБ)
-        for (let i = 0; i < files.length; i++) {
-            if (files[i].size > MAX_FILE_SIZE) {
-                return;
-            }
+        const filesArray = Array.from(files);
+        const newAttachments = converFileToAttachment(filesArray);
+        const uniqueFiles = newAttachments.filter((newFile) => {
+            return !temporaryFiles.some((existing) => existing.filename === newFile.filename && existing.size === newFile.size);
+        });
+        if (uniqueFiles.length > 0) {
+            setTemporaryFiles((prev) => {
+                const updatedFiles = [...prev, ...uniqueFiles];
+                return updatedFiles.map((file, index) => {
+                    var _a;
+                    const isSizeError = ((_a = file.size) !== null && _a !== void 0 ? _a : 0) > parseFileSize(maxFileSize);
+                    const isCountError = index + 1 > maxFileCount;
+                    let errorMessage = '';
+                    if (isSizeError) {
+                        errorMessage = lng === 'ru' ? `Файл превышает ${maxFileSize}` : `File exceed ${maxFileSize}`;
+                    }
+                    return Object.assign(Object.assign({}, file), { error: errorMessage || (isCountError ? true : '') });
+                });
+            });
         }
-        event.stopPropagation();
-        event.preventDefault();
-        const newTemporaryFiles = [...temporaryFiles, ...Array.from(files)];
-        setTemporaryFiles(newTemporaryFiles);
-        const newAttachedFiles = Array.from(files).map((file) => ({
-            file,
-            id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-            lng,
-        }));
-        setAttachedFiles((prev) => [...prev, ...newAttachedFiles]);
         event.target.value = '';
     };
-    const removeAttachedFile = (fileId) => {
-        setAttachedFiles((prev) => {
-            const fileToRemove = prev.find((f) => f.id === fileId);
-            if (fileToRemove === null || fileToRemove === void 0 ? void 0 : fileToRemove.preview) {
-                URL.revokeObjectURL(fileToRemove.preview);
-            }
-            return prev.filter((f) => f.id !== fileId);
+    const removeAttachedFile = (id) => {
+        setTemporaryFiles((prev) => {
+            const filteredFiles = prev.filter((file) => {
+                if (file.id === id) {
+                    if (file.preview)
+                        URL.revokeObjectURL(file.preview);
+                    return false;
+                }
+                return true;
+            });
+            return filteredFiles.map((file, index) => {
+                var _a;
+                const isSizeError = ((_a = file.size) !== null && _a !== void 0 ? _a : 0) > parseFileSize(maxFileSize);
+                const isCountError = (index + 1) > maxFileCount;
+                let errorMessage = '';
+                if (isSizeError) {
+                    errorMessage = lng === 'ru' ? `Файл превышает ${maxFileSize}` : `File exceed ${maxFileSize}`;
+                }
+                return Object.assign(Object.assign({}, file), { error: errorMessage || (isCountError ? true : '') });
+            });
         });
+        if (attachedFiles === null || attachedFiles === void 0 ? void 0 : attachedFiles.some((file) => file.id === id)) {
+            onDelete === null || onDelete === void 0 ? void 0 : onDelete(id);
+        }
     };
     const getEditorActions = useCallback(() => {
         const baseActions = [
             {
                 name: 'bold',
                 icon: IconBoldToString('', '', '1.5'),
-                title: 'Bold (Ctrl+B)',
+                title: lng === 'ru' ? 'Жирный (Ctrl+B)' : 'Bold (Ctrl+B)',
                 result: () => { },
             },
             {
                 name: 'italic',
                 icon: IconItalicToString('', '', '1.5'),
-                title: 'Italic (Ctrl+I)',
+                title: lng === 'ru' ? 'Курсив (Ctrl+I)' : 'Italic (Ctrl+I)',
                 result: () => { },
             },
             {
                 name: 'underline',
                 icon: IconUnderlineToString('', '', '1.5'),
-                title: 'Underline (Ctrl+U)',
+                title: lng === 'ru' ? 'Подчеркнутый (Ctrl+U)' : 'Underline (Ctrl+U)',
                 result: () => { },
             },
             {
                 name: 'strikethrough',
                 icon: IconStrikethroughToString('', '', '1.5'),
-                title: 'Strike-through',
+                title: lng === 'ru' ? 'Зачеркнутый' : 'Strike-through',
                 result: () => { },
             },
             {
                 name: 'heading2',
                 icon: IconHeader2ToString('', '', '1.5'),
-                title: 'Heading 2',
+                title: lng === 'ru' ? 'Заголовок' : 'Heading 2',
                 result: () => { },
             },
             {
-                name: 'ulist',
+                name: 'olist',
                 icon: IconBulletlistToString(),
-                title: 'Bullet List',
+                title: lng === 'ru' ? 'Список' : 'Bullet List',
+                result: () => { },
+            },
+            {
+                name: 'undo',
+                icon: IconUndoToString('', '', '1.5'),
+                title: lng === 'ru' ? 'Возврат последнего действия' : 'Return last action',
+                result: () => { },
+            },
+            {
+                name: 'redo',
+                icon: IconRedoToString('', '', '1.5'),
+                title: lng === 'ru' ? 'Отмена последнего действия' : 'Cancel last action',
                 result: () => { },
             },
         ];
@@ -350,12 +431,12 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
             baseActions.push({
                 name: 'image',
                 icon: IconAttachToString('', '', '1.5'),
-                title: 'Upload Image',
+                title: lng === 'ru' ? 'Прикрепить файл' : 'Upload file',
                 result: () => { },
             });
         }
         return baseActions;
-    }, [canAttachFiles]);
+    }, [canAttachFiles, lng]);
     const getEditorClasses = useCallback(() => ({
         actionbar: styles.pellActionbar,
         button: styles.pellButton,
@@ -371,35 +452,96 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
             classes: getEditorClasses(),
         });
     };
-    const createSubmitButton = useCallback(() => {
-        const submitButton = document.createElement('button');
-        submitButton.className = styles.submitButton;
-        submitButton.disabled = !!error || !!isButtonDisabled;
-        submitButton.innerHTML = IconSubmitToString('', '', '1.5');
-        submitButton.type = 'button';
-        submitButtonRef.current = submitButton;
-        return submitButton;
-    }, [error, isButtonDisabled]);
+    const handleSubmit = useCallback(() => {
+        const currentPell = pellRef.current;
+        if (!(currentPell === null || currentPell === void 0 ? void 0 : currentPell.content)) {
+            return;
+        }
+        if (onSubmit && currentPell.content.innerHTML) {
+            const filesToSend = convertAttacmentsToFile(tempFilesRef.current.filter(file => !Boolean(file.error) && file.file));
+            onSubmit(currentPell.content.innerHTML, filesToSend);
+            currentPell.content.innerHTML = '';
+            setTemporaryFiles([]);
+            setEditorHtml('');
+        }
+    }, [onSubmit]);
+    const handleCancel = useCallback(() => {
+        const currentPell = pellRef.current;
+        if (!(currentPell === null || currentPell === void 0 ? void 0 : currentPell.content)) {
+            return;
+        }
+        if (currentPell.content.innerHTML || tempFilesRef.current.length) {
+            currentPell.content.innerHTML = defaultValue || '';
+            setEditorHtml(defaultValue || '');
+            setTemporaryFiles(attachedFiles ? attachedFiles.map(file => (Object.assign({}, file))) : []);
+            if (onCancel) {
+                onCancel === null || onCancel === void 0 ? void 0 : onCancel();
+            }
+        }
+    }, [defaultValue, onCancel]);
+    const hadleRedo = useCallback(() => {
+        const currentPell = pellRef.current;
+        const contentToRestore = redoContentRef.current;
+        if (!(currentPell === null || currentPell === void 0 ? void 0 : currentPell.content) || !contentToRestore) {
+            return;
+        }
+        currentPell.content.innerHTML = contentToRestore;
+        setEditorHtml(contentToRestore);
+        currentPell.content.focus();
+        setTimeout(setCursorToEnd, 0);
+    }, []);
+    const handleUndo = useCallback(() => {
+        const currentPell = pellRef.current;
+        if (!(currentPell === null || currentPell === void 0 ? void 0 : currentPell.content)) {
+            return;
+        }
+        redoContentRef.current = currentPell.content.innerHTML;
+        currentPell.content.innerHTML = defaultValue || '';
+        setEditorHtml(defaultValue || '');
+        setTimeout(setCursorToEnd, 0);
+    }, [defaultValue]);
     const setupToolbar = (pellEditor) => {
         if (!editorRef.current)
             return;
         const actionbar = editorRef.current.querySelector(`.${styles.pellActionbar}`);
         const content = editorRef.current.querySelector(`.${styles.pellContent}`);
-        if (actionbar && content && editorRef.current) {
-            const toolbarContainer = document.createElement('div');
-            toolbarContainer.className = styles.toolbarContainer;
+        if (actionbar && content) {
+            // 1. Контейнер для кнопок форматирования
             const buttonsContainer = document.createElement('div');
             buttonsContainer.className = styles.buttonsContainer;
             while (actionbar.firstChild) {
                 buttonsContainer.appendChild(actionbar.firstChild);
             }
-            const submitButton = createSubmitButton();
+            // 2. Контейнер для Отменить/Добавить
+            const actionsWrapper = document.createElement('div');
+            actionsWrapper.className = styles.actionsWrapper || 'actions-container';
+            actionsWrapper.style.display = 'flex';
+            actionsWrapper.style.alignItems = 'center';
+            actionsWrapper.style.gap = '8px';
+            actionsWrapper.style.marginLeft = 'auto';
             actionbar.appendChild(buttonsContainer);
-            actionbar.appendChild(submitButton);
-            editorRef.current.appendChild(actionbar);
+            actionbar.appendChild(actionsWrapper);
+            const root = createRoot(actionsWrapper);
+            root.render(React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
+                React.createElement(IconButton, { ref: cancelButtonRef, title: lng === 'ru' ? 'Отменить' : 'Cancel', icon: React.createElement(IconClose, null), onClick: handleCancel, style: {
+                        width: '25px',
+                        height: '25px',
+                        padding: '5px',
+                        backgroundColor: 'white',
+                        cursor: 'pointer',
+                        opacity: 0.5,
+                    }, color: "var(--blue-main)" }),
+                React.createElement(IconButton, { ref: submitButtonRef, title: lng === 'ru' ? 'Отправить' : 'Submit', icon: React.createElement(IconSubmit, { width: '10', height: '10', htmlColor: 'blue', strokeWidth: '1' }), onClick: handleSubmit, style: {
+                        width: '25px',
+                        height: '25px',
+                        padding: '5px',
+                        backgroundColor: 'var(--blue-main)',
+                        opacity: 0.5,
+                        cursor: 'pointer'
+                    }, color: "white" })));
         }
         const buttons = editorRef.current.querySelectorAll(`.${styles.pellButton}`);
-        const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'ulist'];
+        const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'olist', 'undo', 'redo'];
         if (canAttachFiles) {
             commands.push('image');
         }
@@ -416,8 +558,14 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
                     if (command === 'heading2') {
                         toggleHeading2();
                     }
-                    else if (command === 'ulist') {
+                    else if (command === 'olist') {
                         toggleBulletList();
+                    }
+                    else if (command === 'undo') {
+                        handleUndo();
+                    }
+                    else if (command === 'redo') {
+                        hadleRedo();
                     }
                     else if (command === 'image') {
                         handleAttachFiles();
@@ -440,22 +588,44 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
         var _a;
         (_a = uploaderRef.current) === null || _a === void 0 ? void 0 : _a.click();
     };
-    const handleEditorChange = useCallback(() => {
+    const handleEditorChange = useCallback((html) => {
+        setEditorHtml(html);
+        redoContentRef.current = html;
         updateActiveStates();
-        if (onChange && (editor === null || editor === void 0 ? void 0 : editor.content)) {
-            onChange(editor.content.innerHTML, attachedFiles);
-        }
-    }, [onChange, editor, attachedFiles, updateActiveStates]);
-    const handleSubmit = useCallback(() => {
-        if (!(editor === null || editor === void 0 ? void 0 : editor.content)) {
+    }, [updateActiveStates]);
+    useEffect(() => {
+        var _a;
+        if (!submitButtonRef.current)
             return;
+        const normalizeHtml = (html) => {
+            if (!html)
+                return '';
+            return html
+                .replace(/&nbsp;/g, ' ') // неразрывные пробелы
+                .replace(/\s+/g, ' ') // лишние пробелы и переносы
+                .replace(/>\s+</g, '><') // пробелы между тегами
+                .trim();
+        };
+        const normalizedEditor = normalizeHtml(editorHtml);
+        const normalizedDefault = normalizeHtml(defaultValue);
+        const contentOnly = normalizedEditor
+            .replace(/<[^>]*>/g, '') // все теги
+            .replace(/\s/g, '') // все пробелов
+            .trim();
+        const isTextEmpty = contentOnly.length === 0;
+        const hasNoNewFiles = temporaryFiles.filter(file => file.file).length === 0 &&
+            temporaryFiles.length === ((_a = attachedFiles === null || attachedFiles === void 0 ? void 0 : attachedFiles.length) !== null && _a !== void 0 ? _a : 0);
+        const hasErrorsInFiles = temporaryFiles.some(file => Boolean(file.error));
+        const hasNoTextChanges = normalizedEditor === normalizedDefault;
+        const hasNoChanges = hasNoTextChanges && hasNoNewFiles;
+        if (submitButtonRef.current) {
+            submitButtonRef.current.disabled = hasNoChanges || isTextEmpty || hasErrorsInFiles;
+            submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty || hasErrorsInFiles ? '0.5' : '1';
         }
-        if (onSubmit) {
-            onSubmit(editor.content.innerHTML, attachedFiles);
-            editor.content.innerHTML = '';
-            setAttachedFiles([]);
+        if (cancelButtonRef.current) {
+            cancelButtonRef.current.style.opacity = hasNoChanges ? '0.5' : '1';
         }
-    }, [editor, attachedFiles]);
+    }, [editorHtml, defaultValue, temporaryFiles]);
     const handleKeyDown = (e) => {
         if (e.ctrlKey || e.metaKey) {
             switch (e.key) {
@@ -481,6 +651,7 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
         if (editorRef.current) {
             editorRef.current.innerHTML = '';
             const pellEditor = initializePellEditor();
+            pellRef.current = pellEditor;
             pellEditor.content.innerHTML = defaultValue || '';
             setEditor(pellEditor);
             setupToolbar(pellEditor);
@@ -493,6 +664,7 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
             pellEditorContent.addEventListener('keyup', handleKeyUp);
             pellEditorContent.addEventListener('mouseup', handleMouseUp);
             pellEditorContent.addEventListener('focus', handleFocus);
+            setTimeout(setCursorToEnd, 0);
             return () => {
                 pellEditorContent.removeEventListener('input', handleInput);
                 pellEditorContent.removeEventListener('keyup', handleKeyUp);
@@ -508,16 +680,6 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
             document.removeEventListener('keydown', handleKeyDown);
         };
     }, []);
-    useEffect(() => {
-        const button = submitButtonRef.current;
-        if (button) {
-            button.removeEventListener('click', handleSubmit);
-            button.addEventListener('click', handleSubmit);
-            return () => {
-                button.removeEventListener('click', handleSubmit);
-            };
-        }
-    }, [handleSubmit, submitButtonRef.current]);
     useEffect(() => {
         if (editor) {
             setTimeout(updateActiveStates, 100);
@@ -535,9 +697,9 @@ export const TextEditor = ({ label, onSubmit, onChange, defaultValue, error, hel
     });
     return (React.createElement("div", { className: wrapperClassess },
         label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
-        React.createElement("div", { className: inputClassess },
-            attachedFiles.length > 0 && (React.createElement(AttachedFilesPreview, { files: attachedFiles, onDelete: (id) => removeAttachedFile(id), className: styles.attachedFilesContainer, isEdit: true, lng: lng })),
-            React.createElement("div", { ref: editorRef }),
+        React.createElement("div", { className: inputClassess, title: '' },
+            temporaryFiles.length > 0 && (React.createElement(AttachedFilesPreview, { files: temporaryFiles, allowDelete: true, onDelete: removeAttachedFile, className: styles.attachedFilesContainer, lng: lng, maxFileCount: maxFileCount })),
+            React.createElement("div", { className: styles.editorContainer, ref: editorRef }),
             canAttachFiles && (React.createElement("input", { ref: uploaderRef, type: "file", style: { display: 'none' }, multiple: true, onChange: handleUploadFiles, accept: ACCEPTED_FILE_TYPES }))),
-        error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText) }, helperText))));
+        (error && helperText) && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText) }, helperText))));
 };

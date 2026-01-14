@@ -129,7 +129,7 @@ export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsH
         setIsColorChanged(true);
         setColorValue(newColor);
         setSelectedColor(newColor);
-        onColorChange(newColor);
+        onColorChange === null || onColorChange === void 0 ? void 0 : onColorChange(newColor);
     };
     return (React.createElement("div", { className: (mainColor || recentColors) && styles.colorPickerWrapper, ref: divRef },
         mainColor && (React.createElement("div", { className: mainColorClasses, style: {
