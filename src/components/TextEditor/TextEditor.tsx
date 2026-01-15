@@ -654,7 +654,6 @@ const hadleRedo = useCallback(()=>{
       const root = createRoot(actionsWrapper);
       root.render(
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {/* {isEditMode && ( */}
                 <IconButton
                   ref={cancelButtonRef}
                   title={lng === 'ru' ? 'Отменить' : 'Cancel'}
@@ -665,14 +664,9 @@ const hadleRedo = useCallback(()=>{
                     height: '25px', 
                     padding:'5px', 
                     backgroundColor: 'white',
-                    cursor: 'pointer',
-                    opacity: 0.5,
-
                   }} 
                    color="var(--blue-main)"
                 />
-            {/* )}   */}
-          
                 <IconButton
                   ref={submitButtonRef}
                   title={lng === 'ru' ? 'Отправить' : 'Submit'}
@@ -683,8 +677,6 @@ const hadleRedo = useCallback(()=>{
                     height: '25px', 
                     padding:'5px', 
                     backgroundColor: 'var(--blue-main)',
-                    opacity: 0.5,
-                    cursor: 'pointer'
                   }} 
                   color="white"
                 />             
@@ -697,6 +689,7 @@ const hadleRedo = useCallback(()=>{
     if (canAttachFiles) {
       commands.push('image');
     }
+
 
     buttons.forEach((button: Element, index: number) => {
       const command = commands[index];  
@@ -777,14 +770,17 @@ useEffect(() => {
   if (submitButtonRef.current) {
     submitButtonRef.current.disabled = hasNoChanges || isTextEmpty || hasErrorsInFiles
     submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty || hasErrorsInFiles ? '0.5' : '1';
+    submitButtonRef.current.style.cursor = hasNoChanges || isTextEmpty || hasErrorsInFiles ? 'default' : 'pointer';
   }
  
   if (cancelButtonRef.current) {
-    cancelButtonRef.current.style.opacity = hasNoChanges ? '0.5' : '1';
+    cancelButtonRef.current.disabled = !isEditMode && hasNoChanges
+    cancelButtonRef.current.style.opacity = isEditMode ? '1' : hasNoChanges ? '0.5' : '1';
+    cancelButtonRef.current.style.cursor = isEditMode ? 'pointer' : hasNoChanges ? 'default' : 'pointer';
   }
 
 
-}, [editorHtml, defaultValue, temporaryFiles]);
+}, [editorHtml, defaultValue, temporaryFiles, submitButtonRef.current, cancelButtonRef.current, isEditMode]);
 
 
   const handleKeyDown = (e: KeyboardEvent) => {

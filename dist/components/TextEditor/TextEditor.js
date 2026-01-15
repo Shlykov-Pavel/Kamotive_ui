@@ -528,16 +528,12 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
                         height: '25px',
                         padding: '5px',
                         backgroundColor: 'white',
-                        cursor: 'pointer',
-                        opacity: 0.5,
                     }, color: "var(--blue-main)" }),
                 React.createElement(IconButton, { ref: submitButtonRef, title: lng === 'ru' ? 'Отправить' : 'Submit', icon: React.createElement(IconSubmit, { width: '10', height: '10', htmlColor: 'blue', strokeWidth: '1' }), onClick: handleSubmit, style: {
                         width: '25px',
                         height: '25px',
                         padding: '5px',
                         backgroundColor: 'var(--blue-main)',
-                        opacity: 0.5,
-                        cursor: 'pointer'
                     }, color: "white" })));
         }
         const buttons = editorRef.current.querySelectorAll(`.${styles.pellButton}`);
@@ -621,11 +617,14 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
         if (submitButtonRef.current) {
             submitButtonRef.current.disabled = hasNoChanges || isTextEmpty || hasErrorsInFiles;
             submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty || hasErrorsInFiles ? '0.5' : '1';
+            submitButtonRef.current.style.cursor = hasNoChanges || isTextEmpty || hasErrorsInFiles ? 'default' : 'pointer';
         }
         if (cancelButtonRef.current) {
-            cancelButtonRef.current.style.opacity = hasNoChanges ? '0.5' : '1';
+            cancelButtonRef.current.disabled = !isEditMode && hasNoChanges;
+            cancelButtonRef.current.style.opacity = isEditMode ? '1' : hasNoChanges ? '0.5' : '1';
+            cancelButtonRef.current.style.cursor = isEditMode ? 'pointer' : hasNoChanges ? 'default' : 'pointer';
         }
-    }, [editorHtml, defaultValue, temporaryFiles]);
+    }, [editorHtml, defaultValue, temporaryFiles, submitButtonRef.current, cancelButtonRef.current, isEditMode]);
     const handleKeyDown = (e) => {
         if (e.ctrlKey || e.metaKey) {
             switch (e.key) {
