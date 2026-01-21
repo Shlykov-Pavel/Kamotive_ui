@@ -180,7 +180,7 @@ export interface DropdownProps {
     /** Обязательное поле */
     required?: boolean;
     /** Значение */
-    value?: string | number | TOptions | null;
+    value?: string | number | TOptions | null | TOptions[];
     /** Значение по умолчанию */
     defaultValue?: string | number | TOptions | null;
     /** Callback, который будет вызван при изменении значения */
@@ -229,6 +229,10 @@ export interface DropdownProps {
     noOptionsText?: string;
     /** Язык */
     lng?: string;
+    /** Множественный выбор */
+    multiple?: boolean;
+    /** Количество видимых значений при множественном выборе */
+    limitTags?: number;
 }
 /** @internal */
 export interface TypographyProps {
