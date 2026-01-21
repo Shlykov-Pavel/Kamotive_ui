@@ -7,7 +7,7 @@ export interface DropdownListItemProps {
     item: TOptions | null;
     getOptionLabel?: (option: TOptions) => string;
     size: 'md' | 'lg';
-    selectedItem: TOptions | null;
+    selectedItem: TOptions | null | TOptions[];
     variant?: 'icons' | 'text';
     onChange: (event: React.MouseEvent<HTMLElement>, item: TOptions | null) => void;
     isActive?: boolean;
