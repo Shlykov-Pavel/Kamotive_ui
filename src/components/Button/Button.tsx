@@ -11,7 +11,7 @@ export const Button: React.FC<ButtonProps> = ({
   label,
   variant = 'fill',
   size = 'md',
-  style,
+  style: propsStyle,
   condition,
   icon,
   disabled = false,
@@ -24,9 +24,16 @@ export const Button: React.FC<ButtonProps> = ({
   form
 }) => {
 
-  const [buttonStyle, setButtonStyle] = useState('');
-  const [buttonCondition, setButtonCondition] = useState(condition);
-
+  const btnIcon = icon || typeof children === 'object' && children;
+  
+  let buttonStyle = 'text';
+  if (propsStyle) {
+    buttonStyle = propsStyle;
+  } else if (btnIcon && variant !== 'link') {
+    buttonStyle = (!label && !children) ? 'icon' : 'default';
+  }
+  
+  const buttonCondition = error ? 'error' : (condition || 'default');
   const buttonClasses = classNames(
     styles['button'],
     styles[`button--${size}`],
@@ -73,42 +80,8 @@ export const Button: React.FC<ButtonProps> = ({
       return '#FFFFFF';
     }
   };
+  const iconColorStyle = iconColorFn(); 
 
-  const btnIcon = icon || typeof children === 'object' && children;
-  
-  useEffect(() => {
-   if(!buttonStyle && style) {
-        setButtonStyle(style);
-    } else {
-        if (btnIcon && variant!=='link') {
-            if (!label && !(typeof children === 'string' &&  children)) {
-                setButtonStyle('icon');
-            }
-            else {
-                setButtonStyle('default');
-            }
-        }
-        else {
-            setButtonStyle('text');
-        }
-    }
-}, [style, btnIcon, label, children]);
-
-
-  useEffect(() => {
-    if(!condition) {
-      if(error) {
-        setButtonCondition('error');
-      } else {
-      setButtonCondition('default')
-      }
-    } else {
-     error ? setButtonCondition('error'):setButtonCondition(condition)
-    }
-  }, [condition, error])
-
-  
-  const iconColorStyle = iconColorFn();
 
   if (!buttonStyle) {
     return (

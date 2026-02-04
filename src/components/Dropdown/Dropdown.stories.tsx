@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import { Meta } from '@storybook/react';
 import { Dropdown } from './Dropdown';
 import { IconAccount, IconAlarm, IconBell, IconBriefcase, IconCalendar } from '../../Icons';
@@ -10,9 +10,17 @@ export type BaseOptions = {
 
 export type TOptions<T = {}> = BaseOptions & T;
 
-export interface DropdownProps {
+export interface IDropdownItem {
+  disabled?: boolean;
+  children?: IDropdownItem[];
+  value?: any;
+  label?: string;
+  [key: string]: any;
+}
+
+export interface DropdownProps<T> {
   /** Массив элементов для выпадающего списка */
-  options: Array<string | number | TOptions>;
+  options: T[];
   /** Идентификатор */
   id?: string;
   /** Лейбл */
@@ -22,23 +30,23 @@ export interface DropdownProps {
   /** Обязательное поле */
   required?: boolean;
   /** Значение */
-  value?: string | number | TOptions | null;
+  value?: T | null;
   /** Значение по умолчанию */
-  defaultValue?: string | number | TOptions | null;
+  defaultValue?: IDropdownItem | null;
   /** Callback, который будет вызван при изменении значения */
-  onChange?: (event: any, value: string | number | TOptions | null) => void;
+  onChange?: (event: any, value: T | null) => void;
   /** Флаг, является ли выпадающий список пагинированным */
   showLoadMore?: boolean
-  /** Функция для загрузки списка при пагинированных данныч */
+  /** Функция для загрузки списка при пагинированных данных */
   loadMore?: () => void;
   /** Функция для получения текста опции */
-  getOptionLabel?: (option: TOptions | string) => string;
-  /** Вариaнты выпадающего списка(текст + иконка, текст)' */
-  variant?: 'icons' | 'text';
+  getOptionLabel?: (option: IDropdownItem) => string;
+  /** Вариaнты выпадающего списка' */
+  variant?: 'icons' | 'text' | 'filter';
   /** Размер */
   size?: 'md' | 'lg';
   /** Стили передаваемые напрямую */
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   /** Дополнительный класс */
   className?: string;
   /** Отображение левой метки */
@@ -67,11 +75,13 @@ export interface DropdownProps {
   clearable?: boolean;
   /** Включение автозаполнения */
   enableAutocomplete?: boolean;
+  onSearch?: (value: string) => void;
   /** Текст при отсутствии опций */
   noOptionsText?: string;
   /** Язык */
-  lng?: string;
+  lng?: string,
 }
+
 
 const dropdownOptions = [
   { value: 'Выбор_1', icon: <IconAccount /> },
@@ -139,7 +149,7 @@ const meta: Meta<typeof Dropdown> = {
     variant: {
       description: 'Вариaнты выпадающего списка(текст + иконка, текст)',
       control: { type: 'select' },
-      options: ['icons', 'text'],
+      options: ['icons', 'text', 'filter'],
     },
     className: { description: 'Дополнительный CSS класс для обертки dropdown' },
     disabled: {
@@ -210,6 +220,9 @@ const meta: Meta<typeof Dropdown> = {
       description: 'Позволяет делать поиск по опциям ',
       control: { type: 'boolean' },
     },
+    onSearch: {
+      description: 'Callback, который будет вызван для получения данных поиска'
+    },
      lng :{
       description: 'Язык',
       control: { type: 'radio' },
@@ -221,15 +234,18 @@ const meta: Meta<typeof Dropdown> = {
 export default meta;
 
 // Дефолтный Dropdown
-export const DropdownDefault = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+type DefaultOption = { value: string; icon?: JSX.Element; disabled?: boolean };
+
+export const DropdownDefault = (argTypes: DropdownProps<DefaultOption>): JSX.Element => (
+  <Dropdown {...argTypes} />
+);
 DropdownDefault.storyName = 'Dropdown по умолчанию';
 DropdownDefault.args = {
   isOpened: false,
   options: dropdownOptions,
 };
-
 // Dropdown с выбором опций
-export const DropdownChange = (argTypes: DropdownProps): JSX.Element => {
+export const DropdownChange = (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
   const defaultOptions = [
     { id: '1', name: 'name 1', description: 'описание 1' },
     { id: '2', name: 'name 2', description: 'описание 2' },
@@ -265,7 +281,7 @@ DropdownChange.parameters = {
 };
 
 // Dropdown с ошибкой
-export const DropdownWithError = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownWithError = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownWithError.storyName = 'Dropdown c ошибкой';
 DropdownWithError.args = {
   isOpened: false,
@@ -278,7 +294,7 @@ DropdownWithError.parameters = {
 };
 
 // Dropdown с иконкой открытый
-export const DropdownOpenedDefault = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownOpenedDefault = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedDefault.storyName = 'Dropdown открытый с иконками по умолчанию';
 DropdownOpenedDefault.args = {
   isOpened: true,
@@ -290,7 +306,7 @@ DropdownOpenedDefault.parameters = {
 };
 
 // Dropdown c выбранным значением
-export const DropdownOpenedDefaultSelected = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownOpenedDefaultSelected = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedDefaultSelected.storyName = 'Dropdown открытый с иконками по умолчанию c выбранным значением';
 DropdownOpenedDefaultSelected.args = {
   defaultValue: { value: 'Выбор_2', icon: <IconAlarm /> },
@@ -303,7 +319,7 @@ DropdownOpenedDefaultSelected.parameters = {
 };
 
 // Dropdown без иконок по умолчанию
-export const DropdownOpenedText = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownOpenedText = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedText.storyName = 'Dropdown открытый без иконок по умолчанию';
 DropdownOpenedText.args = {
   isOpened: true,
@@ -313,7 +329,7 @@ DropdownOpenedText.parameters = {
 };
 
 // Dropdown без иконок с выбранным значением
-export const DropdownOpenedTextSelected = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownOpenedTextSelected = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownOpenedTextSelected.storyName = 'Dropdown открытый без иконок по умолчанию c выбранным значением';
 DropdownOpenedTextSelected.args = {
   defaultValue: { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar /> },
@@ -326,7 +342,7 @@ DropdownOpenedTextSelected.parameters = {
 };
 
 // Dropdown заблокированный
-export const DropdownDisabled = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownDisabled = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownDisabled.storyName = 'Dropdown заблокированный';
 DropdownDisabled.args = {
   disabled: true,
@@ -339,7 +355,7 @@ DropdownDisabled.parameters = {
 };
 
 // Dropdown только чтение
-export const DropdownReadOnly = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownReadOnly = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownReadOnly.storyName = 'Dropdown только чтение';
 DropdownReadOnly.args = {
   readOnly: true,
@@ -352,7 +368,7 @@ DropdownReadOnly.parameters = {
 };
 
 // Dropdown с лейблом
-export const DropdownSelectVariantSelect = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownSelectVariantSelect = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownSelectVariantSelect.storyName = 'Dropdown селект c лейблом';
 DropdownSelectVariantSelect.args = {
   label: 'Лейбл селекта',
@@ -365,7 +381,7 @@ DropdownSelectVariantSelect.parameters = {
 };
 
 // Dropdown с боковым лейблом
-export const DropdownSelectVariantSelectLeftLabel = (argTypes: DropdownProps): JSX.Element => (
+export const DropdownSelectVariantSelectLeftLabel = (argTypes: DropdownProps<DefaultOption>): JSX.Element => (
   <Dropdown {...argTypes} />
 );
 DropdownSelectVariantSelectLeftLabel.storyName = 'Dropdown селект c боковым лейблом';
@@ -382,7 +398,7 @@ DropdownSelectVariantSelectLeftLabel.parameters = {
 };
 
 // Dropdown с поиском
-export const DropdownAutocomplete = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownAutocomplete = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownAutocomplete.storyName = 'Dropdown с поиском';
 DropdownAutocomplete.args = {
   isOpened: false,
@@ -561,7 +577,7 @@ const complexNestedOptions = [
 ];
 
 // Dropdown со сложными вложенными объектами
-export const DropdownComplexObjects = (argTypes: DropdownProps): JSX.Element => {
+export const DropdownComplexObjects = (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
   const [value, setValue] = useState<string | number | TOptions | null>(null);
 
   const handleChange = (e: any, value: string | number | TOptions | null) => {
@@ -636,7 +652,7 @@ const optionsWithNestedValue = [
   },
 ];
 
-export const DropdownNestedValue = (argTypes: DropdownProps): JSX.Element => {
+export const DropdownNestedValue = (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
   const [value, setValue] = useState<string | number | TOptions | null>(null);
 
   const handleChange = (e: any, value: string | number | TOptions | null) => {
@@ -660,6 +676,22 @@ DropdownNestedValue.storyName = 'Dropdown с вложенным значение
 DropdownNestedValue.parameters = {
   controls: { disable: true },
 };
+
+
+export const DropdownFilter = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
+DropdownFilter.storyName = 'Dropdown для фильтрации';
+DropdownFilter.args = {
+  isOpened: false,
+  options: dropdownOptions,
+  label: 'Лейбл селекта',
+  variant: 'filter',
+  enableAutocomplete: true,
+};
+DropdownFilter.parameters = {
+  controls: { disable: true },
+};
+
+
 
 const optionsPaginated = [
   { value: 'Элемент 1', icon: <IconAccount /> },
@@ -694,7 +726,7 @@ const optionsPaginated = [
   { value: 'Элемент 30', icon: <IconAlarm /> }
 ]
 // Dropdown с подгрузкой значений
-export const DropdownWithPaginatedData = (argTypes: DropdownProps): JSX.Element => {
+export const DropdownWithPaginatedData = (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
   const [value, setValue] = useState<string | number | TOptions | null>(null);
   const [currentOptions, setCurrentOptions] = useState(optionsPaginated.slice(0, 10));
   const [hasMore, setHasMore] = useState(true);
@@ -754,7 +786,7 @@ const englishDropdown = [
   { value: 'Select 5', icon: <IconBriefcase /> },
 ];
 
-export const DropdownEnglish = (argTypes: DropdownProps): JSX.Element => <Dropdown {...argTypes} />;
+export const DropdownEnglish = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
 DropdownEnglish.storyName = 'Dropdown на английском';
 DropdownEnglish.args = {
   placeholder: 'Select option',

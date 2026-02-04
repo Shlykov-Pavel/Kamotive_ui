@@ -182,9 +182,18 @@ export type BaseOptions = {
 export type TOptions<T = {}> = BaseOptions & T;
 
 //Типы для dropdown
-export interface DropdownProps {
+
+export interface IDropdownItem {
+  disabled?: boolean;
+  children?: IDropdownItem[];
+  value?: any;
+  label?: string;
+  [key: string]: any;
+}
+
+export interface DropdownProps<T> {
   /** Массив элементов для выпадающего списка */
-  options: Array<string | number | TOptions>;
+  options: T[];
   /** Идентификатор */
   id?: string;
   /** Лейбл */
@@ -194,19 +203,19 @@ export interface DropdownProps {
   /** Обязательное поле */
   required?: boolean;
   /** Значение */
-  value?: string | number | TOptions | null;
+  value?: T | null;
   /** Значение по умолчанию */
-  defaultValue?: string | number | TOptions | null;
+  defaultValue?: IDropdownItem | null;
   /** Callback, который будет вызван при изменении значения */
-  onChange?: (event: any, value: string | number | TOptions | null) => void;
+  onChange?: (event: any, value: T | null) => void;
   /** Флаг, является ли выпадающий список пагинированным */
   showLoadMore?: boolean
   /** Функция для загрузки списка при пагинированных данных */
   loadMore?: () => void;
   /** Функция для получения текста опции */
-  getOptionLabel?: (option: TOptions) => string;
-  /** Вариaнты выпадающего списка(текст + иконка, текст)' */
-  variant?: 'icons' | 'text';
+  getOptionLabel?: (option: IDropdownItem) => string;
+  /** Вариaнты выпадающего списка' */
+  variant?: 'icons' | 'text' | 'filter';
   /** Размер */
   size?: 'md' | 'lg';
   /** Стили передаваемые напрямую */
@@ -239,6 +248,9 @@ export interface DropdownProps {
   clearable?: boolean;
   /** Включение автозаполнения */
   enableAutocomplete?: boolean;
+  /** Функиця для получения данных по поиску */
+  onSearch?: (value: string) => void;
+  isSearchLoading?: boolean;
   /** Текст при отсутствии опций */
   noOptionsText?: string;
   /** Язык */

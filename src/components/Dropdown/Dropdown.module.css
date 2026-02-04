@@ -45,6 +45,23 @@
   justify-content: space-between;
   position: relative;
   width: 100%;
+    /* &--filter {
+    border: none; 
+    border-bottom: 1px solid var(--grey-mediumLight);
+    border-radius: 0; 
+    padding-left: 0;
+    padding-right: 0;
+    
+    &:hover {
+      border-bottom: 1px solid var(--blue-main);
+      box-shadow: none; 
+    }
+
+    &:focus,
+    &.button--opened { 
+       border-bottom: 1px solid var(--blue-main);
+    }
+  } */
 }
 .button:hover {
   border: 1px solid #0d9aff00;
@@ -55,6 +72,21 @@
   border-color: var(--blue-main);
   box-shadow: none;
 }
+/* Для фильтрации  */
+.button--filter {
+  border: none !important;
+  border-bottom: 1px solid var(--grey-mediumLight) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  /* padding-right: 0 !important; */
+}
+
+.button--filter:hover {
+  border-bottom: 1px solid var(--blue-main) !important;
+  box-shadow: none !important;
+}
+
+
 .button--disabled {
   background-color: rgba(120, 120, 128, 0.08);
   border: 1px solid #0d9aff00;
@@ -127,22 +159,29 @@
 }
 
 .dropdown {
-  position: absolute;
+  /* position: absolute;
   top: 40px;
-  left: 0;
+  
   display: flex;
   margin-top: 5px;
   flex-direction: column;
   align-items: flex-start;
-  padding: 10px 0px;
   max-height: 175px;
-  width: 100%;
-  background: #ffffff;
-  box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-  overflow-y: auto;
   z-index: 1000;
-  overflow-x: hidden;
+  overflow-x: hidden; */
+
+  position: absolute;
+  top: 110%; 
+  left: 0;
+  width: 100%;
+  height: auto; 
+  max-height: 300px;
+  overflow-y: auto; 
+  background: #fff;
+  box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.2);
+  z-index: 9999; 
+  border-radius: 12px;
+  padding: 5px 0
 }
 
 .textField {
@@ -184,6 +223,7 @@
   background-color: rgba(120, 120, 128, 0.08);
   border-radius: 5px;
   width: 89%;
+  /* margin-top: 5px; */
   /* margin: auto; */
 }
 
@@ -197,12 +237,16 @@
   cursor: not-allowed;
 }
 .item-block-icons,
-.item-block-text {
+.item-block-text,
+.item-block-filter {
   display: grid;
   grid-template-columns: auto 1fr;
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
+}
+.item-block-filter {
+  color:  var(--text-grey);
 }
 .item-block-icons--selected {
   display: grid;
@@ -245,6 +289,7 @@
   color: var(--text-dark);
   /* font-weight: var(--font-weight-semiBold); */
 }
+
 .label--default.lg {
   font-size: 12px !important;
 }
@@ -261,6 +306,9 @@
 }
 .label--left.md {
   font-size: 12px !important;
+}
+.label--filter {
+  color: var(--text-grey);
 }
 /* Стили для обязательного поля */
 .label--required::after {
