@@ -138,8 +138,8 @@ const meta: Meta<TableFilterSidebarProps> = {
 export default meta;
 
 
-const Template: StoryFn<TableFilterSidebarProps> = (args) => {
-  const [isOpen, setIsOpen] = useState(args.open);
+export const TableFilterDialogDefault = (argTypes: TableFilterSidebarProps): JSX.Element => {
+  const [isOpen, setIsOpen] = useState(argTypes.open);
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
@@ -154,7 +154,7 @@ const Template: StoryFn<TableFilterSidebarProps> = (args) => {
         </Button>
       </div> 
        <TableFilterSidebar 
-        {...args} 
+        {...argTypes} 
         open={isOpen} 
         onClose={handleClose} 
         onReset={() => console.log('Сбросить')}
@@ -163,10 +163,8 @@ const Template: StoryFn<TableFilterSidebarProps> = (args) => {
       />
       </>
   );
-};
-export const TableFilterDialogDefault = Template.bind({});
+}
 TableFilterDialogDefault.storyName = 'Окно фильтрации для таблицы';
 TableFilterDialogDefault.args = {
   open: false, 
 };
-
