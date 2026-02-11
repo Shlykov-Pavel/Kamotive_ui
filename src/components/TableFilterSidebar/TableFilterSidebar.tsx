@@ -7,26 +7,7 @@ import { IconButton } from '../IconButton/IconButton';
 import { IconClose } from '../../Icons/IconClose/IconClose';
 import { Typography } from '../Typography/Typography';
 import { Button } from '../Button/Button';
-import { icons } from '../Snackbar/Snackbar';
-
-interface TableFilterSidebarProps {
-  open: boolean;
-  onClose: () => void;
-  children: ReactNode;
-  lng: string;
-  onReset?: () => void;
-  onApply?:()=>void;
-  isResetDisabled?: boolean;
-  isApplyDisabled?: boolean;
-  style?: React.CSSProperties;
-  className?: string;
-  isLoading?: boolean;
-  width?: string;
-  zIndex?: number;
-  top?: number;
-  right?: number
-}
-
+import { TableFilterSidebarProps } from '../../types';
 
 export const TableFilterSidebar: FC<TableFilterSidebarProps> = ({ 
     open, 
@@ -41,12 +22,11 @@ export const TableFilterSidebar: FC<TableFilterSidebarProps> = ({
     className,
     isLoading,
     width = '340px',
-    zIndex = 1000, 
+    zIndex = 10000, 
     top = 0,
     right = 0,
   }
-) => {
-  
+) => {  
   if (!open) return null;
   
   const childrenArray = React.Children.toArray(children);
@@ -60,15 +40,21 @@ export const TableFilterSidebar: FC<TableFilterSidebarProps> = ({
 
   return (
    <>
-      {/* Затемнение фона при необходимости (overlay) */}
+      {/* Затемнение фона */}
       <div className={styles.overlay} onClick={onClose} style={{ zIndex }} />
       
       <aside
         className={classNames(styles.sidebar, open && styles.open, className)}
-        style={{ width: sidebarWidth, gap: `${gap + 5}px`, zIndex: zIndex + 1, top: `${top}px`, right: `${right}px`}}
+        style={{ 
+          width: sidebarWidth, 
+          gap: `${gap + 5}px`, 
+          zIndex: zIndex + 1, 
+          top: `${top}px`, 
+          right: `${right}px`,
+          ...style}}
       >
         <div className={styles.header}>
-          <Typography variant='Body1-SemiBold' style={{color:'var(--icons-medium)'}}>{lng === 'ru' ? 'Фильтры' : 'Filters'} </Typography>
+          <Typography variant='Body1-SemiBold' style={{color:'var(--text-dark)'}}>{lng === 'ru' ? 'Фильтры' : 'Filters'} </Typography>
           <IconButton
             title={lng === 'ru' ? 'Закрыть' : 'Close'} 
             onClick={onClose} 
@@ -107,7 +93,6 @@ export const TableFilterSidebar: FC<TableFilterSidebarProps> = ({
         {onReset &&  <Button label={lng === 'ru' ? 'Сбросить' : 'Reset'} variant='outline' onClick={onReset}  disabled={isResetDisabled || isLoading}/>}
         {onApply &&  <Button label={lng === 'ru' ? 'Применить' : 'Apply'} onClick={onApply} disabled={isApplyDisabled || isLoading}/>}
         </div>
-
       </aside>
     </>
   );

@@ -4,24 +4,20 @@
   left: 0;
   right: 0;
   bottom: 0;
-  /* background: rgba(0, 0, 0, 0.1); */
   cursor: pointer;
 }
 
 .sidebar {
   position: absolute; 
   box-sizing: border-box; 
-  /* top: 50px;
-  right: 0px; */
   height: 100%;
   background: #fff;
-  /* box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1); */
-  box-shadow: -10px 0px 30px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: -10px 15px 30px 2px rgba(0, 0, 0, 0.1);
   display: flex; 
   flex-direction: column;
   border-left: 1px solid #ddd;
   transition: transform 0.3s ease, width 0.3s ease; 
-  z-index: 1001;
+  /* z-index: 10001; */
   height: fit-content;
   border-radius: 15px;
 }

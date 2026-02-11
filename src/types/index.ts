@@ -338,6 +338,35 @@ export interface RadioProps {
   size?: 'sm' | 'md';
 }
 
+export interface TableFilterSidebarProps {
+  /** Флаг открытия */
+  open: boolean;
+  /** Функция обработки закрытия */
+  onClose: () => void;
+  /** Содержимое окна */
+  children: ReactNode;
+  /** Язык */
+  lng: string;
+  /** Функция обработки сброса фильтров */
+  onReset?: () => void;
+  /** Функция обработки применения фильтров */
+  onApply?:()=>void;
+  /** Флаги для дизейбла кнопок */
+  isResetDisabled?: boolean;
+  isApplyDisabled?: boolean;
+  /** Стили передаваемые напрямую */
+  style?: React.CSSProperties;
+  /** Дополнительный класс */
+  className?: string;
+  /** Флаг загрузки контента */
+  isLoading?: boolean;
+  width?: string;
+  zIndex?: number;
+  /** Позиционирование */
+  top?: number;
+  right?: number
+}
+
 export interface TabProps {
   /** Значение */
   value?: string;

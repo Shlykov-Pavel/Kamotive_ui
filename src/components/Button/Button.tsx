@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './Button.module.css';
 import classNames from 'classnames';
 import { ButtonProps } from '../../types';

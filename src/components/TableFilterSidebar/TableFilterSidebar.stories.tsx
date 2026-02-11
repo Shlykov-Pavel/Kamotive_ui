@@ -1,17 +1,11 @@
-import React, { CSSProperties, ReactNode, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import type { Meta, StoryFn } from '@storybook/react';
 import { TableFilterSidebar } from './TableFilterSidebar';
 import { Button } from '../Button/Button';
 import { Dropdown } from '../Dropdown/Dropdown';
-import { Checkbox } from '../Checkbox/Checkbox';
 import { DateInput } from '../DateInput/DateInput';
 
-// const [isPaused, setIsPaused] = useState(false);
 
-
-//   const { data, isFetching } = useGetUserQuery(userId ?? '', {
-//     skip: !userId || isPaused,
-//   });
 const FilterGroup = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div>
     <div style={{ 
@@ -122,14 +116,7 @@ const meta: Meta<TableFilterSidebarProps> = {
           {value: 'Завершено', name: 'Завершено', description: 'Завершенные задачи'},
         ]}
       />,
-       
-      // <DateInput/>, 
-      // <>
-      //   <Checkbox label='Петров П.П' />
-      //   <Checkbox label='Иванов И.И.' />
-      //   <Checkbox label='Сидоров С.С.' />
-      // </>,
-
+      
     ]
   },
 
@@ -151,18 +138,6 @@ const meta: Meta<TableFilterSidebarProps> = {
 export default meta;
 
 
-
-
-// export const TableFilterDialogDefault = (argTypes: TableFilterSidebarProps): JSX.Element => <TableFilterSidebar {...argTypes} />;
-// TableFilterDialogDefault.storyName = 'Окно фильтрации для таблицы';
-// TableFilterDialogDefault.args = {
-// open: true,
-
-
-// };
-
-
-
 const Template: StoryFn<TableFilterSidebarProps> = (args) => {
   const [isOpen, setIsOpen] = useState(args.open);
 
@@ -182,8 +157,8 @@ const Template: StoryFn<TableFilterSidebarProps> = (args) => {
         {...args} 
         open={isOpen} 
         onClose={handleClose} 
-        onReset={() => console.log('Filters reset')}
-        onApply={() => console.log('Filters applu')}
+        onReset={() => console.log('Сбросить')}
+        onApply={() => console.log('Применить')}
 
       />
       </>
@@ -195,58 +170,3 @@ TableFilterDialogDefault.args = {
   open: false, 
 };
 
-export const TableFilterDialogDisabledBtns = Template.bind({});
-TableFilterDialogDisabledBtns.storyName = 'Окно фильтрации для таблицы';
-TableFilterDialogDisabledBtns.args = {
-  open: false, 
-};
-
-
-
-
-
-
-// children: (
-    // <>
-      {/* 1. Текстовый фильтр */}
-      {/* <FilterGroup label="Название задачи">
-        <input 
-          type="text" 
-          placeholder="Введите название..." 
-          style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-        />
-      </FilterGroup> */}
-
-      {/* 2. Фильтр-селект (Статус) */}
-      {/* <FilterGroup label="Статус">
-        <select style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}>
-          <option value="">Все статусы</option>
-          <option value="new">Новое</option>
-          <option value="in_progress">В работе</option>
-          <option value="completed">Завершено</option>
-        </select>
-      </FilterGroup> */}
-       {/* 3. Фильтр даты */}
-      {/* <FilterGroup label="Дата создания">
-        <input 
-          type="date" 
-          style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-        />
-      </FilterGroup> */}
-
-      {/* 4. Множественный выбор (Исполнитель) */}
-      {/* <FilterGroup label="Исполнитель">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <label style={{ fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input type="checkbox" /> Иванов И.И.
-          </label>
-          <label style={{ fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input type="checkbox" /> Петров П.П.
-          </label>
-          <label style={{ fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input type="checkbox" /> Сидоров С.С.
-          </label>
-        </div>
-      </FilterGroup> */}
-    // </>
-// ),

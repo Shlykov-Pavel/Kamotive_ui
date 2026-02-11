@@ -350,7 +350,7 @@ export const Dropdown = <T,>({
   const dropdownClassess = classNames(styles.dropdown, className, {
     [styles['dropdown--disabled']]: disabled,
   });
-  const labelClasses = classNames(styles.label, styles[size], styles[`label--${variant}`], {
+  const labelClasses = classNames(styles.label, styles[size], {
     [styles['label--default']]: !isLeftLabel,
     [styles['label--left']]: isLeftLabel,
     [styles['label--required']]: required,
@@ -725,9 +725,9 @@ export const Dropdown = <T,>({
       onClick={onClick}
       style={style ? style : { width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' }}
     >
-      {(variant === 'filter' ? selectedItem && label : label) && (
+       {label && (
         <Typography variant="Caption" className={labelClasses}>
-          {variant === 'filter' ? selectedItem && label : label}
+          {label}
         </Typography>
       )}
       <button
@@ -746,9 +746,9 @@ export const Dropdown = <T,>({
           )}
           <div className={styles.dropdownIcon}>
             {!isOpen ? (
-              <ChevronDown strokeWidth={size === 'lg' ? '0.5' : '0.3'} />
+              <ChevronDown strokeWidth={size === 'lg' ? '0.5' : '0.3'} htmlColor='var(--icons-medium)' />
             ) : (
-              <ChevronUp strokeWidth={size === 'lg' ? '0.5' : '0.3'} />
+              <ChevronUp strokeWidth={size === 'lg' ? '0.5' : '0.3'} htmlColor='var(--icons-medium)' />
             )}
           </div>
         </div>

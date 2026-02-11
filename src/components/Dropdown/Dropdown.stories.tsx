@@ -409,7 +409,6 @@ DropdownAutocomplete.args = {
 DropdownAutocomplete.parameters = {
   controls: { disable: true },
 };
-// Добавьте этот массив в файл stories после существующих данных
 
 const complexNestedOptions = [
   {
