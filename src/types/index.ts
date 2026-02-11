@@ -203,11 +203,11 @@ export interface DropdownProps<T> {
   /** Обязательное поле */
   required?: boolean;
   /** Значение */
-  value?: T | null;
+  value?: T | null | T[];
   /** Значение по умолчанию */
   defaultValue?: IDropdownItem | null;
   /** Callback, который будет вызван при изменении значения */
-  onChange?: (event: any, value: T | null) => void;
+  onChange?: (event: any, value: T | T[] | null) => void;
   /** Флаг, является ли выпадающий список пагинированным */
   showLoadMore?: boolean
   /** Функция для загрузки списка при пагинированных данных */
@@ -255,6 +255,11 @@ export interface DropdownProps<T> {
   noOptionsText?: string;
   /** Язык */
   lng?: string,
+   /** Множественный выбор */
+  multiple?: boolean,
+   /** Количество видимых значений при множественном выборе */
+  limitTags?: number,
+  
 }
 
 /** @internal */

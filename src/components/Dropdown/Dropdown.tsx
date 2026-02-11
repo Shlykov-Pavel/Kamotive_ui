@@ -5,7 +5,7 @@ import { ChevronDown } from '../../Icons/ChevronDown/ChevronDown';
 import { ChevronUp } from '../../Icons/ChevronUp/ChevronUp';
 import { IconClose } from '../../Icons/IconClose/IconClose';
 import { IconCheck } from '../../Icons/IconCheck/IconCheck';
-import {  DropdownProps, IDropdownItem } from '../../types';
+import {  DropdownProps, IDropdownItem, BaseOptions } from '../../types';
 import { Typography } from '../Typography/Typography';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { Spinner } from '../Spinner/Spinner';
@@ -15,7 +15,7 @@ const isTextOverflowing = (element: HTMLElement | null): boolean => {
   return element.scrollWidth > element.clientWidth;
 };
 
-const getComparisonValue = <T,>(item: T | null, getOptionLabel: ((option: T) => string) | undefined): any => {
+const getComparisonValue = <T extends BaseOptions>(item: T | null, getOptionLabel: ((option: T) => string) | undefined): any => {
   if (!item) return null;
 
   if (getOptionLabel && typeof getOptionLabel === 'function') {
@@ -35,11 +35,11 @@ const getComparisonValue = <T,>(item: T | null, getOptionLabel: ((option: T) => 
  * Компонент Dropdown позволяет пользователям выбирать однин вариант из выпадающего меню
  */
 
-export interface DropdownListItemProps<T> {
+export interface DropdownListItemProps<T extends BaseOptions> {
   item: T | null;
   getOptionLabel?: (option: T) => string;
   size: 'md' | 'lg';
-  selectedItem: T | null;
+  selectedItem: T | null | T[];
   variant?: 'icons' | 'text' | 'filter';
   onChange: (event: React.MouseEvent<HTMLElement>, item: T | null) => void;
   isActive?: boolean;
@@ -161,7 +161,7 @@ function checkItem<T>(
   return null;
 }
 
-export const DropdownListItem = <T,> ({
+export const DropdownListItem = <T extends BaseOptions> ({
   item,
   getOptionLabel,
   size = 'md',
@@ -210,6 +210,11 @@ export const DropdownListItem = <T,> ({
   );
   const hasChildren = item !== null && typeof item === 'object' && 'children' in item && Array.isArray((item as any).children) && (item as any).children.length > 0;
   const isDisabled = item !== null && typeof item === 'object' && 'disabled' in item && (item as any).disabled;
+
+  const isSelectedItem = Array.isArray(selectedItem)
+  ? selectedItem.some((i) => getComparisonValue(i, getOptionLabel) === getComparisonValue(item, getOptionLabel))
+  : getComparisonValue(selectedItem, getOptionLabel) === getComparisonValue(item, getOptionLabel);
+
   const itemContainerClasses = classNames(styles[`item--container`], {
     [styles['item--container--active']]: isActive,
     [styles['item--container--parent']]: hasChildren && !isChild,
@@ -226,9 +231,8 @@ export const DropdownListItem = <T,> ({
     styles[`item-block-${variant}`],
     // { [styles[`item-block-${variant}--selected`]]: selectedItem?.value === item?.value },
     {
-      [styles[`item-block-${variant}--selected`]]:
-        getComparisonValue(selectedItem as any, getOptionLabel) === getComparisonValue(item as any, getOptionLabel),
       [styles['item-block--disabled']]: isDisabled,
+      [styles[`item-block-${variant}--selected`]]: isSelectedItem,
       [styles['item-block--parent']]: hasChildren && !isChild,
       [styles['item-block--child']]: isChild,
     }
@@ -247,7 +251,7 @@ export const DropdownListItem = <T,> ({
             {/* <span>{item?.value}</span> */}
             <span>{getComparisonValue(item, getOptionLabel)}</span>
           </div>
-          {!hasChildren &&
+          {!hasChildren && isSelectedItem &&
             getComparisonValue(selectedItem as any, getOptionLabel) === getComparisonValue(item as any, getOptionLabel) && (
               <IconCheck strokeWidth={size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0'} htmlColor="#0D99FF" />
             )}
@@ -286,7 +290,7 @@ export const DropdownListItem = <T,> ({
   );
 };
 
-export const Dropdown = <T,>({
+export const Dropdown = <T extends BaseOptions>({
   options,
   id,
   label,
@@ -319,10 +323,14 @@ export const Dropdown = <T,>({
   isSearchLoading,
   noOptionsText = 'Нет вариантов для выбора',
   lng = 'ru',
+  multiple = false,
+  limitTags = 1,
 }: DropdownProps<T>) => {
+
   const [isOpen, setIsOpen] = useState(isOpened);
   const [modifiedOptions, setModifiedOptions] = useState<T[] | null>([]);
   const [selectedItem, setSelectedItem] = useState<T | null>(null);
+  const [selectedItems, setSelectedItems] = useState<T[]>([]); //при множественном выборе
   const [errorInput, setErrorInput] = useState(false);
   const [errorInputHelperText, setErrorInputHelperText] = useState(helperText);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -356,9 +364,9 @@ export const Dropdown = <T,>({
     [styles['label--required']]: required,
   });
   const selectedItemClassess = classNames({
-    [styles['item-selected']]: selectedItem,
-    [styles['item-placeholder']]: !selectedItem && ((placeholder ?? label) || (!placeholder && !label)),
-    [styles['button--icons--item-selected']]: variant === 'icons' && (selectedItem as any)?.icon,
+    [styles['item-selected']]: selectedItem || selectedItems.length,
+    [styles['item-placeholder']]: !(selectedItem || selectedItems.length) && ((placeholder ?? label) || (!placeholder && !label)),
+    [styles['button--icons--item-selected']]: variant === 'icons' && (selectedItem as any)?.icon && !multiple,
   });
 
   // обновляет значения searchValue и filteredOptions
@@ -408,6 +416,29 @@ export const Dropdown = <T,>({
   const onChangeHandler = (event: React.MouseEvent<HTMLElement>, item: T | null) => {
     event.preventDefault();
     event.stopPropagation();
+
+    if (multiple && item){
+      setErrorInput(false);
+      setSelectedItems((selectedItems) => {
+        const isSelected = selectedItems.some((i) => getComparisonValue(i, getOptionLabel) === getComparisonValue(item, getOptionLabel));
+        const newSelectedItems =  isSelected ?
+          selectedItems.filter((i) => getComparisonValue(i, getOptionLabel) !== getComparisonValue(item, getOptionLabel)) :
+          [...selectedItems, item]
+
+        const newEvent = {
+          ...event,
+          currentTarget: {
+            ...event.currentTarget,
+            value: newSelectedItems,
+          },
+        };
+        onChange?.(newEvent, newSelectedItems);
+
+        return newSelectedItems;
+      })
+      return;
+    }
+
     const newEvent = {
       ...event,
       currentTarget: {
@@ -488,13 +519,17 @@ export const Dropdown = <T,>({
     }
   };
 
-  //для сброса выбранного значения
+  //для сброса выбранного значения или всех (если multiple)
   const handleReset = (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     event.preventDefault();
     event.stopPropagation();
 
     const startValue = defaultValue ? (checkItem(defaultValue) as T) : null;
-    setSelectedItem(startValue ?? null);
+    if(multiple){
+      setSelectedItems([])
+    } else{
+      setSelectedItem(startValue ?? null);
+    }
 
     if (!enableAutocomplete) {
       setIsOpen(false);
@@ -502,7 +537,7 @@ export const Dropdown = <T,>({
 
     setSearchValue('');
     setFilteredOptions(modifiedOptions);
-    onChange?.(event, startValue ?? null);
+    onChange?.(event, multiple ? [] : startValue ?? null);
     onClose?.(event);
     setActiveIndex(-1);
 
@@ -512,8 +547,38 @@ export const Dropdown = <T,>({
     }
   };
 
+  const handleResetMultipleItem = (event: React.MouseEvent<HTMLElement>, item: T | T[] | null) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    item && setSelectedItems((selectedItems) => {
+
+        const newSelectedItems =  selectedItems.filter((i) => getComparisonValue(i, getOptionLabel) !== getComparisonValue(item, getOptionLabel))
+
+        const newEvent = {
+          ...event,
+          currentTarget: {
+            ...event.currentTarget,
+            value: newSelectedItems,
+          },
+        };
+        onChange?.(newEvent, newSelectedItems);
+
+        if (required && newSelectedItems.length === 0) {
+          setErrorInput(true);
+          setErrorInputHelperText((helperText ?? lng === 'ru') ? 'Поле обязательно для заполнения' : 'Field is required');
+        }
+
+        return newSelectedItems;
+      })
+  }
+
   const [showSelectedTooltip, setShowSelectedTooltip] = useState(false);
   const selectedItemRef = useRef<HTMLDivElement>(null);
+
+  const [showChipTooltip, setShowChipTooltip] = useState<Record<string, boolean>>({});
+  const labelChipRef = useRef<Map<string, HTMLSpanElement | null>>(new Map());
+
   useEffect(() => {
     const checkOverflow = () => {
       setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
@@ -526,15 +591,120 @@ export const Dropdown = <T,>({
       window.removeEventListener('resize', checkOverflow);
     };
   }, [getComparisonValue(selectedItem as any, getOptionLabel)]);
+
+  const recalcChipTooltips = useCallback(() => {
+    const next: Record<string, boolean> = {};
+    labelChipRef.current.forEach((el, key) => {
+      next[key] = !!el && isTextOverflowing(el);
+    });
+    setShowChipTooltip(next);
+}, []);
+
+  useEffect(() => {
+    if (!multiple) return;
+
+    requestAnimationFrame(() => recalcChipTooltips());
+
+    window.addEventListener('resize', recalcChipTooltips);
+    return () => window.removeEventListener('resize', recalcChipTooltips);
+  }, [multiple, selectedItems, limitTags, recalcChipTooltips]);
+
+  const getSelectedItemsText = () => {
+    if(multiple) {
+      if(selectedItems.length === 0){ return ''}
+      return selectedItems.map((item) => {
+        getComparisonValue(item as any, getOptionLabel)
+      })
+    }
+    return getComparisonValue(selectedItem, getOptionLabel)
+  }
+
+  const getChips = () => {
+
+    const visible = selectedItems.slice(0, limitTags);
+    const hidden = selectedItems.length - visible.length;
+
+    return (
+      <div className={styles.chipsWrap}>
+        {visible.map((opt) => {
+          const key = String(getComparisonValue(opt, getOptionLabel) ?? getSelectedItemsText());
+          const label = String(getComparisonValue(opt, getOptionLabel) ?? '');
+          const chip = (
+            <span
+              className={styles.chip}
+              onMouseEnter={() => requestAnimationFrame(() => recalcChipTooltips())}
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              <span
+                className={styles.chipLabel}
+                ref={(el) => {
+                  labelChipRef.current.set(key, el);
+                }}
+              >
+                {label}
+              </span>
+
+              <span
+                className={styles.chipRemove}
+                role="button"
+                tabIndex={0}
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => handleResetMultipleItem(e as any, opt)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') handleResetMultipleItem(e as any, opt);
+                }}
+                aria-label={lng === 'ru' ? 'Удалить' : 'Remove'}
+              >
+                ×
+              </span>
+            </span>
+          );
+
+          return showChipTooltip[key] ? (
+              <Tooltip
+                label={label}
+                position="bottom-left"
+                style={{ width: '100% !important' }}
+                key={key}
+              >
+                {chip}
+              </Tooltip>
+          ) : (
+            chip
+          );
+        })}
+
+        {hidden > 0 && (
+          <span
+            className={styles.chipMore}
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            +{hidden}
+          </span>
+        )}
+      </div>
+    );
+
+  }
   
   const getTextField = () => {
+    const selectedText = getSelectedItemsText()
     const textFieldContent = (
       <div className={selectedItemClassess} ref={selectedItemRef}>
-        {variant === 'icons' &&
+        {variant === 'icons' && !multiple &&
           (selectedItem as any)?.icon &&
           React.cloneElement((selectedItem as any).icon as React.ReactElement, {
             strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
-          })}
+          })
+          }
         {isOpen && enableAutocomplete ? (
           <input
             ref={inputRef}
@@ -543,8 +713,8 @@ export const Dropdown = <T,>({
             className={styles.inlineSearchInput}
             onChange={handleSearchChange}
             placeholder={
-              getComparisonValue(selectedItem as any, getOptionLabel)
-                ? getComparisonValue(selectedItem as any, getOptionLabel).toString()
+              selectedText
+                ? selectedText
                 : lng === 'ru' ? 'Поиск...' : 'Search...'
             }
             onClick={(e) => {
@@ -567,7 +737,13 @@ export const Dropdown = <T,>({
             onKeyDown={handleKeyDown}
             autoFocus
           />
-        ) : selectedItem ? (
+        ) : multiple ? (
+        selectedItems.length > 0 ? (
+          getChips()
+        ) : (
+          searchValue || (placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values'))
+        )
+      ) : selectedItem ? (
           getComparisonValue(selectedItem as any, getOptionLabel)
         ) : (
           searchValue || (placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value'))
@@ -612,7 +788,7 @@ export const Dropdown = <T,>({
                 item={option}
                 getOptionLabel={getOptionLabel as any}
                 size={size}
-                selectedItem={selectedItem}
+                selectedItem={multiple? selectedItems : selectedItem}
                 variant={variant}
                 onChange={onChangeHandler}
                 isActive={activeIndex === index}
@@ -697,6 +873,14 @@ export const Dropdown = <T,>({
   }, [options]);
 
   useEffect(() => {
+    if (multiple) {
+      if(Array.isArray(value)){
+        setSelectedItems(value => value.map(item => checkItem(item) as T))
+      }
+      else{
+        setSelectedItems([])
+      }
+    }
     if (value || defaultValue) {
       const startValue = value
         ? (checkItem(value as any) as T)
@@ -707,7 +891,7 @@ export const Dropdown = <T,>({
     } else {
       setSelectedItem(null);
     }
-  }, [value, defaultValue]);
+  }, [value, defaultValue, multiple]);
 
   useEffect(() => {
     setErrorInput(error);
@@ -739,11 +923,14 @@ export const Dropdown = <T,>({
       >
         {getTextField()}
         <div className={styles.actionButtons}>
-          {clearable && !readOnly && !disabled && (selectedItem || (enableAutocomplete && searchValue)) && (
-            <div className={styles.resetButton}>
-              <IconClose strokeWidth="0.2" htmlColor="var(--text-light)" onClick={handleReset} />
-            </div>
-          )}
+          {clearable &&
+            !readOnly &&
+            !disabled &&
+            (selectedItem || (multiple && selectedItems.length !== 0) || (enableAutocomplete && searchValue)) && (
+              <div className={styles.resetButton}>
+                <IconClose strokeWidth="0.2" htmlColor="var(--text-light)" onClick={handleReset} />
+              </div>
+            )}
           <div className={styles.dropdownIcon}>
             {!isOpen ? (
               <ChevronDown strokeWidth={size === 'lg' ? '0.5' : '0.3'} htmlColor='var(--icons-medium)' />

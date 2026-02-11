@@ -80,6 +80,9 @@ export interface DropdownProps<T> {
   noOptionsText?: string;
   /** Язык */
   lng?: string,
+  /** Множественный выбор */
+  multiple?: boolean;
+  limitTags?: number; 
 }
 
 
@@ -89,7 +92,7 @@ const dropdownOptions = [
   { value: 'Задизейбленный выбор', disabled: true, icon: <IconEyeOff /> },
   { value: 'Выбор_4', icon: <IconBell /> },
   { value: 'Выбор_5', icon: <IconBriefcase /> },
-  { value: 'Длиный тексттттттттттттттттттттт', icon: <IconCalendar /> },
+  { value: 'Очень длиный текст, который не помещается в окно', icon: <IconCalendar /> },
 ];
 
 const withWrapper = (Story: React.ComponentType) => (
@@ -98,7 +101,8 @@ const withWrapper = (Story: React.ComponentType) => (
       backgroundColor: 'var(--white)',
       padding: '30px',
       borderRadius: '10px',
-      width: '300px',
+      width: '400px',
+      height: '20vh'
     }}
   >
     {<Story />}
@@ -223,11 +227,19 @@ const meta: Meta<typeof Dropdown> = {
     onSearch: {
       description: 'Callback, который будет вызван для получения данных поиска'
     },
-     lng :{
+    lng: {
       description: 'Язык',
       control: { type: 'radio' },
       options: ['ru', 'en'],
-     }
+     },
+    multiple: {
+      description: 'Множественный выбор',
+      control: { type: 'boolean' },
+    }, 
+    limitTags: {
+      description: 'Количество видимых значений при множественном выборе',
+      control: { type: 'number' }
+    }
   },
 };
 
@@ -277,6 +289,46 @@ export const DropdownChange = (argTypes: DropdownProps<DefaultOption>): JSX.Elem
 };
 DropdownChange.storyName = 'Dropdown изменяемый';
 DropdownChange.parameters = {
+  controls: { disable: true },
+};
+
+// Dropdown с множественным выбором опций
+export const DropdownMultiple= (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
+  const defaultOptions = [
+    { id: '1', name: 'name 1', description: 'описание 1' },
+    { id: '2', name: 'name 2', description: 'описание 2' },
+    { id: '3', name: 'name 3', description: 'описание 3' },
+    { id: '4', name: 'name 1', description: 'описание 4' },
+    { id: '5', name: 'name 2', description: 'описание 5' },
+    { id: '6', name: 'name 3', description: 'очень длиный текст, который не помещается в окно' },
+  ];
+  const [value, setValue] = useState<TOptions[]>([]);
+  const [isOpened, setIsOpened] = useState(false);
+
+  const handleChange = (e: any, item: any) => {
+    setValue(item);
+  };
+  useEffect(() => {
+    if (argTypes.error) setValue([]);
+  }, [argTypes.error]);
+
+  return (
+    <div style={{ display: 'flex', gap: '30px' }}>
+      <Dropdown
+        {...argTypes}
+        options={defaultOptions}
+        getOptionLabel={(option: TOptions) => option.description}
+        value={value}
+        onChange={handleChange}
+        required={true}
+        limitTags={2}
+        multiple={true}
+      />
+    </div>
+  );
+};
+DropdownMultiple.storyName = 'Dropdown с множественным выбором';
+DropdownMultiple.parameters = {
   controls: { disable: true },
 };
 

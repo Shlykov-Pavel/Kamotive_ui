@@ -369,3 +369,64 @@
 .loadMore:hover {
   color: var(--blue-dark);
 }
+
+.chipsWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--fills-active); 
+  border: 1px solid var(--icons-active);
+  color: var(--text-primary);
+  user-select: none;
+  min-width: 0;
+}
+
+.chipLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.chipRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.chipRemove:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.chipMore {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 16px;
+  user-select: none;
+  white-space: nowrap;
+}
