@@ -30,11 +30,11 @@ export interface DropdownProps<T> {
   /** Обязательное поле */
   required?: boolean;
   /** Значение */
-  value?: T | null;
+  value?: T | T[]| null;
   /** Значение по умолчанию */
   defaultValue?: IDropdownItem | null;
   /** Callback, который будет вызван при изменении значения */
-  onChange?: (event: any, value: T | null) => void;
+  onChange?: (event: any, value: T | T[] | null) => void;
   /** Флаг, является ли выпадающий список пагинированным */
   showLoadMore?: boolean
   /** Функция для загрузки списка при пагинированных данных */
