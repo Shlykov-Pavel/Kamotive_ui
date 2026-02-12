@@ -9,6 +9,7 @@ import {  DropdownProps, IDropdownItem, BaseOptions } from '../../types';
 import { Typography } from '../Typography/Typography';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { Spinner } from '../Spinner/Spinner';
+import { Button } from '../Button/Button';
 
 const isTextOverflowing = (element: HTMLElement | null): boolean => {
   if (!element) return false;
@@ -775,9 +776,6 @@ export const Dropdown = <T extends BaseOptions>({
       {isSearchLoading ? (
         <div className={`${styles['item-block']}`} style={{ textAlign: 'center', padding: '10px', display: 'flex', flexDirection:"column", alignItems:'center', justifyContent:'center' }}>
            <Spinner /> 
-           <span style={{ marginLeft: '10px' }}>
-             {lng === 'ru' ? 'Загрузка...' : 'Loading...'}
-           </span>
         </div>
       ) : (
         <>
@@ -806,15 +804,20 @@ export const Dropdown = <T extends BaseOptions>({
         </>
       )}
       
-      {showLoadMore && loadMore && !isSearchLoading && (
-        <div className={styles.loadMore} onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          loadMore();
-        }}>
-          {lng === 'ru' ? 'Загрузить еще' : 'Load more'}
-        </div>
-      )}
+      {showLoadMore && loadMore && (
+      <Button
+            style={{width: '95%', margin:'10px 0'}}
+            disabled={isSearchLoading}
+            onClick={(e) => {
+              console.log('onClick');
+              e.preventDefault();
+              e.stopPropagation();
+              loadMore();
+            }}
+          >
+            {isSearchLoading ? (lng === 'ru' ? 'Загрузка...': 'Loading...') : (lng === 'ru' ? 'Загрузить еще' : 'Load more')}
+      </Button>
+    )}
     </div>
   );
   return isOpen ? menu : null;

@@ -1,6 +1,6 @@
 import { CheckboxDisabled } from './../components/Checkbox/Checkbox.stories';
 import * as React from 'react';
-import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
+import { ChangeEventHandler, CSSProperties, ReactNode, MouseEvent, ButtonHTMLAttributes} from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
 import { Accept, FileError } from 'react-dropzone/.';
 import { FilePreview } from '../components/AttachedFilesPreview/AttachedFilesPreview';
@@ -36,7 +36,8 @@ export interface ButtonProps {
   /** Размер кнопки */
   size?: 'sm' | 'md' | 'lg';
   /** Стиль кнопки(текст+иконка, текст, иконка) */
-  style?: 'default' | 'text' | 'icon';
+  mode?: 'default' | 'text' | 'icon';
+  style?: CSSProperties;
   /** Состояние кнопки */
   condition?: 'default' | 'error' | 'success' | 'warning' | 'info';
   /** Иконка кнопки */
@@ -44,7 +45,7 @@ export interface ButtonProps {
   /** Заблокированная кнопка */
   disabled?: boolean;
   /** Callback, который будет вызван при клике по кнопке */
-  onClick?: () => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   /** Дочерние элементы */
   children?: ReactNode;
   /** Указатель на ошибку для установки condition */

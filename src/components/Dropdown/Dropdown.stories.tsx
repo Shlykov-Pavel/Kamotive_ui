@@ -781,41 +781,47 @@ export const DropdownWithPaginatedData = (argTypes: DropdownProps<DefaultOption>
   const [value, setValue] = useState<string | number | TOptions | null>(null);
   const [currentOptions, setCurrentOptions] = useState(optionsPaginated.slice(0, 10));
   const [hasMore, setHasMore] = useState(true);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (e: any, value: string | number | TOptions | null) => {
     setValue(value);
   };
 
   const handleLoadMore = () => {
-    const nextBatch = optionsPaginated.slice(currentOptions.length, currentOptions.length + 10);
-    if (nextBatch.length > 0) {
-      setCurrentOptions(prev => [...prev, ...nextBatch]);
-      if (currentOptions.length + nextBatch.length >= optionsPaginated.length) {
-        setHasMore(false);
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setCurrentOptions((prevOptions) => {
+      const nextIndex = prevOptions.length;
+      const nextBatch = optionsPaginated.slice(nextIndex, nextIndex + 10);
+      
+      if (nextBatch.length > 0) {
+        const newTotalLength = prevOptions.length + nextBatch.length;
+        
+        if (newTotalLength >= optionsPaginated.length) {
+          setHasMore(false);
+        }
+        
+        return [...prevOptions, ...nextBatch];
       }
-    }
-  };
+      
+      return prevOptions;
+    });
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+    setIsLoading(false);
+  }, 1000);
+};
 
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-  };
 
   return (
     <Dropdown
       {...argTypes}
       options={currentOptions}
       value={value}
-      isOpened={true}
       onChange={handleChange}
-      onClose={handleClose}
-      onClick={handleClick}
       showLoadMore={hasMore}
       loadMore={handleLoadMore}
+      isSearchLoading={isLoading}
       placeholder="Выберите элемент"
       label="Пагинированный список"
       variant="icons"

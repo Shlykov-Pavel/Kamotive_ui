@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { CSSProperties, ReactNode, useState } from 'react';
 import type { Meta } from '@storybook/react';
 import { Button } from './Button';
 import { IconAccount, IconAlarm, IconAddress, IconBell, IconBriefcase, IconCalendar } from '../../Icons';
@@ -11,7 +11,8 @@ export interface ButtonProps {
  /** Размер кнопки */
  size?: 'sm' | 'md' | 'lg';
  /** Стиль кнопки(текст+иконка, текст, иконка) */
- style?: 'default' | 'text' | 'icon';
+ mode?: 'default' | 'text' | 'icon';
+style?: CSSProperties;
  /** Состояние кнопки */
  condition?: 'default' | 'error' | 'success' | 'warning' | 'info';
  /** Иконка кнопки */
@@ -83,7 +84,7 @@ const meta: Meta<typeof Button> = {
       control: { type: 'radio' },
       options: ['sm', 'md', 'lg'],
     },
-    style: {
+    mode: {
       description: 'Стиль кнопки',
       control: { type: 'select' },
       options: ['default', 'text', 'icon'],
