@@ -810,7 +810,6 @@ export const Dropdown = <T extends BaseOptions>({
             disabled={isSearchLoading}
             variant='outline'
             onClick={(e) => {
-              console.log('onClick');
               e.preventDefault();
               e.stopPropagation();
               loadMore();
