@@ -55,6 +55,20 @@
   border-color: var(--blue-main);
   box-shadow: none;
 }
+/* Для фильтрации  */
+.button--filter {
+  border: none !important;
+  border-bottom: 1px solid var(--grey-mediumLight) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+.button--filter:hover {
+  border-bottom: 1px solid var(--blue-main) !important;
+  box-shadow: none !important;
+}
+
+
 .button--disabled {
   background-color: rgba(120, 120, 128, 0.08);
   border: 1px solid #0d9aff00;
@@ -128,21 +142,17 @@
 
 .dropdown {
   position: absolute;
-  top: 40px;
+  top: 110%; 
   left: 0;
-  display: flex;
-  margin-top: 5px;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 10px 0px;
-  max-height: 175px;
   width: 100%;
-  background: #ffffff;
+  height: auto; 
+  max-height: 300px;
+  overflow-y: auto; 
+  background: #fff;
   box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.2);
+  z-index: 9999; 
   border-radius: 12px;
-  overflow-y: auto;
-  z-index: 1000;
-  overflow-x: hidden;
+  padding: 5px 0
 }
 
 .textField {
@@ -184,6 +194,7 @@
   background-color: rgba(120, 120, 128, 0.08);
   border-radius: 5px;
   width: 89%;
+  /* margin-top: 5px; */
   /* margin: auto; */
 }
 
@@ -192,18 +203,24 @@
   color: var(--text-dark);
   transition: background-color 0.2s ease;
 }
+/* .item-block-filter {
+  color:  var(--text-grey);
+  color:  var(--text-dark);
+} */
 .item-block--disabled {
   color: var(--text-light);
   cursor: not-allowed;
 }
 .item-block-icons,
-.item-block-text {
+.item-block-text,
+.item-block-filter {
   display: grid;
   grid-template-columns: auto 1fr;
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
 }
+
 .item-block-icons--selected {
   display: grid;
   grid-template-columns: auto 1fr 20px;
@@ -245,6 +262,7 @@
   color: var(--text-dark);
   /* font-weight: var(--font-weight-semiBold); */
 }
+
 .label--default.lg {
   font-size: 12px !important;
 }
@@ -261,6 +279,9 @@
 }
 .label--left.md {
   font-size: 12px !important;
+}
+.label--filter {
+  color: var(--icons-medium);
 }
 /* Стили для обязательного поля */
 .label--required::after {
@@ -349,4 +370,65 @@
 }
 .loadMore:hover {
   color: var(--blue-dark);
+}
+
+.chipsWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--fills-active); 
+  border: 1px solid var(--icons-active);
+  color: var(--text-primary);
+  user-select: none;
+  min-width: 0;
+}
+
+.chipLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.chipRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.chipRemove:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.chipMore {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 16px;
+  user-select: none;
+  white-space: nowrap;
 }

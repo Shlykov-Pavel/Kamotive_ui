@@ -7,6 +7,8 @@ import { IconClose } from '../../Icons/IconClose/IconClose';
 import { IconCheck } from '../../Icons/IconCheck/IconCheck';
 import { Typography } from '../Typography/Typography';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { Spinner } from '../Spinner/Spinner';
+import { Button } from '../Button/Button';
 const isTextOverflowing = (element) => {
     if (!element)
         return false;
@@ -18,23 +20,24 @@ const getComparisonValue = (item, getOptionLabel) => {
     if (getOptionLabel && typeof getOptionLabel === 'function') {
         return getOptionLabel(item);
     }
-    // Если есть value, используем его
-    if (item.value !== undefined) {
-        return item.value;
-    }
-    // Если есть id, используем его для сравнения
-    if (item.id !== undefined) {
-        return item.id;
+    if (item && typeof item === 'object') {
+        if ('value' in item)
+            return item.value;
+        if ('id' in item)
+            return item.id;
     }
     // Иначе используем сам объект
     return item;
 };
 function checkItem(item, getOptionLabel, disabled, isDivider) {
+    if (typeof item === 'string' || typeof item === 'number') {
+        return { value: item, disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false };
+    }
     if (typeof item === 'object' && item !== null) {
         const itemCopy = Object.assign({}, item);
         // Проверяем только поле value на вложенные объекты
         if (getOptionLabel) {
-            const labelResult = getOptionLabel(itemCopy);
+            const labelResult = getOptionLabel(item);
             // Если getOptionLabel возвращает массив
             if (Array.isArray(labelResult)) {
                 if (!itemCopy.children) {
@@ -103,12 +106,7 @@ function checkItem(item, getOptionLabel, disabled, isDivider) {
             }
         }
     }
-    else if (typeof item === 'string' || typeof item === 'number') {
-        return { value: item, disabled: disabled !== null && disabled !== void 0 ? disabled : false, isDivider: isDivider !== null && isDivider !== void 0 ? isDivider : false };
-    }
-    else {
-        return null;
-    }
+    return null;
 }
 export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedItem, variant, onChange, isActive, activeIndex, index, isChild = false, }) => {
     var _a, _b;
@@ -127,20 +125,30 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
     const handleItemClick = useCallback((event) => {
         event.preventDefault();
         event.stopPropagation();
+        if (!item)
+            return;
+        if (typeof item === 'string') {
+            onChange(event, item);
+            return;
+        }
         if (!(item === null || item === void 0 ? void 0 : item.disabled)) {
             if (!(item === null || item === void 0 ? void 0 : item.children) || item.children.length === 0) {
                 onChange(event, item); // Если у элемента есть дети, не выбираем родительский элемент
             }
         }
     }, [item, onChange]);
-    const hasChildren = (item === null || item === void 0 ? void 0 : item.children) && item.children.length > 0;
+    const hasChildren = item !== null && typeof item === 'object' && 'children' in item && Array.isArray(item.children) && item.children.length > 0;
+    const isDisabled = item !== null && typeof item === 'object' && 'disabled' in item && item.disabled;
+    const isSelectedItem = Array.isArray(selectedItem)
+        ? selectedItem.some((i) => getComparisonValue(i, getOptionLabel) === getComparisonValue(item, getOptionLabel))
+        : getComparisonValue(selectedItem, getOptionLabel) === getComparisonValue(item, getOptionLabel);
     const itemContainerClasses = classNames(styles[`item--container`], {
         [styles['item--container--active']]: isActive,
         [styles['item--container--parent']]: hasChildren && !isChild,
         [styles['item--container--child']]: isChild,
     });
     const itemClassess = classNames(styles[`item-block`], styles[`button--${size}`], {
-        [styles['item-block--disabled']]: item === null || item === void 0 ? void 0 : item.disabled,
+        [styles['item-block--disabled']]: isDisabled,
         [styles['item-block--active']]: isActive,
         [styles['item-block--parent']]: hasChildren && !isChild, // Стиль для родительских элементов
         [styles['item-block--child']]: isChild, // Стиль для дочерних элементов
@@ -148,34 +156,35 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
     const itemBlock = classNames(styles[`item-block`], styles[`item-block-${variant}`], 
     // { [styles[`item-block-${variant}--selected`]]: selectedItem?.value === item?.value },
     {
-        [styles[`item-block-${variant}--selected`]]: getComparisonValue(selectedItem, getOptionLabel) === getComparisonValue(item, getOptionLabel),
-        [styles['item-block--disabled']]: item === null || item === void 0 ? void 0 : item.disabled,
+        [styles['item-block--disabled']]: isDisabled,
+        [styles[`item-block-${variant}--selected`]]: isSelectedItem,
         [styles['item-block--parent']]: hasChildren && !isChild,
         [styles['item-block--child']]: isChild,
     });
+    const itemData = item !== null && typeof item === 'object' ? item : null;
     const itemContent = (React.createElement("div", { className: itemContainerClasses, onClick: handleItemClick },
         React.createElement("div", { className: itemClassess },
             React.createElement("div", { className: itemBlock },
-                variant === 'icons' &&
-                    (item === null || item === void 0 ? void 0 : item.icon) &&
-                    React.cloneElement(item.icon, {
+                variant === 'icons' && (itemData === null || itemData === void 0 ? void 0 : itemData.icon) &&
+                    React.cloneElement(itemData.icon, {
                         strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
                     }),
                 React.createElement("div", { className: styles.item, ref: itemRef },
                     React.createElement("span", null, getComparisonValue(item, getOptionLabel))),
-                !hasChildren &&
+                !hasChildren && isSelectedItem &&
                     getComparisonValue(selectedItem, getOptionLabel) === getComparisonValue(item, getOptionLabel) && (React.createElement(IconCheck, { strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0', htmlColor: "#0D99FF" }))),
-            (item === null || item === void 0 ? void 0 : item.isDivider) && React.createElement("div", { className: styles.divider })),
+            (itemData === null || itemData === void 0 ? void 0 : itemData.isDivider) && React.createElement("div", { className: styles.divider })),
         hasChildren && (React.createElement("div", { className: styles.nestedMenu }, (_a = item.children) === null || _a === void 0 ? void 0 : _a.map((child, childIndex) => {
             var _a;
             return (React.createElement(DropdownListItem, { key: (_a = child === null || child === void 0 ? void 0 : child.id) !== null && _a !== void 0 ? _a : `${index}-${childIndex}`, item: child, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, onChange: onChange, isActive: false, activeIndex: activeIndex, index: childIndex, isChild: true }));
         })))));
     return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left" }, itemContent)) : (itemContent);
 };
-export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, noOptionsText = 'Нет вариантов для выбора', lng = 'ru', }) => {
+export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, onSearch, isSearchLoading, noOptionsText = 'Нет вариантов для выбора', lng = 'ru', multiple = false, limitTags = 1, }) => {
     const [isOpen, setIsOpen] = useState(isOpened);
     const [modifiedOptions, setModifiedOptions] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItems, setSelectedItems] = useState([]); //при множественном выборе
     const [errorInput, setErrorInput] = useState(false);
     const [errorInputHelperText, setErrorInputHelperText] = useState(helperText);
     const [activeIndex, setActiveIndex] = useState(-1);
@@ -191,6 +200,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         [styles['dropdown--container-helperText']]: errorInput,
     });
     const buttonClassess = classNames(styles.button, styles[`button--${size}`], {
+        [styles['button--filter']]: variant === 'filter',
         [styles['button-item--selected']]: getComparisonValue(selectedItem, getOptionLabel) && !disabled,
         [styles['button--readOnly']]: readOnly,
         [styles['button--disabled']]: disabled,
@@ -205,9 +215,9 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         [styles['label--required']]: required,
     });
     const selectedItemClassess = classNames({
-        [styles['item-selected']]: selectedItem,
-        [styles['item-placeholder']]: !selectedItem && ((placeholder !== null && placeholder !== void 0 ? placeholder : label) || (!placeholder && !label)),
-        [styles['button--icons--item-selected']]: variant === 'icons' && (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.icon),
+        [styles['item-selected']]: selectedItem || selectedItems.length,
+        [styles['item-placeholder']]: !(selectedItem || selectedItems.length) && ((placeholder !== null && placeholder !== void 0 ? placeholder : label) || (!placeholder && !label)),
+        [styles['button--icons--item-selected']]: variant === 'icons' && (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.icon) && !multiple,
     });
     // обновляет значения searchValue и filteredOptions
     const setAutocompleteValues = (value) => {
@@ -248,6 +258,19 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
     const onChangeHandler = (event, item) => {
         event.preventDefault();
         event.stopPropagation();
+        if (multiple && item) {
+            setErrorInput(false);
+            setSelectedItems((selectedItems) => {
+                const isSelected = selectedItems.some((i) => getComparisonValue(i, getOptionLabel) === getComparisonValue(item, getOptionLabel));
+                const newSelectedItems = isSelected ?
+                    selectedItems.filter((i) => getComparisonValue(i, getOptionLabel) !== getComparisonValue(item, getOptionLabel)) :
+                    [...selectedItems, item];
+                const newEvent = Object.assign(Object.assign({}, event), { currentTarget: Object.assign(Object.assign({}, event.currentTarget), { value: newSelectedItems }) });
+                onChange === null || onChange === void 0 ? void 0 : onChange(newEvent, newSelectedItems);
+                return newSelectedItems;
+            });
+            return;
+        }
         const newEvent = Object.assign(Object.assign({}, event), { currentTarget: Object.assign(Object.assign({}, event.currentTarget), { value: item }) });
         if (getComparisonValue(selectedItem, getOptionLabel) !== getComparisonValue(item, getOptionLabel)) {
             setSelectedItem(item);
@@ -265,6 +288,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
     const handleSearchChange = (event) => {
         event.preventDefault();
         event.stopPropagation();
+        onSearch === null || onSearch === void 0 ? void 0 : onSearch(event.target.value);
         const value = event.target.value;
         setAutocompleteValues(value);
     };
@@ -313,18 +337,23 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 break;
         }
     };
-    //для сброса выбранного значения
+    //для сброса выбранного значения или всех (если multiple)
     const handleReset = (event) => {
         event.preventDefault();
         event.stopPropagation();
         const startValue = defaultValue ? checkItem(defaultValue) : null;
-        setSelectedItem(startValue !== null && startValue !== void 0 ? startValue : null);
+        if (multiple) {
+            setSelectedItems([]);
+        }
+        else {
+            setSelectedItem(startValue !== null && startValue !== void 0 ? startValue : null);
+        }
         if (!enableAutocomplete) {
             setIsOpen(false);
         }
         setSearchValue('');
         setFilteredOptions(modifiedOptions);
-        onChange === null || onChange === void 0 ? void 0 : onChange(event, startValue !== null && startValue !== void 0 ? startValue : null);
+        onChange === null || onChange === void 0 ? void 0 : onChange(event, multiple ? [] : startValue !== null && startValue !== void 0 ? startValue : null);
         onClose === null || onClose === void 0 ? void 0 : onClose(event);
         setActiveIndex(-1);
         if (required) {
@@ -332,8 +361,24 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
             setErrorInputHelperText((helperText !== null && helperText !== void 0 ? helperText : lng === 'ru') ? 'Поле обязательно для заполнения' : 'Field is required');
         }
     };
+    const handleResetMultipleItem = (event, item) => {
+        event.preventDefault();
+        event.stopPropagation();
+        item && setSelectedItems((selectedItems) => {
+            const newSelectedItems = selectedItems.filter((i) => getComparisonValue(i, getOptionLabel) !== getComparisonValue(item, getOptionLabel));
+            const newEvent = Object.assign(Object.assign({}, event), { currentTarget: Object.assign(Object.assign({}, event.currentTarget), { value: newSelectedItems }) });
+            onChange === null || onChange === void 0 ? void 0 : onChange(newEvent, newSelectedItems);
+            if (required && newSelectedItems.length === 0) {
+                setErrorInput(true);
+                setErrorInputHelperText((helperText !== null && helperText !== void 0 ? helperText : lng === 'ru') ? 'Поле обязательно для заполнения' : 'Field is required');
+            }
+            return newSelectedItems;
+        });
+    };
     const [showSelectedTooltip, setShowSelectedTooltip] = useState(false);
     const selectedItemRef = useRef(null);
+    const [showChipTooltip, setShowChipTooltip] = useState({});
+    const labelChipRef = useRef(new Map());
     useEffect(() => {
         const checkOverflow = () => {
             setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
@@ -344,16 +389,70 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
             window.removeEventListener('resize', checkOverflow);
         };
     }, [getComparisonValue(selectedItem, getOptionLabel)]);
+    const recalcChipTooltips = useCallback(() => {
+        const next = {};
+        labelChipRef.current.forEach((el, key) => {
+            next[key] = !!el && isTextOverflowing(el);
+        });
+        setShowChipTooltip(next);
+    }, []);
+    useEffect(() => {
+        if (!multiple)
+            return;
+        requestAnimationFrame(() => recalcChipTooltips());
+        window.addEventListener('resize', recalcChipTooltips);
+        return () => window.removeEventListener('resize', recalcChipTooltips);
+    }, [multiple, selectedItems, limitTags, recalcChipTooltips]);
+    const getSelectedItemsText = () => {
+        if (multiple) {
+            if (selectedItems.length === 0) {
+                return '';
+            }
+            return selectedItems.map((item) => {
+                getComparisonValue(item, getOptionLabel);
+            });
+        }
+        return getComparisonValue(selectedItem, getOptionLabel);
+    };
+    const getChips = () => {
+        const visible = selectedItems.slice(0, limitTags);
+        const hidden = selectedItems.length - visible.length;
+        return (React.createElement("div", { className: styles.chipsWrap },
+            visible.map((opt) => {
+                var _a, _b;
+                const key = String((_a = getComparisonValue(opt, getOptionLabel)) !== null && _a !== void 0 ? _a : getSelectedItemsText());
+                const label = String((_b = getComparisonValue(opt, getOptionLabel)) !== null && _b !== void 0 ? _b : '');
+                const chip = (React.createElement("span", { className: styles.chip, onMouseEnter: () => requestAnimationFrame(() => recalcChipTooltips()), onMouseDown: (e) => e.stopPropagation(), onClick: (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    } },
+                    React.createElement("span", { className: styles.chipLabel, ref: (el) => {
+                            labelChipRef.current.set(key, el);
+                        } }, label),
+                    React.createElement("span", { className: styles.chipRemove, role: "button", tabIndex: 0, onMouseDown: (e) => e.stopPropagation(), onClick: (e) => handleResetMultipleItem(e, opt), onKeyDown: (e) => {
+                            if (e.key === 'Enter' || e.key === ' ')
+                                handleResetMultipleItem(e, opt);
+                        }, "aria-label": lng === 'ru' ? 'Удалить' : 'Remove' }, "\u00D7")));
+                return showChipTooltip[key] ? (React.createElement(Tooltip, { label: label, position: "bottom-left", style: { width: '100% !important' }, key: key }, chip)) : (chip);
+            }),
+            hidden > 0 && (React.createElement("span", { className: styles.chipMore, onMouseDown: (e) => e.stopPropagation(), onClick: (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                } },
+                "+",
+                hidden))));
+    };
     const getTextField = () => {
-        var _a, _b;
+        var _a, _b, _c;
+        const selectedText = getSelectedItemsText();
         const textFieldContent = (React.createElement("div", { className: selectedItemClassess, ref: selectedItemRef },
-            variant === 'icons' &&
+            variant === 'icons' && !multiple &&
                 (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.icon) &&
                 React.cloneElement(selectedItem.icon, {
                     strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
                 }),
-            isOpen && enableAutocomplete ? (React.createElement("input", { ref: inputRef, type: "text", value: searchValue, className: styles.inlineSearchInput, onChange: handleSearchChange, placeholder: getComparisonValue(selectedItem, getOptionLabel)
-                    ? getComparisonValue(selectedItem, getOptionLabel).toString()
+            isOpen && enableAutocomplete ? (React.createElement("input", { ref: inputRef, type: "text", value: searchValue, className: styles.inlineSearchInput, onChange: handleSearchChange, placeholder: selectedText
+                    ? selectedText
                     : lng === 'ru' ? 'Поиск...' : 'Search...', onClick: (e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -367,24 +466,25 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 }, onBlur: (e) => {
                     e.stopPropagation();
                     onBlur === null || onBlur === void 0 ? void 0 : onBlur(e);
-                }, onKeyDown: handleKeyDown, autoFocus: true })) : selectedItem ? (getComparisonValue(selectedItem, getOptionLabel)) : (searchValue || ((_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : (lng === 'ru' ? 'Выберите значение' : 'Select value')))));
+                }, onKeyDown: handleKeyDown, autoFocus: true })) : multiple ? (selectedItems.length > 0 ? (getChips()) : (searchValue || ((_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : (lng === 'ru' ? 'Выберите значения' : 'Select values')))) : selectedItem ? (getComparisonValue(selectedItem, getOptionLabel)) : (searchValue || ((_b = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _b !== void 0 ? _b : (lng === 'ru' ? 'Выберите значение' : 'Select value')))));
         return showSelectedTooltip ? (React.createElement("div", { className: styles.textField },
-            React.createElement(Tooltip, { label: ((_b = getComparisonValue(selectedItem, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left", style: { width: '100% !important' } }, textFieldContent))) : (textFieldContent);
+            React.createElement(Tooltip, { label: ((_c = getComparisonValue(selectedItem, getOptionLabel)) === null || _c === void 0 ? void 0 : _c.toString()) || '', position: "bottom-left", style: { width: '100% !important' } }, textFieldContent))) : (textFieldContent);
     };
     const getDropdownMenu = () => {
         const optionsToRender = enableAutocomplete && searchValue ? filteredOptions : modifiedOptions;
         const menu = isOpen && (React.createElement("div", { className: dropdownClassess },
-            optionsToRender && optionsToRender.length > 0 ? (optionsToRender.map((optionsToRender, index) => {
+            isSearchLoading ? (React.createElement("div", { className: `${styles['item-block']}`, style: { textAlign: 'center', padding: '10px', display: 'flex', flexDirection: "column", alignItems: 'center', justifyContent: 'center' } },
+                React.createElement(Spinner, null))) : (React.createElement(React.Fragment, null, optionsToRender && optionsToRender.length > 0 ? (optionsToRender.map((option, index) => {
                 var _a;
-                return (React.createElement(DropdownListItem, { key: (_a = optionsToRender === null || optionsToRender === void 0 ? void 0 : optionsToRender.id) !== null && _a !== void 0 ? _a : index, item: optionsToRender, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, variant: variant, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index }));
-            })) : (React.createElement("div", { className: `${styles['item-container']} ${styles['item-block']}`, style: { paddingLeft: '15px' } }, lng === 'ru' || lng.includes('ru')
+                return (React.createElement(DropdownListItem, { key: (_a = option === null || option === void 0 ? void 0 : option.id) !== null && _a !== void 0 ? _a : index, item: option, getOptionLabel: getOptionLabel, size: size, selectedItem: multiple ? selectedItems : selectedItem, variant: variant, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index }));
+            })) : (React.createElement("div", { className: `${styles['item-block']}`, style: { margin: '15px auto' } }, lng === 'ru' || lng.includes('ru')
                 ? noOptionsText || 'Нет вариантов для выбора'
-                : noOptionsText || 'No options to select')),
-            showLoadMore && loadMore && React.createElement("div", { className: styles[`loadMore`], onClick: (e) => {
-                    e.stopPropagation();
+                : noOptionsText || 'No options to select')))),
+            showLoadMore && loadMore && (React.createElement(Button, { style: { width: '95%', margin: '10px 0' }, disabled: isSearchLoading, variant: 'outline', onClick: (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     loadMore();
-                } }, lng === 'ru' ? 'Загрузить еще' : 'Load more')));
+                } }, isSearchLoading ? (lng === 'ru' ? 'Загрузка...' : 'Loading...') : (lng === 'ru' ? 'Загрузить еще' : 'Load more')))));
         return isOpen ? menu : null;
     };
     useEffect(() => {
@@ -429,6 +529,14 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         }
     }, [options]);
     useEffect(() => {
+        if (multiple) {
+            if (Array.isArray(value)) {
+                setSelectedItems(value => value.map(item => checkItem(item)));
+            }
+            else {
+                setSelectedItems([]);
+            }
+        }
         if (value || defaultValue) {
             const startValue = value
                 ? checkItem(value)
@@ -440,7 +548,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         else {
             setSelectedItem(null);
         }
-    }, [value, defaultValue]);
+    }, [value, defaultValue, multiple]);
     useEffect(() => {
         setErrorInput(error);
     }, [error]);
@@ -452,9 +560,12 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         React.createElement("button", { className: buttonClassess, onClick: readOnly ? undefined : handleToggle, disabled: disabled, tabIndex: 0, onKeyDown: handleKeyDown },
             getTextField(),
             React.createElement("div", { className: styles.actionButtons },
-                clearable && !readOnly && !disabled && (selectedItem || (enableAutocomplete && searchValue)) && (React.createElement("div", { className: styles.resetButton },
+                clearable &&
+                    !readOnly &&
+                    !disabled &&
+                    (selectedItem || (multiple && selectedItems.length !== 0) || (enableAutocomplete && searchValue)) && (React.createElement("div", { className: styles.resetButton },
                     React.createElement(IconClose, { strokeWidth: "0.2", htmlColor: "var(--text-light)", onClick: handleReset }))),
-                React.createElement("div", { className: styles.dropdownIcon }, !isOpen ? (React.createElement(ChevronDown, { strokeWidth: size === 'lg' ? '0.5' : '0.3' })) : (React.createElement(ChevronUp, { strokeWidth: size === 'lg' ? '0.5' : '0.3' })))),
+                React.createElement("div", { className: styles.dropdownIcon }, !isOpen ? (React.createElement(ChevronDown, { strokeWidth: size === 'lg' ? '0.5' : '0.3', htmlColor: 'var(--icons-medium)' })) : (React.createElement(ChevronUp, { strokeWidth: size === 'lg' ? '0.5' : '0.3', htmlColor: 'var(--icons-medium)' })))),
             getDropdownMenu()),
         errorInput && errorInputHelperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]) }, helperText !== null && helperText !== void 0 ? helperText : errorInputHelperText))));
 };
