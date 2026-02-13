@@ -203,6 +203,10 @@
   color: var(--text-dark);
   transition: background-color 0.2s ease;
 }
+/* .item-block-filter {
+  color:  var(--text-grey);
+  color:  var(--text-dark);
+} */
 .item-block--disabled {
   color: var(--text-light);
   cursor: not-allowed;
@@ -216,9 +220,7 @@
   align-items: center;
   gap: 10px;
 }
-.item-block-filter {
-  color:  var(--text-grey);
-}
+
 .item-block-icons--selected {
   display: grid;
   grid-template-columns: auto 1fr 20px;
