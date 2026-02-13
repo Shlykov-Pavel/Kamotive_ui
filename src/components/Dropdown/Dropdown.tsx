@@ -806,8 +806,10 @@ export const Dropdown = <T extends BaseOptions>({
       
       {showLoadMore && loadMore && (
       <Button
-            style={{width: '95%', margin:'10px 0'}}
+            style={{ margin:'10px 0'}}
             disabled={isSearchLoading}
+            // variant='link'
+            variant='outline'
             onClick={(e) => {
               console.log('onClick');
               e.preventDefault();
