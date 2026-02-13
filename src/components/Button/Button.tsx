@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './Button.module.css';
 import classNames from 'classnames';
 import { ButtonProps } from '../../types';
@@ -11,6 +11,7 @@ export const Button: React.FC<ButtonProps> = ({
   label,
   variant = 'fill',
   size = 'md',
+  mode,
   style,
   condition,
   icon,
@@ -24,13 +25,20 @@ export const Button: React.FC<ButtonProps> = ({
   form
 }) => {
 
-  const [buttonStyle, setButtonStyle] = useState('');
-  const [buttonCondition, setButtonCondition] = useState(condition);
-
+  const btnIcon = icon || typeof children === 'object' && children;
+  
+  let modeStyle = 'text';
+  if (mode) {
+    modeStyle = mode;
+  } else if (btnIcon && variant !== 'link') {
+    modeStyle = (!label && !children) ? 'icon' : 'default';
+  }
+  
+  const buttonCondition = error ? 'error' : (condition || 'default');
   const buttonClasses = classNames(
     styles['button'],
     styles[`button--${size}`],
-    styles[`button--${buttonStyle}`],
+    styles[`button--${modeStyle}`],
     {
     [styles[`button--${variant}-${buttonCondition}`]]: buttonCondition && !color,
     [styles[`button--${variant}-custom`]]: color && !error
@@ -73,44 +81,10 @@ export const Button: React.FC<ButtonProps> = ({
       return '#FFFFFF';
     }
   };
-
-  const btnIcon = icon || typeof children === 'object' && children;
-  
-  useEffect(() => {
-   if(!buttonStyle && style) {
-        setButtonStyle(style);
-    } else {
-        if (btnIcon && variant!=='link') {
-            if (!label && !(typeof children === 'string' &&  children)) {
-                setButtonStyle('icon');
-            }
-            else {
-                setButtonStyle('default');
-            }
-        }
-        else {
-            setButtonStyle('text');
-        }
-    }
-}, [style, btnIcon, label, children]);
+  const iconColorStyle = iconColorFn(); 
 
 
-  useEffect(() => {
-    if(!condition) {
-      if(error) {
-        setButtonCondition('error');
-      } else {
-      setButtonCondition('default')
-      }
-    } else {
-     error ? setButtonCondition('error'):setButtonCondition(condition)
-    }
-  }, [condition, error])
-
-  
-  const iconColorStyle = iconColorFn();
-
-  if (!buttonStyle) {
+  if (!modeStyle) {
     return (
       <button className={buttonClasses}>
         <Typography variant="Body1">Кнопка</Typography>
@@ -120,21 +94,25 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button className={buttonClasses}  
-    style={color && !error ? {
+    style={{
+      ...style,
+      ...(color && !error ? {
       '--button-color': color,
       '--button-hover-color': variant === 'fill' || variant === 'link' ? `color-mix(in srgb, ${color} 90%, black)` : `color-mix(in srgb, ${color} 10%, transparent)`,
       '--button-active-color':  variant === 'fill' || variant === 'link' ? `color-mix(in srgb, ${color} 80%, black)` : `color-mix(in srgb, ${color} 20%, transparent)`,
       '--button-disabled-color':  variant === 'fill' || variant === 'link' ? `color-mix(in srgb, ${color} 80%, white)` : `color-mix(in srgb, ${color} 10%, transparent)`,
       '--button-disabled-textColor':  variant === 'fill' ? `color-mix(in srgb, ${color} 80%, white)` : `color-mix(in srgb, ${color} 50%, transparent)`,
-    } as React.CSSProperties : {}}
-      onClick={onClick} 
+      } : {})
+      } as React.CSSProperties
+      }
+      onClick={(e)=>onClick?.(e)} 
       disabled={disabled}
       aria-disabled={disabled}
       type={type}
       name={name ? name : label ? `button-${label}` : 'button'}
       form={form}
       >
-      {btnIcon && (buttonStyle === 'icon' || buttonStyle === 'default') && (() => {
+      {btnIcon && (modeStyle === 'icon' || modeStyle === 'default') && (() => {
         const iconElement = btnIcon as React.ReactElement;
         const defaultStrokeWidth = size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0';
         
@@ -143,7 +121,7 @@ export const Button: React.FC<ButtonProps> = ({
           strokeWidth: iconElement.props.strokeWidth ?? defaultStrokeWidth,
         });
       })()}
-      {(buttonStyle === 'text' || buttonStyle === 'default') && (
+      {(modeStyle === 'text' || modeStyle === 'default') && (
         <Typography variant="Body1">{label ? label : typeof children === 'string' && children}</Typography>
       )}
     </button>

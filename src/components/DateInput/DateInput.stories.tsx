@@ -74,6 +74,6 @@ DateInputEn.storyName = 'Date Input локализованный en-EN';
 DateInputEn.args = {
 	lng: 'en',
 	label: 'Select a date',
-	dateFormat: 'dd-MM-yyyy',
+	dateFormat: 'dd-MM-yyyy hh:mm',
 	value: new Date()
 };

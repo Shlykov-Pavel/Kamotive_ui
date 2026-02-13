@@ -26,6 +26,7 @@ export { Breadcrumb as Breadcrumb } from './src/components/Breadcrumb/Breadcrumb
 export { Breadcrumbs as Breadcrumbs } from './src/components/Breadcrumbs/Breadcrumbs';
 export { Tooltip as Tooltip } from './src/components/Tooltip/Tooltip';
 export { Link as Link } from './src/components/Link/Link';
+export { TableFilterSidebar as TableFilterSidebar } from './src/components/TableFilterSidebar/TableFilterSidebar';
 
 import './src/fonts.css';
 import './src/colors.css';

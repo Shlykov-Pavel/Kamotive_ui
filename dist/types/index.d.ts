@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChangeEventHandler, CSSProperties, ReactNode } from 'react';
+import { ChangeEventHandler, CSSProperties, ReactNode, MouseEvent } from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
 import { Accept, FileError } from 'react-dropzone/.';
 /** @internal */
@@ -31,7 +31,8 @@ export interface ButtonProps {
     /** Размер кнопки */
     size?: 'sm' | 'md' | 'lg';
     /** Стиль кнопки(текст+иконка, текст, иконка) */
-    style?: 'default' | 'text' | 'icon';
+    mode?: 'default' | 'text' | 'icon';
+    style?: CSSProperties;
     /** Состояние кнопки */
     condition?: 'default' | 'error' | 'success' | 'warning' | 'info';
     /** Иконка кнопки */
@@ -39,7 +40,7 @@ export interface ButtonProps {
     /** Заблокированная кнопка */
     disabled?: boolean;
     /** Callback, который будет вызван при клике по кнопке */
-    onClick?: () => void;
+    onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
     /** Дочерние элементы */
     children?: ReactNode;
     /** Указатель на ошибку для установки condition */
@@ -168,9 +169,16 @@ export type BaseOptions = {
     [key: string]: any;
 };
 export type TOptions<T = {}> = BaseOptions & T;
-export interface DropdownProps {
+export interface IDropdownItem {
+    disabled?: boolean;
+    children?: IDropdownItem[];
+    value?: any;
+    label?: string;
+    [key: string]: any;
+}
+export interface DropdownProps<T> {
     /** Массив элементов для выпадающего списка */
-    options: Array<string | number | TOptions>;
+    options: T[];
     /** Идентификатор */
     id?: string;
     /** Лейбл */
@@ -180,19 +188,19 @@ export interface DropdownProps {
     /** Обязательное поле */
     required?: boolean;
     /** Значение */
-    value?: string | number | TOptions | null | TOptions[];
+    value?: T | null | T[];
     /** Значение по умолчанию */
-    defaultValue?: string | number | TOptions | null;
+    defaultValue?: IDropdownItem | null;
     /** Callback, который будет вызван при изменении значения */
-    onChange?: (event: any, value: string | number | TOptions | null) => void;
+    onChange?: (event: any, value: T | T[] | null) => void;
     /** Флаг, является ли выпадающий список пагинированным */
     showLoadMore?: boolean;
     /** Функция для загрузки списка при пагинированных данных */
     loadMore?: () => void;
     /** Функция для получения текста опции */
-    getOptionLabel?: (option: TOptions) => string;
-    /** Вариaнты выпадающего списка(текст + иконка, текст)' */
-    variant?: 'icons' | 'text';
+    getOptionLabel?: (option: IDropdownItem) => string;
+    /** Вариaнты выпадающего списка' */
+    variant?: 'icons' | 'text' | 'filter';
     /** Размер */
     size?: 'md' | 'lg';
     /** Стили передаваемые напрямую */
@@ -225,6 +233,9 @@ export interface DropdownProps {
     clearable?: boolean;
     /** Включение автозаполнения */
     enableAutocomplete?: boolean;
+    /** Функиця для получения данных по поиску */
+    onSearch?: (value: string) => void;
+    isSearchLoading?: boolean;
     /** Текст при отсутствии опций */
     noOptionsText?: string;
     /** Язык */
@@ -308,6 +319,34 @@ export interface RadioProps {
     disabled?: boolean;
     /** Размер чекбокса */
     size?: 'sm' | 'md';
+}
+export interface TableFilterSidebarProps {
+    /** Флаг открытия */
+    open: boolean;
+    /** Функция обработки закрытия */
+    onClose: () => void;
+    /** Содержимое окна */
+    children: ReactNode;
+    /** Язык */
+    lng: string;
+    /** Функция обработки сброса фильтров */
+    onReset?: () => void;
+    /** Функция обработки применения фильтров */
+    onApply?: () => void;
+    /** Флаги для дизейбла кнопок */
+    isResetDisabled?: boolean;
+    isApplyDisabled?: boolean;
+    /** Стили передаваемые напрямую */
+    style?: React.CSSProperties;
+    /** Дополнительный класс */
+    className?: string;
+    /** Флаг загрузки контента */
+    isLoading?: boolean;
+    width?: string;
+    zIndex?: number;
+    /** Позиционирование */
+    top?: number;
+    right?: number;
 }
 export interface TabProps {
     /** Значение */
