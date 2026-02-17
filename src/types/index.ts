@@ -237,6 +237,8 @@ export interface DropdownProps<T> {
   error?: boolean;
   /** Текст ошибки */
   helperText?: string;
+  /** Callback, который будет вызван при открытии Dropdown(для подгрузки данных) */
+  onOpen?:(event: any) => void;
   /** Callback, который будет вызван при клике */
   onClick?: (event: any) => void;
   /** Callback при потере фокуса */

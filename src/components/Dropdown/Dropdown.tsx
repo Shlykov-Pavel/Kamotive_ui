@@ -314,6 +314,7 @@ export const Dropdown = <T extends BaseOptions>({
   isOpened = false,
   error = false,
   helperText,
+  onOpen,
   onClick,
   onBlur,
   onFocus,
@@ -391,12 +392,12 @@ export const Dropdown = <T extends BaseOptions>({
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
       event.stopPropagation();
-
       const newIsOpen = !isOpen;
       setIsOpen(newIsOpen);
-
-      if (newIsOpen && enableAutocomplete) {
-        const value = getComparisonValue(selectedItem as any, getOptionLabel)
+      if (newIsOpen) {
+          onOpen?.(event);
+        if(enableAutocomplete){
+          const value = getComparisonValue(selectedItem as any, getOptionLabel)
           ? getComparisonValue(selectedItem as any, getOptionLabel).toString()
           : searchValue;
         setSearchValue(value);
@@ -407,6 +408,8 @@ export const Dropdown = <T extends BaseOptions>({
             inputRef.current.focus();
           }
         });
+        }
+        
       } else if (!newIsOpen) {
         onClose?.(event);
       }

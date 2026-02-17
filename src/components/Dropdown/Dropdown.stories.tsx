@@ -63,6 +63,8 @@ export interface DropdownProps<T> {
   error?: boolean;
   /** Текст ошибки */
   helperText?: string;
+  /** Callback, который будет вызван при открытии Dropdown(для подгрузки данных) */
+  onOpen?:(event: any) => void;
   /** Callback, который будет вызван при клике */
   onClick?: (event: any) => void;
   /** Callback при потере фокуса */
@@ -195,6 +197,10 @@ const meta: Meta<typeof Dropdown> = {
     loadMore: {
       description: 'Callback для загрузки списка при пагинированных данных',
       action: 'loaded',
+    },
+    onOpen: {
+      description: 'Callback, который будет вызван при открытии Dropdown',
+      action: 'opened',
     },
     onClose: {
       description: 'Callback, который будет вызван при закрытии выпадающего списка',
