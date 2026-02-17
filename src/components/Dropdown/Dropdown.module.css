@@ -35,7 +35,7 @@
   border-radius: 10px;
   cursor: pointer;
   padding: 6px 12px;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
   background-color: transparent;
   color: var(--text-dark);
   border: 1px solid var(--grey-mediumLight);
@@ -48,7 +48,8 @@
 }
 .button:hover {
   border: 1px solid #0d9aff00;
-  box-shadow: 0px 0px 2px var(--blue-main);
+  box-shadow: 0px 0px 0px 0.75px var(--blue-main);
+  /* outline: none; */
 }
 .button:focus,
 .button:active {
