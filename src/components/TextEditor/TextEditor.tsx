@@ -251,6 +251,15 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     });
   }, []);
 
+  const safeQueryCommandState = (state: string): boolean | null => {
+    try {
+      if (typeof document.queryCommandState !== 'function') return null;
+      return document.queryCommandState(state);
+    } catch {
+      return null;
+    }
+  };
+
   const updateActiveStates = useCallback(() => {
     const contentElement = pellRef.current?.content;
     if (!contentElement) return;
@@ -280,10 +289,11 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     if (!element) return;
 
     const newStates = {
-      bold: isFormatActive(element, ['B', 'STRONG'], 'font-weight', ['bold', '700', '800', '900']),
-      italic: isFormatActive(element, ['I', 'EM'], 'font-style', ['italic']),
-      underline: isFormatActive(element, ['U'], 'text-decoration', ['underline']),
-      strikethrough: isFormatActive(element, ['S', 'STRIKE', 'DEL'], 'text-decoration', ['line-through']),
+      bold: safeQueryCommandState('bold') ?? isFormatActive(element, ['B', 'STRONG'], 'font-weight', ['bold', '700', '800', '900']),
+      italic: safeQueryCommandState('italic') ?? isFormatActive(element, ['I', 'EM'], 'font-style', ['italic']),
+      underline: safeQueryCommandState('underline') ?? isFormatActive(element, ['U'], 'text-decoration', ['underline']),
+      strikethrough: safeQueryCommandState('strikeThrough') ?? isFormatActive(element, ['S', 'STRIKE', 'DEL'], 'text-decoration', ['line-through']),
+
       heading2: checkFormatting(element, ['H2']),
       olist: checkFormatting(element, ['OL']) || !!element.closest('ol'),
     };
