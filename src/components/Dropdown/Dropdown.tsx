@@ -412,6 +412,8 @@ export const Dropdown = <T extends BaseOptions>({
         
       } else if (!newIsOpen) {
         onClose?.(event);
+        setSearchValue('')
+        setFilteredOptions(null);
       }
     },
     [isOpen, enableAutocomplete, searchValue, selectedItem, modifiedOptions, onClose]
