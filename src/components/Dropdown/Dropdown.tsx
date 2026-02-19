@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Dropdown.module.css';
 import classNames from 'classnames';
 import { ChevronDown } from '../../Icons/ChevronDown/ChevronDown';
@@ -252,8 +252,7 @@ export const DropdownListItem = <T extends BaseOptions> ({
             {/* <span>{item?.value}</span> */}
             <span>{getComparisonValue(item, getOptionLabel)}</span>
           </div>
-          {!hasChildren && isSelectedItem &&
-            getComparisonValue(selectedItem as any, getOptionLabel) === getComparisonValue(item as any, getOptionLabel) && (
+          {!hasChildren && isSelectedItem && (
               <IconCheck strokeWidth={size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0'} htmlColor="#0D99FF" />
             )}
         </div>
@@ -322,6 +321,7 @@ export const Dropdown = <T extends BaseOptions>({
   clearable = true,
   enableAutocomplete = false,
   onSearch,
+  isLoadMoreLoading,
   isSearchLoading,
   noOptionsText = 'Нет вариантов для выбора',
   lng = 'ru',
@@ -330,14 +330,33 @@ export const Dropdown = <T extends BaseOptions>({
 }: DropdownProps<T>) => {
 
   const [isOpen, setIsOpen] = useState(isOpened);
-  const [modifiedOptions, setModifiedOptions] = useState<T[] | null>([]);
   const [selectedItem, setSelectedItem] = useState<T | null>(null);
   const [selectedItems, setSelectedItems] = useState<T[]>([]); //при множественном выборе
   const [errorInput, setErrorInput] = useState(false);
   const [errorInputHelperText, setErrorInputHelperText] = useState(helperText);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [searchValue, setSearchValue] = useState('');
-  const [filteredOptions, setFilteredOptions] = useState<T[] | null>([]);
+
+  const actualOptions = useMemo(() => {
+    return (options?.map(opt => {
+      const transformed = checkItem(opt, getOptionLabel,disabled,isDivider);
+      return transformed as T;
+    }) || []) as T[];
+  }, [options, getOptionLabel]);
+
+  const displayOptions = useMemo(() => {
+    if (!enableAutocomplete || !searchValue) return actualOptions;
+    // Если поиск внутренний
+    if (onSearch && searchValue.trim().length >= 3) return actualOptions; 
+    return actualOptions.filter(opt => {
+      const val = (opt as any)?.value || '';
+      //const val = getComparisonValue(opt as any, getOptionLabel as any) || '';
+      return String(val).toLowerCase().includes(searchValue.toLowerCase());
+    });
+
+  }, [actualOptions, enableAutocomplete, searchValue, getOptionLabel, onSearch]);
+
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -371,24 +390,12 @@ export const Dropdown = <T extends BaseOptions>({
     [styles['button--icons--item-selected']]: variant === 'icons' && (selectedItem as any)?.icon && !multiple,
   });
 
-  // обновляет значения searchValue и filteredOptions
   const setAutocompleteValues = (value: string) => {
     setSearchValue(value);
-
-    // фильтрация по введенному значению
-    if (modifiedOptions && modifiedOptions.length > 0) {
-      const filtered = modifiedOptions.filter((option) => {
-        if (!option || !(option as any).value) return false;
-        const optionValue = String((option as any).value).toLowerCase();
-        return optionValue.includes(value.toLowerCase());
-      });
-
-      setFilteredOptions(filtered as T[]);
-      setActiveIndex(filtered && filtered.length > 0 ? 0 : -1);
-    }
+    setActiveIndex(displayOptions.length > 0 ? 0 : -1);
   };
 
-  const handleToggle = useCallback(
+  const handleToggle =
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
       event.stopPropagation();
@@ -401,8 +408,6 @@ export const Dropdown = <T extends BaseOptions>({
           ? getComparisonValue(selectedItem as any, getOptionLabel).toString()
           : searchValue;
         setSearchValue(value);
-        setFilteredOptions(modifiedOptions);
-
         requestAnimationFrame(() => {
           if (inputRef.current) {
             inputRef.current.focus();
@@ -413,11 +418,8 @@ export const Dropdown = <T extends BaseOptions>({
       } else if (!newIsOpen) {
         onClose?.(event);
         setSearchValue('')
-        setFilteredOptions(null);
       }
-    },
-    [isOpen, enableAutocomplete, searchValue, selectedItem, modifiedOptions, onClose]
-  );
+    };
 
   const onChangeHandler = (event: React.MouseEvent<HTMLElement>, item: T | null) => {
     event.preventDefault();
@@ -425,6 +427,7 @@ export const Dropdown = <T extends BaseOptions>({
 
     if (multiple && item){
       setErrorInput(false);
+       setSearchValue(''); 
       setSelectedItems((selectedItems) => {
         const isSelected = selectedItems.some((i) => getComparisonValue(i, getOptionLabel) === getComparisonValue(item, getOptionLabel));
         const newSelectedItems =  isSelected ?
@@ -456,6 +459,8 @@ export const Dropdown = <T extends BaseOptions>({
     if (getComparisonValue(selectedItem as any, getOptionLabel) !== getComparisonValue(item as any, getOptionLabel)) {
       setSelectedItem(item);
       setIsOpen(false);
+      setSearchValue('');
+      onSearch?.('');  
       onChange?.(newEvent, item);
       onClose?.(event);
     }
@@ -501,16 +506,16 @@ export const Dropdown = <T extends BaseOptions>({
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        modifiedOptions && setActiveIndex((prev) => (prev < modifiedOptions.length - 1 ? prev + 1 : prev));
+        displayOptions && setActiveIndex((prev) => (prev < displayOptions.length - 1 ? prev + 1 : prev));
         break;
       case 'ArrowUp':
         event.preventDefault();
-        setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        displayOptions && setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
         break;
       case 'Enter':
         event.preventDefault();
-        if (activeIndex >= 0) {
-          const selectedOption = modifiedOptions && modifiedOptions[activeIndex];
+        if (activeIndex >= 0 && activeIndex < displayOptions.length) {
+          const selectedOption = displayOptions[activeIndex];
           onChangeHandler(event as any, selectedOption);
           setIsOpen(false);
           onClose?.(event as any);
@@ -542,7 +547,7 @@ export const Dropdown = <T extends BaseOptions>({
     }
 
     setSearchValue('');
-    setFilteredOptions(modifiedOptions);
+    onSearch?.('')
     onChange?.(event, multiple ? [] : startValue ?? null);
     onClose?.(event);
     setActiveIndex(-1);
@@ -625,8 +630,7 @@ export const Dropdown = <T extends BaseOptions>({
     return getComparisonValue(selectedItem, getOptionLabel)
   }
 
-  const getChips = () => {
-
+  const getChips = () => {   
     const visible = selectedItems.slice(0, limitTags);
     const hidden = selectedItems.length - visible.length;
 
@@ -711,6 +715,7 @@ export const Dropdown = <T extends BaseOptions>({
             strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
           })
           }
+        {multiple && selectedItems.length > 0 && getChips()}
         {isOpen && enableAutocomplete ? (
           <input
             ref={inputRef}
@@ -719,10 +724,15 @@ export const Dropdown = <T extends BaseOptions>({
             className={styles.inlineSearchInput}
             onChange={handleSearchChange}
             placeholder={
-              selectedText
-                ? selectedText
-                : lng === 'ru' ? 'Поиск...' : 'Search...'
+              !searchValue 
+                ? (lng === 'ru' ? 'Поиск...' : 'Search...') 
+                : ''
             }
+            style={{ 
+              flex: 1, 
+              minWidth: searchValue ? `${searchValue.length + 2}ch` : '80px',
+              width: 'auto' 
+            }}
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
@@ -743,17 +753,16 @@ export const Dropdown = <T extends BaseOptions>({
             onKeyDown={handleKeyDown}
             autoFocus
           />
-        ) : multiple ? (
-        selectedItems.length > 0 ? (
-          getChips()
         ) : (
-          searchValue || (placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values'))
+        !multiple && (
+          selectedItem 
+            ? getComparisonValue(selectedItem as any, getOptionLabel)
+            : (searchValue || (placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value')))
         )
-      ) : selectedItem ? (
-          getComparisonValue(selectedItem as any, getOptionLabel)
-        ) : (
-          searchValue || (placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value'))
-        )}
+      )}
+      {multiple && selectedItems.length === 0 && !isOpen && (
+        <span>{placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values')}</span>
+      )}
       </div>
     );
 
@@ -774,11 +783,13 @@ export const Dropdown = <T extends BaseOptions>({
 
   
   const getDropdownMenu = () => {
-  const optionsToRender = enableAutocomplete && searchValue ? filteredOptions : modifiedOptions;
+  //const optionsToRender = enableAutocomplete && searchValue ? filteredOptions : modifiedOptions;
+  const optionsToRender = displayOptions;
+  const isSearchingNow = enableAutocomplete && !!searchValue;
 
   const menu = isOpen && (
     <div className={dropdownClassess}>
-      {isSearchLoading ? (
+      {isSearchLoading? (
         <div className={`${styles['item-block']}`} style={{ textAlign: 'center', padding: '10px', display: 'flex', flexDirection:"column", alignItems:'center', justifyContent:'center' }}>
            <Spinner /> 
         </div>
@@ -809,10 +820,10 @@ export const Dropdown = <T extends BaseOptions>({
         </>
       )}
       
-      {showLoadMore && loadMore && (
+      {!isSearchingNow && showLoadMore && loadMore && (
       <Button
             style={{width: '95%', margin:'10px 0'}}
-            disabled={isSearchLoading}
+            disabled={isLoadMoreLoading}
             variant='outline'
             onClick={(e) => {
               e.preventDefault();
@@ -820,7 +831,7 @@ export const Dropdown = <T extends BaseOptions>({
               loadMore();
             }}
           >
-            {isSearchLoading ? (lng === 'ru' ? 'Загрузка...': 'Loading...') : (lng === 'ru' ? 'Загрузить еще' : 'Load more')}
+            {isLoadMoreLoading ? (lng === 'ru' ? 'Загрузка...': 'Loading...') : (lng === 'ru' ? 'Загрузить еще' : 'Load more')}
       </Button>
     )}
     </div>
@@ -859,35 +870,18 @@ export const Dropdown = <T extends BaseOptions>({
     };
   }, [selectedItem, label, isOpen, size, placeholder, onClose, isLeftLabel]);
 
-  useEffect(() => {
-    if (options) {
-      const modifiedOptions = options.map((option, index) => {
-        const modifiedOption = checkItem?.(
-          option as any,
-          getOptionLabel as any,
-          (option as IDropdownItem)?.disabled,
-          isDivider
-        ) as T;
-        if (
-          modifiedOption &&
-          getComparisonValue(modifiedOption as any, getOptionLabel) === getComparisonValue(selectedItem as any, getOptionLabel)
-        ) {
-          setActiveIndex(index);
-        }
-        return modifiedOption;
-      });
-      setModifiedOptions(modifiedOptions as T[]);
-    }
-  }, [options]);
 
   useEffect(() => {
     if (multiple) {
       if(Array.isArray(value)){
-        setSelectedItems(value => value.map(item => checkItem(item) as T))
+          const transformed = value.map(item => checkItem(item, getOptionLabel) as T);
+      setSelectedItems(transformed);
+        //setSelectedItems(value => value.map(item => checkItem(item) as T))
       }
       else{
         setSelectedItems([])
       }
+      return
     }
     if (value || defaultValue) {
       const startValue = value
@@ -905,9 +899,6 @@ export const Dropdown = <T extends BaseOptions>({
     setErrorInput(error);
   }, [error]);
 
-  useEffect(() => {
-    setFilteredOptions(modifiedOptions);
-  }, [modifiedOptions]);
 
   return (
     <div

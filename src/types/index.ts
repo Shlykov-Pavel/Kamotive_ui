@@ -213,6 +213,7 @@ export interface DropdownProps<T> {
   showLoadMore?: boolean
   /** Функция для загрузки списка при пагинированных данных */
   loadMore?: () => void;
+  isLoadMoreLoading?: boolean,
   /** Функция для получения текста опции */
   getOptionLabel?: (option: IDropdownItem) => string;
   /** Вариaнты выпадающего списка' */

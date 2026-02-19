@@ -39,6 +39,7 @@ export interface DropdownProps<T> {
   showLoadMore?: boolean
   /** Функция для загрузки списка при пагинированных данных */
   loadMore?: () => void;
+  isLoadMoreLoading?: boolean,
   /** Функция для получения текста опции */
   getOptionLabel?: (option: IDropdownItem) => string;
   /** Вариaнты выпадающего списка' */
@@ -725,6 +726,7 @@ export const DropdownNestedValue = (argTypes: DropdownProps<DefaultOption>): JSX
       placeholder="Выберите опцию с вложенным заначением"
       label="Вложенное значение"
       variant="icons"
+      enableAutocomplete={true}
     />
   );
 };
@@ -743,6 +745,7 @@ DropdownFilter.args = {
   label: 'Лейбл селекта',
   variant: 'filter',
   enableAutocomplete: true,
+  onSearch: ()=>{console.log('SEARCH')}
 };
 DropdownFilter.parameters = {
   controls: { disable: true },
@@ -751,72 +754,95 @@ DropdownFilter.parameters = {
 
 
 const optionsPaginated = [
-  { value: 'Элемент 1', icon: <IconAccount /> },
-  { value: 'Элемент 2', icon: <IconAlarm /> },
-  { value: 'Элемент 3', icon: <IconBell /> },
-  { value: 'Элемент 4', icon: <IconBriefcase /> },
-  { value: 'Элемент 5', icon: <IconAccount /> },
-  { value: 'Элемент 6', icon: <IconAlarm /> },
-  { value: 'Элемент 7', icon: <IconBell /> },
-  { value: 'Элемент 8', icon: <IconBriefcase /> },
-  { value: 'Элемент 9', icon: <IconAccount /> },
-  { value: 'Элемент 10', icon: <IconAlarm /> },
-  { value: 'Элемент 11', icon: <IconBell /> },
-  { value: 'Элемент 12', icon: <IconBriefcase /> },
-  { value: 'Элемент 13', icon: <IconAccount /> },
-  { value: 'Элемент 14', icon: <IconAlarm /> },
-  { value: 'Элемент 15', icon: <IconBell /> },
-  { value: 'Элемент 16', icon: <IconBriefcase /> },
-  { value: 'Элемент 17', icon: <IconAccount /> },
-  { value: 'Элемент 18', icon: <IconAlarm /> },
-  { value: 'Элемент 19', icon: <IconBell /> },
-  { value: 'Элемент 20', icon: <IconBriefcase /> },
-  { value: 'Элемент 21', icon: <IconAccount /> },
-  { value: 'Элемент 22', icon: <IconAlarm /> },
-  { value: 'Элемент 23', icon: <IconBell /> },
-  { value: 'Элемент 24', icon: <IconBriefcase /> },
-  { value: 'Элемент 25', icon: <IconAccount /> },
-  { value: 'Элемент 26', icon: <IconAlarm /> },
-  { value: 'Элемент 27', icon: <IconBell /> },
-  { value: 'Элемент 28', icon: <IconBriefcase /> },
-  { value: 'Элемент 29', icon: <IconAccount /> },
-  { value: 'Элемент 30', icon: <IconAlarm /> }
+  { id: '1', value: 'Элемент 1', name: 'Элемент 1', icon: <IconAccount /> },
+  { id: '2', value: 'Элемент 2',name: 'Элемент 2', icon: <IconAlarm /> },
+  { id: '3',value: 'Элемент 3', name: 'Элемент 3',icon: <IconBell /> },
+  { id: '4',value: 'Элемент 4', name: 'Элемент 4',icon: <IconBriefcase /> },
+  { id: '5',value: 'Элемент 5', name: 'Элемент 5',icon: <IconAccount /> },
+  { id: '6',value: 'Элемент 6', name: 'Элемент 6',icon: <IconAlarm /> },
+  { id: '7',value: 'Элемент 7', name: 'Элемент 7',icon: <IconBell /> },
+  { id: '8',value: 'Элемент 8', name: 'Элемент 8',icon: <IconBriefcase /> },
+  { id: '9',value: 'Элемент 9', name: 'Элемент 9',icon: <IconAccount /> },
+  { id: '10',value: 'Элемент 10', name: 'Элемент 10',icon: <IconAlarm /> },
+  { id: '11',value: 'Элемент 11', name: 'Элемент 11',icon: <IconBell /> },
+  { id: '12',value: 'Элемент 12', name: 'Элемент 12',icon: <IconBriefcase /> },
+  { id: '13',value: 'Элемент 13', name: 'Элемент 13',icon: <IconAccount /> },
+  { id: '14',value: 'Элемент 14', name: 'Элемент 14',icon: <IconAlarm /> },
+  { id: '15',value: 'Элемент 15', name: 'Элемент 15',icon: <IconBell /> },
+  { id: '16',value: 'Элемент 16', name: 'Элемент 16',icon: <IconBriefcase /> },
+  { id: '17',value: 'Элемент 17', name: 'Элемент 17',icon: <IconAccount /> },
+  { id: '18',value: 'Элемент 18', name: 'Элемент 18',icon: <IconAlarm /> },
+  { id: '19',value: 'Элемент 19', name: 'Элемент 19',icon: <IconBell /> },
+  { id: '20',value: 'Элемент 20', name: 'Элемент 20',icon: <IconBriefcase /> },
+  { id: '21',value: 'Элемент 21', name: 'Элемент 21',icon: <IconAccount /> },
+  { id: '22',value: 'Элемент 22', name: 'Элемент 22',icon: <IconAlarm /> },
+  { id: '23',value: 'Элемент 23', name: 'Элемент 23',icon: <IconBell /> },
+  { id: '24',value: 'Элемент 24', name: 'Элемент 24',icon: <IconBriefcase /> },
+  { id: '25',value: 'Элемент 25', name: 'Элемент 25',icon: <IconAccount /> },
+  { id: '26',value: 'Элемент 26', name: 'Элемент 26',icon: <IconAlarm /> },
+  { id: '27',value: 'Элемент 27', name: 'Элемент 27',icon: <IconBell /> },
+  { id: '28',value: 'Элемент 28', name: 'Элемент 28',icon: <IconBriefcase /> },
+  { id: '29',value: 'Элемент 29', name: 'Элемент 29',icon: <IconAccount /> },
+  { id: '30',value: 'Элемент 30', name: 'Элемент 30',icon: <IconAlarm /> }
 ]
+
+const foundOptions = [
+  { id: '31',value: 'Найденный 1', name: 'Элемент 31',icon: <IconAccount /> },
+  { id: '32',value: 'Найденный 2', name: 'Элемент 32',icon: <IconAlarm /> },
+  { id: '33',value: 'Найденный 3', name: 'Элемент 33',icon: <IconBriefcase /> },
+  {id: '34', value: 'Найденный 4', name: 'Элемент 34',icon: <IconAccount /> },
+  { id: '35',value: 'Найденный 5', name: 'Элемент 35',icon: <IconAlarm /> }
+]
+
 // Dropdown с подгрузкой значений
 export const DropdownWithPaginatedData = (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
   const [value, setValue] = useState<string | number | TOptions | null>(null);
-  const [currentOptions, setCurrentOptions] = useState(optionsPaginated.slice(0, 10));
+
+   const [paginatedOptions, setPaginatedOptions] = useState(optionsPaginated.slice(0, 10));
+
+   const [searchOptions, setSearchOptions] = useState<typeof foundOptions>([]);
+   const [isSearching, setIsSearching] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false)
-
+  const [isFoundLoading, setIsFoundLoading] = useState(false)
+  const currentOptions = isSearching ? searchOptions : paginatedOptions;
+  
   const handleChange = (e: any, value: string | number | TOptions | null) => {
     setValue(value);
   };
-
   const handleLoadMore = () => {
+    if (isSearching) return;
     setIsLoading(true);
-
     setTimeout(() => {
-      setCurrentOptions((prevOptions) => {
-      const nextIndex = prevOptions.length;
-      const nextBatch = optionsPaginated.slice(nextIndex, nextIndex + 10);
-      
-      if (nextBatch.length > 0) {
-        const newTotalLength = prevOptions.length + nextBatch.length;
-        
-        if (newTotalLength >= optionsPaginated.length) {
-          setHasMore(false);
-        }
-        
-        return [...prevOptions, ...nextBatch];
+    const nextIndex = paginatedOptions.length;
+    const nextBatch = optionsPaginated.slice(nextIndex, nextIndex + 10);
+    
+    if (nextBatch.length > 0) {
+      setPaginatedOptions(prev => [...prev, ...nextBatch]);
+      if (nextIndex + nextBatch.length >= optionsPaginated.length) {
+        setHasMore(false);
       }
-      
-      return prevOptions;
-    });
-
+    }
     setIsLoading(false);
-  }, 1000);
+  }, 800);
 };
+
+ const handleSearch = (val: string) => {
+    const query = val.trim();
+    
+    if (query.length >= 3) {
+      setIsSearching(true);
+      setIsFoundLoading(true);
+      
+      setTimeout(() => {
+        setSearchOptions(foundOptions);
+        setIsFoundLoading(false);
+      }, 600);
+    } else {
+      setIsSearching(false);
+      setSearchOptions([]);
+    }
+  };
 
 
   return (
@@ -825,12 +851,17 @@ export const DropdownWithPaginatedData = (argTypes: DropdownProps<DefaultOption>
       options={currentOptions}
       value={value}
       onChange={handleChange}
-      showLoadMore={hasMore}
+      showLoadMore={!isSearching && hasMore}
       loadMore={handleLoadMore}
-      isSearchLoading={isLoading}
+      isSearchLoading={isFoundLoading}
+      isLoadMoreLoading={isLoading}
+      enableAutocomplete={true}
+      onSearch={handleSearch}
       placeholder="Выберите элемент"
       label="Пагинированный список"
-      variant="icons"
+      variant="text"
+      // multiple={true}
+      // limitTags={1}
     />
   );
 };
