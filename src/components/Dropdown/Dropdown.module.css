@@ -71,9 +71,13 @@
 
 
 .button--disabled {
+  cursor: not-allowed;
+   pointer-events: none;  
   background-color: rgba(120, 120, 128, 0.08);
   border: 1px solid #0d9aff00;
   color: rgba(60, 60, 67, 0.3);
+  user-select: none;
+   opacity: 0.5;
 }
 .button--readOnly {
   background-color: rgba(120, 120, 128, 0.08);
@@ -321,9 +325,10 @@
   font-size: inherit;
   font-family: inherit;
   color: inherit;
+  color: var(--text-dark);
   
   &::placeholder {
-    color: #999; 
+    color: var(--text-grey); 
     opacity: 0.7;
   }
 }

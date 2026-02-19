@@ -87,16 +87,16 @@ function checkItem<T>(
         return {
           ...itemCopy,
           value: displayValue,
-          disabled: disabled ?? false,
-          isDivider: isDivider ?? false,
+          disabled: itemCopy.disabled ?? disabled ?? false,
+          isDivider: itemCopy.isDivider ?? isDivider ?? false,
         };
       } else {
         // Обычная обработка, если getOptionLabel возвращает строку
         return {
           ...itemCopy,
           value: labelResult,
-          disabled: disabled ?? false,
-          isDivider: isDivider ?? false,
+         disabled: itemCopy.disabled ?? disabled ?? false,
+          isDivider: itemCopy.isDivider ?? isDivider ?? false,
         };
       }
     }
@@ -129,22 +129,22 @@ function checkItem<T>(
     if ('value' in itemCopy) {
       return {
         ...itemCopy,
-        disabled: disabled ?? false,
-        isDivider: isDivider ?? false,
+        disabled: itemCopy.disabled ?? disabled ?? false,
+        isDivider: itemCopy.isDivider ?? isDivider ?? false,
       };
     } else if ('name' in itemCopy && !('value' in itemCopy)) {
       return {
         ...itemCopy,
         value: itemCopy.name,
-        disabled: disabled ?? false,
-        isDivider: isDivider ?? false,
+        disabled: itemCopy.disabled ?? disabled ?? false,
+        isDivider: itemCopy.isDivider ?? isDivider ?? false,
       };
     } else if ('description' in itemCopy && !('value' in itemCopy)) {
       return {
         ...itemCopy,
         value: itemCopy.description,
-        disabled: disabled ?? false,
-        isDivider: isDivider ?? false,
+        disabled: itemCopy.disabled ?? disabled ?? false,
+        isDivider: itemCopy.isDivider ?? isDivider ?? false,
       };
     } else {
       const keys = Object.keys(itemCopy) as Array<keyof typeof itemCopy>;
@@ -153,8 +153,8 @@ function checkItem<T>(
         return {
           ...itemCopy,
           value: firstValue,
-          disabled: disabled ?? false,
-          isDivider: isDivider ?? false,
+          disabled: itemCopy.disabled ?? disabled ?? false,
+          isDivider: itemCopy.isDivider ?? isDivider ?? false,
         };
       }
     }
@@ -385,8 +385,10 @@ export const Dropdown = <T extends BaseOptions>({
     [styles['label--required']]: required,
   });
   const selectedItemClassess = classNames({
-    [styles['item-selected']]: selectedItem || selectedItems.length,
-    [styles['item-placeholder']]: !(selectedItem || selectedItems.length) && ((placeholder ?? label) || (!placeholder && !label)),
+    [styles['item-selected']]: !!selectedItem || !!selectedItems.length || !!searchValue,
+      [styles['item-placeholder']]: !(selectedItem || selectedItems.length || searchValue) && 
+    ((placeholder ?? label) || (!placeholder && !label)),
+    // [styles['item-placeholder']]: !(selectedItem || selectedItems.length) && ((placeholder ?? label) || (!placeholder && !label)),
     [styles['button--icons--item-selected']]: variant === 'icons' && (selectedItem as any)?.icon && !multiple,
   });
 
@@ -457,7 +459,7 @@ export const Dropdown = <T extends BaseOptions>({
     };
 
     if (getComparisonValue(selectedItem as any, getOptionLabel) !== getComparisonValue(item as any, getOptionLabel)) {
-      setSelectedItem(item);
+      setSelectedItem(item);     
       setIsOpen(false);
       setSearchValue('');
       onSearch?.('');  
@@ -545,7 +547,7 @@ export const Dropdown = <T extends BaseOptions>({
     // if (!enableAutocomplete) {
     //   setIsOpen(false);
     // }
-    if (!multiple) {
+    if (!multiple) {;
       setIsOpen(false);
     }
 
@@ -814,7 +816,7 @@ export const Dropdown = <T extends BaseOptions>({
               />
             ))
           ) : (
-            <div className={`${styles['item-block']}`} style={{ margin: '15px auto' }}>
+            <div className={`${styles['item-block']}`} style={{ margin: '15px auto', textAlign:'center', color:'var(--text-grey)' }}>
               {lng === 'ru' || lng.includes('ru')
                 ? noOptionsText || 'Нет вариантов для выбора'
                 : noOptionsText || 'No options to select'}
@@ -916,12 +918,17 @@ export const Dropdown = <T extends BaseOptions>({
           {label}
         </Typography>
       )}
-      <button
+      <div
         className={buttonClassess}
-        onClick={readOnly ? undefined : handleToggle}
-        disabled={disabled}
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
+        onClick={disabled || readOnly ? undefined : handleToggle}
+        role="button"
+        // disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
+        aria-disabled={disabled}
+        onKeyDown={(e) => {
+          if (disabled) return;
+          handleKeyDown(e);
+        }}
       >
         {getTextField()}
         <div className={styles.actionButtons}>
@@ -942,7 +949,7 @@ export const Dropdown = <T extends BaseOptions>({
           </div>
         </div>
         {getDropdownMenu()}
-      </button>
+      </div>
       {errorInput && errorInputHelperText && (
         <Typography variant="Caption" className={classNames(styles.helperText, styles[size])}>
           {helperText ?? errorInputHelperText}
