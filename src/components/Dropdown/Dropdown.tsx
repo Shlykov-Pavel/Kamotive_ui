@@ -542,7 +542,10 @@ export const Dropdown = <T extends BaseOptions>({
       setSelectedItem(startValue ?? null);
     }
 
-    if (!enableAutocomplete) {
+    // if (!enableAutocomplete) {
+    //   setIsOpen(false);
+    // }
+    if (!multiple) {
       setIsOpen(false);
     }
 
