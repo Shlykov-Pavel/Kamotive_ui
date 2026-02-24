@@ -794,7 +794,7 @@ export const Dropdown = <T extends BaseOptions>({
   const menu = isOpen && (
     <div className={dropdownClassess}>
       {showSpinner ? (
-        <div className={`${styles['item-block']}`} style={{ textAlign: 'center', padding: '10px', display: 'flex', flexDirection:"column", alignItems:'center', justifyContent:'center' }}>
+        <div className={`${styles['item-block']}`} style={{ padding: '10px', display: 'flex', flexDirection:"column", alignItems:'center', justifyContent:'center', margin:'0 auto' }}>
            <Spinner /> 
         </div>
       ) : (
