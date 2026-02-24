@@ -299,38 +299,49 @@
 
 .item-selected {
   color: var(--text-dark);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  cursor: text; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  min-width: 0; 
+  cursor: text;
+  overflow: hidden; 
 }
 
-.item-selected .inlineSearchInput {
-  text-align: left;
-  direction: ltr;
-  /* width: 100%; */
-  
-  overflow: visible;
+.item-selected span{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;    
+  flex-shrink: 1; 
+  width: 100%;
+}
+.item-selected .chipsWrap span{
+   width: auto; 
+   white-space: nowrap; 
+}
 
-  width: auto;
-  flex: 1;
-  min-width: 60px;
-    border: none;
+.inlineSearchInput {
+  flex: 1 1 10px;
+  min-width: 60px; 
+  border: none;
+  background: transparent;
   outline: none;
   background: transparent;
   padding: 0;
-  margin-top: 5px;
-
+  margin: 0;
+  
   font-size: inherit;
   font-family: inherit;
-  color: inherit;
   color: var(--text-dark);
-  
-  &::placeholder {
-    color: var(--text-grey); 
-    opacity: 0.7;
-  }
+  text-align: left;
+  width: 100%;
+}
+
+.inlineSearchInput::placeholder {
+  color: var(--text-grey);
+  opacity: 0.7;
 }
 
 .item-placeholder {
@@ -401,6 +412,7 @@
   gap: 6px;
   min-width: 0;
   overflow: hidden;
+  width: 100%;
 }
 
 .chip {

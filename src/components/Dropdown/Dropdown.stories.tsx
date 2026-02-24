@@ -773,6 +773,7 @@ const optionsPaginated = [
   { id: '17',value: 'Элемент 17', name: 'Элемент 17',icon: <IconAccount /> },
   { id: '18',value: 'Элемент 18', name: 'Элемент 18',icon: <IconAlarm /> },
   { id: '19',value: 'Элемент 19', name: 'Элемент 19',icon: <IconBell /> },
+  { id: '31', value: 'Очень длинный текст, который не помещается в окно', name: 'очень длиный текст, который не помещается в окно',icon: <IconAlarm /> },
   { id: '20',value: 'Элемент 20', name: 'Элемент 20',icon: <IconBriefcase /> },
   { id: '21',value: 'Элемент 21', name: 'Элемент 21',icon: <IconAccount /> },
   { id: '22',value: 'Элемент 22', name: 'Элемент 22',icon: <IconAlarm /> },
@@ -861,7 +862,7 @@ export const DropdownWithPaginatedData = (argTypes: DropdownProps<DefaultOption>
       label="Пагинированный список"
       variant="text"
       // multiple={true}
-      // limitTags={1}
+      // limitTags={2}
     />
   );
 };
