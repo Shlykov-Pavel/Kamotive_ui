@@ -499,7 +499,7 @@ export const Dropdown = <T extends BaseOptions>({
     if (value === '') {
        // onChange?.(event as any, null); 
         // setSelectedItem(null);
-      handleReset(event); 
+      handleReset(event, false); 
       return; 
     }
     setSearchValue(value);
@@ -559,7 +559,7 @@ export const Dropdown = <T extends BaseOptions>({
   };
 
   //для сброса выбранного значения или всех (если multiple)
-  const handleReset = (event?: React.SyntheticEvent) => {
+  const handleReset = (event?: React.SyntheticEvent, close: boolean = true) => {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -575,13 +575,13 @@ export const Dropdown = <T extends BaseOptions>({
     // if (!enableAutocomplete) {
     //   setIsOpen(false);
     // }
-    if (!multiple) {;
+    if (!multiple && close) {;
       setIsOpen(false);
     }
     setSearchValue('');
     onSearch?.('')
     onChange?.(event, multiple ? [] : startValue ?? null);
-    onClose?.(event);
+    close && onClose?.(event);
     setActiveIndex(-1);
 
     if (required) {
