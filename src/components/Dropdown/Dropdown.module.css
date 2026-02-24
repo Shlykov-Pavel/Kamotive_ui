@@ -194,8 +194,7 @@
   margin-left: 10px;
 }
 
-.item--container:hover,
-.item--container--active {
+.item--container:hover{
   background-color: rgba(120, 120, 128, 0.08);
   border-radius: 5px;
   width: 89%;
