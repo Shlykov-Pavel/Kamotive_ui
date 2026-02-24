@@ -722,8 +722,8 @@ export const Dropdown = <T extends BaseOptions>({
           })
           }
         {multiple && selectedItems.length > 0 && getChips()}
-        {!multiple && selectedItem && !searchValue && (
-          <span className={styles.textTruncated}>
+        {!multiple && selectedItem && (
+          <span style={{ display: (isOpen && enableAutocomplete && searchValue) ? 'none' : 'block'}}>
             {getComparisonValue(selectedItem as any, getOptionLabel)}
           </span>
         )}
@@ -759,13 +759,17 @@ export const Dropdown = <T extends BaseOptions>({
                 autoFocus
               />
         )}
-        {!multiple && !selectedItem && !searchValue && !isOpen && (
-            <span className={styles.textTruncated}>
+        {!isOpen && (
+          <>
+          {!multiple && !selectedItem && !searchValue && !isOpen && (
+            <span>
               {placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value')}
             </span>
-        )}
-        {multiple && selectedItems.length === 0 && !isOpen && (
-          <span>{placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values')}</span>
+          )}
+          {multiple && selectedItems.length === 0 && !isOpen && (
+            <span>{placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values')}</span>
+          )}
+        </>
         )}
       </div>
   );
