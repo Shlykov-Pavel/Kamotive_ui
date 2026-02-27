@@ -97,11 +97,7 @@
   border-color: var(--error-main);
   color: var(--error-main);
 }
-.button--icons--item-selected {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+
 .button-item--selected {
   color: var(--text-dark);
 }
@@ -157,7 +153,7 @@
   box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.2);
   z-index: 9999; 
   border-radius: 12px;
-  padding: 5px
+  padding: 5px 0;
 }
 
 .textField {
@@ -188,18 +184,23 @@
 }
 
 .item--container {
-  padding: 6px;
-  width: 89%;
-  /* margin: auto; */
-  margin-left: 10px;
+  width: 97% !important;           
+  margin: 2px auto;     
+  cursor: pointer;
+  border-radius: 6px;  
+  transition: background-color 0.2s ease;
+  padding: 6px 0px;
+  box-sizing: border-box;
+  
 }
 
 .item--container:hover{
   background-color: rgba(120, 120, 128, 0.08);
-  border-radius: 5px;
-  width: 89%;
-  /* margin-top: 5px; */
-  /* margin: auto; */
+  width: 97% !important; 
+}
+.item--container:has(._item-block--disabled):hover {
+  background-color: transparent;
+  cursor: not-allowed;
 }
 
 .item-block {
@@ -219,21 +220,41 @@
 .item-block-text,
 .item-block-filter {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr auto;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  width: 100%;
+
+  /* gap: 10px; */
+}
+
+
+.item-block-text,
+.item-block-filter {
+   /* grid-template-columns: 1fr auto;  */
+    gap: 10px;
+}
+.item-block-icons {
+  grid-template-columns: auto 1fr; 
+}
+
+.item-block-text--selected,
+.item-block-filter--selected {
+  grid-template-columns: 1fr 30px;
+}
+.item-block-text--selected span,
+.item-block-filter--selected span{
+  color: var(--blue-dark);
 }
 
 .item-block-icons--selected {
-  display: grid;
-  grid-template-columns: auto 1fr 20px;
+  grid-template-columns: auto 1fr 30px;
   justify-content: space-between;
   align-items: center;
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  gap: 10px;
+  /* gap: 10px; */
   color: var(--text-dark);
 }
 
@@ -241,8 +262,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 100%;
+  max-width: 93%;
   justify-self: self-start;
+}
+.item span{
+  padding: 6px;
 }
 
 .label {
@@ -319,6 +343,12 @@
 .item-selected .chipsWrap span{
    width: auto; 
    white-space: nowrap; 
+}
+
+.button--icons--item-selected {
+  flex-direction: row;
+  align-items: center;
+  /* gap: 10px; */
 }
 
 .inlineSearchInput {

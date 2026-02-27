@@ -227,6 +227,7 @@ export const DropdownListItem = <T extends BaseOptions> ({
     [styles['item-block--parent']]: hasChildren && !isChild, // Стиль для родительских элементов
     [styles['item-block--child']]: isChild, // Стиль для дочерних элементов
   });
+
   const itemBlock = classNames(
     styles[`item-block`],
     styles[`item-block-${variant}`],
@@ -830,7 +831,7 @@ export const Dropdown = <T extends BaseOptions>({
       
       {!showSpinner && !isSearchingNow && showLoadMore && loadMore && (
       <Button
-            style={{width: '95%', margin:'10px 0'}}
+            style={{width: '97%', margin:'10px auto', display: 'block', boxSizing:'border-box'}}
             disabled={isLoadMoreLoading}
             variant='outline'
             onClick={(e) => {
