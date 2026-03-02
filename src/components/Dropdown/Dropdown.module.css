@@ -35,7 +35,7 @@
   border-radius: 10px;
   cursor: pointer;
   padding: 6px 12px;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
   background-color: transparent;
   color: var(--text-dark);
   border: 1px solid var(--grey-mediumLight);
@@ -48,7 +48,8 @@
 }
 .button:hover {
   border: 1px solid #0d9aff00;
-  box-shadow: 0px 0px 2px var(--blue-main);
+  box-shadow: 0px 0px 0px 0.75px var(--blue-main);
+  /* outline: none; */
 }
 .button:focus,
 .button:active {
@@ -70,9 +71,13 @@
 
 
 .button--disabled {
+  cursor: not-allowed;
+   pointer-events: none;  
   background-color: rgba(120, 120, 128, 0.08);
   border: 1px solid #0d9aff00;
   color: rgba(60, 60, 67, 0.3);
+  user-select: none;
+   opacity: 0.5;
 }
 .button--readOnly {
   background-color: rgba(120, 120, 128, 0.08);
@@ -92,11 +97,7 @@
   border-color: var(--error-main);
   color: var(--error-main);
 }
-.button--icons--item-selected {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+
 .button-item--selected {
   color: var(--text-dark);
 }
@@ -146,13 +147,13 @@
   left: 0;
   width: 100%;
   height: auto; 
-  max-height: 300px;
+  max-height: 30vh;
   overflow-y: auto; 
   background: #fff;
   box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.2);
   z-index: 9999; 
   border-radius: 12px;
-  padding: 5px 0
+  padding: 5px 0;
 }
 
 .textField {
@@ -183,19 +184,23 @@
 }
 
 .item--container {
-  padding: 6px;
-  width: 89%;
-  /* margin: auto; */
-  margin-left: 10px;
+  width: 97% !important;           
+  margin: 2px auto;     
+  cursor: pointer;
+  border-radius: 6px;  
+  transition: background-color 0.2s ease;
+  padding: 6px 0px;
+  box-sizing: border-box;
+  
 }
 
-.item--container:hover,
-.item--container--active {
+.item--container:hover{
   background-color: rgba(120, 120, 128, 0.08);
-  border-radius: 5px;
-  width: 89%;
-  /* margin-top: 5px; */
-  /* margin: auto; */
+  width: 97% !important; 
+}
+.item--container:has(._item-block--disabled):hover {
+  background-color: transparent;
+  cursor: not-allowed;
 }
 
 .item-block {
@@ -215,21 +220,41 @@
 .item-block-text,
 .item-block-filter {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr auto;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  width: 100%;
+
+  /* gap: 10px; */
+}
+
+
+.item-block-text,
+.item-block-filter {
+   /* grid-template-columns: 1fr auto;  */
+    gap: 10px;
+}
+.item-block-icons {
+  grid-template-columns: auto 1fr; 
+}
+
+.item-block-text--selected,
+.item-block-filter--selected {
+  grid-template-columns: 1fr 30px;
+}
+.item-block-text--selected span,
+.item-block-filter--selected span{
+  color: var(--blue-dark);
 }
 
 .item-block-icons--selected {
-  display: grid;
-  grid-template-columns: auto 1fr 20px;
+  grid-template-columns: auto 1fr 30px;
   justify-content: space-between;
   align-items: center;
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  gap: 10px;
+  /* gap: 10px; */
   color: var(--text-dark);
 }
 
@@ -237,8 +262,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 100%;
+  max-width: 93%;
   justify-self: self-start;
+}
+.item span{
+  padding: 6px;
 }
 
 .label {
@@ -294,20 +322,55 @@
 
 .item-selected {
   color: var(--text-dark);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-  text-align: left;
-  position: relative;
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  min-width: 0; 
+  cursor: text;
+  overflow: hidden; 
 }
 
-.item-selected .inlineSearchInput {
-  text-align: left;
-  direction: ltr;
+.item-selected span{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;    
+  flex-shrink: 1; 
   width: 100%;
-  overflow: visible;
+}
+.item-selected .chipsWrap span{
+   width: auto; 
+   white-space: nowrap; 
+}
+
+.button--icons--item-selected {
+  flex-direction: row;
+  align-items: center;
+  /* gap: 10px; */
+}
+
+.inlineSearchInput {
+  flex: 1 1 10px;
+  min-width: 60px; 
+  border: none;
+  background: transparent;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  
+  font-size: inherit;
+  font-family: inherit;
+  color: var(--text-dark);
+  text-align: left;
+  width: 100%;
+}
+
+.inlineSearchInput::placeholder {
+  color: var(--text-grey);
+  opacity: 0.7;
 }
 
 .item-placeholder {
@@ -378,6 +441,7 @@
   gap: 6px;
   min-width: 0;
   overflow: hidden;
+  width: 100%;
 }
 
 .chip {
