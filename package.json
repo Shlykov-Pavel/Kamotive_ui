@@ -1,5 +1,5 @@
 {
-  "name": "kamotive-ui",
+  "name": "kamotive_ui",
   "version": "2.3.26",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
