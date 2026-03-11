@@ -80,89 +80,50 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
       };
     }
 
-   // Функция для получения имени файла без расширения
-  const getFileNameWithoutExtension = (filename: string): string => {
-    // Находим последнюю точку
-    const lastDotIndex = filename.lastIndexOf('.');
-    
-    // Если точка не найдена, точка в начале или после точки ничего нет
-    if (lastDotIndex === -1 || lastDotIndex === 0 || lastDotIndex === filename.length - 1) {
-      return filename;
-    }
-    
-    // Возвращаем всё до последней точки
-    return filename.substring(0, lastDotIndex);
-  };
-
-  // Проверка длины имени файла (120 символов для имени без расширения)
-  if (typeof maxFileName === 'number' && maxFileName > 0) {
-    const fileNameWithoutExt = getFileNameWithoutExtension(file.name);
-    const nameLength = Array.from(fileNameWithoutExt).length;
-    
-    if (nameLength > maxFileName) {
-      return {
-        code: 'name-too-large',
-        message: lng === 'ru' || lng.includes('ru') 
-          ? `Имя файла (без расширения) не может превышать ${maxFileName} символов. Текущая длина: ${nameLength}`
-          : `File name (without extension) must be under ${maxFileName} symbols. Current length: ${nameLength}`,
-      };
-    }
-  }
-
-  // Функция для получения расширения файла
-  const getFileExtension = (filename: string): string => {
-    const lastDotIndex = filename.lastIndexOf('.');
-    if (lastDotIndex === -1 || lastDotIndex === filename.length - 1) {
-      return '';
-    }
-    return filename.substring(lastDotIndex).toLowerCase();
-  };
-
-  const fileExtension = getFileExtension(file.name);
-
-  // Проверка поддерживаемых форматов
-  if (acceptedFormats && !rejectedFormats) {
-    // Собираем все разрешенные расширения
-    const acceptedExtensions = Object.values(acceptedFormats)
-      .reduce((acc: string[], val) => acc.concat(val), []);
-    
-    // Проверяем, что расширение файла есть в списке разрешенных
-    if (!acceptedExtensions.includes(fileExtension)) {
-      return {
-        code: 'file-invalid-type',
-        message: lng === 'ru' || lng.includes('ru')
-          ? `Файл должен быть одного из следующих типов: ${acceptedExtensions.join(', ')}`
-          : `File must be one of: ${acceptedExtensions.join(', ')}`,
-      };
-    }
-  }
-    
-
-    // if(maxFileName && file.name.length > maxFileName){      
-    //   return {
-    //     code: 'name-too-large',
-    //     message: lng === 'ru' || lng.includes('ru') ? `Имя файла не может превышать ${maxFileName} символов` : `File name must be under ${maxFileName} symbols`,
-    //   }
-    // }
-
-    // if (acceptedFormats && !rejectedFormats) {
-    //   const acceptedExtensions = Object.values(acceptedFormats)
-    //     .reduce((acc, val) => acc.concat(val), []);
+    const getFileNameWithoutExtension = (filename: string): string => {
+      const lastDotIndex = filename.lastIndexOf('.');
       
-    //   const fileParts = file.name.split('.');
-    //   const fileExtension = fileParts.length > 1 
-    //     ? `.${fileParts.pop()!.toLowerCase()}` 
-    //     : '';
+      if (lastDotIndex === -1 || lastDotIndex === 0 || lastDotIndex === filename.length - 1) {
+        return filename;
+      }
+      return filename.substring(0, lastDotIndex);
+    };
 
-    //   if (!acceptedExtensions.includes(fileExtension)) {
-    //     return {
-    //       code: 'file-invalid-type',
-    //       message: lng === 'ru' || lng.includes('ru')
-    //         ? `Файл должен быть одного из следующих типов: ${acceptedExtensions.join(', ')}`
-    //         : `File must be one of: ${acceptedExtensions.join(', ')}`,
-    //     };
-    //   }
-    // }
+    if (typeof maxFileName === 'number' && maxFileName > 0) {
+      const fileNameWithoutExt = getFileNameWithoutExtension(file.name);
+      const nameLength = Array.from(fileNameWithoutExt).length;
+      
+      if (nameLength > maxFileName) {
+        return {
+          code: 'name-too-large',
+          message: lng === 'ru' || lng.includes('ru') 
+            ? `Имя файла не может превышать ${maxFileName} символов. Текущая длина: ${nameLength}`
+            : `File name must be under ${maxFileName} symbols. Current length: ${nameLength}`,
+        };
+      }
+    }
+
+    const getFileExtension = (filename: string): string => {
+      const lastDotIndex = filename.lastIndexOf('.');
+      if (lastDotIndex === -1 || lastDotIndex === filename.length - 1) {
+        return '';
+      }
+      return filename.substring(lastDotIndex).toLowerCase();
+    };
+    const fileExtension = getFileExtension(file.name);
+
+    if (acceptedFormats && !rejectedFormats) {
+      const acceptedExtensions = Object.values(acceptedFormats)
+        .reduce((acc: string[], val) => acc.concat(val), []);
+      if (!acceptedExtensions.includes(fileExtension)) {
+        return {
+          code: 'file-invalid-type',
+          message: lng === 'ru' || lng.includes('ru')
+            ? `Файл должен быть одного из следующих типов: ${acceptedExtensions.join(', ')}`
+            : `File must be one of: ${acceptedExtensions.join(', ')}`,
+        };
+      }
+    }
 
     if (rejectedFormats) {
       const rejectedExtensions = Object.values(rejectedFormats)
