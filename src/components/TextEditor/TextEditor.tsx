@@ -601,31 +601,24 @@ const removeAttachedFile = (id: string) => {
     
   }, [defaultValue, onCancel]); 
 
-const hadleRedo = useCallback(()=>{  
-  
-  const currentPell = pellRef.current;
-  const contentToRestore = redoContentRef.current;  
-  if (!currentPell?.content || !contentToRestore) {
-      return;
-    }
+  const handleRedo = useCallback(() => {
+    const currentPell = pellRef.current;
+    if (!currentPell?.content) return;
 
-  currentPell.content.innerHTML = contentToRestore;
-  setEditorHtml(contentToRestore);
-  currentPell.content.focus();
-   setTimeout(setCursorToEnd, 0); 
-
-},[])
+    document.execCommand('redo');
+    setEditorHtml(currentPell.content.innerHTML);
+    updateActiveStates();
+  }, [updateActiveStates]);
 
   const handleUndo = useCallback(()=>{
     const currentPell = pellRef.current;
     if (!currentPell?.content) {
         return;
     }
-    redoContentRef.current = currentPell.content.innerHTML
-    currentPell.content.innerHTML = defaultValue || '';
-    setEditorHtml(defaultValue || '');
-    setTimeout(setCursorToEnd, 0); 
-  },[defaultValue])
+    document.execCommand('undo');
+    setEditorHtml(currentPell.content.innerHTML);
+    updateActiveStates();
+  }, [updateActiveStates]);
 
   const setupToolbar = (pellEditor: PellEditor) => {
     if (!editorRef.current) return;
@@ -707,9 +700,9 @@ const hadleRedo = useCallback(()=>{
           } else if (command === 'olist') {
             toggleBulletList();
           } else if (command === 'undo'){
-             handleUndo()
+            handleUndo()
           } else if (command === 'redo'){
-            hadleRedo()
+            handleRedo()
           } else if (command === 'image') {
             handleAttachFiles();
           } else {
