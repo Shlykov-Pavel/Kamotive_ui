@@ -12,6 +12,124 @@ interface CustomFileRejection extends Omit<FileRejection, 'file'> {
   file: TAttachments;
 }
 
+const getFileNameWithoutExtension = (filename: string): string => {
+  const lastDotIndex = filename.lastIndexOf('.');
+  
+  if (lastDotIndex === -1 || lastDotIndex === 0 || lastDotIndex === filename.length - 1) {
+    return filename;
+  }
+  return filename.substring(0, lastDotIndex);
+};
+
+const getFileExtension = (filename: string): string => {
+  const lastDotIndex = filename.lastIndexOf('.');
+  if (lastDotIndex === -1 || lastDotIndex === filename.length - 1) {
+    return '';
+  }
+  return filename.substring(lastDotIndex).toLowerCase();
+};
+
+// Функция для получения всех доступных форматов в виде строки
+const getAcceptedFormatsString = (acceptedFormats: Accept) => {
+  const uniqueFormats = new Set<string>();
+  for (const key in acceptedFormats) {
+    if (acceptedFormats.hasOwnProperty(key)) {
+      acceptedFormats[key].forEach((format) => {
+        uniqueFormats.add(format.replace('.', ''));
+      });
+    }
+  }
+  return Array.from(uniqueFormats).join(', ');
+};
+
+const fileValidatorInner = (
+  file: File, 
+  maxFileSize: number, 
+  maxFileCount: number, 
+  maxFileName: number,
+  addedFilesLength: number,
+  lng: string,
+  acceptedFormats?: Accept,
+  rejectedFormats?: Accept,
+  fileValidator?: (file: File) => FileError | FileError[] | null
+): FileError | FileError[] | null => {
+  
+  const fileExtension = getFileExtension(file.name);
+  const fileNameWithoutExt = getFileNameWithoutExtension(file.name);
+  const nameLength = Array.from(fileNameWithoutExt).length;
+  const fileParts = file.name.split('.');
+  const fileExt = fileParts.length > 1 ? `.${fileParts.pop()!.toLowerCase()}` : '';
+  
+  const checks = {
+    isSizeTooLarge: file.size > maxFileSize * 1024 * 1024 * 1024,
+    isTooManyFiles: addedFilesLength > maxFileCount - 1,
+    isNameTooLarge: typeof maxFileName === 'number' && maxFileName > 0 && nameLength > maxFileName,
+    isAcceptedFormatValid: true,
+    isRejectedFormatValid: true
+  };
+  
+  // Проверка форматов
+  if (acceptedFormats && !rejectedFormats) {
+    const acceptedExtensions = Object.values(acceptedFormats).reduce((acc: string[], val) => acc.concat(val), []);
+    checks.isAcceptedFormatValid = acceptedExtensions.includes(fileExtension);
+  }
+  
+  if (rejectedFormats) {
+    const rejectedExtensions = Object.values(rejectedFormats).reduce((acc, val) => acc.concat(val), []);
+    checks.isRejectedFormatValid = !rejectedExtensions.includes(fileExt);
+  }
+  
+  switch (true) {
+    case checks.isSizeTooLarge:
+      return {
+        code: 'size-too-large',
+        message: lng === 'ru' || lng.includes('ru')
+          ? `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`
+          : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
+      };
+    
+    case checks.isTooManyFiles:
+      return {
+        code: 'files-count-too-large',
+        message: lng === 'ru' || lng.includes('ru') 
+          ? `Максимальное количество файлов ${maxFileCount}` 
+          : `Maximum number of files ${maxFileCount}`,
+      };
+    
+    case checks.isNameTooLarge:
+      return {
+        code: 'name-too-large',
+        message: lng === 'ru' || lng.includes('ru') 
+          ? `Имя файла не может превышать ${maxFileName} символов.`
+          : `File name must be under ${maxFileName} symbols.`,
+      };
+    
+    case !checks.isAcceptedFormatValid:
+      return {
+        code: 'file-invalid-type',
+        message: lng === 'ru' || lng.includes('ru')
+          ? `Файл должен быть одного из следующих типов: ${Object.values(acceptedFormats!).reduce((acc: string[], val) => acc.concat(val), []).join(', ')}`
+          : `File must be one of: ${Object.values(acceptedFormats!).reduce((acc: string[], val) => acc.concat(val), []).join(', ')}`,
+      };
+    
+    case !checks.isRejectedFormatValid:
+      return {
+        code: 'file-invalid-type',
+        message: lng === 'ru' || lng.includes('ru')
+          ? `Файл не должен быть одного из следующих типов: ${getAcceptedFormatsString(rejectedFormats!)}`
+          : `File must not be one of: ${getAcceptedFormatsString(rejectedFormats!)}`,
+      };
+    
+    default: {
+      if (fileValidator) {
+        const customValidationResult = fileValidator(file);
+        if (customValidationResult) return customValidationResult;
+      }
+      return null;
+    }
+  }
+};
+
 export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   maxFileSize = 2,
   maxFileCount = 10,
@@ -48,124 +166,18 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
     }
   }));
 
-  const fileValidatorInner = (file: File): FileError | FileError[] | null => {
-    if (file.size > maxFileSize * 1024 * 1024 * 1024) {
-      return {
-        code: 'size-too-large',
-        message:
-          lng === 'ru' || lng.includes('ru')
-            ? `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`
-            : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
-      };
-    }
-    // Проверка на дубликаты в filesList
-    // if (filesList.find((existingFile: TAttachments) => existingFile.filename === file.name)) {
-    //   return {
-    //     code: 'repeating-file-name',
-    //     message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке прикрепленных файлов` : `File already exists in the list of attached files`,
-    //   };
-    // }
-    // Проверка на дубликаты в addedFiles
-    // if (addedFiles.find((addedFile: File) => addedFile.name === file.name)) {
-    //   return {
-    //     code: 'repeating-file-name',
-    //     message: lng === 'ru' || lng.includes('ru') ? `Файл уже добавлен` : `File already added`,
-    //   };
-    // }
-    if (addedFiles.length > maxFileCount - 1) {
-      return {
-        code: 'files-count-too-large',
-        message:
-          lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
-      };
-    }
-
-    const getFileNameWithoutExtension = (filename: string): string => {
-      const lastDotIndex = filename.lastIndexOf('.');
-      
-      if (lastDotIndex === -1 || lastDotIndex === 0 || lastDotIndex === filename.length - 1) {
-        return filename;
-      }
-      return filename.substring(0, lastDotIndex);
-    };
-
-    if (typeof maxFileName === 'number' && maxFileName > 0) {
-      const fileNameWithoutExt = getFileNameWithoutExtension(file.name);
-      const nameLength = Array.from(fileNameWithoutExt).length;
-      
-      if (nameLength > maxFileName) {
-        return {
-          code: 'name-too-large',
-          message: lng === 'ru' || lng.includes('ru') 
-            ? `Имя файла не может превышать ${maxFileName} символов. Текущая длина: ${nameLength}`
-            : `File name must be under ${maxFileName} symbols. Current length: ${nameLength}`,
-        };
-      }
-    }
-
-    const getFileExtension = (filename: string): string => {
-      const lastDotIndex = filename.lastIndexOf('.');
-      if (lastDotIndex === -1 || lastDotIndex === filename.length - 1) {
-        return '';
-      }
-      return filename.substring(lastDotIndex).toLowerCase();
-    };
-    const fileExtension = getFileExtension(file.name);
-
-    if (acceptedFormats && !rejectedFormats) {
-      const acceptedExtensions = Object.values(acceptedFormats)
-        .reduce((acc: string[], val) => acc.concat(val), []);
-      if (!acceptedExtensions.includes(fileExtension)) {
-        return {
-          code: 'file-invalid-type',
-          message: lng === 'ru' || lng.includes('ru')
-            ? `Файл должен быть одного из следующих типов: ${acceptedExtensions.join(', ')}`
-            : `File must be one of: ${acceptedExtensions.join(', ')}`,
-        };
-      }
-    }
-
-    if (rejectedFormats) {
-      const rejectedExtensions = Object.values(rejectedFormats)
-        .reduce((acc, val) => acc.concat(val), []);
-      
-      const fileParts = file.name.split('.');
-      const fileExtension = fileParts.length > 1 
-        ? `.${fileParts.pop()!.toLowerCase()}` 
-        : '';
-
-      if (rejectedExtensions.includes(fileExtension)) {
-        return {
-          code: 'file-invalid-type',
-          message: lng === 'ru' || lng.includes('ru')
-            ? `Файл не должен быть одного из следующих типов: ${getAcceptedFormatsString(rejectedFormats)}`
-            : `File must not be one of: ${getAcceptedFormatsString(rejectedFormats)}`,
-        };
-      }
-    }
-
-    if (fileValidator) {
-      const customValidationResult = fileValidator(file);
-       if (customValidationResult) {
-          return customValidationResult;
-        }
-    }
-    return null;
-  };  
-  
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      setAddedFiles([...addedFiles, ...acceptedFiles]);  
-      const newFormatAttachments: TAttachments[] = acceptedFiles.map((file) => {
-        return {
-          id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-          filename: file.name,
-          size: file.size,
-          type: file.type,
-        };
-      });
-      setLoadingFilesNames(newFormatAttachments.map((file) => file?.filename ?? 'Без названия'));
+      setAddedFiles([...addedFiles, ...acceptedFiles]);
 
+      const newFormatAttachments: TAttachments[] = acceptedFiles.map((file) => ({
+        id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+        filename: file.name,
+        size: file.size,
+        type: file.type,
+      }));
+
+      setLoadingFilesNames(newFormatAttachments.map((file) => file?.filename ?? 'Без названия'));
       setIsLoadingFiles(true);
       setAddedFilesFormatted([...addedFilesFormated, ...newFormatAttachments]);
 
@@ -174,6 +186,7 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
       const hasTooManyFilesError = fileRejections.some((rejection) =>
         rejection.errors.some((error) => error.code === 'too-many-files')
       );
+
       if (hasTooManyFilesError) {
         const remainingFiles = Math.max(0, maxFileCount - addedFiles.length);
 
@@ -219,7 +232,17 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
       }
     },
 
-    validator: fileValidatorInner,
+    validator: (file) => fileValidatorInner(
+      file, 
+      maxFileSize, 
+      maxFileCount, 
+      maxFileName,
+      addedFiles.length,
+      lng,
+      acceptedFormats,
+      rejectedFormats,
+      fileValidator
+    ),
     accept: undefined,
     maxFiles: maxFileCount,
     disabled: !canAdd,
@@ -238,22 +261,20 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
     }
   };
 
-  const acceptedFileItems = addedFilesFormated.map((file: TAttachments) => {
-    return (
-      <FileItem
-        key={file.id}
-        file={file}
-        //loading={loadingFilesNames.includes(file.filename)} // Показываем лоадер только для новых файлов
-        onDelete={handleDeleteFiles}
-        isAddedFile={true}
-        lng={lng}
-      />
-    );
-  });
   const handleDeleteRejectedFile = (id: string) => {
     setErrorFiles(errorFiles.filter((rejection) => rejection.file.id !== id));
   };
 
+  const acceptedFileItems = addedFilesFormated.map((file: TAttachments) => (
+    <FileItem
+      key={file.id}
+      file={file}
+      onDelete={handleDeleteFiles}
+      isAddedFile={true}
+      lng={lng}
+    />
+  ));
+  
   const fileRejectionItems = errorFiles.map(({ file, errors }) => (
     <FileItem
       key={file.id}
@@ -264,19 +285,6 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
       lng={lng}
     />
   ));
-
-  // Функция для получения всех доступных форматов в виде строки
-  const getAcceptedFormatsString = (acceptedFormats: Accept) => {
-    const uniqueFormats = new Set<string>();
-    for (const key in acceptedFormats) {
-      if (acceptedFormats.hasOwnProperty(key)) {
-        acceptedFormats[key].forEach((format) => {
-          uniqueFormats.add(format.replace('.', ''));
-        });
-      }
-    }
-    return Array.from(uniqueFormats).join(', ');
-  };
 
   useEffect(()=>{
     if (addedFiles.length === 0) {
@@ -302,11 +310,13 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
         >
           {lng === 'ru' || lng.includes('ru') ? (
             <>
-              <span style={{ textDecoration: 'underline' }}>Нажмите на область</span> <span> или перетащите файлы</span>
+              <span style={{ textDecoration: 'underline' }}>Нажмите на область</span> 
+              <span> или перетащите файлы</span>
             </>
           ) : (
             <>
-              <span style={{ textDecoration: 'underline' }}>Сlick on this area</span> <span>or drag files here</span>
+              <span style={{ textDecoration: 'underline' }}>Click on this area</span> 
+              <span> or drag files here</span>
             </>
           )}
         </Typography>
@@ -348,13 +358,9 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
           {acceptedFileItems}
           {fileRejectionItems}
         </div>
-      ) : lng === 'ru' || lng.includes('ru') ? (
-        <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
-          Файлы не добавлены
-        </Typography>
       ) : (
         <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
-          Files not added
+          {lng === 'ru' || lng.includes('ru') ? 'Файлы не добавлены' : 'Files not added'}
         </Typography>
       )}
     </section>
