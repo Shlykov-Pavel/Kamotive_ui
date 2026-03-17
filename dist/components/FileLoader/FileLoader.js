@@ -5,6 +5,100 @@ import { Typography } from '../Typography/Typography';
 import { IconUpload } from '../../Icons';
 import { FileItem } from '../FileItem/FileItem';
 import classNames from 'classnames';
+const getFileNameWithoutExtension = (filename) => {
+    const lastDotIndex = filename.lastIndexOf('.');
+    if (lastDotIndex === -1 || lastDotIndex === 0 || lastDotIndex === filename.length - 1) {
+        return filename;
+    }
+    return filename.substring(0, lastDotIndex);
+};
+const getFileExtension = (filename) => {
+    const lastDotIndex = filename.lastIndexOf('.');
+    if (lastDotIndex === -1 || lastDotIndex === filename.length - 1) {
+        return '';
+    }
+    return filename.substring(lastDotIndex).toLowerCase();
+};
+// Функция для получения всех доступных форматов в виде строки
+const getAcceptedFormatsString = (acceptedFormats) => {
+    const uniqueFormats = new Set();
+    for (const key in acceptedFormats) {
+        if (acceptedFormats.hasOwnProperty(key)) {
+            acceptedFormats[key].forEach((format) => {
+                uniqueFormats.add(format.replace('.', ''));
+            });
+        }
+    }
+    return Array.from(uniqueFormats).join(', ');
+};
+const fileValidatorInner = (file, maxFileSize, maxFileCount, maxFileName, addedFilesLength, lng, acceptedFormats, rejectedFormats, fileValidator) => {
+    const fileExtension = getFileExtension(file.name);
+    const fileNameWithoutExt = getFileNameWithoutExtension(file.name);
+    const nameLength = Array.from(fileNameWithoutExt).length;
+    const fileParts = file.name.split('.');
+    const fileExt = fileParts.length > 1 ? `.${fileParts.pop().toLowerCase()}` : '';
+    const checks = {
+        isSizeTooLarge: file.size > maxFileSize * 1024 * 1024 * 1024,
+        isTooManyFiles: addedFilesLength > maxFileCount - 1,
+        isNameTooLarge: typeof maxFileName === 'number' && maxFileName > 0 && nameLength > maxFileName,
+        isAcceptedFormatValid: true,
+        isRejectedFormatValid: true
+    };
+    // Проверка форматов
+    if (acceptedFormats && !rejectedFormats) {
+        const acceptedExtensions = Object.values(acceptedFormats).reduce((acc, val) => acc.concat(val), []);
+        checks.isAcceptedFormatValid = acceptedExtensions.includes(fileExtension);
+    }
+    if (rejectedFormats) {
+        const rejectedExtensions = Object.values(rejectedFormats).reduce((acc, val) => acc.concat(val), []);
+        checks.isRejectedFormatValid = !rejectedExtensions.includes(fileExt);
+    }
+    switch (true) {
+        case checks.isSizeTooLarge:
+            return {
+                code: 'size-too-large',
+                message: lng === 'ru' || lng.includes('ru')
+                    ? `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`
+                    : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
+            };
+        case checks.isTooManyFiles:
+            return {
+                code: 'files-count-too-large',
+                message: lng === 'ru' || lng.includes('ru')
+                    ? `Максимальное количество файлов ${maxFileCount}`
+                    : `Maximum number of files ${maxFileCount}`,
+            };
+        case checks.isNameTooLarge:
+            return {
+                code: 'name-too-large',
+                message: lng === 'ru' || lng.includes('ru')
+                    ? `Имя файла не может превышать ${maxFileName} символов.`
+                    : `File name must be under ${maxFileName} symbols.`,
+            };
+        case !checks.isAcceptedFormatValid:
+            return {
+                code: 'file-invalid-type',
+                message: lng === 'ru' || lng.includes('ru')
+                    ? `Файл должен быть одного из следующих типов: ${Object.values(acceptedFormats).reduce((acc, val) => acc.concat(val), []).join(', ')}`
+                    : `File must be one of: ${Object.values(acceptedFormats).reduce((acc, val) => acc.concat(val), []).join(', ')}`,
+            };
+        case !checks.isRejectedFormatValid:
+            return {
+                code: 'file-invalid-type',
+                message: lng === 'ru' || lng.includes('ru')
+                    ? `Файл не должен быть одного из следующих типов: ${getAcceptedFormatsString(rejectedFormats)}`
+                    : `File must not be one of: ${getAcceptedFormatsString(rejectedFormats)}`,
+            };
+        default: {
+            if (fileValidator) {
+                const customValidationResult = fileValidator(file);
+                if (customValidationResult)
+                    return customValidationResult;
+            }
+            return null;
+        }
+    }
+};
 export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxFileName = 0, acceptedFormats = {
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
@@ -25,92 +119,15 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
             setLoadingFilesNames([]);
         }
     }));
-    const fileValidatorInner = (file) => {
-        if (file.size > maxFileSize * 1024 * 1024 * 1024) {
-            return {
-                code: 'size-too-large',
-                message: lng === 'ru' || lng.includes('ru')
-                    ? `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`
-                    : `Maximum file size ${maxFileSize.toFixed(0)} GB`,
-            };
-        }
-        // Проверка на дубликаты в filesList
-        // if (filesList.find((existingFile: TAttachments) => existingFile.filename === file.name)) {
-        //   return {
-        //     code: 'repeating-file-name',
-        //     message: lng === 'ru' || lng.includes('ru') ? `Файл уже существует в списке прикрепленных файлов` : `File already exists in the list of attached files`,
-        //   };
-        // }
-        // Проверка на дубликаты в addedFiles
-        // if (addedFiles.find((addedFile: File) => addedFile.name === file.name)) {
-        //   return {
-        //     code: 'repeating-file-name',
-        //     message: lng === 'ru' || lng.includes('ru') ? `Файл уже добавлен` : `File already added`,
-        //   };
-        // }
-        if (addedFiles.length > maxFileCount - 1) {
-            return {
-                code: 'files-count-too-large',
-                message: lng === 'ru' || lng.includes('ru') ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`,
-            };
-        }
-        if (maxFileName && file.name.length > maxFileName) {
-            return {
-                code: 'name-too-large',
-                message: lng === 'ru' || lng.includes('ru') ? `Имя файла не может превышать ${maxFileName} символов` : `File name must be under ${maxFileName} symbols`,
-            };
-        }
-        if (acceptedFormats && !rejectedFormats) {
-            const acceptedExtensions = Object.values(acceptedFormats)
-                .reduce((acc, val) => acc.concat(val), []);
-            const fileParts = file.name.split('.');
-            const fileExtension = fileParts.length > 1
-                ? `.${fileParts.pop().toLowerCase()}`
-                : '';
-            if (!acceptedExtensions.includes(fileExtension)) {
-                return {
-                    code: 'file-invalid-type',
-                    message: lng === 'ru' || lng.includes('ru')
-                        ? `Файл должен быть одного из следующих типов: ${acceptedExtensions.join(', ')}`
-                        : `File must be one of: ${acceptedExtensions.join(', ')}`,
-                };
-            }
-        }
-        if (rejectedFormats) {
-            const rejectedExtensions = Object.values(rejectedFormats)
-                .reduce((acc, val) => acc.concat(val), []);
-            const fileParts = file.name.split('.');
-            const fileExtension = fileParts.length > 1
-                ? `.${fileParts.pop().toLowerCase()}`
-                : '';
-            if (rejectedExtensions.includes(fileExtension)) {
-                return {
-                    code: 'file-invalid-type',
-                    message: lng === 'ru' || lng.includes('ru')
-                        ? `Файл не должен быть одного из следующих типов: ${getAcceptedFormatsString(rejectedFormats)}`
-                        : `File must not be one of: ${getAcceptedFormatsString(rejectedFormats)}`,
-                };
-            }
-        }
-        if (fileValidator) {
-            const customValidationResult = fileValidator(file);
-            if (customValidationResult) {
-                return customValidationResult;
-            }
-        }
-        return null;
-    };
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles, fileRejections) => {
             setAddedFiles([...addedFiles, ...acceptedFiles]);
-            const newFormatAttachments = acceptedFiles.map((file) => {
-                return {
-                    id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-                    filename: file.name,
-                    size: file.size,
-                    type: file.type,
-                };
-            });
+            const newFormatAttachments = acceptedFiles.map((file) => ({
+                id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+                filename: file.name,
+                size: file.size,
+                type: file.type,
+            }));
             setLoadingFilesNames(newFormatAttachments.map((file) => { var _a; return (_a = file === null || file === void 0 ? void 0 : file.filename) !== null && _a !== void 0 ? _a : 'Без названия'; }));
             setIsLoadingFiles(true);
             setAddedFilesFormatted([...addedFilesFormated, ...newFormatAttachments]);
@@ -160,7 +177,7 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
                 setErrorFiles([...errorFiles, ...formattedRejections]);
             }
         },
-        validator: fileValidatorInner,
+        validator: (file) => fileValidatorInner(file, maxFileSize, maxFileCount, maxFileName, addedFiles.length, lng, acceptedFormats, rejectedFormats, fileValidator),
         accept: undefined,
         maxFiles: maxFileCount,
         disabled: !canAdd,
@@ -176,27 +193,11 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
             setLoadingFilesNames(loadingFilesNames.filter((name) => name !== fileToDelete.filename));
         }
     };
-    const acceptedFileItems = addedFilesFormated.map((file) => {
-        return (React.createElement(FileItem, { key: file.id, file: file, 
-            //loading={loadingFilesNames.includes(file.filename)} // Показываем лоадер только для новых файлов
-            onDelete: handleDeleteFiles, isAddedFile: true, lng: lng }));
-    });
     const handleDeleteRejectedFile = (id) => {
         setErrorFiles(errorFiles.filter((rejection) => rejection.file.id !== id));
     };
+    const acceptedFileItems = addedFilesFormated.map((file) => (React.createElement(FileItem, { key: file.id, file: file, onDelete: handleDeleteFiles, isAddedFile: true, lng: lng })));
     const fileRejectionItems = errorFiles.map(({ file, errors }) => (React.createElement(FileItem, { key: file.id, file: file, error: errors[0].message, onDelete: handleDeleteRejectedFile, isRejectedFile: true, lng: lng })));
-    // Функция для получения всех доступных форматов в виде строки
-    const getAcceptedFormatsString = (acceptedFormats) => {
-        const uniqueFormats = new Set();
-        for (const key in acceptedFormats) {
-            if (acceptedFormats.hasOwnProperty(key)) {
-                acceptedFormats[key].forEach((format) => {
-                    uniqueFormats.add(format.replace('.', ''));
-                });
-            }
-        }
-        return Array.from(uniqueFormats).join(', ');
-    };
     useEffect(() => {
         if (addedFiles.length === 0) {
             setAddedFilesFormatted([]);
@@ -213,11 +214,9 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
             React.createElement(IconUpload, { htmlColor: !canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)', width: '34', height: '34' }),
             React.createElement(Typography, { variant: "Body1", color: !canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)', style: { textAlign: 'center' } }, lng === 'ru' || lng.includes('ru') ? (React.createElement(React.Fragment, null,
                 React.createElement("span", { style: { textDecoration: 'underline' } }, "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 \u043D\u0430 \u043E\u0431\u043B\u0430\u0441\u0442\u044C"),
-                " ",
                 React.createElement("span", null, " \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0442\u0430\u0449\u0438\u0442\u0435 \u0444\u0430\u0439\u043B\u044B"))) : (React.createElement(React.Fragment, null,
-                React.createElement("span", { style: { textDecoration: 'underline' } }, "\u0421lick on this area"),
-                " ",
-                React.createElement("span", null, "or drag files here")))),
+                React.createElement("span", { style: { textDecoration: 'underline' } }, "Click on this area"),
+                React.createElement("span", null, " or drag files here")))),
             React.createElement("div", null,
                 maxFileSize &&
                     (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" },
@@ -233,5 +232,5 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
         rejectedFormats && (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `${lng === 'ru' || lng.includes('ru') ? 'Неподдерживаемые форматы:' : 'Unsupported formats:'} ${getAcceptedFormatsString(rejectedFormats)}`)),
         (addedFiles === null || addedFiles === void 0 ? void 0 : addedFiles.length) > 0 || (errorFiles === null || errorFiles === void 0 ? void 0 : errorFiles.length) > 0 ? (React.createElement("div", { className: styles['addedFiles'] },
             acceptedFileItems,
-            fileRejectionItems)) : lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, "\u0424\u0430\u0439\u043B\u044B \u043D\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B")) : (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, "Files not added"))));
+            fileRejectionItems)) : (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, lng === 'ru' || lng.includes('ru') ? 'Файлы не добавлены' : 'Files not added'))));
 });
