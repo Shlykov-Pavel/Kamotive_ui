@@ -176,33 +176,6 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     [editor]
   );
 
-  const hasStyle = useCallback(
-    (element: Element, property: string, values: string[]): boolean => {
-      let current = element;
-      while (current && current !== editor?.content) {
-        const computedStyle = window.getComputedStyle(current);
-        const styleValue = computedStyle.getPropertyValue(property);
-
-        if (values.some((value) => styleValue.includes(value))) {
-          return true;
-        }
-        current = current.parentElement as Element;
-      }
-      return false;
-    },
-    [editor]
-  );
-
-  const isFormatActive = useCallback(
-    (element: Element, tagNames: string[], styleProperty?: string, styleValues?: string[]): boolean => {
-      return (
-        checkFormatting(element, tagNames) ||
-        (styleProperty && styleValues ? hasStyle(element, styleProperty, styleValues) : false)
-      );
-    },
-    [checkFormatting, hasStyle]
-  );
-
   const setCursorToEnd = () => {
     try {
       const content = pellRef.current?.content;
@@ -277,20 +250,18 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     const range = selection.getRangeAt(0);
     const element = getElementFromRange(range);
 
-    if (!element) return;
-
     const newStates = {
-      bold: isFormatActive(element, ['B', 'STRONG'], 'font-weight', ['bold', '700', '800', '900']),
-      italic: isFormatActive(element, ['I', 'EM'], 'font-style', ['italic']),
-      underline: isFormatActive(element, ['U'], 'text-decoration', ['underline']),
-      strikethrough: isFormatActive(element, ['S', 'STRIKE', 'DEL'], 'text-decoration', ['line-through']),
-      heading2: checkFormatting(element, ['H2']),
-      olist: checkFormatting(element, ['OL']) || !!element.closest('ol'),
+      bold: document.queryCommandState('bold'),
+      italic: document.queryCommandState('italic'),
+      underline: document.queryCommandState('underline'),
+      strikethrough: document.queryCommandState('strikethrough'),
+      heading2: element ? checkFormatting(element, ['H2']) : false,
+      olist: element ? (checkFormatting(element, ['OL']) || !!element.closest('ol')) : false,
     };
     setActiveStates(newStates);
     updateButtonStates(newStates);
     
-  }, [isFormatActive, checkFormatting, updateButtonStates]);
+  }, [checkFormatting, updateButtonStates]);
 
   const toggleHeading2 = () => {
     const selection = window.getSelection();
