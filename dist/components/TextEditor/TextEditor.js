@@ -113,22 +113,6 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
         }
         return false;
     }, [editor]);
-    const hasStyle = useCallback((element, property, values) => {
-        let current = element;
-        while (current && current !== (editor === null || editor === void 0 ? void 0 : editor.content)) {
-            const computedStyle = window.getComputedStyle(current);
-            const styleValue = computedStyle.getPropertyValue(property);
-            if (values.some((value) => styleValue.includes(value))) {
-                return true;
-            }
-            current = current.parentElement;
-        }
-        return false;
-    }, [editor]);
-    const isFormatActive = useCallback((element, tagNames, styleProperty, styleValues) => {
-        return (checkFormatting(element, tagNames) ||
-            (styleProperty && styleValues ? hasStyle(element, styleProperty, styleValues) : false));
-    }, [checkFormatting, hasStyle]);
     const setCursorToEnd = () => {
         var _a;
         try {
@@ -200,19 +184,17 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
         }
         const range = selection.getRangeAt(0);
         const element = getElementFromRange(range);
-        if (!element)
-            return;
         const newStates = {
-            bold: isFormatActive(element, ['B', 'STRONG'], 'font-weight', ['bold', '700', '800', '900']),
-            italic: isFormatActive(element, ['I', 'EM'], 'font-style', ['italic']),
-            underline: isFormatActive(element, ['U'], 'text-decoration', ['underline']),
-            strikethrough: isFormatActive(element, ['S', 'STRIKE', 'DEL'], 'text-decoration', ['line-through']),
-            heading2: checkFormatting(element, ['H2']),
-            olist: checkFormatting(element, ['OL']) || !!element.closest('ol'),
+            bold: document.queryCommandState('bold'),
+            italic: document.queryCommandState('italic'),
+            underline: document.queryCommandState('underline'),
+            strikethrough: document.queryCommandState('strikethrough'),
+            heading2: element ? checkFormatting(element, ['H2']) : false,
+            olist: element ? (checkFormatting(element, ['OL']) || !!element.closest('ol')) : false,
         };
         setActiveStates(newStates);
         updateButtonStates(newStates);
-    }, [isFormatActive, checkFormatting, updateButtonStates]);
+    }, [checkFormatting, updateButtonStates]);
     const toggleHeading2 = () => {
         var _a;
         const selection = window.getSelection();
