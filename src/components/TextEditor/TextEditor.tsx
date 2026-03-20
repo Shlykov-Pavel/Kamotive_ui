@@ -604,6 +604,41 @@ const hadleRedo = useCallback(()=>{
     setTimeout(setCursorToEnd, 0); 
   },[defaultValue])
 
+
+  const handleDecorationToggle = (command: 'underline' | 'strikethrough') => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+    const range = getSafeRange();
+    if (!range) return;
+
+    const isTurningOn = !document.queryCommandState(command);
+    if (range.collapsed && isTurningOn) {
+      const conflictTags = command === 'underline' ? ['S', 'STRIKE'] : ['U'];
+      const element = getElementFromRange(range);
+
+      let conflictEl: Element | null = element;
+      while (conflictEl && conflictEl !== pellRef.current?.content) {
+        if (conflictTags.includes(conflictEl.tagName)) break;
+        conflictEl = conflictEl.parentElement;
+      }
+
+      if (conflictEl && conflictEl !== pellRef.current?.content && conflictTags.includes(conflictEl.tagName)) {
+        const newRange = document.createRange();
+        newRange.setStartAfter(conflictEl);
+        newRange.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+
+        const conflictCommand = command === 'underline' ? 'strikethrough' : 'underline';
+        if (document.queryCommandState(conflictCommand)) {
+          document.execCommand(conflictCommand, false, undefined);
+        }
+      }
+    }
+
+    document.execCommand(command, false, undefined);
+  };
+
   const handleBoldToggle = () => {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
@@ -728,6 +763,10 @@ const hadleRedo = useCallback(()=>{
 
           if (command === 'bold') {
             handleBoldToggle();
+          } else if (command === 'underline') {
+            handleDecorationToggle('underline');
+          } else if (command === 'strikethrough') {
+            handleDecorationToggle('strikethrough');
           } else if (command === 'heading2') {
             toggleHeading2();
           } else if (command === 'olist') {
