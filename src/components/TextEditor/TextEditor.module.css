@@ -57,8 +57,9 @@
 .editorContainer {
   display: flex;
   flex-direction: column-reverse;
-  max-height: 50vh;
-	overflow-y: scroll;
+  height: auto;
+  max-height: none;
+	/* overflow-y: scroll; */
 }
 .pellActionbar {
 	border: none;
@@ -153,9 +154,9 @@
 }
 
 .pellContent {
-	/* max-height: 250px; */
 	max-height: 30vh;
-	overflow: scroll;
+	min-height: 80px;
+
 	outline: none;
 	line-height: 1.6;
 	font-family: var(--font-family-content);
@@ -163,10 +164,9 @@
 	color: var(--text-dark);
 	overflow-y: auto;
 	resize: none;
-	/* padding: 16px; */
 	padding: 10px 12px;
 	outline: none;
-	/* padding-bottom: 0; */
+	word-break: break-word;
 }
 
 .pellContent h2 {
@@ -237,7 +237,8 @@
 
 .attachedFilesContainer {
 	max-height: 25vh;
-    overflow: scroll;
+    overflow-y: auto;
+	overflow-x: hidden;
 	margin-top: 5px;
 	background-color: none;
 	border: none;
