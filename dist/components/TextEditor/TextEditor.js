@@ -113,22 +113,6 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
         }
         return false;
     }, [editor]);
-    const hasStyle = useCallback((element, property, values) => {
-        let current = element;
-        while (current && current !== (editor === null || editor === void 0 ? void 0 : editor.content)) {
-            const computedStyle = window.getComputedStyle(current);
-            const styleValue = computedStyle.getPropertyValue(property);
-            if (values.some((value) => styleValue.includes(value))) {
-                return true;
-            }
-            current = current.parentElement;
-        }
-        return false;
-    }, [editor]);
-    const isFormatActive = useCallback((element, tagNames, styleProperty, styleValues) => {
-        return (checkFormatting(element, tagNames) ||
-            (styleProperty && styleValues ? hasStyle(element, styleProperty, styleValues) : false));
-    }, [checkFormatting, hasStyle]);
     const setCursorToEnd = () => {
         var _a;
         try {
@@ -200,19 +184,21 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
         }
         const range = selection.getRangeAt(0);
         const element = getElementFromRange(range);
-        if (!element)
-            return;
+        const isInH2 = element ? checkFormatting(element, ['H2']) : false;
+        const isBold = isInH2
+            ? (element ? checkFormatting(element, ['B', 'STRONG']) : false)
+            : document.queryCommandState('bold');
         const newStates = {
-            bold: isFormatActive(element, ['B', 'STRONG'], 'font-weight', ['bold', '700', '800', '900']),
-            italic: isFormatActive(element, ['I', 'EM'], 'font-style', ['italic']),
-            underline: isFormatActive(element, ['U'], 'text-decoration', ['underline']),
-            strikethrough: isFormatActive(element, ['S', 'STRIKE', 'DEL'], 'text-decoration', ['line-through']),
-            heading2: checkFormatting(element, ['H2']),
-            olist: checkFormatting(element, ['OL']) || !!element.closest('ol'),
+            bold: isBold,
+            italic: document.queryCommandState('italic'),
+            underline: document.queryCommandState('underline'),
+            strikethrough: document.queryCommandState('strikethrough'),
+            heading2: isInH2,
+            olist: element ? (checkFormatting(element, ['OL']) || !!element.closest('ol')) : false,
         };
         setActiveStates(newStates);
         updateButtonStates(newStates);
-    }, [isFormatActive, checkFormatting, updateButtonStates]);
+    }, [checkFormatting, updateButtonStates]);
     const toggleHeading2 = () => {
         var _a;
         const selection = window.getSelection();
@@ -240,7 +226,9 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
         }
         if (h2Element) {
             const div = document.createElement('div');
-            div.innerHTML = h2Element.innerHTML;
+            while (h2Element.firstChild) {
+                div.appendChild(h2Element.firstChild);
+            }
             const rangeOffset = range.startOffset;
             const textNode = range.startContainer;
             (_a = h2Element.parentNode) === null || _a === void 0 ? void 0 : _a.replaceChild(div, h2Element);
@@ -500,6 +488,52 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
         setEditorHtml(defaultValue || '');
         setTimeout(setCursorToEnd, 0);
     }, [defaultValue]);
+    const handleBoldToggle = () => {
+        var _a, _b;
+        const selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0)
+            return;
+        const range = getSafeRange();
+        if (!range)
+            return;
+        const element = getElementFromRange(range);
+        const isInH2 = element ? checkFormatting(element, ['H2']) : false;
+        if (!isInH2) {
+            document.execCommand('bold', false, undefined);
+            return;
+        }
+        const hasBold = element ? checkFormatting(element, ['B', 'STRONG']) : false;
+        if (hasBold) {
+            document.execCommand('bold', false, undefined);
+        }
+        else if (!range.collapsed) {
+            try {
+                const b = document.createElement('b');
+                range.surroundContents(b);
+                const newRange = document.createRange();
+                newRange.selectNodeContents(b);
+                newRange.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+                (_a = pellRef.current) === null || _a === void 0 ? void 0 : _a.content.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            catch (_c) {
+                document.execCommand('insertHTML', false, `<b>${range.toString()}</b>`);
+            }
+        }
+        else {
+            const b = document.createElement('b');
+            const zws = document.createTextNode('\u200B');
+            b.appendChild(zws);
+            range.insertNode(b);
+            const newRange = document.createRange();
+            newRange.setStart(zws, 1);
+            newRange.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+            (_b = pellRef.current) === null || _b === void 0 ? void 0 : _b.content.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    };
     const setupToolbar = (pellEditor) => {
         if (!editorRef.current)
             return;
@@ -551,7 +585,10 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
                 htmlButton.addEventListener('mousedown', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (command === 'heading2') {
+                    if (command === 'bold') {
+                        handleBoldToggle();
+                    }
+                    else if (command === 'heading2') {
                         toggleHeading2();
                     }
                     else if (command === 'olist') {
@@ -585,8 +622,9 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
         (_a = uploaderRef.current) === null || _a === void 0 ? void 0 : _a.click();
     };
     const handleEditorChange = useCallback((html) => {
-        setEditorHtml(html);
-        redoContentRef.current = html;
+        const cleanHtml = html.replace(/\u200B/g, '');
+        setEditorHtml(cleanHtml);
+        redoContentRef.current = cleanHtml;
         updateActiveStates();
     }, [updateActiveStates]);
     useEffect(() => {

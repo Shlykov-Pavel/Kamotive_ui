@@ -180,7 +180,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
         })))));
     return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left" }, itemContent)) : (itemContent);
 };
-export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, onSearch, isLoadMoreLoading, isSearchLoading, noOptionsText = 'Нет вариантов для выбора', lng = 'ru', multiple = false, limitTags = 1, }) => {
+export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, onSearch, isLoadMoreLoading, isSearchLoading, noOptionsText, lng = 'ru', multiple = false, limitTags = 1, }) => {
     const inputRef = useRef(null);
     const containerRef = useRef(null);
     const onCloseRef = useRef(onClose);

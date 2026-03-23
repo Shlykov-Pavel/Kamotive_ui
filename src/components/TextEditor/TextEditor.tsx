@@ -176,33 +176,6 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     [editor]
   );
 
-  const hasStyle = useCallback(
-    (element: Element, property: string, values: string[]): boolean => {
-      let current = element;
-      while (current && current !== editor?.content) {
-        const computedStyle = window.getComputedStyle(current);
-        const styleValue = computedStyle.getPropertyValue(property);
-
-        if (values.some((value) => styleValue.includes(value))) {
-          return true;
-        }
-        current = current.parentElement as Element;
-      }
-      return false;
-    },
-    [editor]
-  );
-
-  const isFormatActive = useCallback(
-    (element: Element, tagNames: string[], styleProperty?: string, styleValues?: string[]): boolean => {
-      return (
-        checkFormatting(element, tagNames) ||
-        (styleProperty && styleValues ? hasStyle(element, styleProperty, styleValues) : false)
-      );
-    },
-    [checkFormatting, hasStyle]
-  );
-
   const setCursorToEnd = () => {
     try {
       const content = pellRef.current?.content;
@@ -277,20 +250,22 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     const range = selection.getRangeAt(0);
     const element = getElementFromRange(range);
 
-    if (!element) return;
-
+    const isInH2 = element ? checkFormatting(element, ['H2']) : false;
+    const isBold = isInH2
+      ? (element ? checkFormatting(element, ['B', 'STRONG']) : false)
+      : document.queryCommandState('bold');
     const newStates = {
-      bold: isFormatActive(element, ['B', 'STRONG'], 'font-weight', ['bold', '700', '800', '900']),
-      italic: isFormatActive(element, ['I', 'EM'], 'font-style', ['italic']),
-      underline: isFormatActive(element, ['U'], 'text-decoration', ['underline']),
-      strikethrough: isFormatActive(element, ['S', 'STRIKE', 'DEL'], 'text-decoration', ['line-through']),
-      heading2: checkFormatting(element, ['H2']),
-      olist: checkFormatting(element, ['OL']) || !!element.closest('ol'),
+      bold: isBold,
+      italic: document.queryCommandState('italic'),
+      underline: document.queryCommandState('underline'),
+      strikethrough: document.queryCommandState('strikethrough'),
+      heading2: isInH2,
+      olist: element ? (checkFormatting(element, ['OL']) || !!element.closest('ol')) : false,
     };
     setActiveStates(newStates);
     updateButtonStates(newStates);
     
-  }, [isFormatActive, checkFormatting, updateButtonStates]);
+  }, [checkFormatting, updateButtonStates]);
 
   const toggleHeading2 = () => {
     const selection = window.getSelection();
@@ -321,7 +296,9 @@ export const TextEditor: React.FC<TextEditorProps> = ({
 
     if (h2Element) {
       const div = document.createElement('div');
-      div.innerHTML = h2Element.innerHTML;
+      while (h2Element.firstChild) {
+        div.appendChild(h2Element.firstChild);
+      }
 
       const rangeOffset = range.startOffset;
       const textNode = range.startContainer;
@@ -620,6 +597,53 @@ const removeAttachedFile = (id: string) => {
     updateActiveStates();
   }, [updateActiveStates]);
 
+  const handleBoldToggle = () => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = getSafeRange();
+    if (!range) return;
+
+    const element = getElementFromRange(range);
+    const isInH2 = element ? checkFormatting(element, ['H2']) : false;
+
+    if (!isInH2) {
+      document.execCommand('bold', false, undefined);
+      return;
+    }
+
+    const hasBold = element ? checkFormatting(element, ['B', 'STRONG']) : false;
+
+    if (hasBold) {
+      document.execCommand('bold', false, undefined);
+    } else if (!range.collapsed) {
+      try {
+        const b = document.createElement('b');
+        range.surroundContents(b);
+        const newRange = document.createRange();
+        newRange.selectNodeContents(b);
+        newRange.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+        pellRef.current?.content.dispatchEvent(new Event('input', { bubbles: true }));
+      } catch {
+        document.execCommand('insertHTML', false, `<b>${range.toString()}</b>`);
+      }
+    } else {
+      const b = document.createElement('b');
+      const zws = document.createTextNode('\u200B');
+      b.appendChild(zws);
+      range.insertNode(b);
+
+      const newRange = document.createRange();
+      newRange.setStart(zws, 1);
+      newRange.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(newRange);
+      pellRef.current?.content.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  };
+
   const setupToolbar = (pellEditor: PellEditor) => {
     if (!editorRef.current) return;
     const actionbar = editorRef.current.querySelector(`.${styles.pellActionbar}`);
@@ -695,7 +719,9 @@ const removeAttachedFile = (id: string) => {
           e.preventDefault();
           e.stopPropagation();
 
-          if (command === 'heading2') {
+          if (command === 'bold') {
+            handleBoldToggle();
+          } else if (command === 'heading2') {
             toggleHeading2();
           } else if (command === 'olist') {
             toggleBulletList();
@@ -729,8 +755,9 @@ const removeAttachedFile = (id: string) => {
   };
 
   const handleEditorChange = useCallback((html: string) => {
-    setEditorHtml(html);
-    redoContentRef.current = html;
+    const cleanHtml = html.replace(/\u200B/g, '');
+    setEditorHtml(cleanHtml);
+    redoContentRef.current = cleanHtml;
     updateActiveStates();
 }, [updateActiveStates]);
 

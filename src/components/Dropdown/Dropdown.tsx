@@ -324,7 +324,7 @@ export const Dropdown = <T extends BaseOptions>({
   onSearch,
   isLoadMoreLoading,
   isSearchLoading,
-  noOptionsText = 'Нет вариантов для выбора',
+  noOptionsText,
   lng = 'ru',
   multiple = false,
   limitTags = 1,
