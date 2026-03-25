@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';  
+import React, { useCallback, useEffect, useRef, useState } from 'react'; 
 
 import classNames from 'classnames';
 import styles from './TextEditor.module.css';
@@ -24,24 +23,13 @@ import { AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPrevi
 import { Extension } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
-import { EditorContent, useEditor, Editor } from '@tiptap/react';
+import { EditorContent, useEditor, Editor, useEditorState } from '@tiptap/react';
 
 
 const ACCEPTED_FILE_TYPES =
   'image/*,audio/*,video/*,.doc,.docx,.html,.htm,.odt,.pdf,.xls,.xlsx,.ods,.ppt,.pptx,.txt,.zip,.djvu';
 const MAX_FILE_SIZE = 2147483648; // 2 ГБ
 
-const getSafeSelection = () => {
-  try {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) {
-      return null;
-    }
-    return selection;
-  } catch (error) {
-    return null;
-  }
-};
 
 export const formatFileSize = (bytes?: number, lng?:string): string => {
   if (!bytes || bytes === 0) {
@@ -125,11 +113,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   className,
   lng = 'en',
 }) => {
-  const editorRef = useRef<HTMLDivElement>(null);
   const uploaderRef = useRef<HTMLInputElement>(null);
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
-  const cancelButtonRef = useRef<HTMLButtonElement>(null);
-  const buttonRefs = useRef<{ [key: string]: HTMLElement }>({});
 
   const [editorHtml, setEditorHtml] = useState(defaultValue || '');
   const [temporaryFiles, setTemporaryFiles] = useState<TAttachments[]>(attachedFiles ?? []);
@@ -160,40 +144,22 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     },
   });
 
-  const [activeStates, setActiveStates] = useState({
-    bold: false,
-    italic: false,
-    underline: false,
-    strikethrough: false,
-    heading2: false,
-    olist: false,
-  });
-
-  const updateActiveStates = useCallback(() => {
-    if (!editor) return;
-
-    const newStates = {
+  const editorState = useEditorState({
+    editor,
+    selector: ({ editor }) => ({
       bold: editor.isActive('bold'),
       italic: editor.isActive('italic'),
       underline: editor.isActive('underline'),
       strikethrough: editor.isActive('strike'),
       heading2: editor.isActive('heading', { level: 2 }),
       olist: editor.isActive('orderedList'),
-    };
-
-    setActiveStates(newStates);
-
-    Object.entries(newStates).forEach(([key, val]) => {
-      const btn = buttonRefs.current[key];
-      if (btn) btn.classList.toggle(styles.pellButtonSelected, val);
-    });
-  }, [editor]);
+    }),
+  })  as Record<string, boolean>;
 
   const applyAction = (action: (e: Editor) => void) => {
     if (!editor) return;
     action(editor);
     editor.commands.focus();
-    updateActiveStates();
   };
 
   const commands = {
@@ -208,96 +174,73 @@ export const TextEditor: React.FC<TextEditorProps> = ({
     image: () => uploaderRef.current?.click(),
   };
 
-  useEffect(() => {
-    if (!editorRef.current || !editor) return;
+  const toolbarButtons = [
+    {
+      name: 'bold',
+      icon: IconBoldToString('', '', '1.5'),
+      action: commands.bold,
+      active: 'bold',
+      title: lng === 'ru' ? 'Жирный (Ctrl+B)' : 'Bold (Ctrl+B)',
+    },
+    {
+      name: 'italic',
+      icon: IconItalicToString('', '', '1.5'),
+      action: commands.italic,
+      active: 'italic',
+      title: lng === 'ru' ? 'Курсив (Ctrl+I)' : 'Italic (Ctrl+I)',
+    },
+    {
+      name: 'underline',
+      icon: IconUnderlineToString('', '', '1.5'),
+      action: commands.underline,
+      active: 'underline',
+      title: lng === 'ru' ? 'Подчеркнутый (Ctrl+U)' : 'Underline (Ctrl+U)',
+    },
+    {
+      name: 'strikethrough',
+      icon: IconStrikethroughToString('', '', '1.5'),
+      action: commands.strikethrough,
+      active: 'strikethrough',
+      title: lng === 'ru' ? 'Зачеркнутый' : 'Strike-through',
+    },
+    {
+      name: 'heading2',
+      icon: IconHeader2ToString('', '', '1.5'),
+      action: commands.heading2,
+      active: 'heading2',
+      title: lng === 'ru' ? 'Заголовок' : 'Heading 2',
+    },
+    {
+      name: 'olist',
+      icon: IconBulletlistToString(),
+      action: commands.olist,
+      active: 'olist',
+      title: lng === 'ru' ? 'Список' : 'Bullet List',
+    },
+    {
+      name: 'undo',
+      icon: IconUndoToString('', '', '1.5'),
+      action: commands.undo,
+      title: lng === 'ru' ? 'Возврат последнего действия' : 'Return last action',
+    },
+    {
+      name: 'redo',
+      icon: IconRedoToString('', '', '1.5'),
+      action: commands.redo,
+      title: lng === 'ru' ? 'Отмена последнего действия' : 'Cancel last action',
+    },
+  ];
 
-    editorRef.current.innerHTML = '';
-
-    const actionbar = document.createElement('div');
-    actionbar.className = styles.pellActionbar;
-
-    const content = document.createElement('div');
-    content.className = styles.pellContent;
-
-    editorRef.current.appendChild(actionbar);
-    editorRef.current.appendChild(content);
-
-    const root = createRoot(content);
-    root.render(<EditorContent editor={editor} />);
-
-    const createBtn = (name: string, icon: string) => {
-      const btn = document.createElement('button');
-      btn.className = styles.pellButton;
-      btn.innerHTML = icon;
-      buttonRefs.current[name] = btn;
-
-      btn.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        commands[name as keyof typeof commands]?.();
-      });
-
-      actionbar.appendChild(btn);
-    };
-
-    createBtn('bold', IconBoldToString('', '', '1.5'));
-    createBtn('italic', IconItalicToString('', '', '1.5'));
-    createBtn('underline', IconUnderlineToString('', '', '1.5'));
-    createBtn('strikethrough', IconStrikethroughToString('', '', '1.5'));
-    createBtn('heading2', IconHeader2ToString('', '', '1.5'));
-    createBtn('olist', IconBulletlistToString());
-    createBtn('undo', IconUndoToString('', '', '1.5'));
-    createBtn('redo', IconRedoToString('', '', '1.5'));
-
-    if (canAttachFiles) {
-      createBtn('image', IconAttachToString('', '', '1.5'));
-    }
-
-    const actionsWrapper = document.createElement('div');
-    actionsWrapper.className = styles.actionsWrapper || 'actions-container';
-    actionsWrapper.style.display = 'flex';
-    actionsWrapper.style.alignItems = 'center';
-    actionsWrapper.style.gap = '8px';
-    actionsWrapper.style.marginLeft = 'auto';
-    actionbar.appendChild(actionsWrapper);
-
-    const actionsRoot = createRoot(actionsWrapper);
-    actionsRoot.render(
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <IconButton 
-          ref={cancelButtonRef} 
-          title={lng === 'ru' ? 'Отменить' : 'Cancel'}
-          icon={<IconClose />} 
-          onClick={handleCancel}
-          style={{ 
-            width: '25px', 
-            height: '25px', 
-            padding:'5px', 
-            backgroundColor: 'white',
-          }} 
-          color="var(--blue-main)"
-        />
-        <IconButton 
-          ref={submitButtonRef}
-          title={lng === 'ru' ? 'Отправить' : 'Submit'}
-          icon={<IconSubmit  width={'10'} height={'10'} htmlColor='blue' strokeWidth={'1'}/>} 
-          onClick={handleSubmit}
-          style={{ 
-            width: '25px', 
-            height: '25px', 
-            padding:'5px', 
-            backgroundColor: 'var(--blue-main)',
-          }}
-          color="white"
-        />
-      </div>
-    );
-
-    setTimeout(updateActiveStates, 0);
-
-    return () => {
-      editorRef.current && (editorRef.current.innerHTML = '');
-    };
-  }, [editor]);
+  const normalize = (html: string) => html.replace(/&nbsp;|\s+/g, ' ').replace(/>\s+</g, '><').trim();
+  const normalizedEditor = normalize(editorHtml || '');
+  const normalizedDefault = normalize(defaultValue || '');
+  const isTextEmpty = normalizedEditor.replace(/<[^>]*>/g, '').trim().length === 0;
+  const hasNoNewFiles = temporaryFiles.filter(f => f.file).length === 0 && 
+                        temporaryFiles.length === (attachedFiles?.length ?? 0);
+  const hasErrorsInFiles = temporaryFiles.some(f => !!f.error);    
+  const hasNoTextChanges = normalizedEditor === normalizedDefault;
+  const isSubmitDisabled = (hasNoTextChanges && hasNoNewFiles) || isTextEmpty || hasErrorsInFiles;
+  const isCancelDisabled = !isEditMode && (hasNoTextChanges && hasNoNewFiles);
 
   // Функция обработки загрузки файлов
   const handleUploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -420,7 +363,78 @@ const removeAttachedFile = (id: string) => {
             maxFileCount={maxFileCount}
           />
         )}
-        <div className={styles.editorContainer} ref={editorRef}></div>
+        <div className={styles.editorContainer}>
+          <div className={styles.pellActionbar}>
+            <div className={styles.buttonsContainer}>
+              {toolbarButtons.map((btn) => {
+                const isActive = btn.active ? editorState[btn.active] : false;
+
+                 return (
+                  <button
+                    key={btn.name}
+                    type="button"
+                    className={`${styles.pellButton} ${
+                      btn.active && isActive ? styles.pellButtonSelected : ''
+                    }`}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      btn.action();
+                    }}
+                    dangerouslySetInnerHTML={{ __html: btn.icon }}
+                    title={btn.title}
+                  />
+                )
+              })}
+              {canAttachFiles && (
+                <button
+                  type="button"
+                  className={styles.pellButton}
+                  onMouseDown={(e) => { e.preventDefault(); commands.image(); }}
+                  dangerouslySetInnerHTML={{ __html: IconAttachToString('', '', '1.5') }}
+                  title={lng === 'ru' ? 'Прикрепить файл' : 'Upload file'}
+                />
+              )}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <IconButton 
+                disabled={isCancelDisabled}
+                title={lng === 'ru' ? 'Отменить' : 'Cancel'}
+                icon={<IconClose />} 
+                onClick={handleCancel}
+                style={{ 
+                  width: '25px', 
+                  height: '25px', 
+                  padding:'5px', 
+                  backgroundColor: 'white',
+                  opacity: isCancelDisabled ? 0.5 : 1,
+                  cursor: isCancelDisabled ? 'default' : 'pointer',
+                }} 
+                color="var(--blue-main)"
+              />
+              <IconButton 
+                title={lng === 'ru' ? 'Отправить' : 'Submit'}
+                icon={<IconSubmit width={'10'} height={'10'} htmlColor='blue' strokeWidth={'1'} />} 
+                onClick={handleSubmit}
+                disabled={isSubmitDisabled}
+                style={{ 
+                  width: '25px', 
+                  height: '25px', 
+                  padding:'5px', 
+                  backgroundColor: 'var(--blue-main)',
+                  opacity: isSubmitDisabled ? 0.5 : 1,
+                  cursor: isSubmitDisabled ? 'default' : 'pointer'
+                }}
+                color="white"
+              />
+            </div>
+          </div>
+
+          <div className={styles.pellContent} onClick={() => editor?.chain().focus().run()}>
+            {editor && <EditorContent editor={editor} />}
+          </div>
+
+        </div>
 
         {canAttachFiles && (
           <input
