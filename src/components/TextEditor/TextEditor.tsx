@@ -1,66 +1,35 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { init, exec, PellEditor } from 'pell';
+import React, { useCallback, useEffect, useRef, useState } from 'react'; 
+
+import classNames from 'classnames';
+import styles from './TextEditor.module.css';
 import {
-  IconAttachToString,
-  IconBoldToString,
-  IconBulletlistToString,
-  IconHeader2ToString,
-  IconItalicToString,
-  IconStrikethroughToString,
-  IconUnderlineToString,
-  IconSubmit,
   IconClose,
+  IconSubmit,
   IconRedoToString,
   IconUndoToString,
+  IconBoldToString,
+  IconItalicToString,
+  IconAttachToString,
+  IconHeader2ToString,
+  IconUnderlineToString,
+  IconBulletlistToString,
+  IconStrikethroughToString,
 } from '../../Icons';
 import { Typography } from '../Typography/Typography';
-import classNames from 'classnames';
-import { AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
-import { TAttachments, TextEditorProps } from '../../types';
-import styles from './TextEditor.module.css';
 import { IconButton } from '../IconButton/IconButton';
+import { TAttachments, TextEditorProps } from '../../types';
+import { AttachedFilesPreview } from '../AttachedFilesPreview/AttachedFilesPreview';
+
+import { Extension } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import { EditorContent, useEditor, Editor, useEditorState } from '@tiptap/react';
+
 
 const ACCEPTED_FILE_TYPES =
   'image/*,audio/*,video/*,.doc,.docx,.html,.htm,.odt,.pdf,.xls,.xlsx,.ods,.ppt,.pptx,.txt,.zip,.djvu';
 const MAX_FILE_SIZE = 2147483648; // 2 ГБ
 
-const getSafeSelection = () => {
-  try {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) {
-      return null;
-    }
-    return selection;
-  } catch (error) {
-    return null;
-  }
-};
-
-
-const getElementFromRange = (range: Range): HTMLElement | null => {
-  let node = range.startContainer;
-
-  if (node.nodeType === Node.ELEMENT_NODE) {
-    const element = node as HTMLElement;
-    
-    if (element.childNodes.length > 0) {
-      const childIndex = range.startOffset > 0 ? range.startOffset - 1 : 0;
-      let lastChild = element.childNodes[childIndex];
-
-      while (lastChild && lastChild.hasChildNodes()) {
-        lastChild = lastChild.lastChild!;
-      }
-
-      return lastChild.nodeType === Node.ELEMENT_NODE 
-        ? (lastChild as HTMLElement) 
-        : lastChild.parentElement;
-    }
-    return element;
-  }
-
-  return node.parentElement;
-};
 
 export const formatFileSize = (bytes?: number, lng?:string): string => {
   if (!bytes || bytes === 0) {
@@ -112,7 +81,19 @@ const parseFileSize = (sizeStr: string): number => {
   return value * (units[unit] || 0);
 };
 
-
+const Hotkeys = Extension.create({
+  name: 'customHotkeys',
+  addKeyboardShortcuts() {
+    return {
+      'Mod-b': () => this.editor.chain().focus().toggleBold().run(),
+      'Mod-i': () => this.editor.chain().focus().toggleItalic().run(),
+      'Mod-u': () => this.editor.chain().focus().toggleUnderline().run(),
+      'Mod-z': () => this.editor.chain().focus().undo().run(),
+      'Mod-Shift-z': () => this.editor.chain().focus().redo().run(),
+      'Mod-y': () => this.editor.chain().focus().redo().run(),
+    };
+  },
+});
 
 
 export const TextEditor: React.FC<TextEditorProps> = ({
@@ -132,260 +113,134 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   className,
   lng = 'en',
 }) => {
-  const editorRef = useRef<HTMLDivElement>(null);
-  const pellRef = useRef<PellEditor | null>(null);
   const uploaderRef = useRef<HTMLInputElement>(null);
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
-  const cancelButtonRef = useRef<HTMLButtonElement>(null);
-  const buttonRefs = useRef<{ [key: string]: HTMLElement }>({});
-  const redoContentRef = useRef<string>('');
 
-  const [editor, setEditor] = useState<PellEditor | null>(null);
-  const [editorHtml, setEditorHtml] = useState(defaultValue || ''); 
+  const [editorHtml, setEditorHtml] = useState(defaultValue || '');
   const [temporaryFiles, setTemporaryFiles] = useState<TAttachments[]>(attachedFiles ?? []);
-
- 
   const tempFilesRef = useRef<TAttachments[]>(attachedFiles ?? []);
 
-  
   useEffect(() => {
     tempFilesRef.current = temporaryFiles;
-  }, [temporaryFiles]); 
-  
+  }, [temporaryFiles]);
 
-  const [activeStates, setActiveStates] = useState({
-    bold: false,
-    italic: false,
-    underline: false,
-    strikethrough: false,
-    heading2: false,
-    olist: false,
-  }); 
-
-  const checkFormatting = useCallback(
-    (element: Element, tagNames: string[]): boolean => {
-      let current = element;
-      while (current && current !== editor?.content) {
-        if (tagNames.includes(current.tagName)) {
-          return true;
-        }
-        current = current.parentElement as Element;
-      }
-      return false;
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        history: false,
+      } as any),
+      Underline,
+      Hotkeys,
+    ],
+    content: defaultValue || '',
+    editorProps: {
+      attributes: {
+        class: styles.pellContent,
+        style: 'overflow: visible; height: auto; outline: none;',
+      },
     },
-    [editor]
-  );
+    onUpdate: ({ editor }) => {
+      const cleanHtml = editor.getHTML().replace(/\u200B/g, '');
+      setEditorHtml(cleanHtml);
+    },
+  });
 
-  const setCursorToEnd = () => {
-    try {
-      const content = pellRef.current?.content;
-      if (!content) return;
-      content.focus();
+  const editorState = useEditorState({
+    editor,
+    selector: ({ editor }) => ({
+      bold: editor.isActive('bold'),
+      italic: editor.isActive('italic'),
+      underline: editor.isActive('underline'),
+      strikethrough: editor.isActive('strike'),
+      heading2: editor.isActive('heading', { level: 2 }),
+      olist: editor.isActive('orderedList'),
+    }),
+  })  as Record<string, boolean>;
 
-      const selection = window.getSelection();
-      if (!selection) return;
-      const range = document.createRange();
-      range.selectNodeContents(content);
-      range.collapse(false);
-      
-      selection.removeAllRanges();
-      selection.addRange(range);
-       content.scrollTop = content.scrollHeight;
-    } catch (error) {
-      console.warn('Error setting cursor to end:', error);
-    }
+  const applyAction = (action: (e: Editor) => void) => {
+    if (!editor) return;
+    action(editor);
+    editor.commands.focus();
   };
 
-  const getSafeRange = () => {    
-    try {
-      const selection = getSafeSelection();
-      if (!selection || selection.rangeCount === 0) {
-        setCursorToEnd();
-
-        const newSelection = getSafeSelection();
-        if (!newSelection || newSelection.rangeCount === 0) {
-          return null;
-        }
-        return newSelection.getRangeAt(0);
-      }
-      return selection.getRangeAt(0);
-    } catch (error) {
-      setCursorToEnd();
-      return null;
-    }
+  const commands = {
+    bold: () => applyAction((e) => e.chain().toggleBold().run()),
+    italic: () => applyAction((e) => e.chain().toggleItalic().run()),
+    underline: () => applyAction((e) => e.chain().toggleUnderline().run()),
+    strikethrough: () => applyAction((e) => e.chain().toggleStrike().run()),
+    heading2: () => applyAction((e) => e.chain().toggleHeading({ level: 2 }).run()),
+    olist: () => applyAction((e) => e.chain().toggleOrderedList().run()),
+    undo: () => applyAction((e) => e.chain().undo().run()),
+    redo: () => applyAction((e) => e.chain().redo().run()),
+    image: () => uploaderRef.current?.click(),
   };
 
-  const updateButtonStates = useCallback((states: typeof activeStates) => {
-    Object.entries(states).forEach(([command, isActive]) => {
-      const button = buttonRefs.current[command];
-      if (button) {
-        button.classList.toggle(styles.pellButtonSelected, isActive);
-      }
-    });
-  }, []);
+  const toolbarButtons = [
+    {
+      name: 'bold',
+      icon: IconBoldToString('', '', '1.5'),
+      action: commands.bold,
+      active: 'bold',
+      title: lng === 'ru' ? 'Жирный (Ctrl+B)' : 'Bold (Ctrl+B)',
+    },
+    {
+      name: 'italic',
+      icon: IconItalicToString('', '', '1.5'),
+      action: commands.italic,
+      active: 'italic',
+      title: lng === 'ru' ? 'Курсив (Ctrl+I)' : 'Italic (Ctrl+I)',
+    },
+    {
+      name: 'underline',
+      icon: IconUnderlineToString('', '', '1.5'),
+      action: commands.underline,
+      active: 'underline',
+      title: lng === 'ru' ? 'Подчеркнутый (Ctrl+U)' : 'Underline (Ctrl+U)',
+    },
+    {
+      name: 'strikethrough',
+      icon: IconStrikethroughToString('', '', '1.5'),
+      action: commands.strikethrough,
+      active: 'strikethrough',
+      title: lng === 'ru' ? 'Зачеркнутый' : 'Strike-through',
+    },
+    {
+      name: 'heading2',
+      icon: IconHeader2ToString('', '', '1.5'),
+      action: commands.heading2,
+      active: 'heading2',
+      title: lng === 'ru' ? 'Заголовок' : 'Heading 2',
+    },
+    {
+      name: 'olist',
+      icon: IconBulletlistToString(),
+      action: commands.olist,
+      active: 'olist',
+      title: lng === 'ru' ? 'Список' : 'Bullet List',
+    },
+    {
+      name: 'undo',
+      icon: IconUndoToString('', '', '1.5'),
+      action: commands.undo,
+      title: lng === 'ru' ? 'Возврат последнего действия' : 'Return last action',
+    },
+    {
+      name: 'redo',
+      icon: IconRedoToString('', '', '1.5'),
+      action: commands.redo,
+      title: lng === 'ru' ? 'Отмена последнего действия' : 'Cancel last action',
+    },
+  ];
 
-  const updateActiveStates = useCallback(() => {
-    const contentElement = pellRef.current?.content;
-    if (!contentElement) return;
-
-    const selection = window.getSelection();
-    if (!selection?.rangeCount) {
-      const defaultStates = {
-        bold: false,
-        italic: false,
-        underline: false,
-        strikethrough: false,
-        heading2: false,
-        olist: false,
-      };
-
-      setActiveStates(defaultStates);
-      updateButtonStates(defaultStates);
-      return;
-    }
-    if (!contentElement.contains(selection.anchorNode)) {
-      return;
-    }
-
-    const range = selection.getRangeAt(0);
-    const element = getElementFromRange(range);
-
-    const isInH2 = element ? checkFormatting(element, ['H2']) : false;
-    const isBold = isInH2
-      ? (element ? checkFormatting(element, ['B', 'STRONG']) : false)
-      : document.queryCommandState('bold');
-    const newStates = {
-      bold: isBold,
-      italic: document.queryCommandState('italic'),
-      underline: document.queryCommandState('underline'),
-      strikethrough: document.queryCommandState('strikethrough'),
-      heading2: isInH2,
-      olist: element ? (checkFormatting(element, ['OL']) || !!element.closest('ol')) : false,
-    };
-    setActiveStates(newStates);
-    updateButtonStates(newStates);
-    
-  }, [checkFormatting, updateButtonStates]);
-
-  const toggleHeading2 = () => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
-
-    const range = getSafeRange();
-    if (!range) return;
-    let h2Element = null;
-
-    if (range.startContainer.nodeType === Node.TEXT_NODE) {
-      const parentElement = range.startContainer.parentElement;
-      h2Element = parentElement?.closest('h2') || null;
-    } else {
-      const container = range.startContainer as Element;
-
-      if (container.querySelector) {
-        h2Element = container.querySelector('h2');
-      }
-
-      if (!h2Element && (container as Element).tagName === 'H2') {
-        h2Element = container as Element;
-      }
-
-      if (!h2Element && container.nodeType === Node.ELEMENT_NODE) {
-        h2Element = (container as Element).closest('h2');
-      }
-    }
-
-    if (h2Element) {
-      const div = document.createElement('div');
-      while (h2Element.firstChild) {
-        div.appendChild(h2Element.firstChild);
-      }
-
-      const rangeOffset = range.startOffset;
-      const textNode = range.startContainer;
-
-      h2Element.parentNode?.replaceChild(div, h2Element);
-
-      try {
-        const newRange = document.createRange();
-        if (textNode.nodeType === Node.TEXT_NODE && div.contains(textNode)) {
-          newRange.setStart(textNode, rangeOffset);
-          newRange.setEnd(textNode, rangeOffset);
-        } else {
-          newRange.setStart(div, 0);
-          newRange.setEnd(div, 0);
-        }
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-      } catch (e) {
-        const newRange = document.createRange();
-        newRange.selectNodeContents(div);
-        newRange.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-      }
-    } else {
-      exec('formatBlock', 'h2');
-    }
-  };
-
-  const toggleBulletList = () => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
-
-    const range = getSafeRange();
-    if (!range) return;
-    const container = range.commonAncestorContainer;
-    const currentElement = container.nodeType === Node.TEXT_NODE ? container.parentElement : (container as Element);
-
-    if (!currentElement) return;
-
-    const isInList = !!currentElement.closest('ol');
-    exec('insertOrderedList');
-    if (isInList) {
-      const contentElement = editorRef.current?.querySelector(`.${styles.pellContent}`) as HTMLElement;
-      if (!contentElement) return;
-
-      const spans = contentElement.querySelectorAll('span');
-
-      spans.forEach((span) => {
-        const computedStyle = window.getComputedStyle(span);
-        const fontSize = computedStyle.fontSize;
-        const fontWeight = computedStyle.fontWeight;
-
-        if (fontSize && (parseFloat(fontSize) > 16 || fontWeight === 'bold' || fontWeight === '700')) {
-          const div = document.createElement('div');
-          div.innerHTML = span.innerHTML;
-          span.parentNode?.replaceChild(div, span);
-        } else {
-          const parent = span.parentNode;
-          if (parent) {
-            while (span.firstChild) {
-              parent.insertBefore(span.firstChild, span);
-            }
-            parent.removeChild(span);
-          }
-        }
-      });
-
-      const allElements = contentElement.querySelectorAll('*');
-      allElements.forEach((element) => {
-        const htmlElement = element as HTMLElement;
-        const computedStyle = window.getComputedStyle(element);
-        const fontSize = computedStyle.fontSize;
-
-        if (!['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(element.tagName)) {
-          if (fontSize && parseFloat(fontSize) > 18) {
-            htmlElement.style.fontSize = '';
-            htmlElement.style.fontWeight = '';
-            htmlElement.style.fontFamily = '';
-          }
-        }
-      });
-      updateActiveStates();
-    }
-  };
-
-
+  const normalize = (html: string) => html.replace(/&nbsp;|\s+/g, ' ').replace(/>\s+</g, '><').trim();
+  const normalizedEditor = normalize(editorHtml || '');
+  const normalizedDefault = normalize(defaultValue || '');
+  const isTextEmpty = normalizedEditor.replace(/<[^>]*>/g, '').trim().length === 0;
+  const hasNoNewFiles = temporaryFiles.filter(f => f.file).length === 0 && 
+                        temporaryFiles.length === (attachedFiles?.length ?? 0);
+  const hasErrorsInFiles = temporaryFiles.some(f => !!f.error);    
+  const hasNoTextChanges = normalizedEditor === normalizedDefault;
+  const isSubmitDisabled = (hasNoTextChanges && hasNoNewFiles) || isTextEmpty || hasErrorsInFiles;
+  const isCancelDisabled = !isEditMode && (hasNoTextChanges && hasNoNewFiles);
 
   // Функция обработки загрузки файлов
   const handleUploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -457,428 +312,24 @@ const removeAttachedFile = (id: string) => {
 };
 
 
-  const getEditorActions = useCallback(
-    () => {
-      const baseActions = [
-        {
-          name: 'bold',
-          icon: IconBoldToString('', '', '1.5'),
-           title: lng === 'ru' ? 'Жирный (Ctrl+B)' : 'Bold (Ctrl+B)',
-          result: () => {},
-        },
-        {
-          name: 'italic',
-          icon: IconItalicToString('', '', '1.5'),
-          title: lng === 'ru' ? 'Курсив (Ctrl+I)' : 'Italic (Ctrl+I)',
-          result: () => {},
-        },
-        {
-          name: 'underline',
-          icon: IconUnderlineToString('', '', '1.5'),
-          title: lng === 'ru' ? 'Подчеркнутый (Ctrl+U)' : 'Underline (Ctrl+U)',
-          result: () => {},
-        },
-        {
-          name: 'strikethrough',
-          icon: IconStrikethroughToString('', '', '1.5'),
-          title: lng === 'ru' ? 'Зачеркнутый' : 'Strike-through',
-          result: () => {},
-        },
-        {
-          name: 'heading2',
-          icon: IconHeader2ToString('', '', '1.5'),
-          title: lng === 'ru' ? 'Заголовок' : 'Heading 2',
-          result: () => {},
-        },
-        {
-          name: 'olist',
-          icon: IconBulletlistToString(),
-          title: lng === 'ru' ? 'Список' : 'Bullet List',
-          result: () => {},
-        },
-        {
-          name: 'undo',
-          icon: IconUndoToString('', '', '1.5'),
-          title: lng === 'ru' ? 'Возврат последнего действия' : 'Return last action',
-          result: () => {},
-        },
-        {
-          name: 'redo',
-          icon: IconRedoToString('', '', '1.5'),
-          title: lng === 'ru' ? 'Отмена последнего действия' : 'Cancel last action',
-          result: () => {},
-        },
-        
-      ];
-      if (canAttachFiles) {
-        baseActions.push({
-          name: 'image',
-          icon: IconAttachToString('', '', '1.5'),
-          title: lng === 'ru' ? 'Прикрепить файл' : 'Upload file',
-          result: () => {},
-        });
-      }
-  
-      return baseActions;
-    },
-    [canAttachFiles,lng]
-  );
-
-  const getEditorClasses = useCallback(
-    () => ({
-      actionbar: styles.pellActionbar,
-      button: styles.pellButton,
-      content: styles.pellContent,
-      selected: styles.pellButtonSelected,
-    }),
-    []
-  );
-
-  const initializePellEditor = () => {
-    return init({
-      element: editorRef.current!,
-      onChange: handleEditorChange,
-      defaultParagraphSeparator: 'div',
-      actions: getEditorActions(),
-      classes: getEditorClasses(),
-    });
-  };
-
-
   const handleSubmit = useCallback(() => {
-    const currentPell = pellRef.current; 
-    if (!currentPell?.content) {
-      return;
-    }
-    if (onSubmit && currentPell.content.innerHTML) {
-      const filesToSend: File[] = convertAttacmentsToFile(
-        tempFilesRef.current.filter(file => !Boolean(file.error) && file.file)
-      );  
-      onSubmit(currentPell.content.innerHTML, filesToSend);
-      currentPell.content.innerHTML = '';
-      setTemporaryFiles([]);
-      setEditorHtml('');
-    }
-  }, [onSubmit]);
+    if (!editor) return;
+    const filesToSend = convertAttacmentsToFile(
+      tempFilesRef.current.filter(file => !Boolean(file.error) && file.file)
+    );
+
+    onSubmit?.(editor.getHTML(), filesToSend);
+    editor.commands.clearContent();
+    setTemporaryFiles([]);
+  }, [editor, onSubmit]);
 
   const handleCancel = useCallback(() => {
-    const currentPell = pellRef.current;
-    if (!currentPell?.content) {
-      return;
-    }
-    if(currentPell.content.innerHTML || tempFilesRef.current.length) {
-      currentPell.content.innerHTML = defaultValue || '';
-      setEditorHtml(defaultValue || ''); 
-      setTemporaryFiles(attachedFiles ? attachedFiles.map(file => ({...file})) : [])
+    if (!editor) return;
 
-      if (onCancel) {
-        onCancel?.();
-      }
-    }
-    
-  }, [defaultValue, onCancel]); 
-
-const hadleRedo = useCallback(()=>{  
-  
-  const currentPell = pellRef.current;
-  const contentToRestore = redoContentRef.current;  
-  if (!currentPell?.content || !contentToRestore) {
-      return;
-    }
-
-  currentPell.content.innerHTML = contentToRestore;
-  setEditorHtml(contentToRestore);
-  currentPell.content.focus();
-   setTimeout(setCursorToEnd, 0); 
-
-},[])
-
-  const handleUndo = useCallback(()=>{
-    const currentPell = pellRef.current;
-    if (!currentPell?.content) {
-        return;
-    }
-    redoContentRef.current = currentPell.content.innerHTML
-    currentPell.content.innerHTML = defaultValue || '';
-    setEditorHtml(defaultValue || '');
-    setTimeout(setCursorToEnd, 0); 
-  },[defaultValue])
-
-  const handleBoldToggle = () => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
-
-    const range = getSafeRange();
-    if (!range) return;
-
-    const element = getElementFromRange(range);
-    const isInH2 = element ? checkFormatting(element, ['H2']) : false;
-
-    if (!isInH2) {
-      document.execCommand('bold', false, undefined);
-      return;
-    }
-
-    const hasBold = element ? checkFormatting(element, ['B', 'STRONG']) : false;
-
-    if (hasBold) {
-      document.execCommand('bold', false, undefined);
-    } else if (!range.collapsed) {
-      try {
-        const b = document.createElement('b');
-        range.surroundContents(b);
-        const newRange = document.createRange();
-        newRange.selectNodeContents(b);
-        newRange.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-        pellRef.current?.content.dispatchEvent(new Event('input', { bubbles: true }));
-      } catch {
-        document.execCommand('insertHTML', false, `<b>${range.toString()}</b>`);
-      }
-    } else {
-      const b = document.createElement('b');
-      const zws = document.createTextNode('\u200B');
-      b.appendChild(zws);
-      range.insertNode(b);
-
-      const newRange = document.createRange();
-      newRange.setStart(zws, 1);
-      newRange.collapse(true);
-      selection.removeAllRanges();
-      selection.addRange(newRange);
-      pellRef.current?.content.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-  };
-
-  const setupToolbar = (pellEditor: PellEditor) => {
-    if (!editorRef.current) return;
-    const actionbar = editorRef.current.querySelector(`.${styles.pellActionbar}`);
-    const content = editorRef.current.querySelector(`.${styles.pellContent}`);
-
-    if (actionbar && content) {
-      // 1. Контейнер для кнопок форматирования
-      const buttonsContainer = document.createElement('div');
-      buttonsContainer.className = styles.buttonsContainer;
-      while (actionbar.firstChild) {
-        buttonsContainer.appendChild(actionbar.firstChild);
-      }
-     
-      // 2. Контейнер для Отменить/Добавить
-      const actionsWrapper = document.createElement('div');
-      actionsWrapper.className = styles.actionsWrapper || 'actions-container';
-      actionsWrapper.style.display = 'flex';
-      actionsWrapper.style.alignItems = 'center';
-      actionsWrapper.style.gap = '8px';
-      actionsWrapper.style.marginLeft = 'auto'; 
-
-      actionbar.appendChild(buttonsContainer);
-      actionbar.appendChild(actionsWrapper);
-
-      const root = createRoot(actionsWrapper);
-      root.render(
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <IconButton
-                  ref={cancelButtonRef}
-                  title={lng === 'ru' ? 'Отменить' : 'Cancel'}
-                  icon={<IconClose/>} 
-                  onClick={handleCancel} 
-                   style={{ 
-                    width: '25px', 
-                    height: '25px', 
-                    padding:'5px', 
-                    backgroundColor: 'white',
-                  }} 
-                   color="var(--blue-main)"
-                />
-                <IconButton
-                  ref={submitButtonRef}
-                  title={lng === 'ru' ? 'Отправить' : 'Submit'}
-                  icon={<IconSubmit width={'10'} height={'10'} htmlColor='blue' strokeWidth={'1'}/>} 
-                  onClick={handleSubmit} 
-                  style={{ 
-                    width: '25px', 
-                    height: '25px', 
-                    padding:'5px', 
-                    backgroundColor: 'var(--blue-main)',
-                  }} 
-                  color="white"
-                />             
-        </div>
-      );
-    }
-    
-    const buttons = editorRef.current.querySelectorAll(`.${styles.pellButton}`);
-    const commands = ['bold', 'italic', 'underline', 'strikethrough', 'heading2', 'olist', 'undo','redo'];
-    if (canAttachFiles) {
-      commands.push('image');
-    }
-
-
-    buttons.forEach((button: Element, index: number) => {
-      const command = commands[index];  
-      if (command) {
-        const htmlButton = button as HTMLElement;
-        buttonRefs.current[command] = htmlButton;
-        htmlButton.setAttribute('data-command', command);
-        htmlButton.onclick = null;
-        htmlButton.addEventListener('mousedown', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-
-          if (command === 'bold') {
-            handleBoldToggle();
-          } else if (command === 'heading2') {
-            toggleHeading2();
-          } else if (command === 'olist') {
-            toggleBulletList();
-          } else if (command === 'undo'){
-             handleUndo()
-          } else if (command === 'redo'){
-            hadleRedo()
-          } else if (command === 'image') {
-            handleAttachFiles();
-          } else {
-            document.execCommand(command, false, undefined);
-          }
-
-          pellEditor.content.focus();
-          updateActiveStates();
-          
-        });
-
-        htmlButton.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        });
-      }
-    });
-  }
-
-
-  // Функция для открытия диалога выбора файлов
-  const handleAttachFiles = () => {
-    uploaderRef.current?.click();
-  };
-
-  const handleEditorChange = useCallback((html: string) => {
-    const cleanHtml = html.replace(/\u200B/g, '');
-    setEditorHtml(cleanHtml);
-    redoContentRef.current = cleanHtml;
-    updateActiveStates();
-}, [updateActiveStates]);
-
-useEffect(() => {
-  if (!submitButtonRef.current) return;
-  
-  const normalizeHtml = (html: string | undefined | null) => {
-    if (!html) return '';
-    return html
-      .replace(/&nbsp;/g, ' ')      // неразрывные пробелы
-      .replace(/\s+/g, ' ')         // лишние пробелы и переносы
-      .replace(/>\s+</g, '><')      // пробелы между тегами
-      .trim();
-  };
-
-  const normalizedEditor = normalizeHtml(editorHtml);
-  const normalizedDefault = normalizeHtml(defaultValue);
-
-  const contentOnly = normalizedEditor
-    .replace(/<[^>]*>/g, '') // все теги
-    .replace(/\s/g, '')      // все пробелов
-    .trim();
-  const isTextEmpty = contentOnly.length === 0
-  const hasNoNewFiles = temporaryFiles.filter(file => file.file).length === 0 && 
-                         temporaryFiles.length === (attachedFiles?.length ?? 0);
-  const hasErrorsInFiles = temporaryFiles.some(file => Boolean(file.error));    
-  const hasNoTextChanges = normalizedEditor === normalizedDefault;
-  const hasNoChanges = hasNoTextChanges && hasNoNewFiles;
-  
-  if (submitButtonRef.current) {
-    submitButtonRef.current.disabled = hasNoChanges || isTextEmpty || hasErrorsInFiles
-    submitButtonRef.current.style.opacity = hasNoChanges || isTextEmpty || hasErrorsInFiles ? '0.5' : '1';
-    submitButtonRef.current.style.cursor = hasNoChanges || isTextEmpty || hasErrorsInFiles ? 'default' : 'pointer';
-  }
- 
-  if (cancelButtonRef.current) {
-    cancelButtonRef.current.disabled = !isEditMode && hasNoChanges
-    cancelButtonRef.current.style.opacity = isEditMode ? '1' : hasNoChanges ? '0.5' : '1';
-    cancelButtonRef.current.style.cursor = isEditMode ? 'pointer' : hasNoChanges ? 'default' : 'pointer';
-  }
-
-
-}, [editorHtml, defaultValue, temporaryFiles, submitButtonRef.current, cancelButtonRef.current, isEditMode]);
-
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.ctrlKey || e.metaKey) {
-      switch (e.key) {
-        case 'b':
-          e.preventDefault();
-          document.execCommand('bold', false, undefined);
-          updateActiveStates();
-          break;
-        case 'i':
-          e.preventDefault();
-          document.execCommand('italic', false, undefined);
-          updateActiveStates();
-          break;
-        case 'u':
-          e.preventDefault();
-          document.execCommand('underline', false, undefined);
-          updateActiveStates();
-          break;
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.innerHTML = '';
-      const pellEditor = initializePellEditor();
-      pellRef.current = pellEditor;
-
-      pellEditor.content.innerHTML = defaultValue || '';
-      setEditor(pellEditor);
-      setupToolbar(pellEditor);
-
-      const pellEditorContent = pellEditor.content;
-      const handleInput = () => updateActiveStates();
-      const handleKeyUp = () => setTimeout(updateActiveStates, 10);
-      const handleMouseUp = () => setTimeout(updateActiveStates, 10);
-      const handleFocus = () => setTimeout(updateActiveStates, 10);
-
-      pellEditorContent.addEventListener('input', handleInput);
-      pellEditorContent.addEventListener('keyup', handleKeyUp);
-      pellEditorContent.addEventListener('mouseup', handleMouseUp);
-      pellEditorContent.addEventListener('focus', handleFocus);
-      setTimeout(setCursorToEnd, 0); 
-
-      return () => {
-        pellEditorContent.removeEventListener('input', handleInput);
-        pellEditorContent.removeEventListener('keyup', handleKeyUp);
-        pellEditorContent.removeEventListener('mouseup', handleMouseUp);
-        pellEditorContent.removeEventListener('focus', handleFocus);
-
-        if (editorRef.current) {
-          editorRef.current.innerHTML = '';
-        }
-      };
-    }
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
-
-  useEffect(() => {
-    if (editor) {
-      setTimeout(updateActiveStates, 100);
-    }
-  }, [editor]);
+    editor.commands.setContent(defaultValue || '');
+    setTemporaryFiles(attachedFiles ?? []);
+    onCancel?.();
+  }, [editor, defaultValue, attachedFiles, onCancel]);
 
   const wrapperClassess = classNames(styles['wrapper--input'], {
     [styles['wrapper--input-label']]: label && !required,
@@ -912,7 +363,78 @@ useEffect(() => {
             maxFileCount={maxFileCount}
           />
         )}
-        <div className={styles.editorContainer} ref={editorRef}></div>
+        <div className={styles.editorContainer}>
+          <div className={styles.pellActionbar}>
+            <div className={styles.buttonsContainer}>
+              {toolbarButtons.map((btn) => {
+                const isActive = btn.active ? editorState[btn.active] : false;
+
+                 return (
+                  <button
+                    key={btn.name}
+                    type="button"
+                    className={`${styles.pellButton} ${
+                      btn.active && isActive ? styles.pellButtonSelected : ''
+                    }`}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      btn.action();
+                    }}
+                    dangerouslySetInnerHTML={{ __html: btn.icon }}
+                    title={btn.title}
+                  />
+                )
+              })}
+              {canAttachFiles && (
+                <button
+                  type="button"
+                  className={styles.pellButton}
+                  onMouseDown={(e) => { e.preventDefault(); commands.image(); }}
+                  dangerouslySetInnerHTML={{ __html: IconAttachToString('', '', '1.5') }}
+                  title={lng === 'ru' ? 'Прикрепить файл' : 'Upload file'}
+                />
+              )}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <IconButton 
+                disabled={isCancelDisabled}
+                title={lng === 'ru' ? 'Отменить' : 'Cancel'}
+                icon={<IconClose />} 
+                onClick={handleCancel}
+                style={{ 
+                  width: '25px', 
+                  height: '25px', 
+                  padding:'5px', 
+                  backgroundColor: 'white',
+                  opacity: isCancelDisabled ? 0.5 : 1,
+                  cursor: isCancelDisabled ? 'default' : 'pointer',
+                }} 
+                color="var(--blue-main)"
+              />
+              <IconButton 
+                title={lng === 'ru' ? 'Отправить' : 'Submit'}
+                icon={<IconSubmit width={'10'} height={'10'} htmlColor='blue' strokeWidth={'1'} />} 
+                onClick={handleSubmit}
+                disabled={isSubmitDisabled}
+                style={{ 
+                  width: '25px', 
+                  height: '25px', 
+                  padding:'5px', 
+                  backgroundColor: 'var(--blue-main)',
+                  opacity: isSubmitDisabled ? 0.5 : 1,
+                  cursor: isSubmitDisabled ? 'default' : 'pointer'
+                }}
+                color="white"
+              />
+            </div>
+          </div>
+
+          <div className={styles.pellContent} onClick={() => editor?.chain().focus().run()}>
+            {editor && <EditorContent editor={editor} />}
+          </div>
+
+        </div>
 
         {canAttachFiles && (
           <input
@@ -925,8 +447,8 @@ useEffect(() => {
           />
         )}
       </div>
-      {(error && helperText) && (
-        <Typography variant="Caption" className={classNames(styles.helperText)}>
+      {error && helperText && (
+        <Typography variant="Caption" className={styles.helperText}>
           {helperText}
         </Typography>
       )}
