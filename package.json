@@ -1,6 +1,6 @@
 {
   "name": "kamotive_ui",
-  "version": "20.3.26",
+  "version": "30.3.26",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
