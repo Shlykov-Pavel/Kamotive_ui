@@ -200,7 +200,8 @@
   color: var(--blue-main);
   border: 1px solid var(--blue-main);
 }
-.button--outline-default:hover {
+.button--outline-default:hover,
+.button--outline-default--active {
   background-color: rgba(13, 153, 255, 0.07);
   color: var(--blue-main);
   border: 1px solid var(--blue-main);
