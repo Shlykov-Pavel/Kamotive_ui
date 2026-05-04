@@ -26,8 +26,14 @@ const getComparisonValue = (item, getOptionLabel) => {
         if ('id' in item)
             return item.id;
     }
-    // Иначе используем сам объект
     return item;
+};
+const getItemId = (item) => {
+    if (!item || typeof item !== 'object')
+        return null;
+    if ('id' in item)
+        return item.id;
+    return null;
 };
 function checkItem(item, getOptionLabel, disabled, isDivider) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z;
@@ -140,9 +146,12 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
     }, [item, onChange]);
     const hasChildren = item !== null && typeof item === 'object' && 'children' in item && Array.isArray(item.children) && item.children.length > 0;
     const isDisabled = item !== null && typeof item === 'object' && 'disabled' in item && item.disabled;
+    const itemId = getItemId(item);
     const isSelectedItem = Array.isArray(selectedItem)
-        ? selectedItem.some((i) => getComparisonValue(i, getOptionLabel) === getComparisonValue(item, getOptionLabel))
-        : getComparisonValue(selectedItem, getOptionLabel) === getComparisonValue(item, getOptionLabel);
+        ? selectedItem.some((i) => itemId !== null ? getItemId(i) === itemId : getComparisonValue(i, getOptionLabel) === getComparisonValue(item, getOptionLabel))
+        : itemId !== null
+            ? getItemId(selectedItem) === itemId
+            : getComparisonValue(selectedItem, getOptionLabel) === getComparisonValue(item, getOptionLabel);
     const itemContainerClasses = classNames(styles[`item--container`], {
         [styles['item--container--active']]: isActive,
         [styles['item--container--parent']]: hasChildren && !isChild,
@@ -180,9 +189,11 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
         })))));
     return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left" }, itemContent)) : (itemContent);
 };
-export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, onSearch, isLoadMoreLoading, isSearchLoading, noOptionsText, lng = 'ru', multiple = false, limitTags = 1, }) => {
+export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, onSearch, isOptionsLoading, isSearchLoading, noOptionsText, lng = 'ru', multiple = false, limitTags = 1, }) => {
     const inputRef = useRef(null);
     const containerRef = useRef(null);
+    const dropdownRef = useRef(null);
+    const hoveredIndexRef = useRef(-1);
     const onCloseRef = useRef(onClose);
     const labelChipRef = useRef(new Map());
     const selectedItemRef = useRef(null);
@@ -266,6 +277,14 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         setIsOpen(newIsOpen);
         if (newIsOpen) {
             onOpen === null || onOpen === void 0 ? void 0 : onOpen(event);
+            const currentItem = multiple ? null : selectedItem;
+            const initialIndex = currentItem
+                ? displayOptions.findIndex((opt) => {
+                    const id = getItemId(opt);
+                    return id !== null ? id === getItemId(currentItem) : getComparisonValue(opt, getOptionLabel) === getComparisonValue(currentItem, getOptionLabel);
+                })
+                : -1;
+            setActiveIndex(initialIndex);
             if (enableAutocomplete && onChange) {
                 const selectedValue = ((_a = getComparisonValue(selectedItem, getOptionLabel)) === null || _a === void 0 ? void 0 : _a.toString()) || '';
                 setIsInitialOpen(true);
@@ -280,6 +299,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         else if (!newIsOpen) {
             onClose === null || onClose === void 0 ? void 0 : onClose(event);
             setSearchValue('');
+            hoveredIndexRef.current = -1;
         }
     };
     const onChangeHandler = (event, item) => {
@@ -289,23 +309,32 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
             setErrorInput(false);
             setSearchValue('');
             setSelectedItems((selectedItems) => {
-                const isSelected = selectedItems.some((i) => getComparisonValue(i, getOptionLabel) === getComparisonValue(item, getOptionLabel));
-                const newSelectedItems = isSelected ?
-                    selectedItems.filter((i) => getComparisonValue(i, getOptionLabel) !== getComparisonValue(item, getOptionLabel)) :
-                    [...selectedItems, item];
+                const itemId = getItemId(item);
+                const isSame = (i) => itemId !== null
+                    ? getItemId(i) === itemId
+                    : getComparisonValue(i, getOptionLabel) === getComparisonValue(item, getOptionLabel);
+                const isSelected = selectedItems.some(isSame);
+                const newSelectedItems = isSelected
+                    ? selectedItems.filter((i) => !isSame(i))
+                    : [...selectedItems, item];
                 const newEvent = Object.assign(Object.assign({}, event), { currentTarget: Object.assign(Object.assign({}, event.currentTarget), { value: newSelectedItems }) });
-                onChange === null || onChange === void 0 ? void 0 : onChange(newEvent, newSelectedItems);
+                onChange === null || onChange === void 0 ? void 0 : onChange(event, newSelectedItems);
                 return newSelectedItems;
             });
             return;
         }
         const newEvent = Object.assign(Object.assign({}, event), { currentTarget: Object.assign(Object.assign({}, event.currentTarget), { value: item }) });
-        if (getComparisonValue(selectedItem, getOptionLabel) !== getComparisonValue(item, getOptionLabel)) {
+        const selectedId = getItemId(selectedItem);
+        const itemId = getItemId(item);
+        const isDifferent = selectedId !== null && itemId !== null
+            ? selectedId !== itemId
+            : getComparisonValue(selectedItem, getOptionLabel) !== getComparisonValue(item, getOptionLabel);
+        if (isDifferent) {
             setSelectedItem(item);
             setIsOpen(false);
             setSearchValue('');
             onSearch === null || onSearch === void 0 ? void 0 : onSearch('');
-            onChange === null || onChange === void 0 ? void 0 : onChange(newEvent, item);
+            onChange === null || onChange === void 0 ? void 0 : onChange(event, item);
             onClose === null || onClose === void 0 ? void 0 : onClose(event);
         }
         if (item) {
@@ -332,6 +361,10 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
     };
     //для выбора опции из списка с клавиатуры
     const handleKeyDown = (event) => {
+        if (isOpen && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
         if (!isOpen) {
             if (event.key === 'Enter' || event.key === 'ArrowDown') {
                 event.preventDefault();
@@ -352,15 +385,26 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         switch (event.key) {
             case 'ArrowDown':
                 event.preventDefault();
-                displayOptions && setActiveIndex((prev) => (prev < displayOptions.length - 1 ? prev + 1 : prev));
+                displayOptions && setActiveIndex((prev) => {
+                    const start = prev < 0 ? hoveredIndexRef.current : prev;
+                    const hasLoadMore = showLoadMore && !!loadMore && !isSearchingNow && !showSpinner;
+                    const max = displayOptions.length - 1 + (hasLoadMore ? 1 : 0);
+                    return start <= max ? start + 1 : start;
+                });
                 break;
             case 'ArrowUp':
                 event.preventDefault();
-                displayOptions && setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
+                displayOptions && setActiveIndex((prev) => {
+                    const start = prev < 0 ? hoveredIndexRef.current : prev;
+                    return start > 0 ? start - 1 : start;
+                });
                 break;
             case 'Enter':
                 event.preventDefault();
-                if (activeIndex >= 0 && activeIndex < displayOptions.length) {
+                if (activeIndex === displayOptions.length && showLoadMore && loadMore) {
+                    loadMore();
+                }
+                else if (activeIndex >= 0 && activeIndex < displayOptions.length) {
                     const selectedOption = displayOptions[activeIndex];
                     onChangeHandler(event, selectedOption);
                     setIsOpen(false);
@@ -397,7 +441,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         }
         setSearchValue('');
         onSearch === null || onSearch === void 0 ? void 0 : onSearch('');
-        onChange === null || onChange === void 0 ? void 0 : onChange(event, multiple ? [] : startValue !== null && startValue !== void 0 ? startValue : null);
+        onChange === null || onChange === void 0 ? void 0 : onChange(event, []);
         close && (onClose === null || onClose === void 0 ? void 0 : onClose(event));
         setActiveIndex(-1);
         if (required) {
@@ -409,9 +453,9 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         event.preventDefault();
         event.stopPropagation();
         item && setSelectedItems((selectedItems) => {
-            const newSelectedItems = selectedItems.filter((i) => getComparisonValue(i, getOptionLabel) !== getComparisonValue(item, getOptionLabel));
-            const newEvent = Object.assign(Object.assign({}, event), { currentTarget: Object.assign(Object.assign({}, event.currentTarget), { value: newSelectedItems }) });
-            onChange === null || onChange === void 0 ? void 0 : onChange(newEvent, newSelectedItems);
+            const itemId = getItemId(item);
+            const newSelectedItems = selectedItems.filter((i) => itemId !== null ? getItemId(i) !== itemId : getComparisonValue(i, getOptionLabel) !== getComparisonValue(item, getOptionLabel));
+            onChange === null || onChange === void 0 ? void 0 : onChange(event, newSelectedItems);
             if (required && newSelectedItems.length === 0) {
                 setErrorInput(true);
                 setErrorInputHelperText((helperText !== null && helperText !== void 0 ? helperText : lng === 'ru') ? 'Поле обязательно для заполнения' : 'Field is required');
@@ -436,9 +480,9 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         const hidden = selectedItems.length - visible.length;
         return (React.createElement("div", { className: styles.chipsWrap },
             visible.map((opt) => {
-                var _a, _b;
-                const key = String((_a = getComparisonValue(opt, getOptionLabel)) !== null && _a !== void 0 ? _a : getSelectedItemsText());
-                const label = String((_b = getComparisonValue(opt, getOptionLabel)) !== null && _b !== void 0 ? _b : '');
+                var _a, _b, _c;
+                const key = String((_b = (_a = getItemId(opt)) !== null && _a !== void 0 ? _a : getComparisonValue(opt, getOptionLabel)) !== null && _b !== void 0 ? _b : getSelectedItemsText());
+                const label = String((_c = getComparisonValue(opt, getOptionLabel)) !== null && _c !== void 0 ? _c : '');
                 const chip = (React.createElement("span", { className: styles.chip, onMouseEnter: () => requestAnimationFrame(() => recalcChipTooltips()), onMouseDown: (e) => e.stopPropagation(), onClick: (e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -489,18 +533,28 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                     e.stopPropagation();
                     onBlur === null || onBlur === void 0 ? void 0 : onBlur(e);
                 }, onKeyDown: handleKeyDown, autoFocus: true })),
-            !isOpen && (React.createElement(React.Fragment, null,
-                !multiple && !selectedItem && !searchValue && !isOpen && (React.createElement("span", null, (_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : (lng === 'ru' ? 'Выберите значение' : 'Select value'))),
-                multiple && selectedItems.length === 0 && !isOpen && (React.createElement("span", null, (_b = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _b !== void 0 ? _b : (lng === 'ru' ? 'Выберите значения' : 'Select values')))))));
+            !multiple && !selectedItem && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", null, (_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : (lng === 'ru' ? 'Выберите значение' : 'Select value'))),
+            multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", null, (_b = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _b !== void 0 ? _b : (lng === 'ru' ? 'Выберите значения' : 'Select values')))));
         return showSelectedTooltip ? (React.createElement("div", { className: styles.textField },
             React.createElement(Tooltip, { label: ((_c = getComparisonValue(selectedItem, getOptionLabel)) === null || _c === void 0 ? void 0 : _c.toString()) || '', position: "bottom-left", style: { width: '100% !important' } }, textFieldContent))) : (textFieldContent);
     };
+    const isSearchingNow = !isInitialOpen && !!searchValue.trim();
+    const showSpinner = isSearchLoading || (isOptionsLoading && displayOptions.length === 0);
     const getDropdownMenu = () => {
-        //const optionsToRender = enableAutocomplete && searchValue ? filteredOptions : modifiedOptions;
         const optionsToRender = displayOptions;
-        const isSearchingNow = !isInitialOpen && !!searchValue.trim();
-        const showSpinner = isSearchLoading || (isLoadMoreLoading && optionsToRender.length === 0);
-        const menu = isOpen && (React.createElement("div", { className: dropdownClassess },
+        const menu = isOpen && (React.createElement("div", { className: dropdownClassess, ref: dropdownRef, onMouseMove: (e) => {
+                var _a;
+                const items = (_a = dropdownRef.current) === null || _a === void 0 ? void 0 : _a.querySelectorAll('[class*="item--container"]');
+                if (!items)
+                    return;
+                const target = e.target.closest('[class*="item--container"]');
+                if (!target)
+                    return;
+                const idx = Array.from(items).indexOf(target);
+                if (idx !== -1)
+                    hoveredIndexRef.current = idx;
+                setActiveIndex(-1);
+            } },
             showSpinner ? (React.createElement("div", { className: `${styles['item-block']}`, style: { padding: '10px', display: 'flex', flexDirection: "column", alignItems: 'center', justifyContent: 'center', margin: '0 auto' } },
                 React.createElement(Spinner, null))) : (React.createElement(React.Fragment, null, optionsToRender && optionsToRender.length > 0 ? (optionsToRender.map((option, index) => {
                 var _a;
@@ -508,15 +562,27 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
             })) : (React.createElement("div", { className: `${styles['item-block']}`, style: { margin: '15px auto', textAlign: 'center', color: 'var(--text-grey)' } }, lng === 'ru' || lng.includes('ru')
                 ? noOptionsText || 'Нет вариантов для выбора'
                 : noOptionsText || 'No options to select')))),
-            !showSpinner && !isSearchingNow && showLoadMore && loadMore && (React.createElement(Button, { style: { width: '97%', margin: '10px auto', display: 'block', boxSizing: 'border-box' }, disabled: isLoadMoreLoading, variant: 'outline', onClick: (e) => {
+            !showSpinner && !isSearchingNow && showLoadMore && loadMore && (React.createElement(Button, { ref: loadMoreRef, style: { width: '97%', margin: '10px auto', display: 'block', boxSizing: 'border-box' }, disabled: isOptionsLoading, variant: 'outline', active: activeIndex === displayOptions.length, onClick: (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     loadMore();
-                } }, isLoadMoreLoading
+                } }, isOptionsLoading
                 ? (lng === 'ru' ? 'Загрузка...' : 'Loading...')
                 : (lng === 'ru' ? 'Загрузить еще' : 'Load more')))));
         return isOpen ? menu : null;
     };
+    const loadMoreRef = useRef(null);
+    useEffect(() => {
+        var _a, _b;
+        if (activeIndex < 0 || !dropdownRef.current)
+            return;
+        if (activeIndex === displayOptions.length) {
+            (_a = loadMoreRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({ block: 'nearest' });
+            return;
+        }
+        const items = dropdownRef.current.querySelectorAll('[class*="item--container"]');
+        (_b = items[activeIndex]) === null || _b === void 0 ? void 0 : _b.scrollIntoView({ block: 'nearest' });
+    }, [activeIndex, displayOptions.length]);
     useEffect(() => {
         onCloseRef.current = onClose;
     }, [onClose]);
@@ -593,6 +659,8 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
             // disabled={disabled}
             tabIndex: disabled ? -1 : 0, "aria-disabled": disabled, onKeyDown: (e) => {
                 if (disabled)
+                    return;
+                if (enableAutocomplete && e.target instanceof HTMLInputElement)
                     return;
                 handleKeyDown(e);
             } },

@@ -5,7 +5,7 @@ import { Typography } from '../Typography/Typography';
 /**
  * Компонент Button представляет собой кнопку, которую можно настроить с помощью различных параметров (размер, иконки, стили, состояние).
  */
-export const Button = ({ label, variant = 'fill', size = 'md', mode, style, condition, icon, disabled = false, onClick, children, error, color, name, type = 'button', form }) => {
+export const Button = React.forwardRef(({ label, variant = 'fill', size = 'md', mode, style, condition, icon, disabled = false, onClick, children, error, color, name, type = 'button', form, className, active, }, ref) => {
     const btnIcon = icon || typeof children === 'object' && children;
     let modeStyle = 'text';
     if (mode) {
@@ -15,9 +15,10 @@ export const Button = ({ label, variant = 'fill', size = 'md', mode, style, cond
         modeStyle = (!label && !children) ? 'icon' : 'default';
     }
     const buttonCondition = error ? 'error' : (condition || 'default');
-    const buttonClasses = classNames(styles['button'], styles[`button--${size}`], styles[`button--${modeStyle}`], {
+    const buttonClasses = classNames(styles['button'], styles[`button--${size}`], styles[`button--${modeStyle}`], className, {
         [styles[`button--${variant}-${buttonCondition}`]]: buttonCondition && !color,
-        [styles[`button--${variant}-custom`]]: color && !error
+        [styles[`button--${variant}-custom`]]: color && !error,
+        [styles[`button--${variant}-${buttonCondition}--active`]]: active && buttonCondition && !color,
     });
     const iconColorFn = () => {
         if (buttonCondition && !color) {
@@ -60,7 +61,7 @@ export const Button = ({ label, variant = 'fill', size = 'md', mode, style, cond
         return (React.createElement("button", { className: buttonClasses },
             React.createElement(Typography, { variant: "Body1" }, "\u041A\u043D\u043E\u043F\u043A\u0430")));
     }
-    return (React.createElement("button", { className: buttonClasses, style: Object.assign(Object.assign({}, style), (color && !error ? {
+    return (React.createElement("button", { className: buttonClasses, ref: ref, style: Object.assign(Object.assign({}, style), (color && !error ? {
             '--button-color': color,
             '--button-hover-color': variant === 'fill' || variant === 'link' ? `color-mix(in srgb, ${color} 90%, black)` : `color-mix(in srgb, ${color} 10%, transparent)`,
             '--button-active-color': variant === 'fill' || variant === 'link' ? `color-mix(in srgb, ${color} 80%, black)` : `color-mix(in srgb, ${color} 20%, transparent)`,
@@ -77,4 +78,4 @@ export const Button = ({ label, variant = 'fill', size = 'md', mode, style, cond
             });
         })(),
         (modeStyle === 'text' || modeStyle === 'default') && (React.createElement(Typography, { variant: "Body1" }, label ? label : typeof children === 'string' && children))));
-};
+});
