@@ -7,7 +7,7 @@ import { Typography } from '../Typography/Typography';
  * Компонент Button представляет собой кнопку, которую можно настроить с помощью различных параметров (размер, иконки, стили, состояние).
  */
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   label,
   variant = 'fill',
   size = 'md',
@@ -22,8 +22,10 @@ export const Button: React.FC<ButtonProps> = ({
   color,
   name,
   type = 'button',
-  form
-}) => {
+  form,
+  className,
+  active,
+}, ref) => {
 
   const btnIcon = icon || typeof children === 'object' && children;
   
@@ -39,9 +41,11 @@ export const Button: React.FC<ButtonProps> = ({
     styles['button'],
     styles[`button--${size}`],
     styles[`button--${modeStyle}`],
+    className,
     {
     [styles[`button--${variant}-${buttonCondition}`]]: buttonCondition && !color,
-    [styles[`button--${variant}-custom`]]: color && !error
+    [styles[`button--${variant}-custom`]]: color && !error,
+    [styles[`button--${variant}-${buttonCondition}--active`]]: active && buttonCondition && !color,
     },
   );  
   
@@ -94,6 +98,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button className={buttonClasses}  
+    ref={ref}
     style={{
       ...style,
       ...(color && !error ? {
@@ -126,4 +131,4 @@ export const Button: React.FC<ButtonProps> = ({
       )}
     </button>
   );
-};
+});

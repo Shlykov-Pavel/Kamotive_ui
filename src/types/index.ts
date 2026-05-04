@@ -2,7 +2,7 @@ import { CheckboxDisabled } from './../components/Checkbox/Checkbox.stories';
 import * as React from 'react';
 import { ChangeEventHandler, CSSProperties, ReactNode, MouseEvent, ButtonHTMLAttributes} from 'react';
 import { ETypographyVariants } from '../components/Typography/enums';
-import { Accept, FileError } from 'react-dropzone/.';
+import { Accept, FileError } from 'react-dropzone';
 import { FilePreview } from '../components/AttachedFilesPreview/AttachedFilesPreview';
 
 /** @internal */
@@ -58,6 +58,12 @@ export interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   /** Указатель на форму */
   form?: string;
+  /** Дополнительный CSS класс */
+  className?: string;
+  /** Ref на элемент кнопки */
+  ref?: React.Ref<HTMLButtonElement>;
+  /** Активное состояние (имитирует hover) */
+  active?: boolean;
 }
 
 /** @internal */
@@ -192,7 +198,7 @@ export interface IDropdownItem {
   [key: string]: any;
 }
 
-export interface DropdownProps<T> {
+export interface DropdownBaseProps<T> {
   /** Массив элементов для выпадающего списка */
   options: T[];
   /** Идентификатор */
@@ -203,20 +209,16 @@ export interface DropdownProps<T> {
   placeholder?: string;
   /** Обязательное поле */
   required?: boolean;
-  /** Значение */
-  value?: T | null | T[];
   /** Значение по умолчанию */
   defaultValue?: IDropdownItem | null;
-  /** Callback, который будет вызван при изменении значения */
-  onChange?: (event: any, value: T | T[] | null) => void;
   /** Флаг, является ли выпадающий список пагинированным */
-  showLoadMore?: boolean
+  showLoadMore?: boolean;
   /** Функция для загрузки списка при пагинированных данных */
   loadMore?: () => void;
-  isLoadMoreLoading?: boolean,
+  isOptionsLoading?: boolean,
   /** Функция для получения текста опции */
   getOptionLabel?: (option: IDropdownItem) => string;
-  /** Вариaнты выпадающего списка' */
+  /** Варианты выпадающего списка */
   variant?: 'icons' | 'text' | 'filter';
   /** Размер */
   size?: 'md' | 'lg';
@@ -238,33 +240,47 @@ export interface DropdownProps<T> {
   error?: boolean;
   /** Текст ошибки */
   helperText?: string;
-  /** Callback, который будет вызван при открытии Dropdown(для подгрузки данных) */
-  onOpen?:(event: any) => void;
-  /** Callback, который будет вызван при клике */
+  /** Callback, который будет вызван при открытии Dropdown */
+  onOpen?: (event: any) => void;
+  /** Callback при клике */
   onClick?: (event: any) => void;
   /** Callback при потере фокуса */
   onBlur?: (event: any) => void;
   /** Callback при получении фокуса */
   onFocus?: (event: any) => void;
-  /** Callback, который будет вызван при закрытии выпадающего списка */
+  /** Callback при закрытии */
   onClose?: (event: any) => void;
-  /** Возможность сброса значения до первоначального */
+  /** Возможность сброса значения */
   clearable?: boolean;
   /** Включение автозаполнения */
   enableAutocomplete?: boolean;
-  /** Функиця для получения данных по поиску */
+  /** Функция для получения данных по поиску */
   onSearch?: (value: string) => void;
   isSearchLoading?: boolean;
   /** Текст при отсутствии опций */
   noOptionsText?: string;
   /** Язык */
-  lng?: string,
-   /** Множественный выбор */
+  lng?: string;
+  /** Множественный выбор */
   multiple?: boolean,
-   /** Количество видимых значений при множественном выборе */
-  limitTags?: number,
-  
+  /** Количество видимых значений при множественном выборе */
+  limitTags?: number;
 }
+
+export type DropdownProps<T> =
+
+  | (DropdownBaseProps<T> & { 
+      multiple: true; 
+      value?: T[] | null; 
+      onChange?: (event: any, value: T[]) => void 
+    })
+
+  | (DropdownBaseProps<T> & { 
+      multiple?: false; 
+      value?: T | null; 
+      onChange?: (event: any, value: T | null) => void 
+    });
+
 
 /** @internal */
 export interface TypographyProps {
