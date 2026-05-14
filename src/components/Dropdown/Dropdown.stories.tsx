@@ -766,6 +766,7 @@ DropdownFilter.storyName = 'Dropdown для фильтрации';
 DropdownFilter.args = {
   isOpened: false,
   options: dropdownOptions,
+  isOptionsLoading: true,
   label: 'Лейбл селекта',
   variant: 'filter',
   enableAutocomplete: true,
