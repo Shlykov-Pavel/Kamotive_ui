@@ -521,7 +521,10 @@ export const Dropdown = <T extends BaseOptions>({
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+    let value = event.target.value;
+    if (/(\S+)\.\s+$/.test(value)) {
+        value = value.replace(/(\S+)\.\s+$/, '$1  '); //для неподстановки точки автоматом при двойных пробелов
+    }
     event.preventDefault();
     event.stopPropagation();
     if (value === '') {
@@ -538,6 +541,14 @@ export const Dropdown = <T extends BaseOptions>({
 
   //для выбора опции из списка с клавиатуры
   const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.target instanceof HTMLInputElement) {
+      const inputTarget = event.target; 
+      
+      if (event.key === ' ' && !inputTarget.value.trim()) {
+        event.preventDefault(); 
+        return; 
+      }
+    }
     if (isOpen && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
       event.preventDefault();
       event.stopPropagation();
