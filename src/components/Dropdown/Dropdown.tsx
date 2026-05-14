@@ -522,8 +522,9 @@ export const Dropdown = <T extends BaseOptions>({
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value = event.target.value;
-    if (/(\S+)\.\s+$/.test(value)) {
-        value = value.replace(/(\S+)\.\s+$/, '$1  '); //для неподстановки точки автоматом при двойных пробелов
+    const regex = /(\S+)\.\s+$/ //проверка автоматического подставления точки после двойных пробелов
+    if (regex.test(value)) {
+        value = value.replace(regex, '$1  ');
     }
     event.preventDefault();
     event.stopPropagation();
