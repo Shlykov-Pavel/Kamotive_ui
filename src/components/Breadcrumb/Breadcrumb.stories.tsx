@@ -50,7 +50,10 @@ export const BreadcrumbWithIcon = (argTypes: BreadcrumbProps): JSX.Element => <B
 BreadcrumbWithIcon.storyName = 'Breadcrumb с иконкой';
 BreadcrumbWithIcon.args = {
   active: true,
-  children: [<IconBell />, 'Breadcrumb с иконкой'],
+  //children: [<IconBell />, 'Breadcrumb с иконкой'],
+  icon: <IconBell />,
+  label: 'Breadcrumb с иконкой',
+  testId: 'storybook'
 };
 
 export const BreadcrumbIcon = (argTypes: BreadcrumbProps): JSX.Element => <Breadcrumb {...argTypes} />;

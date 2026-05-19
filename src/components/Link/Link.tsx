@@ -21,6 +21,7 @@ export const Link: FC<LinkProps> = ({
   maxWidth,
   size,
   widthInPixels,
+  testId = 'default'
 }) => {
   const stylesUnderline = underline === 'hover' ? styles.linkHover : underline === 'none' ? styles.linkNone : '';
 
@@ -52,7 +53,7 @@ export const Link: FC<LinkProps> = ({
   }, [actualSize, widthInPixels, size]);
 
   const linkContent = (
-    <Typography variant={variant} color={color} style={contentStyle}>
+    <Typography variant={variant} color={color} style={contentStyle} testId={`${testId}-link`}>
       {children}
     </Typography>
   );
@@ -61,6 +62,7 @@ export const Link: FC<LinkProps> = ({
       onClick={onClick}
       className={classNames(styles.link, stylesUnderline, isTooltipVisible && styles.tooltipStyle, className)}
       style={{ ...linkStyle, ...stylesTooltipWidth }}
+      data-test-id={`${testId}-link`}
     >
       {!size && (
         <div
@@ -85,6 +87,7 @@ export const Link: FC<LinkProps> = ({
       title={title}
       className={classNames(styles.link, stylesUnderline, isTooltipVisible && styles.tooltipStyle, className)}
       style={{ ...linkStyle, ...stylesTooltipWidth }}
+      data-test-id={`${testId}-link`}
     >
       {!size && (
         <div
@@ -112,6 +115,7 @@ export const Link: FC<LinkProps> = ({
       opacity={0.4}
       displayDelay={0}
       style={{ maxWidth: '500px' }}
+      testId={`${testId}-link`}
     >
       {link}
     </Tooltip>

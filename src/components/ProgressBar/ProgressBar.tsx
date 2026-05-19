@@ -18,6 +18,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   animationDuration = 8000,
   setIsLoadingFinished,
   width,
+  testId = 'default'
 }) => {
   const [percent, setPercent] = useState(value);
   const validPercentage = Math.min(Math.max(value, 0), max);
@@ -52,18 +53,19 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   }, [animated, validPercentage, setIsLoadingFinished, animationDuration]);
 
   return (
-    <div className={styles['progress-bar--wrapper']}>
+    <div className={styles['progress-bar--wrapper']} data-test-id={`${testId}-progressbar`}>
       <progress
         id="linear-progress"
         className={progressBarClasses}
         value={percent}
         max={max}
         style={{ width: width }}
+        data-test-id={`${testId}-progressbar-indicator`}
         //style={{ transition: animated ? 'width 0.8s ease-in-out' : 'none' }}
       />
-      <label htmlFor="progress" className={styles['progress-bar-percentage']}>
+      <label htmlFor="progress" className={styles['progress-bar-percentage']} data-test-id={`${testId}-progressbar-label`}>
         {showValue && (
-          <Typography variant="Body1" color={'#9CA0A7'} className={styles['progress-bar-percentage']}>
+          <Typography variant="Body1" color={'#9CA0A7'} className={styles['progress-bar-percentage']} testId={`${testId}-progressbar`}>
             {percent}%
           </Typography>
         )}

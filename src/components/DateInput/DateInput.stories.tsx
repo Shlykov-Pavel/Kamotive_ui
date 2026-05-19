@@ -25,6 +25,7 @@ const meta: Meta<DateInputProps> = {
   ],
   args: {
 	disabled: false,
+	testId: 'storybook'
   },
   argTypes: {
 	disabled: { description: 'Устанавливает атрибут disabled', control: { type: 'boolean' } },

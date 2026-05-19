@@ -85,6 +85,7 @@ export interface DropdownBaseProps<T> {
   multiple?: boolean,
   /** Количество видимых значений при множественном выборе */
   limitTags?: number;
+  testId?:string;
 }
 
 export type DropdownProps<T> =
@@ -140,6 +141,7 @@ const meta: Meta<typeof Dropdown> = {
     options: dropdownOptions,
     noOptionsText: 'Нет опций для выбора',
     label: 'Выпадающий список',
+    testId: 'storybook'
   },
   argTypes: {
     id: {

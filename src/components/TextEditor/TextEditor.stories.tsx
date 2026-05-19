@@ -35,6 +35,7 @@ export interface TextEditorProps {
   isButtonDisabled?: boolean;
   /** Язык */
   lng?: string;
+  testId?:string
 }
 
 
@@ -58,6 +59,9 @@ const meta: Meta<TextEditorProps> = {
       </div>
     ),
   ],
+  args:{
+    testId:'storybook'
+  },
   argTypes: {
     label: {},
     helperText: {},

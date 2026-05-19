@@ -16,6 +16,7 @@ export type SnackbarProps = {
   onClose?: () => void;
   /** Стили передаваемые напрямую */
   style?: React.CSSProperties;
+  testId?: string;
 };
 
 const withWrapper = (Story: React.ComponentType) => (
@@ -78,6 +79,7 @@ export const SnackbarColors = (argTypes: SnackbarProps): JSX.Element => {
           duration={0}
           onClose={argTypes.onClose}
           style={{ position: 'relative' }}
+          testId='storybook'
         >
           Текст
         </Snackbar>

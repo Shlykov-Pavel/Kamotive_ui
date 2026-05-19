@@ -112,6 +112,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
   required,
   className,
   lng = 'en',
+  testId='default'
 }) => {
   const uploaderRef = useRef<HTMLInputElement>(null);
 
@@ -136,6 +137,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       attributes: {
         class: styles.pellContent,
         style: 'overflow: visible; height: auto; outline: none;',
+        'data-test-id': `${testId}-text-field`
       },
     },
     onUpdate: ({ editor }) => {
@@ -181,6 +183,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({
       action: commands.bold,
       active: 'bold',
       title: lng === 'ru' ? 'Жирный (Ctrl+B)' : 'Bold (Ctrl+B)',
+      'data-test-id': `${testId}-text-bold`
     },
     {
       name: 'italic',
@@ -345,9 +348,9 @@ const removeAttachedFile = (id: string) => {
   });
 
   return (
-    <div className={wrapperClassess}>
+    <div data-test-id={`${testId}-textEditor-block`} className={wrapperClassess}>
       {label && (
-        <Typography variant="Caption" className={labelClasses}>
+        <Typography testId={`${testId}-textEditor`} variant="Caption" className={labelClasses}>
           {label}
         </Typography>
       )}
@@ -361,10 +364,11 @@ const removeAttachedFile = (id: string) => {
             className={styles.attachedFilesContainer}
             lng={lng}
             maxFileCount={maxFileCount}
+            testId={`${testId}-textEditor-attached`} 
           />
         )}
         <div className={styles.editorContainer}>
-          <div className={styles.pellActionbar}>
+          <div data-test-id={`${testId}-textEditor-toolbar`} className={styles.pellActionbar}>
             <div className={styles.buttonsContainer}>
               {toolbarButtons.map((btn) => {
                 const isActive = btn.active ? editorState[btn.active] : false;
@@ -382,6 +386,8 @@ const removeAttachedFile = (id: string) => {
                     }}
                     dangerouslySetInnerHTML={{ __html: btn.icon }}
                     title={btn.title}
+                    data-test-id={`${testId}-textEditor-${btn.name}-button`} 
+                    
                   />
                 )
               })}
@@ -392,6 +398,7 @@ const removeAttachedFile = (id: string) => {
                   onMouseDown={(e) => { e.preventDefault(); commands.image(); }}
                   dangerouslySetInnerHTML={{ __html: IconAttachToString('', '', '1.5') }}
                   title={lng === 'ru' ? 'Прикрепить файл' : 'Upload file'}
+                  data-test-id={`${testId}-textEditor-attach-button`}
                 />
               )}
             </div>
@@ -411,6 +418,7 @@ const removeAttachedFile = (id: string) => {
                   cursor: isCancelDisabled ? 'default' : 'pointer',
                 }} 
                 color="var(--blue-main)"
+                data-test-id={`${testId}-textEditor-cancel-button`}
               />
               <IconButton 
                 title={lng === 'ru' ? 'Отправить' : 'Submit'}
@@ -426,11 +434,12 @@ const removeAttachedFile = (id: string) => {
                   cursor: isSubmitDisabled ? 'default' : 'pointer'
                 }}
                 color="white"
+                data-test-id={`${testId}-textEditor-submit-button`}
               />
             </div>
           </div>
 
-          <div className={styles.pellContent} onClick={() => editor?.chain().focus().run()}>
+          <div data-test-id={`${testId}-textEditor-text-field`} className={styles.pellContent} onClick={() => editor?.chain().focus().run()}>
             {editor && <EditorContent editor={editor} />}
           </div>
 
@@ -440,15 +449,17 @@ const removeAttachedFile = (id: string) => {
           <input
             ref={uploaderRef}
             type="file"
+            name="file"
             style={{ display: 'none' }}
             multiple
             onChange={handleUploadFiles}
             accept={ACCEPTED_FILE_TYPES}
+            data-test-id={`${testId}-textEditor-upload-input`}
           />
         )}
       </div>
       {error && helperText && (
-        <Typography variant="Caption" className={styles.helperText}>
+        <Typography testId={`${testId}-textEditor-error`} variant="Caption" className={styles.helperText}>
           {helperText}
         </Typography>
       )}

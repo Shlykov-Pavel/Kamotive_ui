@@ -25,6 +25,7 @@ export const TableFilterSidebar: FC<TableFilterSidebarProps> = ({
     zIndex = 10000, 
     top = 0,
     right = 0,
+    testId = 'default'
   }
 ) => {  
   if (!open) return null;
@@ -52,21 +53,22 @@ export const TableFilterSidebar: FC<TableFilterSidebarProps> = ({
           top: `${top}px`, 
           right: `${right}px`,
           ...style}}
+        data-test-id={`${testId}-filter-modal`}
       >
-        <div className={styles.header}>
-          <Typography variant='Body1-SemiBold' style={{color:'var(--text-dark)'}}>{lng === 'ru' ? 'Фильтры' : 'Filters'} </Typography>
+        <div className={styles.header} data-test-id={`${testId}-filter-header`}>
+          <Typography variant='Body1-SemiBold' style={{color:'var(--text-dark)'}} testId={`${testId}-filter`}>{lng === 'ru' ? 'Фильтры' : 'Filters'} </Typography>
           <IconButton
             title={lng === 'ru' ? 'Закрыть' : 'Close'} 
             onClick={onClose} 
             icon={<IconClose />} 
             color="var(--icons-grey)" 
-
             className={styles.closeBtn}
+            testId={`${testId}-filter`}
           />
         </div>
-        <div className={styles.content}>
+        <div className={styles.content} data-test-id={`${testId}-filter-content`}>
           {isLoading ? (
-            <div className={styles.loaderWrapper}><Spinner /></div>
+            <div className={styles.loaderWrapper}><Spinner testId={`${testId}-filter`}/></div>
           ) : (
             <div 
               style={{ 
@@ -74,6 +76,7 @@ export const TableFilterSidebar: FC<TableFilterSidebarProps> = ({
                 gap: `${gap}px ${gap+10}px`, 
                 gridTemplateColumns: `repeat(${columnsCount}, minmax(0, 1fr))` 
               }}
+              data-test-id={`${testId}-filters-list`}
             >
               {childrenArray.map((child, index) => (
                 <div 
@@ -82,6 +85,7 @@ export const TableFilterSidebar: FC<TableFilterSidebarProps> = ({
                     minWidth: 0,      
                     width: '100%', 
                   }}
+                  data-test-id={`${testId}-filter-item-${index}`}
                 >
                   {child}
                 </div>
@@ -90,8 +94,8 @@ export const TableFilterSidebar: FC<TableFilterSidebarProps> = ({
           )}
         </div>
         <div className={styles.buttons}>
-        {onReset &&  <Button label={lng === 'ru' ? 'Сбросить' : 'Reset'} variant='outline' onClick={onReset}  disabled={isResetDisabled || isLoading}/>}
-        {onApply &&  <Button label={lng === 'ru' ? 'Применить' : 'Apply'} onClick={onApply} disabled={isApplyDisabled || isLoading}/>}
+        {onReset &&  <Button label={lng === 'ru' ? 'Сбросить' : 'Reset'} variant='outline' onClick={onReset}  disabled={isResetDisabled || isLoading} testId={`${testId}-filter-reset`}/>}
+        {onApply &&  <Button label={lng === 'ru' ? 'Применить' : 'Apply'} onClick={onApply} disabled={isApplyDisabled || isLoading} testId={`${testId}-filter-apply`}/>}
         </div>
       </aside>
     </>

@@ -30,6 +30,7 @@ export const Comment: FC<CommentProps> = ({
   lng = 'ru',
   style,
   className,
+  testId = 'default'
 }) => {
   
   const [isEditMode, setIsEditMode] = useState(isEdit);
@@ -65,25 +66,24 @@ export const Comment: FC<CommentProps> = ({
     onEdit?.(isEditMode)
   }, [isEditMode]);
 
-
   return (
-    <div className={wrapperClassess} style={style}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div data-test-id={`${testId}-comment-section`} className={wrapperClassess} style={style}>
+      <div data-test-id={`${testId}-comment-section-header`} style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div className={styles.labelWrapper}>
           <div className={styles.flexBox}>
             {avatar && !imageError ? (
-              <img src={avatar} alt="Avatar" className={styles.avatar} onError={() => setImageError(true)} />
+              <img data-test-id={`${testId}-comment-avatar`} src={avatar} alt="Avatar" className={styles.avatar} onError={() => setImageError(true)} />
             ) : (
-              <div className={`${styles.avatar} ${styles.avatarIcon} ${styles.flexBox}`}>
+              <div data-test-id={`${testId}-comment-avatar-placeholder`} className={`${styles.avatar} ${styles.avatarIcon} ${styles.flexBox}`}>
                 <IconAccount />
               </div>
             )}
           </div>
-          <div className={styles.infoWrapper}>
-            <Typography variant="Body2-Medium" className={labelClasses}>
+          <div data-test-id={`${testId}-comment-info-block`} className={styles.infoWrapper}>
+            <Typography testId={`${testId}-comment-author`} variant="Body2-Medium" className={labelClasses}>
               {comment?.authorUser?.fullName ?? ''}
             </Typography>
-            <Typography variant="Caption" className={styles.label} style={{ color: '#8E8E93' }}>
+            <Typography testId={`${testId}-comment-date`} variant="Caption" className={styles.label} style={{ color: '#8E8E93' }}>
               {creationDate}
             </Typography>
           </div>
@@ -91,11 +91,12 @@ export const Comment: FC<CommentProps> = ({
         {canEdit && (
           <div className={styles.iconsWrapper}>
               <IconButton
-              icon={isEditMode ? <IconPencilCancel width={'14'} height={'14'}/>: <IconPencil  width={'14'} height={'14'}/>} 
-              title={isEditMode ? lng === 'ru' ? 'Закрыть редактирование' : 'Close edit' : lng === 'ru' ? 'Редактировать' : 'Edit'}
-              onClick={handleEditClick}
-              style={{ width: '30px', height: '30px', padding:'5px' }} 
-              color= "var(--icons-grey)" 
+                icon={isEditMode ? <IconPencilCancel width={'14'} height={'14'}/>: <IconPencil  width={'14'} height={'14'}/>} 
+                title={isEditMode ? lng === 'ru' ? 'Закрыть редактирование' : 'Close edit' : lng === 'ru' ? 'Редактировать' : 'Edit'}
+                onClick={handleEditClick}
+                style={{ width: '30px', height: '30px', padding:'5px' }} 
+                color= "var(--icons-grey)" 
+                data-test-id={`${testId}-comment-edit-button`}
               />
           
               <IconButton 
@@ -104,8 +105,8 @@ export const Comment: FC<CommentProps> = ({
                 onClick={handleDeleteClick} 
                 size="sm" 
                 style={{ width: '30px', height: '30px', padding:'5px'}} 
-                
                 color= "var(--icons-grey)" 
+                data-test-id={`${testId}-comment-delete-button`}
             />
           </div>
         )}
@@ -125,6 +126,7 @@ export const Comment: FC<CommentProps> = ({
           maxFileCount={maxFileCount}
           maxFileSize={maxFileSize}
           lng={lng}
+          testId={`${testId}-comment-editor`}
         />
       ) : (
         <div className={styles.commentWrapper}>
@@ -137,9 +139,11 @@ export const Comment: FC<CommentProps> = ({
               className={styles.attachedFilesContainer}
               maxFileCount={maxFileCount} 
               lng={lng}
+              testId={`${testId}-comment-attached`}
             />
           )}
           <div 
+            data-test-id={`${testId}-comment-text`}
             id={`comment-${comment.id}`}
             className={inputClassess} 
             dangerouslySetInnerHTML={{ __html: comment.text || '' }} />
@@ -147,7 +151,7 @@ export const Comment: FC<CommentProps> = ({
      
       )}
       {error && helperText && (
-        <Typography variant="Caption" className={classNames(styles.helperText)}>
+        <Typography variant="Caption" className={classNames(styles.helperText)} testId={`${testId}-comment-error`}>
           {helperText}
         </Typography>
       )}

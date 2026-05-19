@@ -31,7 +31,7 @@ export const title = (lng: string) => ({
   info: lng === 'ru' ? 'Информация' : 'Info',
 });
 
-export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose, style, lng = 'ru' }) => {
+export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, icon = true, onClose, style, lng = 'ru', testId = 'default' }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
 
@@ -65,19 +65,19 @@ export const Snackbar: FC<SnackbarProps> = ({ children, type, duration = 10000, 
   );
 
   return (
-    <div className={snackbarClasses} style={style}>
-      <div className={styles['snackbar-textAndIcon']}>
+    <div className={snackbarClasses} style={style} data-test-id={`${testId}-snackbar-${type}`}>
+      <div className={styles['snackbar-textAndIcon']} data-test-id={`${testId}-snackbar-${type}-icon`}>
         {icon && icons[type]}
-        <div className={styles['snackbar-text']}>
-          <Typography variant="Body1-Medium" color={'var(--text-dark)'}>
+        <div className={styles['snackbar-text']} data-test-id={`${testId}-snackbar-text`}>
+          <Typography variant="Body1-Medium" color={'var(--text-dark)'} testId={`${testId}-snackbar-${type}-title`}>
             {title(lng)[type]}
           </Typography>
-          <Typography variant="Body1" color={'var(--text-btn-light)'}>
+          <Typography variant="Body1" color={'var(--text-btn-light)'} testId={`${testId}-snackbar-${type}-content`}>
             {children}
           </Typography>
         </div>
       </div>
-      <button className={styles.button} onClick={handleClose}>
+      <button className={styles.button} onClick={handleClose} data-test-id={`${testId}-snackbar-${type}-close-button`}>
         <IconClose htmlColor={'var(--text-btn-light)'} />
       </button>
     </div>

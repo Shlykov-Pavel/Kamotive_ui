@@ -52,6 +52,7 @@ export interface DropdownListItemProps<T extends BaseOptions> {
   activeIndex?: number;
   index?: number;
   isChild?: boolean;
+  testId?: string;
 }
 
 function checkItem<T>(
@@ -178,6 +179,7 @@ export const DropdownListItem = <T extends BaseOptions> ({
   activeIndex,
   index,
   isChild = false,
+  testId
 }: DropdownListItemProps<T>) => {
   const itemRef = useRef<HTMLDivElement>(null);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -249,7 +251,7 @@ export const DropdownListItem = <T extends BaseOptions> ({
 
   const itemData = item !== null && typeof item === 'object' ? (item as any) : null; 
   const itemContent = (
-    <div className={itemContainerClasses} onClick={handleItemClick}>
+    <div className={itemContainerClasses} onClick={handleItemClick} data-test-id={`${testId}-item`}>
       <div className={itemClassess}>
         <div className={itemBlock}>
           {variant === 'icons' && itemData?.icon &&
@@ -258,17 +260,22 @@ export const DropdownListItem = <T extends BaseOptions> ({
           })}
           <div className={styles.item} ref={itemRef}>
             {/* <span>{item?.value}</span> */}
-            <span>{getComparisonValue(item, getOptionLabel)}</span>
+            <span data-test-id={`${testId}-item-title`}>{getComparisonValue(item, getOptionLabel)}</span>
           </div>
           {!hasChildren && isSelectedItem && (
-              <IconCheck strokeWidth={size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0'} htmlColor="#0D99FF" />
+             <span 
+                data-test-id={`${testId}-checked-icon`} 
+                style={{ display: 'inline-flex' }}
+              >
+                <IconCheck strokeWidth={size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0'} htmlColor="#0D99FF" />
+              </span>
             )}
         </div>
        {itemData?.isDivider && <div className={styles.divider}></div>}
       </div>
       {/* Вложенные элементы */}
       {hasChildren && (
-        <div className={styles.nestedMenu}>
+        <div className={styles.nestedMenu} data-test-id={`${testId}-nested-block`}>
           {(item as any).children?.map((child: any, childIndex: number) => {
             return (
               <DropdownListItem
@@ -282,6 +289,7 @@ export const DropdownListItem = <T extends BaseOptions> ({
                 activeIndex={activeIndex}
                 index={childIndex}
                 isChild={true}
+                testId={`${testId}-nested-${childIndex}`}
               />
             );
           })}
@@ -290,7 +298,7 @@ export const DropdownListItem = <T extends BaseOptions> ({
     </div>
   );
   return showTooltip ? (
-    <Tooltip label={getComparisonValue(item as any, getOptionLabel)?.toString() || ''} position="bottom-left">
+    <Tooltip label={getComparisonValue(item as any, getOptionLabel)?.toString() || ''} position="bottom-left" testId={`${testId}`}>
       {itemContent}
     </Tooltip>
   ) : (
@@ -335,6 +343,7 @@ export const Dropdown = <T extends BaseOptions>({
   lng = 'ru',
   multiple = false,
   limitTags = 1,
+  testId = 'default'
 }: DropdownProps<T>) => {
 
   
@@ -763,7 +772,9 @@ export const Dropdown = <T extends BaseOptions>({
           if (isOpen && enableAutocomplete) {
             inputRef.current?.focus();
           }
-        }}>
+        }}
+        data-test-id={`${testId}-dropdown-value-wrapper`}
+        >
         {variant === 'icons' && !multiple &&
           (selectedItem as any)?.icon &&
           React.cloneElement((selectedItem as any).icon as React.ReactElement, {
@@ -772,7 +783,7 @@ export const Dropdown = <T extends BaseOptions>({
           }
         {multiple && selectedItems.length > 0 && getChips()}
         {!multiple && selectedItem && (
-          <span style={{ display: (isOpen && enableAutocomplete && searchValue) ? 'none' : 'block'}}>
+          <span data-test-id={`${testId}-dropdown-current-value`} style={{ display: (isOpen && enableAutocomplete && searchValue) ? 'none' : 'block'}}>
             {getComparisonValue(selectedItem as any, getOptionLabel)}
           </span>
         )}
@@ -780,6 +791,7 @@ export const Dropdown = <T extends BaseOptions>({
               <input
                 ref={inputRef}
                 type="text"
+                name="text"
                 value={searchValue}
                 className={styles.inlineSearchInput}
                 onChange={handleSearchChange}
@@ -806,15 +818,16 @@ export const Dropdown = <T extends BaseOptions>({
                 }}
                 onKeyDown={handleKeyDown}
                 autoFocus
+                data-test-id={`${testId}-dropdown-search-input`}
               />
         )}
         {!multiple && !selectedItem && !searchValue && !(isOpen && enableAutocomplete) && (
-            <span>
+            <span data-test-id={`${testId}-dropdown-placeholder`}>
               {placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value')}
             </span>
           )}
           {multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (
-            <span>{placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values')}</span>
+            <span data-test-id={`${testId}-dropdown-placeholder`}>{placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values')}</span>
           )}
       </div>
   );
@@ -825,6 +838,7 @@ export const Dropdown = <T extends BaseOptions>({
           label={getComparisonValue(selectedItem as any, getOptionLabel)?.toString() || ''}
           position="bottom-left"
           style={{ width: '100% !important' }}
+          data-test-id={`${testId}-dropdown-tooltip`}
         >
           {textFieldContent}
         </Tooltip>
@@ -853,9 +867,10 @@ export const Dropdown = <T extends BaseOptions>({
         if (idx !== -1) hoveredIndexRef.current = idx;
         setActiveIndex(-1);
       }}
+      data-test-id={`${testId}-dropdown-options-list`}
     >
       {showSpinner ? (
-        <div className={`${styles['item-block']}`} style={{ padding: '10px', display: 'flex', flexDirection:"column", alignItems:'center', justifyContent:'center', margin:'0 auto' }}>
+        <div className={`${styles['item-block']}`} style={{ padding: '10px', display: 'flex', flexDirection:"column", alignItems:'center', justifyContent:'center', margin:'0 auto' }} data-test-id={`${testId}-dropdown-spinner`}>
            <Spinner /> 
         </div>
       ) : (
@@ -873,10 +888,11 @@ export const Dropdown = <T extends BaseOptions>({
                 isActive={activeIndex === index}
                 activeIndex={activeIndex}
                 index={index}
+                testId={`${testId}-dropdown-option-${index}`}
               />
             ))
           ) : (
-            <div className={`${styles['item-block']}`} style={{ margin: '15px auto', textAlign:'center', color:'var(--text-grey)' }}>
+            <div className={`${styles['item-block']}`} style={{ margin: '15px auto', textAlign:'center', color:'var(--text-grey)' }} data-test-id={`${testId}-dropdown-empty`}>
               {lng === 'ru' || lng.includes('ru')
                 ? noOptionsText || 'Нет вариантов для выбора'
                 : noOptionsText || 'No options to select'}
@@ -897,6 +913,7 @@ export const Dropdown = <T extends BaseOptions>({
               e.stopPropagation();
               loadMore();
             }}
+            testId={`${testId}-dropdown-loadmore`}
           >
             {isOptionsLoading 
             ? (lng === 'ru' ? 'Загрузка...': 'Loading...') 
@@ -1008,9 +1025,10 @@ export const Dropdown = <T extends BaseOptions>({
       ref={containerRef}
       onClick={onClick}
       style={style ? style : { width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' }}
+      data-test-id={`${testId}-dropdown-block`}
     >
        {label && (
-        <Typography variant="Caption" className={labelClasses}>
+        <Typography variant="Caption" className={labelClasses} testId={`${testId}-dropdown`}>
           {label}
         </Typography>
       )}
@@ -1026,6 +1044,7 @@ export const Dropdown = <T extends BaseOptions>({
           if (enableAutocomplete && e.target instanceof HTMLInputElement) return;
           handleKeyDown(e);
         }}
+        data-test-id={`${testId}-dropdown-trigger-button`}
       >
         {getTextField()}
         <div className={styles.actionButtons}>
@@ -1033,11 +1052,11 @@ export const Dropdown = <T extends BaseOptions>({
             !readOnly &&
             !disabled &&
             (selectedItem || (multiple && selectedItems.length !== 0) || (enableAutocomplete && searchValue)) && (
-              <div className={styles.resetButton}>
+              <div className={styles.resetButton} data-test-id={`${testId}-dropdown-clear-button`}>
                 <IconClose strokeWidth="0.2" htmlColor="var(--text-light)" onClick={handleReset} />
               </div>
             )}
-          <div className={styles.dropdownIcon}>
+          <div className={styles.dropdownIcon} data-test-id={`${testId}-dropdown-open-button`}>
             {!isOpen ? (
               <ChevronDown strokeWidth={size === 'lg' ? '0.5' : '0.3'} htmlColor='var(--icons-medium)' />
             ) : (
@@ -1048,7 +1067,7 @@ export const Dropdown = <T extends BaseOptions>({
         {getDropdownMenu()}
       </div>
       {errorInput && errorInputHelperText && (
-        <Typography variant="Caption" className={classNames(styles.helperText, styles[size])}>
+        <Typography variant="Caption" className={classNames(styles.helperText, styles[size])} testId={`${testId}-dropdown-error`}>
           {helperText ?? errorInputHelperText}
         </Typography>
       )}

@@ -19,6 +19,9 @@ const meta: Meta<TooltipProps> = {
       </div>
     ),
   ],
+  args: {
+    testId: 'storybook',
+  },
   argTypes: {
     label: { description: 'Текст для отображения' },
     children: { description: 'Передает дочерние элементы для отображения' },

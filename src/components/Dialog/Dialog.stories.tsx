@@ -25,7 +25,8 @@ export interface DialogProps {
   /**Окно растягивается до максимальной ширины*/
   fullWidth?: boolean;
   /**Показ лоадера сверху диалогового окна*/
-  isLoading?:boolean
+  isLoading?:boolean;
+  testId?: string
  }
 
 const meta: Meta<DialogProps> = {
@@ -53,6 +54,7 @@ const meta: Meta<DialogProps> = {
     maxWidth: 'md',
     overlay: true,
     fullWidth: false,
+    testId:'storybook'
   },
   argTypes: {
     open: { description: 'Флаг открытия окна', control: { type: 'boolean' } },
@@ -99,7 +101,7 @@ export const DialogExample = (argTypes: DialogProps): JSX.Element => {
       <Dialog open={open}>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
           <Typography variant="Heading4"> Модальное окно</Typography>
-          <IconButton icon={<IconClose/>} onClick={onClose}/>
+          <IconButton icon={<IconClose/>} onClick={onClose} title='close'/>
         </div>
         <Typography variant="Body1">
           Компонент Dialog реализован как пустой контейнер, который можно наполнить любым контентом

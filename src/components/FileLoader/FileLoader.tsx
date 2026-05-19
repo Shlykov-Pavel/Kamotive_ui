@@ -146,7 +146,8 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   lng = 'ru',
   className,
   style,
-  fileValidator
+  fileValidator,
+  testId ='default'
 }, ref) => {
   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
   const [loadingFilesNames, setLoadingFilesNames] = useState<string[]>([]);
@@ -265,17 +266,18 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
     setErrorFiles(errorFiles.filter((rejection) => rejection.file.id !== id));
   };
 
-  const acceptedFileItems = addedFilesFormated.map((file: TAttachments) => (
+  const acceptedFileItems = addedFilesFormated.map((file: TAttachments, index) => (
     <FileItem
       key={file.id}
       file={file}
       onDelete={handleDeleteFiles}
       isAddedFile={true}
       lng={lng}
+      testId={`${testId}-dropzone-accepted-${index}`}
     />
   ));
   
-  const fileRejectionItems = errorFiles.map(({ file, errors }) => (
+  const fileRejectionItems = errorFiles.map(({ file, errors }, index) => (
     <FileItem
       key={file.id}
       file={file}
@@ -283,6 +285,7 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
       onDelete={handleDeleteRejectedFile}
       isRejectedFile={true}
       lng={lng}
+      testId={`${testId}-dropzone-rejected-${index}`}
     />
   ));
 
@@ -299,14 +302,17 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
   }, [loadingFilesNames, isLoadingFiles]);
 
   return (
-    <section className={classNames(styles['fileLoader'], className)} style={style}>
-      <div {...getRootProps({ className: `${styles['dropzone']} ${!canAdd ? styles['disabled'] : ''}` })}>
-        <input {...getInputProps()} />
-        <IconUpload htmlColor={!canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)'} width='34' height='34' />
+    <section className={classNames(styles['fileLoader'], className)} style={style} data-test-id={`${testId}-loader-section`}>
+      <div {...getRootProps({ className: `${styles['dropzone']} ${!canAdd ? styles['disabled'] : ''}` })} data-test-id={`${testId}-dropzone-block`}>
+        <input {...getInputProps()} data-test-id={`${testId}-dropzone-input`} name='file' />
+          <span data-test-id={`${testId}-dropzone-upload-icon`} style={{ display: 'inline-flex' }}>
+            <IconUpload htmlColor={!canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)'} width='34' height='34' />
+          </span>
         <Typography
           variant="Body1"
           color={!canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)'}
           style={{ textAlign: 'center' }}
+          testId={`${testId}-dropzone`}
         >
           {lng === 'ru' || lng.includes('ru') ? (
             <>
@@ -323,43 +329,43 @@ export const FileLoader = forwardRef<FileLoaderHandle, FileLoaderProps>(({
         <div>
           {maxFileSize &&
             (lng === 'ru' || lng.includes('ru') ? (
-              <Typography variant="Body2" color="var(--grey-medium)">
+              <Typography variant="Body2" color="var(--grey-medium)" testId={`${testId}-dropzone-sizelimits`}>
                 {`Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`} <br />
               </Typography>
             ) : (
-              <Typography variant="Body2" color="var(--grey-medium)">
+              <Typography variant="Body2" color="var(--grey-medium)" testId={`${testId}-dropzone-sizelimits`}>
                 {`Maximum file size ${maxFileSize.toFixed(0)} GB`} <br />
               </Typography>
             ))}
           {maxFileCount &&
             (lng === 'ru' || lng.includes('ru') ? (
-              <Typography variant="Body2" color="var(--grey-medium)">
+              <Typography variant="Body2" color="var(--grey-medium)" testId={`${testId}-dropzone-countlimits`}>
                 {`За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`}
               </Typography>
             ) : (
-              <Typography variant="Body2" color="var(--grey-medium)">
+              <Typography variant="Body2" color="var(--grey-medium)" testId={`${testId}-dropzone-countlimits`}>
                 {`You can upload ${maxFileCount} ${maxFileCount > 1 ? `files` : `file`}`}
               </Typography>
             ))}
         </div>
       </div>
       {acceptedFormats && !rejectedFormats && (
-        <Typography variant="Body2" color="var(--grey-medium)">
+        <Typography variant="Body2" color="var(--grey-medium)" testId={`${testId}-dropzone-acceptformats`}>
           {`${lng === 'ru' || lng.includes('ru') ? 'Поддерживаемые форматы:' : 'Supported formats:'} ${getAcceptedFormatsString(acceptedFormats)}`}
         </Typography>
       )}
       {rejectedFormats && (
-        <Typography variant="Body2" color="var(--grey-medium)">
+        <Typography variant="Body2" color="var(--grey-medium)" testId={`${testId}-dropzone-rejectformats`}>
           {`${lng === 'ru' || lng.includes('ru') ? 'Неподдерживаемые форматы:' : 'Unsupported formats:'} ${getAcceptedFormatsString(rejectedFormats)}`}
         </Typography>
       )}
       {addedFiles?.length > 0 || errorFiles?.length > 0 ? (
-        <div className={styles['addedFiles']}>
+        <div className={styles['addedFiles']} data-test-id={`${testId}-dropzone-added-list`}>
           {acceptedFileItems}
           {fileRejectionItems}
         </div>
       ) : (
-        <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }}>
+        <Typography variant="Body2-SemiBold" color="var(--grey-medium)" style={{ marginTop: '5px' }} testId={`${testId}-dropzone-empty`}>
           {lng === 'ru' || lng.includes('ru') ? 'Файлы не добавлены' : 'Files not added'}
         </Typography>
       )}

@@ -11,6 +11,7 @@ const spinnerSizes: { [key: string]: number } = { lg: 54, md: 34, sm: 24, xs: 8 
 
 export const Spinner: FC<SpinnerProps> = ({
   size = 'md',
+  testId = 'default'
 }) => {
   
   const spinnerSize = typeof size === 'string' ? spinnerSizes[size] : size;
@@ -25,8 +26,9 @@ export const Spinner: FC<SpinnerProps> = ({
         height: adjustedSize,
         padding: strokeWidth 
       }}
+      data-test-id={`${testId}-spinner`}
     >
-      <svg id="spinner" viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} className={styles["spinner"]} fill="none" color={'var(--blue-main)'}>
+      <svg id="spinner" viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} className={styles["spinner"]} fill="none" color={'var(--blue-main)'}  data-test-id={`${testId}-spinner-svg`}>
         <defs>
           <linearGradient id="spinner-secondHalf">
             <stop offset="0%" stopOpacity="0" stopColor="currentColor"/>

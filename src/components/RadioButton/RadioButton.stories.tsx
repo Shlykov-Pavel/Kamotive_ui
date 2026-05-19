@@ -14,6 +14,7 @@ export interface RadioProps {
   disabled?: boolean;
   /** Размер чекбокса */
   size?: 'sm' | 'md';
+  testId?: string;
 }
 
 const meta: Meta<RadioProps> = {
@@ -36,6 +37,7 @@ const meta: Meta<RadioProps> = {
   args: {
     size: 'sm',
     disabled: false,
+    testId: 'storybook'
   },
   argTypes: {
     size: {

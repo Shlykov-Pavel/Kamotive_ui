@@ -11,6 +11,7 @@ export interface ProgressLoaderProps {
    showValue?: boolean;
    /** Анимация */
    animated?: boolean;
+   testId?: string
  }
 
 const withWrapper = (Story: React.ComponentType) => <div style={{
@@ -31,6 +32,7 @@ const meta: Meta<typeof ProgressLoader> = {
     size: 'xl',
     showValue: true,
     animated: false,
+    testId: 'storybook'
   },
   argTypes: {
     value: {

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { CheckboxProps } from '../../types';;
 import { Typography } from '../Typography/Typography';
 
-export const Checkbox: FC<CheckboxProps> = ({ checked, onChange, disabled = false, size = 'sm', label, color, filled }) => {
+export const Checkbox: FC<CheckboxProps> = ({ checked, onChange, disabled = false, size = 'sm', label, color, filled, testId = 'default' }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
@@ -27,15 +27,17 @@ export const Checkbox: FC<CheckboxProps> = ({ checked, onChange, disabled = fals
   } as React.CSSProperties;
 
   return (
-    <label className={styles.checkbox} style={checkboxStyles}>
+    <label data-test-id={`${testId}-checkbox`} className={styles.checkbox} style={checkboxStyles}>
       <input
         type="checkbox"
+        name='checkbox'
         checked={checked}
         onChange={handleChange}
         disabled={disabled}
         className={classNames(styles.input, styles[size])}
+        data-test-id={`${testId}-checkbox-input`}
       />
-      <Typography variant='Body2'>{label}</Typography>
+      <Typography testId={`${testId}-checkbox`} variant='Body2'>{label}</Typography>
     </label>
   );
 };

@@ -15,27 +15,30 @@ type TAttachments = {
 
 interface FileItemProps {
   /** Файл */
-  file: TAttachments;
-  /** Флаг загрузки файла */
-  loading?: boolean;
-  /** Текст ошибки загрузки файла */
-  error?: string;
-  /** Функция обработки скачивания файла */
-  onDownload?: (file: TAttachments) => void;
-  /** Функция обработки удаления файла */
-  onDelete?: (id: string) => void;
-  /**Разрешение на удаление файлов */
-  canDelete?: boolean;
-  /**Разрешение на скачивание файлов */
-  canDownload?: boolean;
-  /** Стили передаваемые напрямую */
-  style?: CSSProperties;
-  /** Флаг добавленного файла */
-  isAddedFile?: boolean;
-  /** Флаг отклоненного файла */
-  isRejectedFile?: boolean;
-  /** Язык интерфейса для типов данных*/
-  lng?: string;
+    file: TAttachments;
+    /** Флаг загрузки файла */
+    loading?: boolean;
+    /** Текст ошибки загрузки файла */
+    error?: string | boolean;
+    /** Функция обработки скачивания файла */
+    onDownload?: (file: TAttachments) => void;
+    /** Функция обработки удаления файла */
+    onDelete?: (id: string) => void;
+    /**Разрешение на удаление файлов */
+    canDelete?: boolean;
+    /**Разрешение на скачивание файлов */
+    canDownload?: boolean;
+    /** Стили передаваемые напрямую */
+    style?: CSSProperties;
+    /** Флаг добавленного файла */
+    isAddedFile?: boolean;
+    /** Флаг отклоненного файла */
+    isRejectedFile?: boolean;
+    /** Флаг для файлов комментариев */
+    isComment?:boolean;
+    /** Язык интерфейса для типов данных*/
+    lng?: string;
+    testId?:string;
 }
 
 const meta: Meta<FileItemProps> = {
@@ -60,6 +63,9 @@ const meta: Meta<FileItemProps> = {
       </div>
     ),
   ],
+  args: {
+    testId: 'storybook',
+  },
   argTypes: {
     file: {
       description: 'Файл',
@@ -115,7 +121,7 @@ const createMockFile = (name: string, size: number): TAttachments => ({
 });
 
 export const FileItemDefault = (argTypes: FileItemProps): JSX.Element => {
-  return <FileItem {...argTypes} />;
+  return <FileItem {...argTypes} onDownload={action('download-clicked')} />;
 };
 
 FileItemDefault.storyName = 'FileItem по умолчанию';
@@ -127,7 +133,7 @@ FileItemDefault.args = {
   lng: 'ru',
 };
 
-export const FileItemProgress = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} />;
+export const FileItemProgress = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} onDownload={action('download-clicked')}/>;
 
 FileItemProgress.storyName = 'FileItem c progress bar';
 
@@ -137,7 +143,7 @@ FileItemProgress.args = {
   lng: 'ru',
 };
 
-export const FileItemError = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} />;
+export const FileItemError = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} onDownload={action('download-clicked')}/>;
 
 FileItemError.storyName = 'FileItem c ошибкой загрузки';
 
@@ -147,7 +153,7 @@ FileItemError.args = {
   lng: 'ru',
 };
 
-export const FileItemEnglish = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} />;
+export const FileItemEnglish = (argTypes: FileItemProps): JSX.Element => <FileItem {...argTypes} onDownload={action('download-clicked')}/>;
 
 FileItemEnglish.storyName = 'FileItem на английском';
 

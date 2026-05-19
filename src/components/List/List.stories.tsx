@@ -32,6 +32,7 @@ const meta: Meta<ListProps> = {
     checkboxFilled: false,
     isHeader: false,
     open: true,
+    testId: 'storybook'
   },
   argTypes: {
     collapsible: { description: 'Возможность раскрытия списка', control: { type: 'boolean' } },

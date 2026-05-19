@@ -28,6 +28,7 @@ export const Input: FC<InputProps> = ({
   onChange,
   onBlur,
   required = false,
+  testId = 'default'
 }) => {
 
 
@@ -73,16 +74,17 @@ export const Input: FC<InputProps> = ({
   });
   
   return (
-    <div className={wrapperClassess} style={style}>
+    <div className={wrapperClassess} style={style} data-test-id={`${testId}-input-block`}>
       {inputLabel && (
-        <Typography variant="Caption" className={labelClasses}>
+        <Typography variant="Caption" className={labelClasses} testId={`${testId}-input`}>
           {inputLabel}
         </Typography>
       )}
-      {icon && <div className={styles.icon}>{icon}</div>}
+      {icon && <div className={styles.icon} data-test-id={`${testId}-input-icon`}>{icon}</div>}
       {multiline ? (
         <textarea
           id={id}
+          name='textarea'
           className={inputClassess}
           value={value}
           placeholder={placeholder}
@@ -90,6 +92,7 @@ export const Input: FC<InputProps> = ({
           onBlur={handleOnBlur}
           disabled={disabled}
           style={{ height: `${rows * 20}px` }}
+          data-test-id={`${testId}-input-textarea`}
         />
       ) : (
         <input
@@ -101,10 +104,11 @@ export const Input: FC<InputProps> = ({
           onBlur={handleOnBlur}
           disabled={disabled}
           readOnly={readOnly}
+          data-test-id={`${testId}-input-field`}
         />
       )}
       {error && helperText && (
-        <Typography variant="Caption" className={classNames(styles.helperText, styles[size])}>
+        <Typography variant="Caption" className={classNames(styles.helperText, styles[size])} testId={`${testId}-input-error`}>
           {helperText}
         </Typography>
       )}

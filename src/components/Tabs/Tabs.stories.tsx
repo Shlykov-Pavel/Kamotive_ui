@@ -20,6 +20,7 @@ interface TabProps {
  style?: CSSProperties;
  /** Дополнительный класс */
  className?: string;
+  testId?: string
 }
 interface TabsProps {
   /** Табы */
@@ -32,6 +33,7 @@ interface TabsProps {
   style?: CSSProperties;
   /** Дополнительный класс */
   className?: string;
+  testId?: string
 }
 
 
@@ -73,7 +75,7 @@ export const TabsDefault = (argTypes: TabsProps): JSX.Element => {
 
   return (
     <>
-      <Tabs value={selectedTab} onChange={handleChange}>
+      <Tabs value={selectedTab} onChange={handleChange} testId='storybook'>
         <Tab value="tab1" label="Item 1">
           <div>Content 1</div>
         </Tab>
