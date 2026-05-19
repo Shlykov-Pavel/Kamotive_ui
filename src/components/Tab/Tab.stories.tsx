@@ -16,6 +16,7 @@ export interface TabProps {
   disabled?:boolean;
   /** Табы */
   children?: React.ReactNode;
+  testId?: string;
 }
 const meta: Meta<TabProps> = {
   component: Tab,
@@ -36,6 +37,7 @@ const meta: Meta<TabProps> = {
   ],
   args: {
     disabled: false,
+    testId: "storybook"
   },
   argTypes: {
     label: { description: 'Текст внутри таба', type: 'string' },

@@ -25,6 +25,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   form,
   className,
   active,
+  testId = 'default'
 }, ref) => {
 
   const btnIcon = icon || typeof children === 'object' && children;
@@ -90,14 +91,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
 
   if (!modeStyle) {
     return (
-      <button className={buttonClasses}>
-        <Typography variant="Body1">Кнопка</Typography>
+      <button data-test-id={`${testId}-button`} className={buttonClasses}>
+        <Typography variant="Body1" testId={`${testId}-button`}>Кнопка</Typography>
       </button>
     );
   }
 
   return (
-    <button className={buttonClasses}  
+    <button data-test-id={`${testId}-button`} className={buttonClasses}  
     ref={ref}
     style={{
       ...style,
@@ -120,14 +121,22 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
       {btnIcon && (modeStyle === 'icon' || modeStyle === 'default') && (() => {
         const iconElement = btnIcon as React.ReactElement;
         const defaultStrokeWidth = size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0';
-        
-        return React.cloneElement(iconElement, {
-          htmlColor: iconColorStyle,
-          strokeWidth: iconElement.props.strokeWidth ?? defaultStrokeWidth,
-        });
+ 
+        return (
+          <span 
+            data-test-id={`${testId}-button-icon`}
+            className="button-icon-wrapper" 
+            style={{ display: 'inline-flex' }}
+          >
+            {React.cloneElement(iconElement, {
+              htmlColor: iconColorStyle,
+              strokeWidth: iconElement.props.strokeWidth ?? defaultStrokeWidth,
+            })}
+          </span>
+        );
       })()}
       {(modeStyle === 'text' || modeStyle === 'default') && (
-        <Typography variant="Body1">{label ? label : typeof children === 'string' && children}</Typography>
+        <Typography testId={`${testId}-button`} variant="Body1">{label ? label : typeof children === 'string' && children}</Typography>
       )}
     </button>
   );

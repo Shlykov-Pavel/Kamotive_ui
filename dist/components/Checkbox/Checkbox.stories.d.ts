@@ -11,6 +11,7 @@ export interface CheckboxProps {
     size?: 'sm' | 'md';
     /** Текст лейбла */
     label?: string;
+    testId?: string;
 }
 declare const meta: Meta<CheckboxProps>;
 export default meta;

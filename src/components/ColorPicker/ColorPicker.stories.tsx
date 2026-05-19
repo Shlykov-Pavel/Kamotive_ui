@@ -37,6 +37,7 @@ export interface ColorPickerProps {
   onChange?: (color: string) => void;
   /** Функция обработки изменения цвета */
   onColorChange?: (color: string) => void;
+  testId?:string;
 }
 
 const withWrapper = (Story: React.ComponentType) => <div style={{
@@ -56,6 +57,9 @@ const meta: Meta<typeof ColorPicker> = {
   },
   tags: ['autodocs'],
   decorators: [withWrapper],
+  args: {
+    testId:'storybook'
+  },
   argTypes: {
     color: {
       description: 'Цвет выбранный пользователем',

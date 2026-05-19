@@ -3,7 +3,7 @@ import styles from './Checkbox.module.css';
 import classNames from 'classnames';
 ;
 import { Typography } from '../Typography/Typography';
-export const Checkbox = ({ checked, onChange, disabled = false, size = 'sm', label, color, filled }) => {
+export const Checkbox = ({ checked, onChange, disabled = false, size = 'sm', label, color, filled, testId = 'default' }) => {
     const handleChange = (e) => {
         if (onChange) {
             onChange(e);
@@ -21,7 +21,7 @@ export const Checkbox = ({ checked, onChange, disabled = false, size = 'sm', lab
         '--arrow-color-hover': filled ? 'var(--white)' : 'var(--border-color-hover)',
         '--arrow-color-disabled': filled ? 'var(--white)' : 'var(--border-color-disabled)',
     };
-    return (React.createElement("label", { className: styles.checkbox, style: checkboxStyles },
-        React.createElement("input", { type: "checkbox", checked: checked, onChange: handleChange, disabled: disabled, className: classNames(styles.input, styles[size]) }),
-        React.createElement(Typography, { variant: 'Body2' }, label)));
+    return (React.createElement("label", { "data-test-id": `${testId}-checkbox`, className: styles.checkbox, style: checkboxStyles },
+        React.createElement("input", { type: "checkbox", name: 'checkbox', checked: checked, onChange: handleChange, disabled: disabled, className: classNames(styles.input, styles[size]), "data-test-id": `${testId}-checkbox-input` }),
+        React.createElement(Typography, { testId: `${testId}-checkbox`, variant: 'Body2' }, label)));
 };

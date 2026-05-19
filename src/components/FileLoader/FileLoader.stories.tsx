@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import { FileLoader } from './FileLoader';
-import { Accept } from 'react-dropzone';
+import { Accept, FileError } from 'react-dropzone';
 
 type TAttachments = {
   id: string;
@@ -14,28 +14,31 @@ type TAttachments = {
   updateDateTime?: string;
 };
 export interface FileLoaderProps {
-  /** Максимальный размер файла */
-  maxFileSize?: number;
-  /** Максимальное количество файлов */
-  maxFileCount?: number;
-  /** Максимальное количество символов в названии файла */
-  maxFileName?: number
-  /**Поддерживаемые форматы файлов */
-  acceptedFormats?: Accept;
-  /**Добавленные файлы */
-  addedFiles: File[];
-  /**Сосотояние для добавления файлов */
-  setAddedFiles: (addedFiles: File[]) => void;
-  /**Заблокировано добавление файлов*/
-  canAdd?: boolean;
-  /** Язык */
-  lng?: string;
-  /** Дополнительный класс */
-  className?: string;
-  /** Стили передаваемые напрямую */
-  style?: React.CSSProperties;
+ /** Максимальный размер файла */
+   maxFileSize?: number;
+   /** Максимальное количество файлов */
+   maxFileCount?: number;
+   /** Максимальное количество символов в названии файла */
+   maxFileName?: number
+   /**Поддерживаемые форматы файлов */
+   acceptedFormats?: Accept;
+   /** Неподдерживаемые форматы файлов */
+   rejectedFormats?: Accept;
+   /**Добавленные файлы */
+   addedFiles: File[];
+   /**Сосотояние для добавления файлов */
+   setAddedFiles: (addedFiles: File[]) => void;
+   /**Разрешени на добавление файлов*/
+   canAdd?: boolean;
+   /** Язык */
+   lng?: string;
+   /** Дополнительный класс */
+   className?: string;
+   /** Стили передаваемые напрямую */
+   style?: React.CSSProperties;
    /** Функция валидации файла */
-  fileValidator?: (file: File) => boolean;
+   fileValidator?: (file: File) => FileError | FileError[] | null;
+   testId?: string;
 }
 
 const meta: Meta<FileLoaderProps> = {
@@ -59,6 +62,9 @@ const meta: Meta<FileLoaderProps> = {
       </div>
     ),
   ],
+  args: {
+    testId: 'storybook',
+  },
   argTypes: {
     maxFileSize: {
       description: 'Максимальный допустимый размер файла в гигабайтах',

@@ -4,7 +4,7 @@ import styles from './Link.module.css';
 import { Typography } from '../Typography/Typography';
 import { ETypographyVariants } from '../Typography/enums';
 import { Tooltip } from '../Tooltip/Tooltip';
-export const Link = ({ href, onClick, children, title, className, style, contentStyle, underline = 'hover', variant = ETypographyVariants.Body1, color = 'var(--text-dark)', maxWidth, size, widthInPixels, }) => {
+export const Link = ({ href, onClick, children, title, className, style, contentStyle, underline = 'hover', variant = ETypographyVariants.Body1, color = 'var(--text-dark)', maxWidth, size, widthInPixels, testId = 'default' }) => {
     const stylesUnderline = underline === 'hover' ? styles.linkHover : underline === 'none' ? styles.linkNone : '';
     const stylesTooltipWidth = maxWidth ? { maxWidth: maxWidth } : {};
     const textRef = useRef(null);
@@ -24,8 +24,8 @@ export const Link = ({ href, onClick, children, title, className, style, content
         const shouldShow = actualSize > widthInPixels;
         return shouldShow;
     }, [actualSize, widthInPixels, size]);
-    const linkContent = (React.createElement(Typography, { variant: variant, color: color, style: contentStyle }, children));
-    const link = onClick ? (React.createElement("div", { onClick: onClick, className: classNames(styles.link, stylesUnderline, isTooltipVisible && styles.tooltipStyle, className), style: Object.assign(Object.assign({}, linkStyle), stylesTooltipWidth) },
+    const linkContent = (React.createElement(Typography, { variant: variant, color: color, style: contentStyle, testId: `${testId}-link` }, children));
+    const link = onClick ? (React.createElement("div", { onClick: onClick, className: classNames(styles.link, stylesUnderline, isTooltipVisible && styles.tooltipStyle, className), style: Object.assign(Object.assign({}, linkStyle), stylesTooltipWidth), "data-test-id": `${testId}-link` },
         !size && (React.createElement("div", { ref: textRef, style: {
                 position: 'absolute',
                 visibility: 'hidden',
@@ -34,7 +34,7 @@ export const Link = ({ href, onClick, children, title, className, style, content
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
             } }, linkContent)),
-        linkContent)) : (React.createElement("a", { href: href, title: title, className: classNames(styles.link, stylesUnderline, isTooltipVisible && styles.tooltipStyle, className), style: Object.assign(Object.assign({}, linkStyle), stylesTooltipWidth) },
+        linkContent)) : (React.createElement("a", { href: href, title: title, className: classNames(styles.link, stylesUnderline, isTooltipVisible && styles.tooltipStyle, className), style: Object.assign(Object.assign({}, linkStyle), stylesTooltipWidth), "data-test-id": `${testId}-link` },
         !size && (React.createElement("div", { ref: textRef, style: {
                 position: 'absolute',
                 visibility: 'hidden',
@@ -44,5 +44,5 @@ export const Link = ({ href, onClick, children, title, className, style, content
                 pointerEvents: 'none',
             } }, linkContent)),
         linkContent));
-    return isTooltipVisible ? (React.createElement(Tooltip, { key: `${size}-${widthInPixels}`, label: children, opacity: 0.4, displayDelay: 0, style: { maxWidth: '500px' } }, link)) : (link);
+    return isTooltipVisible ? (React.createElement(Tooltip, { key: `${size}-${widthInPixels}`, label: children, opacity: 0.4, displayDelay: 0, style: { maxWidth: '500px' }, testId: `${testId}-link` }, link)) : (link);
 };

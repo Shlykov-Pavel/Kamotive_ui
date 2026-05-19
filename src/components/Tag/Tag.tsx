@@ -53,6 +53,7 @@ export const Tag: FC<TagProps> = ({
   editable = false,
   onClick, 
   onChange,
+  testId = 'default'
 }) => {
   interface CustomCSSProperties extends React.CSSProperties {
     '--close-color'?: string;
@@ -89,11 +90,13 @@ export const Tag: FC<TagProps> = ({
             }
           : {}
       }
+      data-test-id={`${testId}-tag`}
     >
       {editable ? (
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative" }} data-test-id={`${testId}-tag-edit`}>
           <input
             type="text"
+            name='input'
             placeholder={label}
             value={newLabel}
             onChange={(e) => {
@@ -106,6 +109,7 @@ export const Tag: FC<TagProps> = ({
               width: `${width}px`,
               minWidth: '25px',
             } as CustomCSSProperties }
+            data-test-id={`${testId}-tag-edit-input`}
           />
           <div
             ref={measurementDivRef}
@@ -119,6 +123,7 @@ export const Tag: FC<TagProps> = ({
               fontWeight: 'inherit',
               letterSpacing: 'inherit',
             }}
+            data-test-id={`${testId}-tag-edit-label`}
           >
             {newLabel || 'Item'}
           </div>
@@ -136,6 +141,7 @@ export const Tag: FC<TagProps> = ({
               : ({ '--close-color': `var(--${color})` } as CustomCSSProperties)
           }
           onClick={onClick}
+          data-test-id={`${testId}-close-button`}
         />
       )}
     </span>

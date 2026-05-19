@@ -15,6 +15,7 @@ export interface TagProps {
     onChange?: (label: string) => void;
     /** Callback при нажатии на кнопку закрытия */
     onClick?: () => void;
+    testId?: string
 }
 
 const meta: Meta<TagProps> = {
@@ -36,6 +37,7 @@ const meta: Meta<TagProps> = {
   ],
   args: {
     closeButton: false,
+    testId: 'storybook'
   },
   argTypes: {
     label: { description: 'Задает текст тега', type: 'string' },

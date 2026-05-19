@@ -18,6 +18,7 @@ export const ProgressLoader: FC<ProgressLoaderProps> = ({
   size = 'xl',
   showValue = true,
   animated = false,
+  testId = 'default'
 }) => {
   const [percent, setPercent] = useState(value);
   const spinnerSize = typeof size === 'string' ? spinnerSizes[size] : size;
@@ -69,8 +70,8 @@ export const ProgressLoader: FC<ProgressLoaderProps> = ({
   }, [animated, validPercentage]);
 
   return (
-    <div className={progressLoaderWrapperClasses} style={{ width: spinnerSize, height: spinnerSize }}>
-      <svg id="svg1" viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} className={styles["progress-loader"]}>
+    <div className={progressLoaderWrapperClasses} style={{ width: spinnerSize, height: spinnerSize }} data-test-id={`${testId}-progressloader`}>
+      <svg id="svg1" viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} className={styles["progress-loader"]} data-test-id={`${testId}-progressloader-image`}>
         <circle
           cx={center}
           cy={center}
@@ -112,6 +113,7 @@ export const ProgressLoader: FC<ProgressLoaderProps> = ({
             variant="Subheading2"
             color={'#9CA0A7'}
             style={{ fontSize: getTypographySize(), fontWeight: '300' }}
+            testId={`${testId}-progressloader`}
           >
             {percent}%
           </Typography>

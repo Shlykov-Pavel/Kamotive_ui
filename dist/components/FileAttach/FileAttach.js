@@ -10,11 +10,11 @@ export const FileAttach = forwardRef(({ filesList = [], maxFileSize = 2, maxFile
     'model/gltf-binary': ['.glb'],
     'application/octet-stream': ['.prt', '.step', '.stp'],
     'text/plain': ['.syslog'],
-}, rejectedFormats, addedFiles, setAddedFiles, onDownload, onDelete, canAdd = true, canDelete = true, canDownload = true, position = 'bottom', lng = 'ru', className, style, fileValidator, }, ref) => {
+}, rejectedFormats, addedFiles, setAddedFiles, onDownload, onDelete, canAdd = true, canDelete = true, canDownload = true, position = 'bottom', lng = 'ru', className, style, fileValidator, testId = 'default' }, ref) => {
     const fileAttachClasses = classNames(styles['fileAttach'], className, {
         [styles[`fileAttach_position_${position}`]]: position,
     });
-    return (React.createElement("div", { className: fileAttachClasses, style: style },
-        React.createElement(FileLoader, { ref: ref, maxFileSize: maxFileSize, maxFileCount: maxFileCount, maxFileName: maxFileName, acceptedFormats: acceptedFormats, rejectedFormats: rejectedFormats, addedFiles: addedFiles, setAddedFiles: setAddedFiles, canAdd: canAdd, lng: lng, fileValidator: fileValidator }),
-        React.createElement(FileListAttaсhed, { filesList: filesList, onDelete: onDelete, onDownload: onDownload, canDelete: canDelete, canDownload: canDownload, lng: lng })));
+    return (React.createElement("div", { className: fileAttachClasses, style: style, "data-test-id": `${testId}-fileAttach-block` },
+        React.createElement(FileLoader, { ref: ref, maxFileSize: maxFileSize, maxFileCount: maxFileCount, maxFileName: maxFileName, acceptedFormats: acceptedFormats, rejectedFormats: rejectedFormats, addedFiles: addedFiles, setAddedFiles: setAddedFiles, canAdd: canAdd, lng: lng, fileValidator: fileValidator, testId: `${testId}-fileAttach` }),
+        React.createElement(FileListAttaсhed, { filesList: filesList, onDelete: onDelete, onDownload: onDownload, canDelete: canDelete, canDownload: canDownload, lng: lng, testId: `${testId}-fileAttach` })));
 });

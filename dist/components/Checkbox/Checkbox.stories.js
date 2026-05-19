@@ -18,6 +18,7 @@ const meta = {
     args: {
         size: 'sm',
         disabled: false,
+        testId: 'storybook'
     },
     argTypes: {
         size: {

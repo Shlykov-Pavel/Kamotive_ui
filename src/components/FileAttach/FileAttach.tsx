@@ -32,13 +32,14 @@ export const FileAttach = forwardRef<FileLoaderHandle, FileAttachProps> (({
   className,
   style,
   fileValidator,
+  testId = 'default'
 }, ref) => {
   const fileAttachClasses = classNames(styles['fileAttach'], className, {
     [styles[`fileAttach_position_${position}`]]: position,
   });
 
   return (
-    <div className={fileAttachClasses} style={style}>
+    <div className={fileAttachClasses} style={style} data-test-id={`${testId}-fileAttach-block`}>
       <FileLoader
         ref={ref}
         maxFileSize={maxFileSize}
@@ -51,6 +52,8 @@ export const FileAttach = forwardRef<FileLoaderHandle, FileAttachProps> (({
         canAdd={canAdd}
         lng={lng}
         fileValidator={fileValidator}
+        testId={`${testId}-fileAttach`}
+       
       />
       <FileListAttaсhed
         filesList={filesList}
@@ -59,6 +62,7 @@ export const FileAttach = forwardRef<FileLoaderHandle, FileAttachProps> (({
         canDelete={canDelete}
         canDownload={canDownload}
         lng={lng}
+        testId={`${testId}-fileAttach`}
       />
     </div>
   );

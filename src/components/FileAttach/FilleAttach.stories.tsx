@@ -16,41 +16,42 @@ type TAttachments = {
 
 interface FileAttachProps {
   //Массив уже прикрепленных файлов(которые есть в объекте)
-  filesList: TAttachments[];
-  /** Максимальный размер файла */
-  maxFileSize?: number;
-  /** Максимальное количество файлов */
-  maxFileCount?: number;
-  /** Максимальное количество символов в названии файла */
-  maxFileName?: number;
-  /**Поддерживаемые форматы файлов */
-  acceptedFormats?: Accept;
-  /** Неподдерживаемые форматы файлов */
-  rejectedFormats?: Accept;
-  /**Добавленные файлы */
-  addedFiles: File[];
-  /**Сосотояние для добавления файлов */
-  setAddedFiles: (addedFiles: File[]) => void;
-  /** Функция обработки скачивания файла */
-  onDownload?: (file: TAttachments) => void;
-  /** Функция обработки удаления файла */
-  onDelete?: (id: string) => void;
-  /**Разрешени на добавление файлов*/
-  canAdd?: boolean;
-  /**Разрешение на удаление файлов */
-  canDelete?: boolean;
-  /**Разрешение на скачивание файлов */
-  canDownload?: boolean;
-  /**Позиционирование блока прикрепленных файлов */
-  position?: 'left' | 'right' | 'bottom';
-  /** Язык */
-  lng?: string;
-  /** Дополнительный класс */
-  className?: string;
-  /** Стили передаваемые напрямую */
-  style?: React.CSSProperties;
-  /** Функция валидации файла */
-  fileValidator?: (file: File) => (file: File) => FileError | FileError[] | null;
+   filesList: TAttachments[];
+   /** Максимальный размер файла */
+   maxFileSize?: number;
+   /** Максимальное количество файлов */
+   maxFileCount?: number;
+   /** Максимальное количество символов в названии файла */
+   maxFileName?: number;
+   /**Поддерживаемые форматы файлов */
+   acceptedFormats?: Accept;
+   /** Неподдерживаемые форматы файлов */
+   rejectedFormats?: Accept;
+   /**Добавленные файлы */
+   addedFiles: File[];
+   /**Сосотояние для добавления файлов */
+   setAddedFiles: (addedFiles: File[]) => void;
+   /** Функция обработки скачивания файла */
+   onDownload?: (file: TAttachments) => void;
+   /** Функция обработки удаления файла */
+   onDelete?: (id: string) => void;
+   /**Разрешени на добавление файлов*/
+   canAdd?: boolean;
+   /**Разрешение на удаление файлов */
+   canDelete?: boolean;
+   /**Разрешение на скачивание файлов */
+   canDownload?: boolean;
+   /**Позиционирование блока прикрепленных файлов */
+   position?: 'left' | 'right' | 'bottom';
+   /** Язык */
+   lng?: string;
+   /** Дополнительный класс */
+   className?: string;
+   /** Стили передаваемые напрямую */
+   style?: React.CSSProperties;
+   /** Функция валидации файла */
+   fileValidator?: (file: File) => FileError | FileError[] | null;
+   testId?: string
 }
 
 // Моковые данные для файлов
@@ -103,6 +104,22 @@ const meta: Meta<FileAttachProps> = {
       </div>
     ),
   ],
+  args: {
+    filesList: [],
+    addedFiles: [],
+    setAddedFiles: action('setAddedFiles'),
+    canAdd: true,
+    canDelete: true,
+    canDownload: true,
+    maxFileSize: 2,
+    maxFileCount: 10,
+    maxFileName: 0,
+    position: 'bottom',
+    lng: 'ru',
+    className: '',
+    style: {},
+    testId: 'storybook',
+  },
   argTypes: {
     filesList: {
       description: 'Массив уже прикрепленных файлов(которые есть в объекте)',
@@ -187,8 +204,11 @@ export const FileAttachDefault = (argTypes: FileAttachProps): JSX.Element => {
       filesList={mockFiles}
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
+      onDownload={action('download-clicked')}
+      onDelete={action('delete-clicked')}
       style={{ width: '360px' }}
       lng={argTypes.lng}
+
     />
   );
 };
@@ -248,6 +268,7 @@ export const FileAttchLeftPosition = (argTypes: FileAttachProps): JSX.Element =>
       filesList={mockFilesList}
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
+      onDownload={action('download-clicked')}
       position="left"
       style={{ height: '400px', width: '680px' }}
       lng={argTypes.lng}
@@ -264,6 +285,7 @@ export const FileAttchRightPosition = (argTypes: FileAttachProps): JSX.Element =
       filesList={mockFiles}
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
+      onDownload={action('download-clicked')}
       position="right"
       style={{ width: '680px' }}
       lng={argTypes.lng}
@@ -281,6 +303,7 @@ export const FileAttachDisabled = (argTypes: FileAttachProps): JSX.Element => {
       filesList={mockFiles}
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
+      onDownload={action('download-clicked')}
       canAdd={false}
       style={{
         width: '360px',
@@ -301,6 +324,7 @@ export const FileAttachDisabledDownload = (argTypes: FileAttachProps): JSX.Eleme
       filesList={mockFiles}
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
+      onDownload={action('download-clicked')}
       canDownload={false}
       style={{
         width: '360px',
@@ -322,6 +346,7 @@ export const FileAttachDisabledDelete = (argTypes: FileAttachProps): JSX.Element
       filesList={mockFiles}
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
+      onDownload={action('download-clicked')}
       canDelete={false}
       style={{
         width: '360px',
@@ -341,6 +366,7 @@ export const FileAttachEnglish = (argTypes: FileAttachProps): JSX.Element => {
       filesList={mockFiles}
       addedFiles={addedFiles}
       setAddedFiles={setAddedFiles}
+      onDownload={action('download-clicked')}
       lng={argTypes.lng}
       style={{
         width: '360px',

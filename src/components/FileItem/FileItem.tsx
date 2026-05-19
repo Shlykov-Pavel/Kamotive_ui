@@ -23,7 +23,8 @@ export const FileItem: FC<FileItemProps> = ({
   isAddedFile,
   isRejectedFile,
   isComment = false,
-  lng
+  lng,
+  testId = 'default'
 }) => {
   
   const [isLoadingFinished, setIsLoadingFinished] = useState(false);
@@ -128,6 +129,7 @@ export const FileItem: FC<FileItemProps> = ({
 
   return (
     <div
+      data-test-id={`${testId}-file-item`}
       className={fileItemClasses}
       style={style}
       ref={fileItemRef}
@@ -140,18 +142,18 @@ export const FileItem: FC<FileItemProps> = ({
           </div>
           <div className={styles['fileItemName']} ref={fileNameRef}>
             {file?.filename && file?.filename.length > maxLength ? (
-              <Tooltip label={file.filename} position="bottom-center" displayDelay={300}>
-                <Typography variant="Body1" color="var(--text-dark)">
+              <Tooltip label={file.filename} position="bottom-center" displayDelay={300} testId={`${testId}-file-item`}>
+                <Typography testId={`${testId}-file-item`} variant="Body1" color="var(--text-dark)">
                   {croppedName(file.filename)}
                 </Typography>
               </Tooltip>
             ) : (
-              <Typography variant="Body1" color="var(--text-dark)">
+              <Typography testId={`${testId}-file-item`} variant="Body1" color="var(--text-dark)">
                 {file.filename && croppedName(file.filename)}
               </Typography>
             )}
             {file.size !== 0 && (
-              <Typography variant="Caption" color="var(--grey-medium)">
+              <Typography testId={`${testId}-file-item-size`} variant="Caption" color="var(--grey-medium)">
                 {formatFileSize(file.size, lng)}
               </Typography>
             )}
@@ -166,6 +168,7 @@ export const FileItem: FC<FileItemProps> = ({
               onClick={(e: React.MouseEvent) => handleDownloadClick(e, file)}
               color="var(--icons-grey)"
               size="sm"
+              data-test-id={`${testId}-file-item-download-button`}
             />
           )}
           {canDelete && (
@@ -176,6 +179,7 @@ export const FileItem: FC<FileItemProps> = ({
               onClick={(e: React.MouseEvent) => handleDeleteClick(e, file.id || '')}
               // color="var(--icons-grey)"
               size="sm"
+              data-test-id={`${testId}-file-item-close-button`}
             />
           )}
         </div>
@@ -191,7 +195,7 @@ export const FileItem: FC<FileItemProps> = ({
         />
       )} */}
       {error && (
-        <Typography variant="Caption" color="var(--error-main)" style={{paddingLeft:"5px"}}>
+        <Typography variant="Caption" color="var(--error-main)" style={{paddingLeft:"5px"}} testId={`${testId}-file-item-error`}>
           {error}
         </Typography>
       )}

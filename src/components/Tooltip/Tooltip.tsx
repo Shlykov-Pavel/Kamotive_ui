@@ -30,6 +30,7 @@ export const Tooltip: FC<TooltipProps> = ({
 	opacity = 0.4,
 	color,
 	followCursor = false,
+	testId = "default"
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
@@ -276,12 +277,13 @@ export const Tooltip: FC<TooltipProps> = ({
 				onMouseDown={handlePointerDown}
 				className={styles.wrapper}
 				ref={childrenRef}
+				data-test-id={`${testId}-tooltip`}
 			>
 				{children}
 			</div>
 			{isOpen && ReactDOM.createPortal(
 				<div ref={tooltipElementRef} className={tooltipClassNames} style={tooltipStyles}>
-					<Typography variant={textSize === 'sm' ? "Caption-Medium" : textSize === 'md' ? "Body2-Medium" : "Body1-Medium"}>{label}</Typography>
+					<Typography variant={textSize === 'sm' ? "Caption-Medium" : textSize === 'md' ? "Body2-Medium" : "Body1-Medium"} testId={`${testId}-tooltip`}>{label}</Typography>
 				</div>,
 				document.body
 			)}

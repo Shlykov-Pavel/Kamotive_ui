@@ -71,6 +71,7 @@ const meta: Meta<typeof Button> = {
     size: 'md',
     disabled: false,
     error: false,
+    testId:'storybook'
   },
   argTypes: {
     label: { description: 'Текст кнопки' },

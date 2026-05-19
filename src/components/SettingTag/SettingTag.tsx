@@ -6,14 +6,14 @@ import { SettingTagProps } from '../../types';
 
 import styles from './SettingTag.module.css';
 
-export const SettingTag: React.FC<SettingTagProps> = ({ label, color, onChange }) => {
+export const SettingTag: React.FC<SettingTagProps> = ({ label, color, onChange, testId = 'default' }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [currentColor, setCurrentColor] = useState(color);
   const colorsOptions = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'indigo', 'purple', 'pink'];
 
   return (
-    <div style={{ display: 'flex', gap: `${isHovered ? '5px' : '10px'}`, flexDirection: 'row', alignItems: 'center' }}>
-      <Tag label={label} color={currentColor} editable={true} onChange={onChange} />
+    <div style={{ display: 'flex', gap: `${isHovered ? '5px' : '10px'}`, flexDirection: 'row', alignItems: 'center' }} data-test-id={`${testId}-settingtag`}>
+      <Tag label={label} color={currentColor} editable={true} onChange={onChange} testId={`${testId}-settingtag`}/>
       {!isHovered ? (
         <div
           className={styles.circle}
@@ -23,6 +23,7 @@ export const SettingTag: React.FC<SettingTagProps> = ({ label, color, onChange }
             height: 10,
             backgroundColor: currentColor?.startsWith('#') ? currentColor : `var(--${currentColor})`,
           }}
+          data-test-id={`${testId}-settingtag-color`}
         />
       ) : (
         <ColorPicker
@@ -31,6 +32,7 @@ export const SettingTag: React.FC<SettingTagProps> = ({ label, color, onChange }
           setIsHovered={setIsHovered}
           onChange={onChange}
           onColorChange={setCurrentColor}
+          testId={`${testId}-settingtag`}
         />
       )}
     </div>

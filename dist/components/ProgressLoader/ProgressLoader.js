@@ -9,7 +9,7 @@ import classNames from 'classnames';
 const spinnerSizes = { xl: 89, lg: 56, md: 40, sm: 34 };
 const animationDuration = 4000; // Длительность анимации в миллисекундах
 const stepTime = 100; // Интервал обновления в миллисекундах
-export const ProgressLoader = ({ value = 0, size = 'xl', showValue = true, animated = false, }) => {
+export const ProgressLoader = ({ value = 0, size = 'xl', showValue = true, animated = false, testId = 'default' }) => {
     const [percent, setPercent] = useState(value);
     const spinnerSize = typeof size === 'string' ? spinnerSizes[size] : size;
     const validPercentage = Math.min(Math.max(value, 0), 100);
@@ -54,8 +54,8 @@ export const ProgressLoader = ({ value = 0, size = 'xl', showValue = true, anima
             setPercent(validPercentage);
         }
     }, [animated, validPercentage]);
-    return (React.createElement("div", { className: progressLoaderWrapperClasses, style: { width: spinnerSize, height: spinnerSize } },
-        React.createElement("svg", { id: "svg1", viewBox: `0 0 ${viewBoxSize} ${viewBoxSize}`, className: styles["progress-loader"] },
+    return (React.createElement("div", { className: progressLoaderWrapperClasses, style: { width: spinnerSize, height: spinnerSize }, "data-test-id": `${testId}-progressloader` },
+        React.createElement("svg", { id: "svg1", viewBox: `0 0 ${viewBoxSize} ${viewBoxSize}`, className: styles["progress-loader"], "data-test-id": `${testId}-progressloader-image` },
             React.createElement("circle", { cx: center, cy: center, r: radius, stroke: "#e5e5ea", strokeWidth: strokeWidth, fill: "none", style: { strokeLinecap: 'round' } }),
             React.createElement("circle", { cx: center, cy: center, r: radius, stroke: 'var(--blue-main)', strokeWidth: strokeWidth, fill: "none", style: {
                     strokeDasharray: `${dashArray}`,
@@ -66,7 +66,7 @@ export const ProgressLoader = ({ value = 0, size = 'xl', showValue = true, anima
                     //transition: animated ? 'stroke-dashoffset 0.5s ease-in-out' : 'none',
                 } }, animated && (React.createElement("animate", { attributeName: "stroke-dashoffset", dur: `${animationDuration / 1000}`, values: `${circumference}; ${percent / 100}`, fill: "freeze" })))),
         showValue && size !== 'sm' && (React.createElement("div", { className: styles["progress-percentage"] },
-            React.createElement(Typography, { variant: "Subheading2", color: '#9CA0A7', style: { fontSize: getTypographySize(), fontWeight: '300' } },
+            React.createElement(Typography, { variant: "Subheading2", color: '#9CA0A7', style: { fontSize: getTypographySize(), fontWeight: '300' }, testId: `${testId}-progressloader` },
                 percent,
                 "%")))));
 };

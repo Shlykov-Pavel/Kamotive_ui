@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { Typography } from '../Typography/Typography';
 import DatePicker from 'react-datepicker';
 import { IconCalendar } from '../../Icons/IconCalendar/IconCalendar';
+// @ts-ignore
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import { ru } from 'date-fns/locale/ru';
@@ -13,7 +14,7 @@ import { ChevronLeft } from '../../Icons/ChevronLeft/ChevronLeft';
 import { Button } from '../Button/Button';
 registerLocale('ru', ru);
 registerLocale('en', enUS);
-const CustomInput = forwardRef(({ value = '', lng, onClick, onDateChange, onClose, className, disabled = false, readOnly = false, dateFormat = 'dd.MM.yyyy' }, ref) => {
+const CustomInput = forwardRef(({ value = '', lng, onClick, onDateChange, onClose, className, disabled = false, readOnly = false, dateFormat = 'dd.MM.yyyy', testId = 'default' }, ref) => {
     const inputRef = useRef(null);
     const [selectedPart, setSelectedPart] = useState(null);
     const [tempInput, setTempInput] = useState('');
@@ -199,9 +200,9 @@ const CustomInput = forwardRef(({ value = '', lng, onClick, onDateChange, onClos
     useImperativeHandle(ref, () => ({
         removeSelection,
     }), [removeSelection]);
-    return (React.createElement("input", { ref: inputRef, value: input || displayValue, onClick: handleClick, onKeyDown: handleKeyDown, onFocus: handleFocus, onBlur: handleBlur, onChange: () => { }, readOnly: !value || readOnly, disabled: disabled, className: className }));
+    return (React.createElement("input", { ref: inputRef, name: 'date', value: input || displayValue, onClick: handleClick, onKeyDown: handleKeyDown, onFocus: handleFocus, onBlur: handleBlur, onChange: () => { }, readOnly: !value || readOnly, disabled: disabled, className: className, "data-test-id": `${testId}-input` }));
 });
-export const DateInput = ({ id, label = 'Выберите дату', size = 'lg', value, style, className, disabled = false, readOnly = false, isLeftLabel = false, icon, error = false, helperText, onChange, onBlur, required = false, lng = 'ru', minDate = new Date('1975-12-31'), maxDate = new Date('2074-12-31'), inputClassName, calendarClassName, dateFormat = 'dd.MM.yyyy', }) => {
+export const DateInput = ({ id, label = 'Выберите дату', size = 'lg', value, style, className, disabled = false, readOnly = false, isLeftLabel = false, icon, error = false, helperText, onChange, onBlur, required = false, lng = 'ru', minDate = new Date('1975-12-31'), maxDate = new Date('2074-12-31'), inputClassName, calendarClassName, dateFormat = 'dd.MM.yyyy', testId = 'dafault' }) => {
     const wrapperClassess = classNames(styles['wrapper--input'], className, {
         [styles['wrapper--left']]: isLeftLabel,
         [styles['wrapper--input-label']]: label && !isLeftLabel && !required,
@@ -306,52 +307,52 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
                 });
             }
         }, [currentMonth]);
-        return (React.createElement("div", { className: `${styles.monthPicker} ${styles.calendar}` },
+        return (React.createElement("div", { "data-test-id": `${testId}-monthpicker-popover`, className: `${styles.monthPicker} ${styles.calendar}` },
             React.createElement("div", { className: styles.monthPickerWrapper },
-                React.createElement("div", { className: styles.monthContainer }, months.map((month, index) => {
+                React.createElement("div", { "data-test-id": `${testId}-months-list`, className: styles.monthContainer }, months.map((month, index) => {
                     const monthClasses = itemClasses('month', months.indexOf(month) === currentMonth);
                     return (React.createElement("div", { key: month, ref: getRef(monthRefs, index), className: monthClasses, onClick: () => {
                             setCurrentMonth(months.indexOf(month));
-                        } }, month));
+                        }, "data-test-id": `${testId}-month-${month}-cell` }, month));
                 })),
                 React.createElement("div", { className: styles.monthContainer }, years.map((year, index) => {
                     const yearClasses = itemClasses('year', year === currentYear);
                     return (React.createElement("div", { key: year, ref: getRef(yearRefs, index), className: yearClasses, onClick: () => {
                             setCurrentYear(year);
-                        } }, year));
+                        }, "data-test-id": `${testId}-year-${year}-cell` }, year));
                 }))),
             React.createElement("div", { className: styles.buttonContainer },
                 React.createElement(Button, { condition: "info", onClick: () => {
                         setIsMonthPickerOpen(false);
-                    } }, lng === 'ru' ? "Отмена" : "Cancel"),
+                    }, testId: `${testId}-monthpicker-cancel` }, lng === 'ru' ? "Отмена" : "Cancel"),
                 React.createElement(Button, { onClick: () => {
                         date.setMonth(currentMonth);
                         date.setFullYear(currentYear);
                         setIsMonthPickerOpen(false);
-                    } }, lng === 'ru' ? "Применить" : "Apply"))));
+                    }, testId: `${testId}-monthpicker-apply` }, lng === 'ru' ? "Применить" : "Apply"))));
     };
     const getMonthPickerWithDate = (date) => {
         return () => React.createElement(MonthPicker, { date: date });
     };
     const renderCustomHeader = ({ date, decreaseMonth, increaseMonth, prevMonthButtonDisabled, nextMonthButtonDisabled, }) => {
-        return (React.createElement("div", { className: styles.calendarHeader },
-            React.createElement("button", { type: "button", onClick: decreaseMonth, disabled: prevMonthButtonDisabled, className: styles.calendarNavButton },
+        return (React.createElement("div", { "data-test-id": `${testId}-calendar-header`, className: styles.calendarHeader },
+            React.createElement("button", { type: "button", onClick: decreaseMonth, disabled: prevMonthButtonDisabled, className: styles.calendarNavButton, "data-test-id": `${testId}-prev-month-button` },
                 React.createElement(ChevronLeft, null)),
             React.createElement("div", { className: styles.monthDisplay, onClick: () => {
                     setIsMonthPickerOpen(true);
-                } },
+                }, "data-test-id": `${testId}-current-month-button` },
                 months[date.getMonth()],
                 ", ",
                 date.getFullYear()),
-            React.createElement("button", { type: "button", onClick: increaseMonth, disabled: nextMonthButtonDisabled, className: styles.calendarNavButton },
+            React.createElement("button", { type: "button", onClick: increaseMonth, disabled: nextMonthButtonDisabled, className: styles.calendarNavButton, "data-test-id": `${testId}-next-month-button` },
                 React.createElement(ChevronRight, null))));
     };
     const renderDayContents = (day, date) => {
-        return React.createElement("div", { className: styles.calendarDay }, day);
+        return React.createElement("div", { "data-test-id": `${testId}-day-${day}-cell`, className: styles.calendarDay }, day);
     };
-    return (React.createElement("div", { className: wrapperClassess, style: style },
-        label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
-        React.createElement("div", { className: styles.icon, onClick: () => { var _a; return (_a = datePickerRef.current) === null || _a === void 0 ? void 0 : _a.setOpen(true); } }, icon || React.createElement(IconCalendar, null)),
+    return (React.createElement("div", { "data-test-id": `${testId}-dateInput-block`, className: wrapperClassess, style: style },
+        label && (React.createElement(Typography, { testId: `${testId}-dateInput`, variant: "Caption", className: labelClasses }, label)),
+        React.createElement("div", { "data-test-id": `${testId}-dateInput-icon-trigger`, className: styles.icon, onClick: () => { var _a; return (_a = datePickerRef.current) === null || _a === void 0 ? void 0 : _a.setOpen(true); } }, icon || React.createElement(IconCalendar, null)),
         React.createElement(DatePicker, Object.assign({ id: id, ref: datePickerRef, selected: selectedDate, onChange: handleDateChange, onBlur: onBlur, dateFormat: dateFormat, locale: lng === 'ru' ? 'ru' : 'en', readOnly: readOnly, disabled: disabled, showPopperArrow: false, calendarClassName: classNames(styles.calendar, calendarClassName), popperClassName: styles.calendarPopper, onCalendarClose: () => setIsMonthPickerOpen(false), minDate: minDate, maxDate: maxDate, inline: false, calendarStartDay: 1, formatWeekDay: (dayName) => {
                 const dayIndex = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье']
                     .findIndex(day => day === dayName);
@@ -365,6 +366,6 @@ export const DateInput = ({ id, label = 'Выберите дату', size = 'lg'
             : {
                 renderCustomHeader: renderCustomHeader,
                 renderDayContents: renderDayContents,
-            }), { customInput: React.createElement(CustomInput, { ref: inputRef, lng: lng, className: classNames(inputClassess, inputClassName), onDateChange: handleCustomInputChange, onClose: handleCloseDatePicker, disabled: disabled, readOnly: readOnly, dateFormat: dateFormat }) })),
-        error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]) }, helperText))));
+            }), { customInput: React.createElement(CustomInput, { ref: inputRef, lng: lng, className: classNames(inputClassess, inputClassName), onDateChange: handleCustomInputChange, onClose: handleCloseDatePicker, disabled: disabled, readOnly: readOnly, dateFormat: dateFormat, testId: `${testId}-dateInput` }) })),
+        error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]), testId: `${testId}-dateInput-error` }, helperText))));
 };

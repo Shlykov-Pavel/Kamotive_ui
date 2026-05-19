@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { BreadcrumbProps } from '../../types';;
 import { Typography } from '../Typography/Typography';
 
-export const Breadcrumb: FC<BreadcrumbProps> = ({ onClick, active, label, icon, children }) => {
+export const Breadcrumb: FC<BreadcrumbProps> = ({ onClick, active, label, icon, children, testId = 'default'}) => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (!active && onClick) {
       onClick();
@@ -17,11 +17,12 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ onClick, active, label, icon, 
 
   return (
     <button 
+      data-test-id={`${testId}-breadcrumb-button`}
       className={classNames(styles.breadcrumb)} 
       onClick={handleClick}
     >
-      {icon && <span className={iconClassNames}>{icon}</span>}
-      <Typography variant="Body1-Medium" className={childrenClassNames} >
+      {icon && <span data-test-id={`${testId}-breadcrumb-icon`} className={iconClassNames}>{icon}</span>}
+      <Typography testId={`${testId}-breadcrumb`} variant="Body1-Medium" className={childrenClassNames} >
         {label || children}
       </Typography>
     </button>

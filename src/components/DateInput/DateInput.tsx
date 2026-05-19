@@ -15,6 +15,7 @@ import { Typography } from '../Typography/Typography';
 import DatePicker, { ReactDatePickerCustomHeaderProps } from 'react-datepicker';
 import { IconCalendar } from '../../Icons/IconCalendar/IconCalendar';
 
+// @ts-ignore
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import { ru } from 'date-fns/locale/ru';
@@ -36,6 +37,7 @@ interface CustomInputProps {
   disabled?: boolean;
   readOnly?: boolean;
   dateFormat?: string;
+  testId?: string
 }
 
 interface SelectionPositions {
@@ -59,7 +61,7 @@ interface MonthPickerProps {
 type DatePart = 'day' | 'month' | 'year';
 
 const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps>(
-  ({ value = '', lng, onClick, onDateChange, onClose, className, disabled=false, readOnly=false, dateFormat='dd.MM.yyyy' }, ref) => {
+  ({ value = '', lng, onClick, onDateChange, onClose, className, disabled=false, readOnly=false, dateFormat='dd.MM.yyyy', testId='default' }, ref) => {
 
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [selectedPart, setSelectedPart] = useState<DatePart | null>(null);
@@ -267,6 +269,7 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
     return (
       <input
         ref={inputRef}
+        name='date'
         value={input || displayValue}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
@@ -276,6 +279,7 @@ const CustomInput = forwardRef<{ removeSelection: () => void }, CustomInputProps
         readOnly={!value || readOnly}
         disabled={disabled}
         className={className}
+        data-test-id={`${testId}-input`}
       />
     );
   }
@@ -304,6 +308,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
   inputClassName,
   calendarClassName,
   dateFormat = 'dd.MM.yyyy',
+  testId = 'dafault'
 }) => {
   const wrapperClassess = classNames(styles['wrapper--input'], className, {
     [styles['wrapper--left']]: isLeftLabel,
@@ -426,9 +431,9 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
     }, [currentMonth]);
 
     return (
-      <div className={`${styles.monthPicker} ${styles.calendar}`}>
+      <div data-test-id={`${testId}-monthpicker-popover`} className={`${styles.monthPicker} ${styles.calendar}`}>
         <div className={styles.monthPickerWrapper}>
-          <div className={styles.monthContainer}>
+          <div data-test-id={`${testId}-months-list`} className={styles.monthContainer}>
             {months.map((month, index) => {
               const monthClasses = itemClasses('month', months.indexOf(month) === currentMonth);
               return (
@@ -439,6 +444,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
                   onClick={() => {
                     setCurrentMonth(months.indexOf(month));
                   }}
+                  data-test-id={`${testId}-month-${month}-cell`}
                 >
                   {month}
                 </div>
@@ -456,6 +462,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
                   onClick={() => {
                     setCurrentYear(year);
                   }}
+                  data-test-id={`${testId}-year-${year}-cell`}
                 >
                   {year}
                 </div>
@@ -469,6 +476,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
             onClick={() => {
               setIsMonthPickerOpen(false);
             }}
+            testId={`${testId}-monthpicker-cancel`}
           >
             {lng === 'ru' ? "Отмена" : "Cancel"}
           </Button>
@@ -478,6 +486,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
               date.setFullYear(currentYear);
               setIsMonthPickerOpen(false);
             }}
+            testId={`${testId}-monthpicker-apply`}
           >
              {lng === 'ru' ? "Применить" : "Apply"}
           </Button>
@@ -498,12 +507,13 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
     nextMonthButtonDisabled,
   }: ReactDatePickerCustomHeaderProps): ReactElement => {
     return (
-      <div className={styles.calendarHeader}>
+      <div data-test-id={`${testId}-calendar-header`} className={styles.calendarHeader}>
         <button
           type="button"
           onClick={decreaseMonth}
           disabled={prevMonthButtonDisabled}
           className={styles.calendarNavButton}
+          data-test-id={`${testId}-prev-month-button`}
         >
           <ChevronLeft />
         </button>
@@ -513,6 +523,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
           onClick={() => {
             setIsMonthPickerOpen(true);
           }}
+          data-test-id={`${testId}-current-month-button`}
         >
           {months[date.getMonth()]}, {date.getFullYear()}
         </div>
@@ -522,6 +533,7 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
           onClick={increaseMonth}
           disabled={nextMonthButtonDisabled}
           className={styles.calendarNavButton}
+          data-test-id={`${testId}-next-month-button`}
         >
           <ChevronRight />
         </button>
@@ -530,17 +542,17 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
   };
 
   const renderDayContents = (day: number, date: Date): ReactElement => {
-    return <div className={styles.calendarDay}>{day}</div>;
+    return <div data-test-id={`${testId}-day-${day}-cell`} className={styles.calendarDay}>{day}</div>;
   };
 
   return (
-    <div className={wrapperClassess} style={style}>
+    <div data-test-id={`${testId}-dateInput-block`} className={wrapperClassess} style={style}>
       {label && (
-        <Typography variant="Caption" className={labelClasses}>
+        <Typography testId={`${testId}-dateInput`} variant="Caption" className={labelClasses}>
           {label}
         </Typography>
       )}
-      <div className={styles.icon} onClick={() => datePickerRef.current?.setOpen(true)}>
+      <div data-test-id={`${testId}-dateInput-icon-trigger`} className={styles.icon} onClick={() => datePickerRef.current?.setOpen(true)}>
         {icon || <IconCalendar />}
       </div>
       <DatePicker
@@ -591,11 +603,12 @@ export const DateInput: FC<DateInputProps & CustomDatePickerProps> = ({
             disabled={disabled}
             readOnly={readOnly}
             dateFormat={dateFormat}
+            testId={`${testId}-dateInput`} 
           />
         }
       />
       {error && helperText && (
-        <Typography variant="Caption" className={classNames(styles.helperText, styles[size])}>
+        <Typography variant="Caption" className={classNames(styles.helperText, styles[size])} testId={`${testId}-dateInput-error`}>
           {helperText}
         </Typography>
       )}

@@ -32,6 +32,7 @@ export const List: FC<ListProps> = ({
   children,
   isHeader = false,
   parentChecked = false,
+  testId = 'default'
 }) => {
   const [isOpen, setIsOpen] = useState(open);
   const [isChecked, setIsChecked] = useState(checked || parentChecked);
@@ -102,38 +103,40 @@ export const List: FC<ListProps> = ({
   );
 
   return (
-    <div className={styles.collapsibleList}>
+    <div className={styles.collapsibleList} data-test-id={`${testId}-list`}>
       {label || titleContent && (
-        <div className={headerClassNames} onClick={handleClick} style={style}>
+        <div className={headerClassNames} onClick={handleClick} style={style} data-test-id={`${testId}-list-header`}>
           {!isHeader && (
             <div>
               {withCheckbox && (
-                <span onClick={handleCheckboxClick}>
-                  <Checkbox checked={isChecked} color={checkboxColor} filled={checkboxFilled} disabled={disabled} />
+                <span onClick={handleCheckboxClick} data-test-id={`${testId}-list-chechbox-block`}>
+                  <Checkbox checked={isChecked} color={checkboxColor} filled={checkboxFilled} disabled={disabled} testId={`${testId}-list`}/>
                 </span>
               )}
               {withRadioButton && (
-                <span onClick={handleRadioClick}>
-                  <RadioButton checked={selected} value={id} disabled={disabled} />
+                <span onClick={handleRadioClick} data-test-id={`${testId}-list-radio-block`}>
+                  <RadioButton checked={selected} value={id} disabled={disabled} testId={`${testId}-list`}/>
                 </span>
               )}
-              {customBullet && <span className={classNames(styles.bullet, bulletClassName)}>{customBullet}</span>}
+              {customBullet && <span className={classNames(styles.bullet, bulletClassName)} data-test-id={`${testId}-list-bullet`}>{customBullet}</span>}
             </div>
           )}
-          {label && <Typography variant="Body1">{label}</Typography>}
+          {label && <Typography variant="Body1" testId={`${testId}-list`}>{label}</Typography>}
           {titleContent}
           {collapsible && (
-            <span className={styles.indicator}>{isOpen ? <ChevronDown /> : <ChevronDown rotation={270} />}</span>
+            <span className={styles.indicator} data-test-id={`${testId}-list-action-icon`}>{isOpen ? <ChevronDown /> : <ChevronDown rotation={270} />}</span>
           )}
         </div>
       )}
 
-      <div className={collapsible ? contentClassNames : styles.content} style={{ paddingLeft: !label ? 0 : '16px' }}>
-        {React.Children.map(children, (child) => {
+      <div className={collapsible ? contentClassNames : styles.content} style={{ paddingLeft: !label ? 0 : '16px' }} data-test-id={`${testId}-list-content-block`}>
+        {React.Children.map(children, (child, index) => {
           if (React.isValidElement(child)) {
+            const childTestId = (child.props as any).testId || `${testId}-list-${index}`;
             const commonProps = {
               style: child.props.style || style,
               className: child.props.className,
+              testId: childTestId,
             };
 
             if (child.type === ListItem || child.type === List) {

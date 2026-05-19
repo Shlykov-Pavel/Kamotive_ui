@@ -13,6 +13,7 @@ export const IconButton= forwardRef<HTMLButtonElement, IconButtonProps>(({
   children,
   className,
   title,
+  testId = 'default'
 },ref) => {
   const validChildren = React.Children.toArray(children).filter((child) => React.isValidElement(child));
   const renderIcon = icon || validChildren[0];
@@ -25,6 +26,9 @@ export const IconButton= forwardRef<HTMLButtonElement, IconButtonProps>(({
       '--hover-border-radius': style.borderRadius,
     }),
   };
+  const iconSlug = title 
+      ? String(title).toLowerCase().trim().replace(/\s+/g, '-') 
+      : 'action';
 
   return (
     <button
@@ -36,6 +40,7 @@ export const IconButton= forwardRef<HTMLButtonElement, IconButtonProps>(({
       onClick={(e) => onClick(e)}
       style={combinedStyle}
       title={title}
+      data-test-id={`${testId}-${iconSlug}-button`}
     >
       {renderIcon &&
         (() => {

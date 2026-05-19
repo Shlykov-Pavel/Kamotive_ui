@@ -5,7 +5,7 @@ import styles from './Spinner.module.css';
  * Компонент Spinner отображает индикатор загрузки.
  */
 const spinnerSizes = { lg: 54, md: 34, sm: 24, xs: 8 };
-export const Spinner = ({ size = 'md', }) => {
+export const Spinner = ({ size = 'md', testId = 'default' }) => {
     const spinnerSize = typeof size === 'string' ? spinnerSizes[size] : size;
     const viewBoxSize = 100;
     const strokeWidth = size === 'lg' || size === 'md' ? 12 : 10;
@@ -14,8 +14,8 @@ export const Spinner = ({ size = 'md', }) => {
             width: adjustedSize,
             height: adjustedSize,
             padding: strokeWidth
-        } },
-        React.createElement("svg", { id: "spinner", viewBox: `0 0 ${viewBoxSize} ${viewBoxSize}`, className: styles["spinner"], fill: "none", color: 'var(--blue-main)' },
+        }, "data-test-id": `${testId}-spinner` },
+        React.createElement("svg", { id: "spinner", viewBox: `0 0 ${viewBoxSize} ${viewBoxSize}`, className: styles["spinner"], fill: "none", color: 'var(--blue-main)', "data-test-id": `${testId}-spinner-svg` },
             React.createElement("defs", null,
                 React.createElement("linearGradient", { id: "spinner-secondHalf" },
                     React.createElement("stop", { offset: "0%", stopOpacity: "0", stopColor: "currentColor" }),

@@ -59,7 +59,7 @@ const mouseLeaveTimer = (callback, delay) => {
 /**
  * Компонент ColorPicker представляет собой элемент управления для выбора цвета.
  */
-export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsHovered, width = 10, height = 10, autoOpen = false, onChange, onColorChange, }) => {
+export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsHovered, width = 10, height = 10, autoOpen = false, onChange, onColorChange, testId = 'default' }) => {
     const [colorValue, setColorValue] = useState(mainColor);
     const [selectedColor, setSelectedColor] = useState(color);
     const [isColorChanged, setIsColorChanged] = useState(false);
@@ -131,30 +131,31 @@ export const ColorPicker = ({ color = '#ffffff', mainColor, recentColors, setIsH
         setSelectedColor(newColor);
         onColorChange === null || onColorChange === void 0 ? void 0 : onColorChange(newColor);
     };
-    return (React.createElement("div", { className: (mainColor || recentColors) && styles.colorPickerWrapper, ref: divRef },
+    return (React.createElement("div", { className: (mainColor || recentColors) && styles.colorPickerWrapper, ref: divRef, "data-test-id": `${testId}-color-block` },
         mainColor && (React.createElement("div", { className: mainColorClasses, style: {
                 width: `${width}px`,
                 height: `${height}px`,
                 backgroundColor: (colorValue === null || colorValue === void 0 ? void 0 : colorValue.startsWith('#')) ? colorValue : `var(--${colorValue})`,
-            } })),
+            }, "data-test-id": `${testId}-color-current` })),
         recentColors &&
             recentColors.map((color, index) => (React.createElement("div", { key: index, className: styles.circle, style: {
                     width: `${width}px`,
                     height: `${height}px`,
                     backgroundColor: color.startsWith('#') ? color : `var(--${color})`,
-                }, onClick: () => colorChangeHandler(color) }))),
+                }, onClick: () => colorChangeHandler(color), "data-test-id": `${testId}-color-${index}-circle` }))),
         React.createElement("div", { className: styles.colorPicker },
             React.createElement("div", { ref: circleRef, className: colorCircleDefaultClasses, onClick: () => setIsOpen(!isOpen), style: {
                     width: `${width}px`,
                     height: `${height}px`,
-                } }),
-            isOpen && (React.createElement("div", { ref: popoverRef, className: popoverClassess },
+                }, "data-test-id": `${testId}-color-button` }),
+            isOpen && (React.createElement("div", { "data-test-id": `${testId}-color-popover`, ref: popoverRef, className: popoverClassess },
                 isOpen && React.createElement(IconColorPicker, { className: styles.colorPickerIcon, htmlColor: 'var(--white)' }),
-                React.createElement(Chrome, { color: selectedColor, placement: GithubPlacement.Right, onChange: colorChangeHandler, className: styles.customChrome, showEyeDropper: false }),
+                React.createElement("div", { "data-test-id": `${testId}-color-chrome` },
+                    React.createElement(Chrome, { color: selectedColor, placement: GithubPlacement.Right, onChange: colorChangeHandler, className: styles.customChrome, showEyeDropper: false })),
                 React.createElement("div", { className: styles.hex, style: { padding: '0 10px 0 20px' } },
                     React.createElement(EditableInput, { value: hexaToHex(selectedColor), style: { width: 68, alignItems: 'flex-start' }, onChange: (e, color) => {
                             const formattedColor = hexaToHex(color.toString());
                             colorChangeHandler(formattedColor);
-                        } })))))));
+                        }, "data-test-id": `${testId}-color-input` })))))));
 };
 export default ColorPicker;

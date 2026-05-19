@@ -17,6 +17,7 @@ interface AttachedFilesProps {
     className?: string;
     maxFileCount?: number;
     lng: string;
+    testId?: string;
 }
 export declare const AttachedFilesPreview: React.FC<AttachedFilesProps>;
 export {};

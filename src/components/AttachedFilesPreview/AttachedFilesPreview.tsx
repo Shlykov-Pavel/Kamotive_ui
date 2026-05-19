@@ -40,6 +40,7 @@ interface AttachedFilesProps {
   className?: string;
   maxFileCount?: number;
   lng: string;
+  testId?:string;
 }
 
 export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
@@ -51,10 +52,11 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
   className,
   maxFileCount = 5,
   lng,
+  testId = 'default'
 }) => {
 
   return (
-    <div className={className} style={style} title="">
+    <div className={className} style={style} title="" data-test-id={`${testId}-files-preview-list`}>
       {files.map((file, index) => (
         <FileItem
           key={`${index + (file.filename ?? '')}`}
@@ -72,10 +74,11 @@ export const AttachedFilesPreview: React.FC<AttachedFilesProps> = ({
           isRejectedFile={file.error}
           isComment={true}
           lng={lng}
+          testId={`${testId}-files-preview-${index}`}
         />
       ))}
        {files.length > maxFileCount && (
-            <Typography variant="Caption" color="var(--error-main)">
+        <Typography variant="Caption" color="var(--error-main)" testId={`${testId}-files-preview-error`}>
           {(lng === 'ru' || lng.includes('ru')) ? `Максимальное количество файлов ${maxFileCount}` : `Maximum number of files ${maxFileCount}`}
         </Typography>
         )}

@@ -14,6 +14,7 @@ interface ToggleButtonProps {
    size?: 'sm' | 'md';
    /** Текст кнопки */
    label?:string;
+   testId?: string;
  }
 
 const meta: Meta<ToggleButtonProps> = {
@@ -36,6 +37,7 @@ const meta: Meta<ToggleButtonProps> = {
   args: {
     size: 'md',
     disabled: false,
+    testId: "storybook"
   },
   argTypes: {
     size: {

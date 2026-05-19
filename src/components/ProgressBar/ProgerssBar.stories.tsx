@@ -17,6 +17,7 @@ export interface ProgressBarProps {
   animationDuration?: number;
   /**Для выставления флага окончания загрузки */
   setIsLoadingFinished?: (value: boolean) => void;
+  testId?: string;
 }
 
 const withWrapper = (Story: React.ComponentType) => (
@@ -45,6 +46,7 @@ const meta: Meta<typeof ProgressBar> = {
     size: 'md',
     showValue: true,
     animated: false,
+    testId: 'storybook',
   },
   argTypes: {
     value: {

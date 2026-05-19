@@ -40,6 +40,7 @@ export interface InputProps {
   onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   /** Обязательное поле */
   required?: boolean;
+  testId?: string
 }
 
 const iconOptions = {
@@ -85,6 +86,7 @@ const meta: Meta<typeof Input> = {
     isLeftLabel: false,
     readOnly: false,
     resize: false,
+    testId: 'storybook'
   },
   argTypes: {
     id: { description: 'Идентификатор компонента' },

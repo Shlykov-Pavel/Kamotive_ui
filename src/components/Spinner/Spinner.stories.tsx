@@ -5,6 +5,7 @@ import { Spinner } from './Spinner';
 export interface SpinnerProps {
   /** Размер */
   size?: 'xs' | 'sm' | 'md' | 'lg';
+  testId?: string;
 }
 
 const withWrapper = (Story: React.ComponentType) => <div style={{
@@ -23,6 +24,7 @@ const meta: Meta<typeof Spinner> = {
   },
   args: {
     size: 'md',
+    testId: 'storybook'
   },
   argTypes: {
     size: {

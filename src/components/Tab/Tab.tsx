@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { TabProps } from '../../types';
 import { Typography } from '../Typography/Typography';
 
-export const Tab: FC<TabProps> = ({ value, onClick, onMouseEnter, label, selected, disabled = false, style, className }) => {
+export const Tab: FC<TabProps> = ({ value, onClick, onMouseEnter, label, selected, disabled = false, style, className, testId = "default" }) => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (onClick && value && !disabled) {
       onClick(value);
@@ -25,8 +25,9 @@ export const Tab: FC<TabProps> = ({ value, onClick, onMouseEnter, label, selecte
       onClick={handleClick}
       onMouseEnter={onMouseEnter}
       style={style}
+      data-test-id={`${testId}-tab`}
     >
-      <Typography variant={selected ? 'Body1-SemiBold' : 'Body1'}>{label}</Typography>
+      <Typography variant={selected ? 'Body1-SemiBold' : 'Body1'} testId={`${testId}-tab`}>{label}</Typography>
     </button>
   );
 

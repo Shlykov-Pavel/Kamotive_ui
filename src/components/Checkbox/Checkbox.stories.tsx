@@ -14,6 +14,7 @@ export interface CheckboxProps {
   size?: 'sm' | 'md';
   /** Текст лейбла */
   label?: string;
+  testId?:string;
 }
 
 const meta: Meta<CheckboxProps> = {
@@ -36,6 +37,7 @@ const meta: Meta<CheckboxProps> = {
   args: {
     size: 'sm',
     disabled: false,
+    testId:'storybook'
   },
   argTypes: {
     size: {

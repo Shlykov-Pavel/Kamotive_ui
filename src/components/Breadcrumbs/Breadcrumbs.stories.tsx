@@ -25,6 +25,7 @@ const meta: Meta<BreadcrumbsProps> = {
 	className: { description: 'Кастомные стили' },
 	separator: { description: 'Разделитель между ссылками' },
 	children: { description: 'Передает дочерние элементы для отображения' },
+  
   },
 };
 
@@ -32,7 +33,7 @@ export default meta;
 
 export const BreadcrumbsDefault = (argTypes: BreadcrumbsProps): JSX.Element => {
 	return (
-		<Breadcrumbs {...argTypes}>
+		<Breadcrumbs {...argTypes} testId="storybook">
 			<Breadcrumb>Parent</Breadcrumb>
 			<Breadcrumb>Level 1</Breadcrumb>
 			<Breadcrumb active>Active</Breadcrumb>

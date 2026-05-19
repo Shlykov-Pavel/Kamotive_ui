@@ -5,17 +5,22 @@ import { action } from '@storybook/addon-actions';
 import { FileListAttaсhed } from './FileListAttaсhed';
 import { Snackbar } from '../Snackbar/Snackbar';
 
-type TAttachments = {
-  id: string;
-  filename: string;
+
+export type TAttachments = {
+  id?: string | null;
+  filename?: string | null;
   uri?: string;
   size?: number;
   createDateTime?: string;
   updateDateTime?: string;
+  file?:File[],
+  preview?: string;
+  lng?: string;
+  [key: string]: any; 
 };
 
 interface FileListAttaсhedProps {
-  /** Список прикрепленных файлов */
+   /** Список прикрепленных файлов */
   filesList: TAttachments[] | [] | undefined;
   /** Функция обработки удаления файла */
   onDelete?: (id: string) => void;
@@ -33,6 +38,7 @@ interface FileListAttaсhedProps {
   className?: string;
   /** Стили передаваемые напрямую */
   style?: React.CSSProperties;
+  testId?: string;
 }
 
 const createMockFile = (name: string, size: number): TAttachments => ({
@@ -72,14 +78,15 @@ const meta: Meta<FileListAttaсhedProps> = {
   ],
   args: {
     filesList: fileListMocked,
-    onDelete: action('onDelete'),
-    onDownload: action('onDownload'),
+    // onDelete: action('onDelete'),
+    // onDownload: action('onDownload'),
     canDelete: true,
     canDownload: true,
     isInfoShown: true,
     className: '',
     style: {},
     lng: 'ru',
+    testId: 'storybook',
   },
   argTypes: {
     filesList: {

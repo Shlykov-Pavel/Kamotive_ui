@@ -36,7 +36,8 @@ interface TableFilterSidebarProps {
   width?: string;
   zIndex?: number;
   top?: number;
-  right?: number
+  right?: number;
+  testId?: string
 }
 
 
@@ -75,6 +76,7 @@ const meta: Meta<TableFilterSidebarProps> = {
           {value: 'описание 2', name: 'описание 2', description: 'описание 2'},
           {value: 'описание 3', name: 'описание 3', description: 'Зописание 3'},
         ]}
+        testId='filter'
       />,
       <Dropdown 
         label="Фильтр 2"
@@ -85,6 +87,7 @@ const meta: Meta<TableFilterSidebarProps> = {
           {value: 'В работе', name: 'В работе', description: 'Задачи в работе'},
           {value: 'Завершено', name: 'Завершено', description: 'Завершенные задачи'},
         ]}
+        testId='filter'
       />,
             <Dropdown 
         label="Фильтр 2"
@@ -95,6 +98,7 @@ const meta: Meta<TableFilterSidebarProps> = {
           {value: 'В работе', name: 'В работе', description: 'Задачи в работе'},
           {value: 'Завершено', name: 'Завершено', description: 'Завершенные задачи'},
         ]}
+        testId='filter'
       />,
             <Dropdown 
         label="Фильтр 2"
@@ -105,6 +109,7 @@ const meta: Meta<TableFilterSidebarProps> = {
           {value: 'В работе', name: 'В работе', description: 'Задачи в работе'},
           {value: 'Завершено', name: 'Завершено', description: 'Завершенные задачи'},
         ]}
+        testId='filter'
       />,
             <Dropdown 
         label="Фильтр 2"
@@ -115,9 +120,11 @@ const meta: Meta<TableFilterSidebarProps> = {
           {value: 'В работе', name: 'В работе', description: 'Задачи в работе'},
           {value: 'Завершено', name: 'Завершено', description: 'Завершенные задачи'},
         ]}
+        testId='filter'
       />,
       
-    ]
+    ],
+    testId:'storybook'
   },
 
   argTypes: {

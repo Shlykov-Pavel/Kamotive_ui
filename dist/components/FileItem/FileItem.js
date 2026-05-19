@@ -6,7 +6,7 @@ import { IconClose, IconDownload, IconFile } from '../../Icons';
 import { Tooltip } from '../Tooltip/Tooltip';
 import classNames from 'classnames';
 import { formatFileSize } from '../AttachedFilesPreview/AttachedFilesPreview';
-export const FileItem = ({ file, loading = false, error = '', onDownload, onDelete, canDelete = true, canDownload = true, style, isAddedFile, isRejectedFile, isComment = false, lng }) => {
+export const FileItem = ({ file, loading = false, error = '', onDownload, onDelete, canDelete = true, canDownload = true, style, isAddedFile, isRejectedFile, isComment = false, lng, testId = 'default' }) => {
     const [isLoadingFinished, setIsLoadingFinished] = useState(false);
     const [animationDuration, setAnimationDuration] = useState(0);
     const [maxLength, setMaxLength] = useState(30);
@@ -98,19 +98,19 @@ export const FileItem = ({ file, loading = false, error = '', onDownload, onDele
             onDownload(file);
         }
     };
-    return (React.createElement("div", { className: fileItemClasses, style: style, ref: fileItemRef, onClick: () => !(isAddedFile || isRejectedFile) && canDownload && file && onDownload && onDownload(file) },
+    return (React.createElement("div", { "data-test-id": `${testId}-file-item`, className: fileItemClasses, style: style, ref: fileItemRef, onClick: () => !(isAddedFile || isRejectedFile) && canDownload && file && onDownload && onDownload(file) },
         React.createElement("div", { className: styles['fileItemFile'] },
             React.createElement("div", { className: styles['fileItemInfo'] },
                 React.createElement("div", { className: styles['fileItemIcon'] },
                     React.createElement(IconFile, { htmlColor: 'var(--icons-grey)' })),
                 React.createElement("div", { className: styles['fileItemName'], ref: fileNameRef },
-                    (file === null || file === void 0 ? void 0 : file.filename) && (file === null || file === void 0 ? void 0 : file.filename.length) > maxLength ? (React.createElement(Tooltip, { label: file.filename, position: "bottom-center", displayDelay: 300 },
-                        React.createElement(Typography, { variant: "Body1", color: "var(--text-dark)" }, croppedName(file.filename)))) : (React.createElement(Typography, { variant: "Body1", color: "var(--text-dark)" }, file.filename && croppedName(file.filename))),
-                    file.size !== 0 && (React.createElement(Typography, { variant: "Caption", color: "var(--grey-medium)" }, formatFileSize(file.size, lng))))),
+                    (file === null || file === void 0 ? void 0 : file.filename) && (file === null || file === void 0 ? void 0 : file.filename.length) > maxLength ? (React.createElement(Tooltip, { label: file.filename, position: "bottom-center", displayDelay: 300, testId: `${testId}-file-item` },
+                        React.createElement(Typography, { testId: `${testId}-file-item`, variant: "Body1", color: "var(--text-dark)" }, croppedName(file.filename)))) : (React.createElement(Typography, { testId: `${testId}-file-item`, variant: "Body1", color: "var(--text-dark)" }, file.filename && croppedName(file.filename))),
+                    file.size !== 0 && (React.createElement(Typography, { testId: `${testId}-file-item-size`, variant: "Caption", color: "var(--grey-medium)" }, formatFileSize(file.size, lng))))),
             React.createElement("div", { className: styles['fileItemActions'] },
-                !(isAddedFile || isRejectedFile) && canDownload && !isComment && (React.createElement(IconButton, { className: fileIcons, icon: React.createElement(IconDownload, null), title: lng === 'ru' ? 'Скачать' : 'Download', onClick: (e) => handleDownloadClick(e, file), color: "var(--icons-grey)", size: "sm" })),
+                !(isAddedFile || isRejectedFile) && canDownload && !isComment && (React.createElement(IconButton, { className: fileIcons, icon: React.createElement(IconDownload, null), title: lng === 'ru' ? 'Скачать' : 'Download', onClick: (e) => handleDownloadClick(e, file), color: "var(--icons-grey)", size: "sm", "data-test-id": `${testId}-file-item-download-button` })),
                 canDelete && (React.createElement(IconButton, { className: fileIcons, icon: React.createElement(IconClose, null), title: lng === 'ru' ? 'Удалить' : 'Delete', onClick: (e) => handleDeleteClick(e, file.id || ''), 
                     // color="var(--icons-grey)"
-                    size: "sm" })))),
-        error && (React.createElement(Typography, { variant: "Caption", color: "var(--error-main)", style: { paddingLeft: "5px" } }, error))));
+                    size: "sm", "data-test-id": `${testId}-file-item-close-button` })))),
+        error && (React.createElement(Typography, { variant: "Caption", color: "var(--error-main)", style: { paddingLeft: "5px" }, testId: `${testId}-file-item-error` }, error))));
 };

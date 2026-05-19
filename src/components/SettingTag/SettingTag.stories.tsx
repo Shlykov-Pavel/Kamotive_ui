@@ -10,6 +10,7 @@ export interface SettingTagProps {
   color?: string;
   /** Callback при изменении значения */
   onChange?:(label: string) => void;
+  testId?: string
 }
 
 const meta: Meta<SettingTagProps> = {
@@ -45,7 +46,7 @@ export default meta;
 
 export const defaultTag = (argTypes: SettingTagProps): JSX.Element => {
 
-  return <SettingTag label={'Item'} color={argTypes.color} />;
+  return <SettingTag label={'Item'} color={argTypes.color} testId ='storybook'/>;
 };
 defaultTag.storyName = 'Tag c color picker для настроек';
 defaultTag.args = {

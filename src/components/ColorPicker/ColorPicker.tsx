@@ -79,6 +79,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   autoOpen = false,
   onChange,
   onColorChange,
+  testId = 'default'
 }) => {
  
   const [colorValue, setColorValue] = useState(mainColor);
@@ -168,6 +169,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
     <div
       className={(mainColor || recentColors) && styles.colorPickerWrapper}
       ref={divRef}
+      data-test-id={`${testId}-color-block`}
     >
       {mainColor && (
         <div
@@ -177,6 +179,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
             height: `${height}px`,
             backgroundColor: colorValue?.startsWith('#') ? colorValue : `var(--${colorValue})`,
           }}
+          data-test-id={`${testId}-color-current`}
         />
       )}
       {recentColors &&
@@ -190,6 +193,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
               backgroundColor: color.startsWith('#') ? color : `var(--${color})`,
             }}
             onClick={() => colorChangeHandler(color)}
+            data-test-id={`${testId}-color-${index}-circle`}
           />
         ))}
 
@@ -202,17 +206,20 @@ export const ColorPicker: FC<ColorPickerProps> = ({
             width: `${width}px`,
             height: `${height}px`,
           }}
+          data-test-id={`${testId}-color-button`}
         />
         {isOpen && (
-          <div ref={popoverRef} className={popoverClassess}>
+          <div data-test-id={`${testId}-color-popover`} ref={popoverRef} className={popoverClassess}>
             {isOpen && <IconColorPicker className={styles.colorPickerIcon} htmlColor={'var(--white)'} />}
-            <Chrome
-              color={selectedColor}
-              placement={GithubPlacement.Right}
-              onChange={colorChangeHandler}
-              className={styles.customChrome}
-              showEyeDropper={false}
-            />
+            <div data-test-id={`${testId}-color-chrome`}>
+              <Chrome
+                color={selectedColor}
+                placement={GithubPlacement.Right}
+                onChange={colorChangeHandler}
+                className={styles.customChrome}
+                showEyeDropper={false}
+              />
+            </div>
             <div className={styles.hex} style={{ padding: '0 10px 0 20px' }}>
               <EditableInput
                 value={hexaToHex(selectedColor)}
@@ -221,6 +228,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
                   const formattedColor = hexaToHex(color.toString());
                   colorChangeHandler(formattedColor);
                 }}
+                data-test-id={`${testId}-color-input`}
               />
             </div>
           </div>

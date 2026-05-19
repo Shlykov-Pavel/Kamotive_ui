@@ -25,6 +25,7 @@ export const ListItem: FC<ListItemProps> = ({
   bulletClassName,
   children,
   parentChecked,
+  testId = 'default'
 }) => {
   const [isChecked, setIsChecked] = useState(checked || parentChecked);
   const itemClassNames = classNames(className, styles.listItem);
@@ -60,19 +61,19 @@ export const ListItem: FC<ListItemProps> = ({
   }, [parentChecked, checked]);
 
   return (
-    <div className={itemClassNames} style={style} onClick={handleClick}>
+    <div className={itemClassNames} style={style} onClick={handleClick} data-test-id={`${testId}-item-block`}>
       {withCheckbox && (
-        <span className={styles.icon} onClick={handleCheckboxClick}>
-          <Checkbox checked={isChecked} color={checkboxColor} filled={checkboxFilled} disabled={disabled}/>
+        <span className={styles.icon} onClick={handleCheckboxClick} data-test-id={`${testId}-item-checkbox-block`}>
+          <Checkbox checked={isChecked} color={checkboxColor} filled={checkboxFilled} disabled={disabled} testId={`${testId}-item`}/>
         </span>
       )}
       {withRadioButton && (
-        <span className={styles.icon} onClick={handleRadioClick}>
-          <RadioButton checked={selected} value={id} disabled={disabled}/>
+        <span className={styles.icon} onClick={handleRadioClick} data-test-id={`${testId}-item-radio-block`}>
+          <RadioButton checked={selected} value={id} disabled={disabled} testId={`${testId}-item`}/>
         </span>
       )}
-      {customBullet && <span className={bulletClassName}>{customBullet}</span>}
-      <Typography variant="Body1">{label}</Typography>
+      {customBullet && <span className={bulletClassName} data-test-id={`${testId}-item-bullet`}>{customBullet}</span>}
+      <Typography variant="Body1" testId={`${testId}-item`}>{label}</Typography>
       {children}
     </div>
   );

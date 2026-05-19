@@ -29,6 +29,7 @@ const meta: Meta<LinkProps> = {
     underline: 'hover',
     variant: ETypographyVariants.Body1,
     color: 'var(--text-dark)',
+    testId: 'storybook'
   },
   argTypes: {
     href: { description: 'Гипертекстовая ссылка', type: 'string' },
@@ -121,6 +122,7 @@ export const LinkWithAutoMeasuredTooltip = (): JSX.Element => {
           Изменить ширину:
           <input
             type="range"
+            name="range"
             min="50"
             max="500"
             value={widthInPixels}
