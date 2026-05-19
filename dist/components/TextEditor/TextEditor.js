@@ -65,7 +65,7 @@ const Hotkeys = Extension.create({
         };
     },
 });
-export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCancel, onDelete, error, helperText, isEditMode, canAttachFiles = true, maxFileCount = 5, maxFileSize = '1Гб', required, className, lng = 'en', }) => {
+export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCancel, onDelete, error, helperText, isEditMode, canAttachFiles = true, maxFileCount = 5, maxFileSize = '1Гб', required, className, lng = 'en', testId = 'default' }) => {
     var _a;
     const uploaderRef = useRef(null);
     const [editorHtml, setEditorHtml] = useState(defaultValue || '');
@@ -87,6 +87,7 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
             attributes: {
                 class: styles.pellContent,
                 style: 'overflow: visible; height: auto; outline: none;',
+                'data-test-id': `${testId}-text-field`
             },
         },
         onUpdate: ({ editor }) => {
@@ -129,6 +130,7 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
             action: commands.bold,
             active: 'bold',
             title: lng === 'ru' ? 'Жирный (Ctrl+B)' : 'Bold (Ctrl+B)',
+            'data-test-id': `${testId}-text-bold`
         },
         {
             name: 'italic',
@@ -265,21 +267,21 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
     const labelClasses = classNames(styles.label, {
         [styles['label--required']]: required,
     });
-    return (React.createElement("div", { className: wrapperClassess },
-        label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
+    return (React.createElement("div", { "data-test-id": `${testId}-textEditor-block`, className: wrapperClassess },
+        label && (React.createElement(Typography, { testId: `${testId}-textEditor`, variant: "Caption", className: labelClasses }, label)),
         React.createElement("div", { className: inputClassess, title: '' },
-            temporaryFiles.length > 0 && (React.createElement(AttachedFilesPreview, { files: temporaryFiles, allowDelete: true, onDelete: removeAttachedFile, className: styles.attachedFilesContainer, lng: lng, maxFileCount: maxFileCount })),
+            temporaryFiles.length > 0 && (React.createElement(AttachedFilesPreview, { files: temporaryFiles, allowDelete: true, onDelete: removeAttachedFile, className: styles.attachedFilesContainer, lng: lng, maxFileCount: maxFileCount, testId: `${testId}-textEditor-attached` })),
             React.createElement("div", { className: styles.editorContainer },
-                React.createElement("div", { className: styles.pellActionbar },
+                React.createElement("div", { "data-test-id": `${testId}-textEditor-toolbar`, className: styles.pellActionbar },
                     React.createElement("div", { className: styles.buttonsContainer },
                         toolbarButtons.map((btn) => {
                             const isActive = btn.active ? editorState[btn.active] : false;
                             return (React.createElement("button", { key: btn.name, type: "button", className: `${styles.pellButton} ${btn.active && isActive ? styles.pellButtonSelected : ''}`, onMouseDown: (e) => {
                                     e.preventDefault();
                                     btn.action();
-                                }, dangerouslySetInnerHTML: { __html: btn.icon }, title: btn.title }));
+                                }, dangerouslySetInnerHTML: { __html: btn.icon }, title: btn.title, "data-test-id": `${testId}-textEditor-${btn.name}-button` }));
                         }),
-                        canAttachFiles && (React.createElement("button", { type: "button", className: styles.pellButton, onMouseDown: (e) => { e.preventDefault(); commands.image(); }, dangerouslySetInnerHTML: { __html: IconAttachToString('', '', '1.5') }, title: lng === 'ru' ? 'Прикрепить файл' : 'Upload file' }))),
+                        canAttachFiles && (React.createElement("button", { type: "button", className: styles.pellButton, onMouseDown: (e) => { e.preventDefault(); commands.image(); }, dangerouslySetInnerHTML: { __html: IconAttachToString('', '', '1.5') }, title: lng === 'ru' ? 'Прикрепить файл' : 'Upload file', "data-test-id": `${testId}-textEditor-attach-button` }))),
                     React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
                         React.createElement(IconButton, { disabled: isCancelDisabled, title: lng === 'ru' ? 'Отменить' : 'Cancel', icon: React.createElement(IconClose, null), onClick: handleCancel, style: {
                                 width: '25px',
@@ -288,7 +290,7 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
                                 backgroundColor: 'white',
                                 opacity: isCancelDisabled ? 0.5 : 1,
                                 cursor: isCancelDisabled ? 'default' : 'pointer',
-                            }, color: "var(--blue-main)" }),
+                            }, color: "var(--blue-main)", "data-test-id": `${testId}-textEditor-cancel-button` }),
                         React.createElement(IconButton, { title: lng === 'ru' ? 'Отправить' : 'Submit', icon: React.createElement(IconSubmit, { width: '10', height: '10', htmlColor: 'blue', strokeWidth: '1' }), onClick: handleSubmit, disabled: isSubmitDisabled, style: {
                                 width: '25px',
                                 height: '25px',
@@ -296,8 +298,8 @@ export const TextEditor = ({ defaultValue, attachedFiles, label, onSubmit, onCan
                                 backgroundColor: 'var(--blue-main)',
                                 opacity: isSubmitDisabled ? 0.5 : 1,
                                 cursor: isSubmitDisabled ? 'default' : 'pointer'
-                            }, color: "white" }))),
-                React.createElement("div", { className: styles.pellContent, onClick: () => editor === null || editor === void 0 ? void 0 : editor.chain().focus().run() }, editor && React.createElement(EditorContent, { editor: editor }))),
-            canAttachFiles && (React.createElement("input", { ref: uploaderRef, type: "file", style: { display: 'none' }, multiple: true, onChange: handleUploadFiles, accept: ACCEPTED_FILE_TYPES }))),
-        error && helperText && (React.createElement(Typography, { variant: "Caption", className: styles.helperText }, helperText))));
+                            }, color: "white", "data-test-id": `${testId}-textEditor-submit-button` }))),
+                React.createElement("div", { "data-test-id": `${testId}-textEditor-text-field`, className: styles.pellContent, onClick: () => editor === null || editor === void 0 ? void 0 : editor.chain().focus().run() }, editor && React.createElement(EditorContent, { editor: editor }))),
+            canAttachFiles && (React.createElement("input", { ref: uploaderRef, type: "file", name: "file", style: { display: 'none' }, multiple: true, onChange: handleUploadFiles, accept: ACCEPTED_FILE_TYPES, "data-test-id": `${testId}-textEditor-upload-input` }))),
+        error && helperText && (React.createElement(Typography, { testId: `${testId}-textEditor-error`, variant: "Caption", className: styles.helperText }, helperText))));
 };

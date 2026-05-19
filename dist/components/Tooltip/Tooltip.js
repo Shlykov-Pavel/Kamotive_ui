@@ -4,7 +4,7 @@ import { Typography } from '../Typography/Typography';
 import classNames from 'classnames';
 import ReactDOM from 'react-dom';
 import { hexToRgba } from '../Tag/Tag';
-export const Tooltip = ({ label, children, className, style, overlayChildren = false, textSize = 'sm', position = 'none', displayDelay = 750, hideDelay = 500, opacity = 0.4, color, followCursor = false, }) => {
+export const Tooltip = ({ label, children, className, style, overlayChildren = false, textSize = 'sm', position = 'none', displayDelay = 750, hideDelay = 500, opacity = 0.4, color, followCursor = false, testId = "default" }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -202,7 +202,7 @@ export const Tooltip = ({ label, children, className, style, overlayChildren = f
     const tooltipStyles = Object.assign(Object.assign({}, style), { position: 'fixed', left: `${coords.x}px`, top: `${coords.y}px`, backgroundColor: color ? hexToRgba(color, opacity) : `rgba(0, 0, 0, ${opacity})`, zIndex: 1500 });
     const tooltipClassNames = classNames(styles.tooltip, isVisible && styles['tooltip--visible'], className);
     return (React.createElement(React.Fragment, null,
-        React.createElement("div", { onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave, onMouseMove: handleMouseMove, onMouseDown: handlePointerDown, className: styles.wrapper, ref: childrenRef }, children),
+        React.createElement("div", { onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave, onMouseMove: handleMouseMove, onMouseDown: handlePointerDown, className: styles.wrapper, ref: childrenRef, "data-test-id": `${testId}-tooltip` }, children),
         isOpen && ReactDOM.createPortal(React.createElement("div", { ref: tooltipElementRef, className: tooltipClassNames, style: tooltipStyles },
-            React.createElement(Typography, { variant: textSize === 'sm' ? "Caption-Medium" : textSize === 'md' ? "Body2-Medium" : "Body1-Medium" }, label)), document.body)));
+            React.createElement(Typography, { variant: textSize === 'sm' ? "Caption-Medium" : textSize === 'md' ? "Body2-Medium" : "Body1-Medium", testId: `${testId}-tooltip` }, label)), document.body)));
 };

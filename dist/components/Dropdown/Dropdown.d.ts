@@ -14,6 +14,7 @@ export interface DropdownListItemProps<T extends BaseOptions> {
     activeIndex?: number;
     index?: number;
     isChild?: boolean;
+    testId?: string;
 }
-export declare const DropdownListItem: <T extends BaseOptions>({ item, getOptionLabel, size, selectedItem, variant, onChange, isActive, activeIndex, index, isChild, }: DropdownListItemProps<T>) => React.JSX.Element;
-export declare const Dropdown: <T extends BaseOptions>({ options, id, label, placeholder, required, value, defaultValue, onChange, showLoadMore, loadMore, getOptionLabel, variant, size, style, className, isLeftLabel, isDivider, disabled, readOnly, isOpened, error, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable, enableAutocomplete, onSearch, isOptionsLoading, isSearchLoading, noOptionsText, lng, multiple, limitTags, }: DropdownProps<T>) => React.JSX.Element;
+export declare const DropdownListItem: <T extends BaseOptions>({ item, getOptionLabel, size, selectedItem, variant, onChange, isActive, activeIndex, index, isChild, testId }: DropdownListItemProps<T>) => React.JSX.Element;
+export declare const Dropdown: <T extends BaseOptions>({ options, id, label, placeholder, required, value, defaultValue, onChange, showLoadMore, loadMore, getOptionLabel, variant, size, style, className, isLeftLabel, isDivider, disabled, readOnly, isOpened, error, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable, enableAutocomplete, onSearch, isOptionsLoading, isSearchLoading, noOptionsText, lng, multiple, limitTags, testId }: DropdownProps<T>) => React.JSX.Element;

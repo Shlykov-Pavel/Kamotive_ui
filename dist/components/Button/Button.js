@@ -5,7 +5,7 @@ import { Typography } from '../Typography/Typography';
 /**
  * Компонент Button представляет собой кнопку, которую можно настроить с помощью различных параметров (размер, иконки, стили, состояние).
  */
-export const Button = React.forwardRef(({ label, variant = 'fill', size = 'md', mode, style, condition, icon, disabled = false, onClick, children, error, color, name, type = 'button', form, className, active, }, ref) => {
+export const Button = React.forwardRef(({ label, variant = 'fill', size = 'md', mode, style, condition, icon, disabled = false, onClick, children, error, color, name, type = 'button', form, className, active, testId = 'default' }, ref) => {
     const btnIcon = icon || typeof children === 'object' && children;
     let modeStyle = 'text';
     if (mode) {
@@ -58,10 +58,10 @@ export const Button = React.forwardRef(({ label, variant = 'fill', size = 'md', 
     };
     const iconColorStyle = iconColorFn();
     if (!modeStyle) {
-        return (React.createElement("button", { className: buttonClasses },
-            React.createElement(Typography, { variant: "Body1" }, "\u041A\u043D\u043E\u043F\u043A\u0430")));
+        return (React.createElement("button", { "data-test-id": `${testId}-button`, className: buttonClasses },
+            React.createElement(Typography, { variant: "Body1", testId: `${testId}-button` }, "\u041A\u043D\u043E\u043F\u043A\u0430")));
     }
-    return (React.createElement("button", { className: buttonClasses, ref: ref, style: Object.assign(Object.assign({}, style), (color && !error ? {
+    return (React.createElement("button", { "data-test-id": `${testId}-button`, className: buttonClasses, ref: ref, style: Object.assign(Object.assign({}, style), (color && !error ? {
             '--button-color': color,
             '--button-hover-color': variant === 'fill' || variant === 'link' ? `color-mix(in srgb, ${color} 90%, black)` : `color-mix(in srgb, ${color} 10%, transparent)`,
             '--button-active-color': variant === 'fill' || variant === 'link' ? `color-mix(in srgb, ${color} 80%, black)` : `color-mix(in srgb, ${color} 20%, transparent)`,
@@ -72,10 +72,10 @@ export const Button = React.forwardRef(({ label, variant = 'fill', size = 'md', 
             var _a;
             const iconElement = btnIcon;
             const defaultStrokeWidth = size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0';
-            return React.cloneElement(iconElement, {
+            return (React.createElement("span", { "data-test-id": `${testId}-button-icon`, className: "button-icon-wrapper", style: { display: 'inline-flex' } }, React.cloneElement(iconElement, {
                 htmlColor: iconColorStyle,
                 strokeWidth: (_a = iconElement.props.strokeWidth) !== null && _a !== void 0 ? _a : defaultStrokeWidth,
-            });
+            })));
         })(),
-        (modeStyle === 'text' || modeStyle === 'default') && (React.createElement(Typography, { variant: "Body1" }, label ? label : typeof children === 'string' && children))));
+        (modeStyle === 'text' || modeStyle === 'default') && (React.createElement(Typography, { testId: `${testId}-button`, variant: "Body1" }, label ? label : typeof children === 'string' && children))));
 });

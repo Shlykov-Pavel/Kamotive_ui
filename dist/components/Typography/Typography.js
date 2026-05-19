@@ -19,8 +19,8 @@ import styles from './Typography.module.css';
  * Компонент Typography для стилизованного отображения текста.
  */
 export const Typography = (_a) => {
-    var { variant = ETypographyVariants.Body1, children, className, color, style } = _a, props = __rest(_a, ["variant", "children", "className", "color", "style"]);
+    var { variant = ETypographyVariants.Body1, children, className, color, style, testId } = _a, props = __rest(_a, ["variant", "children", "className", "color", "style", "testId"]);
     const variantClass = classNames(styles[`typography--variant-${variant}`], className);
     const combinedStyle = Object.assign({ color }, style);
-    return (React.createElement("span", Object.assign({ className: variantClass, style: combinedStyle }, props), children));
+    return (React.createElement("span", Object.assign({ className: variantClass, style: combinedStyle, "data-test-id": `${testId}-text` }, props), children));
 };

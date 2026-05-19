@@ -103,7 +103,7 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
     'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     'application/pdf': ['.pdf'],
     'application/msword': ['.doc', '.docx', '.log', '.syslog', '.txt'],
-}, rejectedFormats, addedFiles, setAddedFiles, canAdd = true, lng = 'ru', className, style, fileValidator }, ref) => {
+}, rejectedFormats, addedFiles, setAddedFiles, canAdd = true, lng = 'ru', className, style, fileValidator, testId = 'default' }, ref) => {
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [loadingFilesNames, setLoadingFilesNames] = useState([]);
     const [errorFiles, setErrorFiles] = useState([]);
@@ -196,8 +196,8 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
     const handleDeleteRejectedFile = (id) => {
         setErrorFiles(errorFiles.filter((rejection) => rejection.file.id !== id));
     };
-    const acceptedFileItems = addedFilesFormated.map((file) => (React.createElement(FileItem, { key: file.id, file: file, onDelete: handleDeleteFiles, isAddedFile: true, lng: lng })));
-    const fileRejectionItems = errorFiles.map(({ file, errors }) => (React.createElement(FileItem, { key: file.id, file: file, error: errors[0].message, onDelete: handleDeleteRejectedFile, isRejectedFile: true, lng: lng })));
+    const acceptedFileItems = addedFilesFormated.map((file, index) => (React.createElement(FileItem, { key: file.id, file: file, onDelete: handleDeleteFiles, isAddedFile: true, lng: lng, testId: `${testId}-dropzone-accepted-${index}` })));
+    const fileRejectionItems = errorFiles.map(({ file, errors }, index) => (React.createElement(FileItem, { key: file.id, file: file, error: errors[0].message, onDelete: handleDeleteRejectedFile, isRejectedFile: true, lng: lng, testId: `${testId}-dropzone-rejected-${index}` })));
     useEffect(() => {
         if (addedFiles.length === 0) {
             setAddedFilesFormatted([]);
@@ -208,29 +208,30 @@ export const FileLoader = forwardRef(({ maxFileSize = 2, maxFileCount = 10, maxF
             setIsLoadingFiles(false);
         }
     }, [loadingFilesNames, isLoadingFiles]);
-    return (React.createElement("section", { className: classNames(styles['fileLoader'], className), style: style },
-        React.createElement("div", Object.assign({}, getRootProps({ className: `${styles['dropzone']} ${!canAdd ? styles['disabled'] : ''}` })),
-            React.createElement("input", Object.assign({}, getInputProps())),
-            React.createElement(IconUpload, { htmlColor: !canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)', width: '34', height: '34' }),
-            React.createElement(Typography, { variant: "Body1", color: !canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)', style: { textAlign: 'center' } }, lng === 'ru' || lng.includes('ru') ? (React.createElement(React.Fragment, null,
+    return (React.createElement("section", { className: classNames(styles['fileLoader'], className), style: style, "data-test-id": `${testId}-loader-section` },
+        React.createElement("div", Object.assign({}, getRootProps({ className: `${styles['dropzone']} ${!canAdd ? styles['disabled'] : ''}` }), { "data-test-id": `${testId}-dropzone-block` }),
+            React.createElement("input", Object.assign({}, getInputProps(), { "data-test-id": `${testId}-dropzone-input`, name: 'file' })),
+            React.createElement("span", { "data-test-id": `${testId}-dropzone-upload-icon`, style: { display: 'inline-flex' } },
+                React.createElement(IconUpload, { htmlColor: !canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)', width: '34', height: '34' })),
+            React.createElement(Typography, { variant: "Body1", color: !canAdd ? 'var(--grey-medium)' : 'var(--icons-grey)', style: { textAlign: 'center' }, testId: `${testId}-dropzone` }, lng === 'ru' || lng.includes('ru') ? (React.createElement(React.Fragment, null,
                 React.createElement("span", { style: { textDecoration: 'underline' } }, "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 \u043D\u0430 \u043E\u0431\u043B\u0430\u0441\u0442\u044C"),
                 React.createElement("span", null, " \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0442\u0430\u0449\u0438\u0442\u0435 \u0444\u0430\u0439\u043B\u044B"))) : (React.createElement(React.Fragment, null,
                 React.createElement("span", { style: { textDecoration: 'underline' } }, "Click on this area"),
                 React.createElement("span", null, " or drag files here")))),
             React.createElement("div", null,
                 maxFileSize &&
-                    (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" },
+                    (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)", testId: `${testId}-dropzone-sizelimits` },
                         `Максимальный размер файла ${maxFileSize.toFixed(0)} ГБ`,
                         " ",
-                        React.createElement("br", null))) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" },
+                        React.createElement("br", null))) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)", testId: `${testId}-dropzone-sizelimits` },
                         `Maximum file size ${maxFileSize.toFixed(0)} GB`,
                         " ",
                         React.createElement("br", null)))),
                 maxFileCount &&
-                    (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`)) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `You can upload ${maxFileCount} ${maxFileCount > 1 ? `files` : `file`}`))))),
-        acceptedFormats && !rejectedFormats && (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `${lng === 'ru' || lng.includes('ru') ? 'Поддерживаемые форматы:' : 'Supported formats:'} ${getAcceptedFormatsString(acceptedFormats)}`)),
-        rejectedFormats && (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)" }, `${lng === 'ru' || lng.includes('ru') ? 'Неподдерживаемые форматы:' : 'Unsupported formats:'} ${getAcceptedFormatsString(rejectedFormats)}`)),
-        (addedFiles === null || addedFiles === void 0 ? void 0 : addedFiles.length) > 0 || (errorFiles === null || errorFiles === void 0 ? void 0 : errorFiles.length) > 0 ? (React.createElement("div", { className: styles['addedFiles'] },
+                    (lng === 'ru' || lng.includes('ru') ? (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)", testId: `${testId}-dropzone-countlimits` }, `За раз можно загрузить ${maxFileCount} ${maxFileCount > 1 ? `файлов` : `файл`}`)) : (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)", testId: `${testId}-dropzone-countlimits` }, `You can upload ${maxFileCount} ${maxFileCount > 1 ? `files` : `file`}`))))),
+        acceptedFormats && !rejectedFormats && (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)", testId: `${testId}-dropzone-acceptformats` }, `${lng === 'ru' || lng.includes('ru') ? 'Поддерживаемые форматы:' : 'Supported formats:'} ${getAcceptedFormatsString(acceptedFormats)}`)),
+        rejectedFormats && (React.createElement(Typography, { variant: "Body2", color: "var(--grey-medium)", testId: `${testId}-dropzone-rejectformats` }, `${lng === 'ru' || lng.includes('ru') ? 'Неподдерживаемые форматы:' : 'Unsupported formats:'} ${getAcceptedFormatsString(rejectedFormats)}`)),
+        (addedFiles === null || addedFiles === void 0 ? void 0 : addedFiles.length) > 0 || (errorFiles === null || errorFiles === void 0 ? void 0 : errorFiles.length) > 0 ? (React.createElement("div", { className: styles['addedFiles'], "data-test-id": `${testId}-dropzone-added-list` },
             acceptedFileItems,
-            fileRejectionItems)) : (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' } }, lng === 'ru' || lng.includes('ru') ? 'Файлы не добавлены' : 'Files not added'))));
+            fileRejectionItems)) : (React.createElement(Typography, { variant: "Body2-SemiBold", color: "var(--grey-medium)", style: { marginTop: '5px' }, testId: `${testId}-dropzone-empty` }, lng === 'ru' || lng.includes('ru') ? 'Файлы не добавлены' : 'Files not added'))));
 });

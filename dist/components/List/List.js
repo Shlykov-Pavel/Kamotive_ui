@@ -6,7 +6,7 @@ import { Checkbox } from '../Checkbox/Checkbox';
 import { RadioButton } from '../RadioButton/RadioButton';
 import { ChevronDown } from '../../Icons';
 import { ListItem } from '../ListItem/ListItem';
-export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selected = false, disabled = false, label, id, style, className, collapsible = false, open = false, withCheckbox = false, checkboxColor, checkboxFilled, withRadioButton = false, customBullet, customItemBullet, bulletClassName, titleContent, children, isHeader = false, parentChecked = false, }) => {
+export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selected = false, disabled = false, label, id, style, className, collapsible = false, open = false, withCheckbox = false, checkboxColor, checkboxFilled, withRadioButton = false, customBullet, customItemBullet, bulletClassName, titleContent, children, isHeader = false, parentChecked = false, testId = 'default' }) => {
     const [isOpen, setIsOpen] = useState(open);
     const [isChecked, setIsChecked] = useState(checked || parentChecked);
     const childIds = [];
@@ -57,22 +57,24 @@ export const List = ({ onClick, onCheck, onRadioSelect, checked = false, selecte
     }, [parentChecked, checked]);
     const headerClassNames = classNames(styles.header, className);
     const contentClassNames = classNames(styles.content, isOpen ? styles['content--expanded'] : styles['content--collapsed']);
-    return (React.createElement("div", { className: styles.collapsibleList },
-        label || titleContent && (React.createElement("div", { className: headerClassNames, onClick: handleClick, style: style },
+    return (React.createElement("div", { className: styles.collapsibleList, "data-test-id": `${testId}-list` },
+        label || titleContent && (React.createElement("div", { className: headerClassNames, onClick: handleClick, style: style, "data-test-id": `${testId}-list-header` },
             !isHeader && (React.createElement("div", null,
-                withCheckbox && (React.createElement("span", { onClick: handleCheckboxClick },
-                    React.createElement(Checkbox, { checked: isChecked, color: checkboxColor, filled: checkboxFilled, disabled: disabled }))),
-                withRadioButton && (React.createElement("span", { onClick: handleRadioClick },
-                    React.createElement(RadioButton, { checked: selected, value: id, disabled: disabled }))),
-                customBullet && React.createElement("span", { className: classNames(styles.bullet, bulletClassName) }, customBullet))),
-            label && React.createElement(Typography, { variant: "Body1" }, label),
+                withCheckbox && (React.createElement("span", { onClick: handleCheckboxClick, "data-test-id": `${testId}-list-chechbox-block` },
+                    React.createElement(Checkbox, { checked: isChecked, color: checkboxColor, filled: checkboxFilled, disabled: disabled, testId: `${testId}-list` }))),
+                withRadioButton && (React.createElement("span", { onClick: handleRadioClick, "data-test-id": `${testId}-list-radio-block` },
+                    React.createElement(RadioButton, { checked: selected, value: id, disabled: disabled, testId: `${testId}-list` }))),
+                customBullet && React.createElement("span", { className: classNames(styles.bullet, bulletClassName), "data-test-id": `${testId}-list-bullet` }, customBullet))),
+            label && React.createElement(Typography, { variant: "Body1", testId: `${testId}-list` }, label),
             titleContent,
-            collapsible && (React.createElement("span", { className: styles.indicator }, isOpen ? React.createElement(ChevronDown, null) : React.createElement(ChevronDown, { rotation: 270 }))))),
-        React.createElement("div", { className: collapsible ? contentClassNames : styles.content, style: { paddingLeft: !label ? 0 : '16px' } }, React.Children.map(children, (child) => {
+            collapsible && (React.createElement("span", { className: styles.indicator, "data-test-id": `${testId}-list-action-icon` }, isOpen ? React.createElement(ChevronDown, null) : React.createElement(ChevronDown, { rotation: 270 }))))),
+        React.createElement("div", { className: collapsible ? contentClassNames : styles.content, style: { paddingLeft: !label ? 0 : '16px' }, "data-test-id": `${testId}-list-content-block` }, React.Children.map(children, (child, index) => {
             if (React.isValidElement(child)) {
+                const childTestId = child.props.testId || `${testId}-list-${index}`;
                 const commonProps = {
                     style: child.props.style || style,
                     className: child.props.className,
+                    testId: childTestId,
                 };
                 if (child.type === ListItem || child.type === List) {
                     return React.cloneElement(child, Object.assign(Object.assign({}, commonProps), { bulletClassName: classNames(styles.bullet, child.props.bulletClassName || bulletClassName), customBullet: child.props.customBullet !== undefined

@@ -33,7 +33,7 @@ const adjustTextColor = (backgroundColor) => {
     const contrastWithWhite = getContrastRatio(backgroundColor, white);
     return contrastWithWhite < 1.5 ? black : "";
 };
-export const Tag = ({ label, color = 'red', closeButton = false, editable = false, onClick, onChange, }) => {
+export const Tag = ({ label, color = 'red', closeButton = false, editable = false, onClick, onChange, testId = 'default' }) => {
     const [newLabel, setNewLabel] = useState(label);
     const [width, setWidth] = useState(0);
     const measurementDivRef = useRef(null);
@@ -55,16 +55,16 @@ export const Tag = ({ label, color = 'red', closeButton = false, editable = fals
                 border: `1px solid ${adjustedColor}`,
                 backgroundColor: hexToRgba(color, 0.2),
             }
-            : {} },
-        editable ? (React.createElement("div", { style: { position: "relative" } },
-            React.createElement("input", { type: "text", placeholder: label, value: newLabel, onChange: (e) => {
+            : {}, "data-test-id": `${testId}-tag` },
+        editable ? (React.createElement("div", { style: { position: "relative" }, "data-test-id": `${testId}-tag-edit` },
+            React.createElement("input", { type: "text", name: 'input', placeholder: label, value: newLabel, onChange: (e) => {
                     setNewLabel(e.target.value);
                 }, onBlur: handleBlur, style: {
                     color: (color === null || color === void 0 ? void 0 : color.startsWith('#')) ? adjustedColor : `var(--${color})`,
                     '--placeholder-color': (color === null || color === void 0 ? void 0 : color.startsWith('#')) ? adjustedColor : `var(--${color})`,
                     width: `${width}px`,
                     minWidth: '25px',
-                } }),
+                }, "data-test-id": `${testId}-tag-edit-input` }),
             React.createElement("div", { ref: measurementDivRef, style: {
                     position: 'absolute',
                     visibility: 'hidden',
@@ -74,11 +74,11 @@ export const Tag = ({ label, color = 'red', closeButton = false, editable = fals
                     fontFamily: 'inherit',
                     fontWeight: 'inherit',
                     letterSpacing: 'inherit',
-                } }, newLabel || 'Item'))) : (React.createElement(React.Fragment, null,
+                }, "data-test-id": `${testId}-tag-edit-label` }, newLabel || 'Item'))) : (React.createElement(React.Fragment, null,
             " ",
             label,
             " ")),
         closeButton && (React.createElement("button", { type: "button", "aria-label": "\u0417\u0430\u043A\u0440\u044B\u0442\u044C", style: color.startsWith('#')
                 ? { '--close-color': adjustedColor }
-                : { '--close-color': `var(--${color})` }, onClick: onClick }))));
+                : { '--close-color': `var(--${color})` }, onClick: onClick, "data-test-id": `${testId}-close-button` }))));
 };

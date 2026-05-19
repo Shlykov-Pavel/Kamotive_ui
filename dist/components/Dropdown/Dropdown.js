@@ -115,7 +115,7 @@ function checkItem(item, getOptionLabel, disabled, isDivider) {
     }
     return null;
 }
-export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedItem, variant, onChange, isActive, activeIndex, index, isChild = false, }) => {
+export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedItem, variant, onChange, isActive, activeIndex, index, isChild = false, testId }) => {
     var _a, _b;
     const itemRef = useRef(null);
     const [showTooltip, setShowTooltip] = useState(false);
@@ -172,7 +172,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
         [styles['item-block--child']]: isChild,
     });
     const itemData = item !== null && typeof item === 'object' ? item : null;
-    const itemContent = (React.createElement("div", { className: itemContainerClasses, onClick: handleItemClick },
+    const itemContent = (React.createElement("div", { className: itemContainerClasses, onClick: handleItemClick, "data-test-id": `${testId}-item` },
         React.createElement("div", { className: itemClassess },
             React.createElement("div", { className: itemBlock },
                 variant === 'icons' && (itemData === null || itemData === void 0 ? void 0 : itemData.icon) &&
@@ -180,16 +180,17 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
                         strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
                     }),
                 React.createElement("div", { className: styles.item, ref: itemRef },
-                    React.createElement("span", null, getComparisonValue(item, getOptionLabel))),
-                !hasChildren && isSelectedItem && (React.createElement(IconCheck, { strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0', htmlColor: "#0D99FF" }))),
+                    React.createElement("span", { "data-test-id": `${testId}-item-title` }, getComparisonValue(item, getOptionLabel))),
+                !hasChildren && isSelectedItem && (React.createElement("span", { "data-test-id": `${testId}-checked-icon`, style: { display: 'inline-flex' } },
+                    React.createElement(IconCheck, { strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0', htmlColor: "#0D99FF" })))),
             (itemData === null || itemData === void 0 ? void 0 : itemData.isDivider) && React.createElement("div", { className: styles.divider })),
-        hasChildren && (React.createElement("div", { className: styles.nestedMenu }, (_a = item.children) === null || _a === void 0 ? void 0 : _a.map((child, childIndex) => {
+        hasChildren && (React.createElement("div", { className: styles.nestedMenu, "data-test-id": `${testId}-nested-block` }, (_a = item.children) === null || _a === void 0 ? void 0 : _a.map((child, childIndex) => {
             var _a;
-            return (React.createElement(DropdownListItem, { key: (_a = child === null || child === void 0 ? void 0 : child.id) !== null && _a !== void 0 ? _a : `${index}-${childIndex}`, item: child, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, onChange: onChange, isActive: false, activeIndex: activeIndex, index: childIndex, isChild: true }));
+            return (React.createElement(DropdownListItem, { key: (_a = child === null || child === void 0 ? void 0 : child.id) !== null && _a !== void 0 ? _a : `${index}-${childIndex}`, item: child, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, onChange: onChange, isActive: false, activeIndex: activeIndex, index: childIndex, isChild: true, testId: `${testId}-nested-${childIndex}` }));
         })))));
-    return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left" }, itemContent)) : (itemContent);
+    return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left", testId: `${testId}` }, itemContent)) : (itemContent);
 };
-export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, onSearch, isOptionsLoading, isSearchLoading, noOptionsText, lng = 'ru', multiple = false, limitTags = 1, }) => {
+export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, onSearch, isOptionsLoading, isSearchLoading, noOptionsText, lng = 'ru', multiple = false, limitTags = 1, testId = 'default' }) => {
     const inputRef = useRef(null);
     const containerRef = useRef(null);
     const dropdownRef = useRef(null);
@@ -522,15 +523,15 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 if (isOpen && enableAutocomplete) {
                     (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.focus();
                 }
-            } },
+            }, "data-test-id": `${testId}-dropdown-value-wrapper` },
             variant === 'icons' && !multiple &&
                 (selectedItem === null || selectedItem === void 0 ? void 0 : selectedItem.icon) &&
                 React.cloneElement(selectedItem.icon, {
                     strokeWidth: size === 'lg' ? '0.5' : size === 'md' ? '0.3' : '0.0',
                 }),
             multiple && selectedItems.length > 0 && getChips(),
-            !multiple && selectedItem && (React.createElement("span", { style: { display: (isOpen && enableAutocomplete && searchValue) ? 'none' : 'block' } }, getComparisonValue(selectedItem, getOptionLabel))),
-            isOpen && enableAutocomplete && (React.createElement("input", { ref: inputRef, type: "text", value: searchValue, className: styles.inlineSearchInput, onChange: handleSearchChange, placeholder: !searchValue && !selectedItem
+            !multiple && selectedItem && (React.createElement("span", { "data-test-id": `${testId}-dropdown-current-value`, style: { display: (isOpen && enableAutocomplete && searchValue) ? 'none' : 'block' } }, getComparisonValue(selectedItem, getOptionLabel))),
+            isOpen && enableAutocomplete && (React.createElement("input", { ref: inputRef, type: "text", name: "text", value: searchValue, className: styles.inlineSearchInput, onChange: handleSearchChange, placeholder: !searchValue && !selectedItem
                     ? (lng === 'ru' ? 'Поиск...' : 'Search...')
                     : '', onClick: (e) => {
                     e.stopPropagation();
@@ -543,11 +544,11 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 }, onBlur: (e) => {
                     e.stopPropagation();
                     onBlur === null || onBlur === void 0 ? void 0 : onBlur(e);
-                }, onKeyDown: handleKeyDown, autoFocus: true })),
-            !multiple && !selectedItem && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", null, (_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : (lng === 'ru' ? 'Выберите значение' : 'Select value'))),
-            multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", null, (_b = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _b !== void 0 ? _b : (lng === 'ru' ? 'Выберите значения' : 'Select values')))));
+                }, onKeyDown: handleKeyDown, autoFocus: true, "data-test-id": `${testId}-dropdown-search-input` })),
+            !multiple && !selectedItem && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", { "data-test-id": `${testId}-dropdown-placeholder` }, (_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : (lng === 'ru' ? 'Выберите значение' : 'Select value'))),
+            multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", { "data-test-id": `${testId}-dropdown-placeholder` }, (_b = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _b !== void 0 ? _b : (lng === 'ru' ? 'Выберите значения' : 'Select values')))));
         return showSelectedTooltip ? (React.createElement("div", { className: styles.textField },
-            React.createElement(Tooltip, { label: ((_c = getComparisonValue(selectedItem, getOptionLabel)) === null || _c === void 0 ? void 0 : _c.toString()) || '', position: "bottom-left", style: { width: '100% !important' } }, textFieldContent))) : (textFieldContent);
+            React.createElement(Tooltip, { label: ((_c = getComparisonValue(selectedItem, getOptionLabel)) === null || _c === void 0 ? void 0 : _c.toString()) || '', position: "bottom-left", style: { width: '100% !important' }, "data-test-id": `${testId}-dropdown-tooltip` }, textFieldContent))) : (textFieldContent);
     };
     const isSearchingNow = !isInitialOpen && !!searchValue.trim();
     const showSpinner = isSearchLoading || (isOptionsLoading && displayOptions.length === 0);
@@ -565,19 +566,19 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 if (idx !== -1)
                     hoveredIndexRef.current = idx;
                 setActiveIndex(-1);
-            } },
-            showSpinner ? (React.createElement("div", { className: `${styles['item-block']}`, style: { padding: '10px', display: 'flex', flexDirection: "column", alignItems: 'center', justifyContent: 'center', margin: '0 auto' } },
+            }, "data-test-id": `${testId}-dropdown-options-list` },
+            showSpinner ? (React.createElement("div", { className: `${styles['item-block']}`, style: { padding: '10px', display: 'flex', flexDirection: "column", alignItems: 'center', justifyContent: 'center', margin: '0 auto' }, "data-test-id": `${testId}-dropdown-spinner` },
                 React.createElement(Spinner, null))) : (React.createElement(React.Fragment, null, optionsToRender && optionsToRender.length > 0 ? (optionsToRender.map((option, index) => {
                 var _a;
-                return (React.createElement(DropdownListItem, { key: (_a = option === null || option === void 0 ? void 0 : option.id) !== null && _a !== void 0 ? _a : index, item: option, getOptionLabel: getOptionLabel, size: size, selectedItem: multiple ? selectedItems : selectedItem, variant: variant, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index }));
-            })) : (React.createElement("div", { className: `${styles['item-block']}`, style: { margin: '15px auto', textAlign: 'center', color: 'var(--text-grey)' } }, lng === 'ru' || lng.includes('ru')
+                return (React.createElement(DropdownListItem, { key: (_a = option === null || option === void 0 ? void 0 : option.id) !== null && _a !== void 0 ? _a : index, item: option, getOptionLabel: getOptionLabel, size: size, selectedItem: multiple ? selectedItems : selectedItem, variant: variant, onChange: onChangeHandler, isActive: activeIndex === index, activeIndex: activeIndex, index: index, testId: `${testId}-dropdown-option-${index}` }));
+            })) : (React.createElement("div", { className: `${styles['item-block']}`, style: { margin: '15px auto', textAlign: 'center', color: 'var(--text-grey)' }, "data-test-id": `${testId}-dropdown-empty` }, lng === 'ru' || lng.includes('ru')
                 ? noOptionsText || 'Нет вариантов для выбора'
                 : noOptionsText || 'No options to select')))),
             !showSpinner && !isSearchingNow && showLoadMore && loadMore && (React.createElement(Button, { ref: loadMoreRef, style: { width: '97%', margin: '10px auto', display: 'block', boxSizing: 'border-box' }, disabled: isOptionsLoading, variant: 'outline', active: activeIndex === displayOptions.length, onClick: (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     loadMore();
-                } }, isOptionsLoading
+                }, testId: `${testId}-dropdown-loadmore` }, isOptionsLoading
                 ? (lng === 'ru' ? 'Загрузка...' : 'Loading...')
                 : (lng === 'ru' ? 'Загрузить еще' : 'Load more')))));
         return isOpen ? menu : null;
@@ -664,8 +665,8 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         window.addEventListener('resize', recalcChipTooltips);
         return () => window.removeEventListener('resize', recalcChipTooltips);
     }, [multiple, selectedItems, limitTags, recalcChipTooltips]);
-    return (React.createElement("div", { id: id, className: wrapperClassess, ref: containerRef, onClick: onClick, style: style ? style : { width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' } },
-        label && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, label)),
+    return (React.createElement("div", { id: id, className: wrapperClassess, ref: containerRef, onClick: onClick, style: style ? style : { width: isLeftLabel && containerWidth ? `${containerWidth}px` : '100%' }, "data-test-id": `${testId}-dropdown-block` },
+        label && (React.createElement(Typography, { variant: "Caption", className: labelClasses, testId: `${testId}-dropdown` }, label)),
         React.createElement("div", { className: buttonClassess, onClick: disabled || readOnly ? undefined : handleToggle, role: "button", 
             // disabled={disabled}
             tabIndex: disabled ? -1 : 0, "aria-disabled": disabled, onKeyDown: (e) => {
@@ -674,15 +675,15 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 if (enableAutocomplete && e.target instanceof HTMLInputElement)
                     return;
                 handleKeyDown(e);
-            } },
+            }, "data-test-id": `${testId}-dropdown-trigger-button` },
             getTextField(),
             React.createElement("div", { className: styles.actionButtons },
                 clearable &&
                     !readOnly &&
                     !disabled &&
-                    (selectedItem || (multiple && selectedItems.length !== 0) || (enableAutocomplete && searchValue)) && (React.createElement("div", { className: styles.resetButton },
+                    (selectedItem || (multiple && selectedItems.length !== 0) || (enableAutocomplete && searchValue)) && (React.createElement("div", { className: styles.resetButton, "data-test-id": `${testId}-dropdown-clear-button` },
                     React.createElement(IconClose, { strokeWidth: "0.2", htmlColor: "var(--text-light)", onClick: handleReset }))),
-                React.createElement("div", { className: styles.dropdownIcon }, !isOpen ? (React.createElement(ChevronDown, { strokeWidth: size === 'lg' ? '0.5' : '0.3', htmlColor: 'var(--icons-medium)' })) : (React.createElement(ChevronUp, { strokeWidth: size === 'lg' ? '0.5' : '0.3', htmlColor: 'var(--icons-medium)' })))),
+                React.createElement("div", { className: styles.dropdownIcon, "data-test-id": `${testId}-dropdown-open-button` }, !isOpen ? (React.createElement(ChevronDown, { strokeWidth: size === 'lg' ? '0.5' : '0.3', htmlColor: 'var(--icons-medium)' })) : (React.createElement(ChevronUp, { strokeWidth: size === 'lg' ? '0.5' : '0.3', htmlColor: 'var(--icons-medium)' })))),
             getDropdownMenu()),
-        errorInput && errorInputHelperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]) }, helperText !== null && helperText !== void 0 ? helperText : errorInputHelperText))));
+        errorInput && errorInputHelperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]), testId: `${testId}-dropdown-error` }, helperText !== null && helperText !== void 0 ? helperText : errorInputHelperText))));
 };

@@ -26,7 +26,7 @@ export const title = (lng) => ({
     warning: lng === 'ru' ? 'Внимание' : 'Warning',
     info: lng === 'ru' ? 'Информация' : 'Info',
 });
-export const Snackbar = ({ children, type, duration = 10000, icon = true, onClose, style, lng = 'ru' }) => {
+export const Snackbar = ({ children, type, duration = 10000, icon = true, onClose, style, lng = 'ru', testId = 'default' }) => {
     const [isVisible, setIsVisible] = useState(true);
     const [isExiting, setIsExiting] = useState(false);
     useEffect(() => {
@@ -49,12 +49,12 @@ export const Snackbar = ({ children, type, duration = 10000, icon = true, onClos
     const snackbarClasses = classNames(styles['snackbar-wrapper'], styles[`snackbar--${type}`], {
         [styles['snackbar-wrapper--exiting']]: isExiting
     });
-    return (React.createElement("div", { className: snackbarClasses, style: style },
-        React.createElement("div", { className: styles['snackbar-textAndIcon'] },
+    return (React.createElement("div", { className: snackbarClasses, style: style, "data-test-id": `${testId}-snackbar-${type}` },
+        React.createElement("div", { className: styles['snackbar-textAndIcon'], "data-test-id": `${testId}-snackbar-${type}-icon` },
             icon && icons[type],
-            React.createElement("div", { className: styles['snackbar-text'] },
-                React.createElement(Typography, { variant: "Body1-Medium", color: 'var(--text-dark)' }, title(lng)[type]),
-                React.createElement(Typography, { variant: "Body1", color: 'var(--text-btn-light)' }, children))),
-        React.createElement("button", { className: styles.button, onClick: handleClose },
+            React.createElement("div", { className: styles['snackbar-text'], "data-test-id": `${testId}-snackbar-text` },
+                React.createElement(Typography, { variant: "Body1-Medium", color: 'var(--text-dark)', testId: `${testId}-snackbar-${type}-title` }, title(lng)[type]),
+                React.createElement(Typography, { variant: "Body1", color: 'var(--text-btn-light)', testId: `${testId}-snackbar-${type}-content` }, children))),
+        React.createElement("button", { className: styles.button, onClick: handleClose, "data-test-id": `${testId}-snackbar-${type}-close-button` },
             React.createElement(IconClose, { htmlColor: 'var(--text-btn-light)' }))));
 };

@@ -6,7 +6,7 @@ import { Typography } from '../Typography/Typography';
 /**
  * Компонент Input для создания текстовых полей ввода различных стилей и размеров.
  */
-export const Input = ({ id, label, placeholder, size = 'lg', value, style, className, multiline = false, rows = 4, resize = false, disabled = false, readOnly = false, isLeftLabel = false, icon, error = false, helperText, onChange, onBlur, required = false, }) => {
+export const Input = ({ id, label, placeholder, size = 'lg', value, style, className, multiline = false, rows = 4, resize = false, disabled = false, readOnly = false, isLeftLabel = false, icon, error = false, helperText, onChange, onBlur, required = false, testId = 'default' }) => {
     const [inputLabel, setInputLabel] = useState(label);
     const handleChange = (event) => {
         event.stopPropagation();
@@ -43,9 +43,9 @@ export const Input = ({ id, label, placeholder, size = 'lg', value, style, class
         [styles['label--left']]: isLeftLabel,
         [styles['label--required']]: required,
     });
-    return (React.createElement("div", { className: wrapperClassess, style: style },
-        inputLabel && (React.createElement(Typography, { variant: "Caption", className: labelClasses }, inputLabel)),
-        icon && React.createElement("div", { className: styles.icon }, icon),
-        multiline ? (React.createElement("textarea", { id: id, className: inputClassess, value: value, placeholder: placeholder, onChange: handleChange, onBlur: handleOnBlur, disabled: disabled, style: { height: `${rows * 20}px` } })) : (React.createElement("input", { id: id, className: inputClassess, value: value, placeholder: placeholder, onChange: handleChange, onBlur: handleOnBlur, disabled: disabled, readOnly: readOnly })),
-        error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]) }, helperText))));
+    return (React.createElement("div", { className: wrapperClassess, style: style, "data-test-id": `${testId}-input-block` },
+        inputLabel && (React.createElement(Typography, { variant: "Caption", className: labelClasses, testId: `${testId}-input` }, inputLabel)),
+        icon && React.createElement("div", { className: styles.icon, "data-test-id": `${testId}-input-icon` }, icon),
+        multiline ? (React.createElement("textarea", { id: id, name: 'textarea', className: inputClassess, value: value, placeholder: placeholder, onChange: handleChange, onBlur: handleOnBlur, disabled: disabled, style: { height: `${rows * 20}px` }, "data-test-id": `${testId}-input-textarea` })) : (React.createElement("input", { id: id, className: inputClassess, value: value, placeholder: placeholder, onChange: handleChange, onBlur: handleOnBlur, disabled: disabled, readOnly: readOnly, "data-test-id": `${testId}-input-field` })),
+        error && helperText && (React.createElement(Typography, { variant: "Caption", className: classNames(styles.helperText, styles[size]), testId: `${testId}-input-error` }, helperText))));
 };

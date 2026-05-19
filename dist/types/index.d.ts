@@ -14,6 +14,7 @@ export interface BreadcrumbProps {
     children?: ReactNode;
     /** Иконка */
     icon?: React.ReactNode;
+    testId?: string;
 }
 export interface BreadcrumbsProps {
     /** Активный */
@@ -22,6 +23,7 @@ export interface BreadcrumbsProps {
     separator?: React.ReactNode;
     /** Дочерние элементы */
     children: React.ReactElement<BreadcrumbProps>[];
+    testId?: string;
 }
 export interface ButtonProps {
     /** Тест кнопки */
@@ -59,6 +61,7 @@ export interface ButtonProps {
     ref?: React.Ref<HTMLButtonElement>;
     /** Активное состояние (имитирует hover) */
     active?: boolean;
+    testId?: string;
 }
 /** @internal */
 export interface InputProps {
@@ -100,6 +103,7 @@ export interface InputProps {
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     /** Обязательное поле */
     required?: boolean;
+    testId?: string;
 }
 /** @internal */
 export interface DateInputProps {
@@ -135,6 +139,7 @@ export interface DateInputProps {
     required?: boolean;
     /** Язык */
     lng?: string;
+    testId?: string;
 }
 /** @internal */
 export interface TagProps {
@@ -150,6 +155,7 @@ export interface TagProps {
     onChange?: (label: string) => void;
     /** Callback при нажатии на кнопку закрытия */
     onClick?: () => void;
+    testId?: string;
 }
 export interface SettingTagProps {
     /** Лейбл */
@@ -158,6 +164,7 @@ export interface SettingTagProps {
     color?: string;
     /** Callback при изменении значения/цвета */
     onChange?: (data: string) => void;
+    testId?: string;
 }
 export interface ToggleButtonProps {
     /** Знчение */
@@ -170,6 +177,7 @@ export interface ToggleButtonProps {
     size?: 'sm' | 'md';
     /** Текст кнопки */
     label?: string;
+    testId?: string;
 }
 export type BaseOptions = {
     [key: string]: any;
@@ -249,6 +257,7 @@ export interface DropdownBaseProps<T> {
     multiple?: boolean;
     /** Количество видимых значений при множественном выборе */
     limitTags?: number;
+    testId?: string;
 }
 export type DropdownProps<T> = (DropdownBaseProps<T> & {
     multiple: true;
@@ -271,6 +280,7 @@ export interface TypographyProps {
     color?: CSSProperties['color'];
     /** Стиль текста */
     style?: CSSProperties;
+    testId?: string;
 }
 export interface ProgressBarProps {
     /** Значение */
@@ -289,6 +299,7 @@ export interface ProgressBarProps {
     setIsLoadingFinished?: (value: boolean) => void;
     /** Ширина прогресс бара */
     width?: string;
+    testId?: string;
 }
 export interface ProgressLoaderProps {
     /** Значение */
@@ -299,10 +310,12 @@ export interface ProgressLoaderProps {
     showValue?: boolean;
     /** Анимация */
     animated?: boolean;
+    testId?: string;
 }
 export interface SpinnerProps {
     /** Размер */
     size?: 'xs' | 'sm' | 'md' | 'lg';
+    testId?: string;
 }
 export interface CheckboxProps {
     /** Идентификатор */
@@ -319,6 +332,7 @@ export interface CheckboxProps {
     color?: string;
     /** Заливка */
     filled?: boolean;
+    testId?: string;
 }
 export interface RadioProps {
     /** Значение */
@@ -333,6 +347,7 @@ export interface RadioProps {
     disabled?: boolean;
     /** Размер чекбокса */
     size?: 'sm' | 'md';
+    testId?: string;
 }
 export interface TableFilterSidebarProps {
     /** Флаг открытия */
@@ -361,6 +376,7 @@ export interface TableFilterSidebarProps {
     /** Позиционирование */
     top?: number;
     right?: number;
+    testId?: string;
 }
 export interface TabProps {
     /** Значение */
@@ -380,6 +396,7 @@ export interface TabProps {
     style?: CSSProperties;
     /** Дополнительный класс */
     className?: string;
+    testId?: string;
 }
 export interface TabsProps {
     /** Табы */
@@ -392,6 +409,7 @@ export interface TabsProps {
     style?: CSSProperties;
     /** Дополнительный класс */
     className?: string;
+    testId?: string;
 }
 export interface ColorPickerProps {
     /** Цвет выбранный пользователем */
@@ -412,6 +430,7 @@ export interface ColorPickerProps {
     onChange?: (color: string) => void;
     /** Функция обработки изменения цвета */
     onColorChange?: (color: string) => void;
+    testId?: string;
 }
 export type SnackbarProps = {
     /** Сообщение */
@@ -428,6 +447,7 @@ export type SnackbarProps = {
     style?: CSSProperties;
     /** Язык */
     lng?: string;
+    testId?: string;
 };
 export type TAttachments = {
     id?: string | null;
@@ -477,6 +497,7 @@ export interface FileAttachProps {
     style?: React.CSSProperties;
     /** Функция валидации файла */
     fileValidator?: (file: File) => FileError | FileError[] | null;
+    testId?: string;
 }
 export interface FileListAttaсhedProps {
     /** Список прикрепленных файлов */
@@ -497,6 +518,7 @@ export interface FileListAttaсhedProps {
     className?: string;
     /** Стили передаваемые напрямую */
     style?: React.CSSProperties;
+    testId?: string;
 }
 export interface FileItemProps {
     /** Файл */
@@ -523,6 +545,7 @@ export interface FileItemProps {
     isComment?: boolean;
     /** Язык интерфейса для типов данных*/
     lng?: string;
+    testId?: string;
 }
 export interface FileLoaderProps {
     /** Максимальный размер файла */
@@ -549,6 +572,7 @@ export interface FileLoaderProps {
     style?: React.CSSProperties;
     /** Функция валидации файла */
     fileValidator?: (file: File) => FileError | FileError[] | null;
+    testId?: string;
 }
 export interface FileLoaderHandle {
     clearErrorFiles: () => void;
@@ -573,6 +597,7 @@ export interface DialogProps {
     fullWidth?: boolean;
     /**Показ лоадера сверху диалогового окна*/
     isLoading?: boolean;
+    testId?: string;
 }
 export interface IconButtonProps {
     /** Иконка кнопки */
@@ -592,6 +617,7 @@ export interface IconButtonProps {
     /** Дополнительный класс */
     className?: string;
     title?: string;
+    testId?: string;
 }
 export interface BaseListProps {
     /** Идентификатор */
@@ -628,6 +654,7 @@ export interface BaseListProps {
     customBullet?: React.ReactNode;
     /** Стиль кастомного буллита */
     bulletClassName?: string;
+    testId?: string;
 }
 export interface ListItemProps extends BaseListProps {
     /** Дочерние элементы */
@@ -672,6 +699,7 @@ export interface TooltipProps {
     color?: string;
     /** Подсказка, следующая за курсором */
     followCursor?: boolean;
+    testId?: string;
 }
 export interface TextEditorProps {
     defaultValue?: string;
@@ -691,6 +719,7 @@ export interface TextEditorProps {
     className?: string;
     /** Язык */
     lng?: string;
+    testId?: string;
 }
 export interface ChildCommentProps {
     id: string;
@@ -736,6 +765,7 @@ export interface CommentProps {
     style?: CSSProperties;
     /** Дополнительный класс */
     className?: string;
+    testId?: string;
 }
 export interface LinkProps {
     /**Гипертекстовая ссылка */
@@ -763,4 +793,5 @@ export interface LinkProps {
     /** Размер - для отображения тултипа */
     size?: number;
     widthInPixels?: number;
+    testId?: string;
 }
