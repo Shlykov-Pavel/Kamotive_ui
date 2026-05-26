@@ -298,7 +298,12 @@ export const DropdownListItem = <T extends BaseOptions> ({
     </div>
   );
   return showTooltip ? (
-    <Tooltip label={getComparisonValue(item as any, getOptionLabel)?.toString() || ''} position="bottom-left" testId={`${testId}`}>
+    <Tooltip 
+        label={getComparisonValue(item as any, getOptionLabel)?.toString() || ''} 
+        position="bottom-left" 
+        testId={`${testId}`}
+        className={variant === 'filter' ? styles.filterTooltipWidth : ''}
+        >
       {itemContent}
     </Tooltip>
   ) : (
@@ -838,7 +843,9 @@ export const Dropdown = <T extends BaseOptions>({
           label={getComparisonValue(selectedItem as any, getOptionLabel)?.toString() || ''}
           position="bottom-left"
           style={{ width: '100% !important' }}
+          className={variant === 'filter' ? styles.filterTooltipWidth : ''}
           data-test-id={`${testId}-dropdown-tooltip`}
+          
         >
           {textFieldContent}
         </Tooltip>
@@ -987,10 +994,17 @@ export const Dropdown = <T extends BaseOptions>({
     setErrorInput(error);
   }, [error]);
 
-    useEffect(() => {
-    const checkOverflow = () => {
-      setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
-    };
+    useEffect(() => { 
+      const checkOverflow = () => {
+        if (!selectedItemRef.current) return;
+        const firstChild = selectedItemRef.current.firstElementChild as HTMLElement;
+        if (firstChild) {
+        const hasOverflow = firstChild.scrollWidth > selectedItemRef.current.clientWidth;
+        setShowSelectedTooltip(hasOverflow);
+      } else {
+        setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
+      }
+  };
 
     checkOverflow();
     window.addEventListener('resize', checkOverflow);

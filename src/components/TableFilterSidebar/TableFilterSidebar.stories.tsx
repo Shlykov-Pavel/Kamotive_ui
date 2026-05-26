@@ -74,7 +74,7 @@ const meta: Meta<TableFilterSidebarProps> = {
         options={[
           {value: 'описание 1', name: 'описание 1', description: 'описание 1'},
           {value: 'описание 2', name: 'описание 2', description: 'описание 2'},
-          {value: 'описание 3', name: 'описание 3', description: 'Зописание 3'},
+          {value: 'описание 3 очень длинный текст очень длинный текст', name: 'описание 3', description: 'Зописание 3'},
         ]}
         testId='filter'
       />,
