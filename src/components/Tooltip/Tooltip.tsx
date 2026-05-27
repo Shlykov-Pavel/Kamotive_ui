@@ -264,7 +264,7 @@ export const Tooltip: FC<TooltipProps> = ({
 		left: `${coords.x}px`,
 		top: `${coords.y}px`,
 		backgroundColor: color ? hexToRgba(color, opacity) : `rgba(0, 0, 0, ${opacity})`,
-		zIndex: 1500,
+		zIndex: 50000,
 	} as CSSProperties;
 
 	const tooltipClassNames = classNames(styles.tooltip, isVisible && styles['tooltip--visible'], className);

@@ -188,7 +188,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
             var _a;
             return (React.createElement(DropdownListItem, { key: (_a = child === null || child === void 0 ? void 0 : child.id) !== null && _a !== void 0 ? _a : `${index}-${childIndex}`, item: child, getOptionLabel: getOptionLabel, size: size, selectedItem: selectedItem, onChange: onChange, isActive: false, activeIndex: activeIndex, index: childIndex, isChild: true, testId: `${testId}-nested-${childIndex}` }));
         })))));
-    return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left", testId: `${testId}` }, itemContent)) : (itemContent);
+    return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left", testId: `${testId}`, className: variant === 'filter' ? styles.filterTooltipWidth : '' }, itemContent)) : (itemContent);
 };
 export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, onSearch, isOptionsLoading, isSearchLoading, noOptionsText, lng = 'ru', multiple = false, limitTags = 1, testId = 'default' }) => {
     const inputRef = useRef(null);
@@ -548,7 +548,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
             !multiple && !selectedItem && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", { "data-test-id": `${testId}-dropdown-placeholder` }, (_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : (lng === 'ru' ? 'Выберите значение' : 'Select value'))),
             multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", { "data-test-id": `${testId}-dropdown-placeholder` }, (_b = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _b !== void 0 ? _b : (lng === 'ru' ? 'Выберите значения' : 'Select values')))));
         return showSelectedTooltip ? (React.createElement("div", { className: styles.textField },
-            React.createElement(Tooltip, { label: ((_c = getComparisonValue(selectedItem, getOptionLabel)) === null || _c === void 0 ? void 0 : _c.toString()) || '', position: "bottom-left", style: { width: '100% !important' }, "data-test-id": `${testId}-dropdown-tooltip` }, textFieldContent))) : (textFieldContent);
+            React.createElement(Tooltip, { label: ((_c = getComparisonValue(selectedItem, getOptionLabel)) === null || _c === void 0 ? void 0 : _c.toString()) || '', position: "bottom-left", style: { width: '100% !important' }, className: variant === 'filter' ? styles.filterTooltipWidth : '', "data-test-id": `${testId}-dropdown-tooltip` }, textFieldContent))) : (textFieldContent);
     };
     const isSearchingNow = !isInitialOpen && !!searchValue.trim();
     const showSpinner = isSearchLoading || (isOptionsLoading && displayOptions.length === 0);
@@ -643,7 +643,16 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
     }, [error]);
     useEffect(() => {
         const checkOverflow = () => {
-            setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
+            if (!selectedItemRef.current)
+                return;
+            const firstChild = selectedItemRef.current.firstElementChild;
+            if (firstChild) {
+                const hasOverflow = firstChild.scrollWidth > selectedItemRef.current.clientWidth;
+                setShowSelectedTooltip(hasOverflow);
+            }
+            else {
+                setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
+            }
         };
         checkOverflow();
         window.addEventListener('resize', checkOverflow);
