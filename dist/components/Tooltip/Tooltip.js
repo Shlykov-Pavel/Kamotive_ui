@@ -199,7 +199,7 @@ export const Tooltip = ({ label, children, className, style, overlayChildren = f
         if (timeoutRef.current)
             clearTimeout(timeoutRef.current);
     };
-    const tooltipStyles = Object.assign(Object.assign({}, style), { position: 'fixed', left: `${coords.x}px`, top: `${coords.y}px`, backgroundColor: color ? hexToRgba(color, opacity) : `rgba(0, 0, 0, ${opacity})`, zIndex: 1500 });
+    const tooltipStyles = Object.assign(Object.assign({}, style), { position: 'fixed', left: `${coords.x}px`, top: `${coords.y}px`, backgroundColor: color ? hexToRgba(color, opacity) : `rgba(0, 0, 0, ${opacity})`, zIndex: 50000 });
     const tooltipClassNames = classNames(styles.tooltip, isVisible && styles['tooltip--visible'], className);
     return (React.createElement(React.Fragment, null,
         React.createElement("div", { onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave, onMouseMove: handleMouseMove, onMouseDown: handlePointerDown, className: styles.wrapper, ref: childrenRef, "data-test-id": `${testId}-tooltip` }, children),
