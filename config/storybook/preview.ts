@@ -1,6 +1,8 @@
 import type { Preview } from "@storybook/react";
-import '../../src/fonts.css';
-import '../../src/colors.css';
+// @ts-ignore
+import '../../src/fonts.scss';
+// @ts-ignore
+import '../../src/variables.scss';
 
 
 

@@ -10,7 +10,7 @@ const sourceDir = path.resolve(__dirname, '../src');
 const destDir = path.resolve(__dirname, '../dist');
 
 // Функция для рекурсивного копирования файлов
-function copyFiles(source, destination, extensions = ['.css', '.scss', '.json']) {
+function copyFiles(source, destination, extensions = ['.css', '.scss', '.json', '.woff2', '.woff', '.d.ts']) {
   if (!fs.existsSync(destination)) {
     fs.mkdirSync(destination, { recursive: true });
   }

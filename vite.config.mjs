@@ -36,17 +36,21 @@ export default defineConfig({
     addBannerPlugin(),
     viteStaticCopy({
       targets: [
-        {
-          src: 'src/types/scss.d.ts', 
+         {
+          src: 'src/types/global.d.ts', 
           dest: 'types', 
         },
         {
-          src: 'src/types/css.d.ts', 
-          dest: 'types',
+          src: 'src/fonts.scss',
+          dest: '.', 
         },
         {
-          src: 'src/types/index.d.ts', 
+          src: 'src/variables.scss',
           dest: '.', 
+        },
+        {
+          src: 'src/fonts/**/*', 
+          dest: 'fonts',
         },
       ],
     }),

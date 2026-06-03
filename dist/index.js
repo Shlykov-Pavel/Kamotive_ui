@@ -30,5 +30,3 @@ export { Breadcrumbs as Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs
 export { Tooltip as Tooltip } from './components/Tooltip/Tooltip';
 export { Link as Link } from './components/Link/Link';
 export { TableFilterSidebar as TableFilterSidebar } from './components/TableFilterSidebar/TableFilterSidebar';
-import './fonts.css';
-import './colors.css';
