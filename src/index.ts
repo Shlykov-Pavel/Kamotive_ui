@@ -66,5 +66,3 @@ export type {
   TooltipProps,
   LinkProps,
 } from './types';
-import './fonts.css';
-import './colors.css';
