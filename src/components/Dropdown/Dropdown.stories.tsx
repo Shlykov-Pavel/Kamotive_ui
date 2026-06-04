@@ -247,6 +247,10 @@ const meta: Meta<typeof Dropdown> = {
       description: 'Позволяет делать поиск по опциям ',
       control: { type: 'boolean' },
     },
+    preserveSearchValue: {
+      description: 'Позволяет делать поиск по опциям ',
+      control: { type: 'boolean' },
+    },
     onSearch: {
       description: 'Callback, который будет вызван для получения данных поиска'
     },

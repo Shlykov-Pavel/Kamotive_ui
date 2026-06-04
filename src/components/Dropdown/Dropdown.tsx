@@ -341,6 +341,7 @@ export const Dropdown = <T extends BaseOptions>({
   onClose,
   clearable = true,
   enableAutocomplete = false,
+  preserveSearchValue = false,
   onSearch,
   isOptionsLoading,
   isSearchLoading,
@@ -443,39 +444,49 @@ export const Dropdown = <T extends BaseOptions>({
     [styles['button--icons--item-selected']]: variant === 'icons' && (selectedItem as any)?.icon && !multiple,
   });
 
-  const handleToggle =
-    (event: React.MouseEvent<HTMLElement>) => {
-      event.preventDefault();
-      event.stopPropagation();
-      const newIsOpen = !isOpen;
-      setIsOpen(newIsOpen);
-      if (newIsOpen) {
-          onOpen?.(event);
-          const currentItem = multiple ? null : selectedItem;
-          const initialIndex = currentItem
-            ? displayOptions.findIndex((opt) => {
-                const id = getItemId(opt as any);
-                return id !== null ? id === getItemId(currentItem as any) : getComparisonValue(opt as any, getOptionLabel) === getComparisonValue(currentItem as any, getOptionLabel);
-              })
-            : -1;
-          setActiveIndex(initialIndex);
-        if(enableAutocomplete && onChange){
-            const selectedValue = getComparisonValue(selectedItem as any, getOptionLabel)?.toString() || '';
-            setIsInitialOpen(true)
-            setSearchValue(selectedValue);
-            requestAnimationFrame(() => {
+  const handleToggle = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
+    
+    if (newIsOpen) {
+      onOpen?.(event);
+      const currentItem = multiple ? null : selectedItem;
+      const initialIndex = currentItem
+        ? displayOptions.findIndex((opt) => {
+            const id = getItemId(opt as any);
+            return id !== null ? id === getItemId(currentItem as any) : getComparisonValue(opt as any, getOptionLabel) === getComparisonValue(currentItem as any, getOptionLabel);
+          })
+        : -1;
+      setActiveIndex(initialIndex);
+      if(enableAutocomplete && onChange) {
+        if (preserveSearchValue && searchValue) {
+          setIsInitialOpen(false);
+          requestAnimationFrame(() => {
             if (inputRef.current) {
               inputRef.current.focus();
             }
           });
+          return;
         }
-        
-      } else if (!newIsOpen) {
-        onClose?.(event);
-        setSearchValue('');
-        hoveredIndexRef.current = -1;
+        const selectedValue = getComparisonValue(selectedItem as any, getOptionLabel)?.toString() || '';
+        setIsInitialOpen(true)
+        setSearchValue(selectedValue);
+        requestAnimationFrame(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        });
       }
-    };
+    } else if (!newIsOpen) {
+      onClose?.(event);
+      if (!preserveSearchValue) {
+        setSearchValue('');
+      }
+      hoveredIndexRef.current = -1;
+    }
+  };
 
   const onChangeHandler = (event: React.MouseEvent<HTMLElement>, item: T | null) => {
     event.preventDefault();
@@ -826,14 +837,19 @@ export const Dropdown = <T extends BaseOptions>({
                 data-test-id={`${testId}-dropdown-search-input`}
               />
         )}
+        {!isOpen && preserveSearchValue && searchValue && !selectedItem && !multiple && (
+          <span data-test-id={`${testId}-dropdown-current-value`}>
+            {searchValue}
+          </span>
+        )}
         {!multiple && !selectedItem && !searchValue && !(isOpen && enableAutocomplete) && (
-            <span data-test-id={`${testId}-dropdown-placeholder`}>
-              {placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value')}
-            </span>
-          )}
-          {multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (
-            <span data-test-id={`${testId}-dropdown-placeholder`}>{placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values')}</span>
-          )}
+          <span data-test-id={`${testId}-dropdown-placeholder`}>
+            {placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value')}
+          </span>
+        )}
+        {multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (
+          <span data-test-id={`${testId}-dropdown-placeholder`}>{placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values')}</span>
+        )}
       </div>
   );
 
