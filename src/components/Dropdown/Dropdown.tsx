@@ -976,6 +976,10 @@ export const Dropdown = <T extends BaseOptions>({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    setErrorInputHelperText(helperText);
+  }, [helperText]);
+
   useLayoutEffect(() => {
     if (containerRef.current) {
       setContainerWidth(calculatedWidth);
@@ -1096,7 +1100,7 @@ export const Dropdown = <T extends BaseOptions>({
         </div>
         {getDropdownMenu()}
       </div>
-      {errorInput && errorInputHelperText && (
+      {errorInput && (helperText || errorInputHelperText) && (
         <Typography variant="Caption" className={classNames(styles.helperText, styles[size])} testId={`${testId}-dropdown-error`}>
           {helperText ?? errorInputHelperText}
         </Typography>
