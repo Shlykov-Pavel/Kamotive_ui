@@ -190,7 +190,7 @@ export const DropdownListItem = ({ item, getOptionLabel, size = 'md', selectedIt
         })))));
     return showTooltip ? (React.createElement(Tooltip, { label: ((_b = getComparisonValue(item, getOptionLabel)) === null || _b === void 0 ? void 0 : _b.toString()) || '', position: "bottom-left", testId: `${testId}`, className: variant === 'filter' ? styles.filterTooltipWidth : '' }, itemContent)) : (itemContent);
 };
-export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, onSearch, isOptionsLoading, isSearchLoading, noOptionsText, lng = 'ru', multiple = false, limitTags = 1, testId = 'default' }) => {
+export const Dropdown = ({ options, id, label, placeholder, required = false, value, defaultValue, onChange, showLoadMore = false, loadMore, getOptionLabel, variant = 'text', size = 'lg', style, className, isLeftLabel = false, isDivider = false, disabled = false, readOnly = false, isOpened = false, error = false, helperText, onOpen, onClick, onBlur, onFocus, onClose, clearable = true, enableAutocomplete = false, preserveSearchValue = false, onSearch, isOptionsLoading, isSearchLoading, noOptionsText, lng = 'ru', multiple = false, limitTags = 1, testId = 'default' }) => {
     const inputRef = useRef(null);
     const containerRef = useRef(null);
     const dropdownRef = useRef(null);
@@ -287,6 +287,15 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                 : -1;
             setActiveIndex(initialIndex);
             if (enableAutocomplete && onChange) {
+                if (preserveSearchValue && searchValue) {
+                    setIsInitialOpen(false);
+                    requestAnimationFrame(() => {
+                        if (inputRef.current) {
+                            inputRef.current.focus();
+                        }
+                    });
+                    return;
+                }
                 const selectedValue = ((_a = getComparisonValue(selectedItem, getOptionLabel)) === null || _a === void 0 ? void 0 : _a.toString()) || '';
                 setIsInitialOpen(true);
                 setSearchValue(selectedValue);
@@ -299,7 +308,9 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
         }
         else if (!newIsOpen) {
             onClose === null || onClose === void 0 ? void 0 : onClose(event);
-            setSearchValue('');
+            if (!preserveSearchValue) {
+                setSearchValue('');
+            }
             hoveredIndexRef.current = -1;
         }
     };
@@ -545,6 +556,7 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
                     e.stopPropagation();
                     onBlur === null || onBlur === void 0 ? void 0 : onBlur(e);
                 }, onKeyDown: handleKeyDown, autoFocus: true, "data-test-id": `${testId}-dropdown-search-input` })),
+            !isOpen && preserveSearchValue && searchValue && !selectedItem && !multiple && (React.createElement("span", { "data-test-id": `${testId}-dropdown-current-value` }, searchValue)),
             !multiple && !selectedItem && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", { "data-test-id": `${testId}-dropdown-placeholder` }, (_a = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _a !== void 0 ? _a : (lng === 'ru' ? 'Выберите значение' : 'Select value'))),
             multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (React.createElement("span", { "data-test-id": `${testId}-dropdown-placeholder` }, (_b = placeholder !== null && placeholder !== void 0 ? placeholder : label) !== null && _b !== void 0 ? _b : (lng === 'ru' ? 'Выберите значения' : 'Select values')))));
         return showSelectedTooltip ? (React.createElement("div", { className: styles.textField },
