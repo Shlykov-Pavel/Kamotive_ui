@@ -341,7 +341,6 @@ export const Dropdown = <T extends BaseOptions>({
   onClose,
   clearable = true,
   enableAutocomplete = false,
-  preserveSearchValue = false,
   onSearch,
   isOptionsLoading,
   isSearchLoading,
@@ -445,6 +444,7 @@ export const Dropdown = <T extends BaseOptions>({
   });
 
   const handleToggle = (event: React.MouseEvent<HTMLElement>) => {
+    if (error) return null
     event.preventDefault();
     event.stopPropagation();
     const newIsOpen = !isOpen;
@@ -461,7 +461,7 @@ export const Dropdown = <T extends BaseOptions>({
         : -1;
       setActiveIndex(initialIndex);
       if(enableAutocomplete && onChange) {
-        if (preserveSearchValue && searchValue) {
+        if (searchValue) {
           setIsInitialOpen(false);
           requestAnimationFrame(() => {
             if (inputRef.current) {
@@ -481,9 +481,6 @@ export const Dropdown = <T extends BaseOptions>({
       }
     } else if (!newIsOpen) {
       onClose?.(event);
-      if (!preserveSearchValue) {
-        setSearchValue('');
-      }
       hoveredIndexRef.current = -1;
     }
   };
@@ -803,7 +800,7 @@ export const Dropdown = <T extends BaseOptions>({
             {getComparisonValue(selectedItem as any, getOptionLabel)}
           </span>
         )}
-        {isOpen && enableAutocomplete && (
+        {enableAutocomplete && (isOpen || (error && searchValue && !selectedItem && !multiple)) && (
               <input
                 ref={inputRef}
                 type="text"
@@ -837,7 +834,7 @@ export const Dropdown = <T extends BaseOptions>({
                 data-test-id={`${testId}-dropdown-search-input`}
               />
         )}
-        {!isOpen && preserveSearchValue && searchValue && !selectedItem && !multiple && (
+        {!isOpen && !error && searchValue && !selectedItem && !multiple && (
           <span data-test-id={`${testId}-dropdown-current-value`}>
             {searchValue}
           </span>
@@ -963,6 +960,12 @@ export const Dropdown = <T extends BaseOptions>({
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
+
+  useEffect(() => {
+    if (error) {
+      setIsOpen(false);
+    }
+  }, [error]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

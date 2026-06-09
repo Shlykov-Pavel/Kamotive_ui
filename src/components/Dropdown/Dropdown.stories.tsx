@@ -72,10 +72,8 @@ export interface DropdownBaseProps<T> {
   onClose?: (event: any) => void;
   /** Возможность сброса значения */
   clearable?: boolean;
-  /** Включение автозаполнения */
+  /** Включение автозаполнения, при enableAutocomplete={true}, по умолчанию сохраняет введенные символы */
   enableAutocomplete?: boolean;
-  /** Сохранение введенного значения при enableAutocomplete={true} при clicAway */
-  preserveSearchValue?: boolean;
   /** Функция для получения данных по поиску */
   onSearch?: (value: string) => void;
   isSearchLoading?: boolean;
@@ -247,10 +245,6 @@ const meta: Meta<typeof Dropdown> = {
     },
     enableAutocomplete: {
       description: 'Позволяет делать поиск по опциям ',
-      control: { type: 'boolean' },
-    },
-    preserveSearchValue: {
-      description: 'Позволяет сохранить введенное значение при нажатии мимо поля ввода ',
       control: { type: 'boolean' },
     },
     onSearch: {
@@ -931,36 +925,36 @@ DropdownEnglish.parameters = {
 };
 
 // Dropdown с сохранением значения после воода
-export const DropdownPreserveSearch = (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
-  const [value, setValue] = useState<DefaultOption | null>(null);
-  const [searchText, setSearchText] = useState('');
+// export const DropdownPreserveSearch = (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
+//   const [value, setValue] = useState<DefaultOption | null>(null);
+//   const [searchText, setSearchText] = useState('');
 
-  const handleSearch = (val: string) => {
-    // можно ничего не делать или фильтровать локально, если нужно
-    setSearchText(val);
-  };
+//   const handleSearch = (val: string) => {
+//     // можно ничего не делать или фильтровать локально, если нужно
+//     setSearchText(val);
+//   };
 
-  const handleChange = (e: any, val: DefaultOption | null) => {
-    setValue(val);
-    setSearchText('');
-  };
+//   const handleChange = (e: any, val: DefaultOption | null) => {
+//     setValue(val);
+//     setSearchText('');
+//   };
 
-  return (
-    <Dropdown
-      {...argTypes}
-      options={dropdownOptions}
-      multiple={false}
-      value={value}
-      onChange={handleChange}
-      enableAutocomplete={true}
-      preserveSearchValue={true}
-      onSearch={handleSearch}
-      placeholder="Начните вводить текст и кликните вне поля"
-      label="Сохранение поискового запроса"
-    />
-  );
-};
-DropdownPreserveSearch.storyName = 'Dropdown с сохранением поиска (preserveSearchValue)';
-DropdownPreserveSearch.parameters = {
-  controls: { disable: true },
-};
+//   return (
+//     <Dropdown
+//       {...argTypes}
+//       options={dropdownOptions}
+//       multiple={false}
+//       value={value}
+//       onChange={handleChange}
+//       enableAutocomplete={true}
+//       preserveSearchValue={true}
+//       onSearch={handleSearch}
+//       placeholder="Начните вводить текст и кликните вне поля"
+//       label="Сохранение поискового запроса"
+//     />
+//   );
+// };
+// DropdownPreserveSearch.storyName = 'Dropdown с сохранением поиска (preserveSearchValue)';
+// DropdownPreserveSearch.parameters = {
+//   controls: { disable: true },
+// };
