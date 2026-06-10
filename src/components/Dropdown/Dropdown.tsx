@@ -1054,6 +1054,11 @@ export const Dropdown = <T extends BaseOptions>({
     return () => window.removeEventListener('resize', recalcChipTooltips);
   }, [multiple, selectedItems, limitTags, recalcChipTooltips]);
 
+  useEffect(() => {
+    if (!error && searchValue.trim().length > 0 && enableAutocomplete) {
+      setIsOpen(true);
+    }
+  }, [error, searchValue, enableAutocomplete]);
 
   return (
     <div
