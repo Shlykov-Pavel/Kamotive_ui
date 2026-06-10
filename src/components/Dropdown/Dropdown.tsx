@@ -580,8 +580,10 @@ export const Dropdown = <T extends BaseOptions>({
       if (event.key === 'Enter' || event.key === 'ArrowDown') {
         event.preventDefault();
         event.stopPropagation();
-        setIsOpen(true);
-        setActiveIndex(0);
+        if (!error) {
+          setIsOpen(true);
+          setActiveIndex(0);
+        }
       }
       return;
     }
@@ -1013,21 +1015,17 @@ export const Dropdown = <T extends BaseOptions>({
     }
   }, [value, defaultValue, multiple]);
 
-  useEffect(() => {
-    setErrorInput(error);
-  }, [error]);
-
-    useEffect(() => { 
-      const checkOverflow = () => {
-        if (!selectedItemRef.current) return;
-        const firstChild = selectedItemRef.current.firstElementChild as HTMLElement;
-        if (firstChild) {
-        const hasOverflow = firstChild.scrollWidth > selectedItemRef.current.clientWidth;
-        setShowSelectedTooltip(hasOverflow);
+  useEffect(() => { 
+    const checkOverflow = () => {
+      if (!selectedItemRef.current) return;
+      const firstChild = selectedItemRef.current.firstElementChild as HTMLElement;
+      if (firstChild) {
+      const hasOverflow = firstChild.scrollWidth > selectedItemRef.current.clientWidth;
+      setShowSelectedTooltip(hasOverflow);
       } else {
         setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
       }
-  };
+    };
 
     checkOverflow();
     window.addEventListener('resize', checkOverflow);
@@ -1043,7 +1041,7 @@ export const Dropdown = <T extends BaseOptions>({
       next[key] = !!el && isTextOverflowing(el);
     });
     setShowChipTooltip(next);
-}, []);
+  }, []);
 
   useEffect(() => {
     if (!multiple) return;
@@ -1055,6 +1053,7 @@ export const Dropdown = <T extends BaseOptions>({
   }, [multiple, selectedItems, limitTags, recalcChipTooltips]);
 
   useEffect(() => {
+    setErrorInput(error);
     if (!error && searchValue.trim().length > 0 && enableAutocomplete) {
       setIsOpen(true);
     }

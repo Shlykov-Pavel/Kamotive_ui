@@ -923,38 +923,3 @@ DropdownEnglish.args = {
 DropdownEnglish.parameters = {
   controls: { disable: true },
 };
-
-// Dropdown с сохранением значения после воода
-// export const DropdownPreserveSearch = (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
-//   const [value, setValue] = useState<DefaultOption | null>(null);
-//   const [searchText, setSearchText] = useState('');
-
-//   const handleSearch = (val: string) => {
-//     // можно ничего не делать или фильтровать локально, если нужно
-//     setSearchText(val);
-//   };
-
-//   const handleChange = (e: any, val: DefaultOption | null) => {
-//     setValue(val);
-//     setSearchText('');
-//   };
-
-//   return (
-//     <Dropdown
-//       {...argTypes}
-//       options={dropdownOptions}
-//       multiple={false}
-//       value={value}
-//       onChange={handleChange}
-//       enableAutocomplete={true}
-//       preserveSearchValue={true}
-//       onSearch={handleSearch}
-//       placeholder="Начните вводить текст и кликните вне поля"
-//       label="Сохранение поискового запроса"
-//     />
-//   );
-// };
-// DropdownPreserveSearch.storyName = 'Dropdown с сохранением поиска (preserveSearchValue)';
-// DropdownPreserveSearch.parameters = {
-//   controls: { disable: true },
-// };
