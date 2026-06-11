@@ -443,39 +443,47 @@ export const Dropdown = <T extends BaseOptions>({
     [styles['button--icons--item-selected']]: variant === 'icons' && (selectedItem as any)?.icon && !multiple,
   });
 
-  const handleToggle =
-    (event: React.MouseEvent<HTMLElement>) => {
-      event.preventDefault();
-      event.stopPropagation();
-      const newIsOpen = !isOpen;
-      setIsOpen(newIsOpen);
-      if (newIsOpen) {
-          onOpen?.(event);
-          const currentItem = multiple ? null : selectedItem;
-          const initialIndex = currentItem
-            ? displayOptions.findIndex((opt) => {
-                const id = getItemId(opt as any);
-                return id !== null ? id === getItemId(currentItem as any) : getComparisonValue(opt as any, getOptionLabel) === getComparisonValue(currentItem as any, getOptionLabel);
-              })
-            : -1;
-          setActiveIndex(initialIndex);
-        if(enableAutocomplete && onChange){
-            const selectedValue = getComparisonValue(selectedItem as any, getOptionLabel)?.toString() || '';
-            setIsInitialOpen(true)
-            setSearchValue(selectedValue);
-            requestAnimationFrame(() => {
+  const handleToggle = (event: React.MouseEvent<HTMLElement>) => {
+    if (error) return null
+    event.preventDefault();
+    event.stopPropagation();
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
+    
+    if (newIsOpen) {
+      onOpen?.(event);
+      const currentItem = multiple ? null : selectedItem;
+      const initialIndex = currentItem
+        ? displayOptions.findIndex((opt) => {
+            const id = getItemId(opt as any);
+            return id !== null ? id === getItemId(currentItem as any) : getComparisonValue(opt as any, getOptionLabel) === getComparisonValue(currentItem as any, getOptionLabel);
+          })
+        : -1;
+      setActiveIndex(initialIndex);
+      if(enableAutocomplete && onChange) {
+        if (searchValue) {
+          setIsInitialOpen(false);
+          requestAnimationFrame(() => {
             if (inputRef.current) {
               inputRef.current.focus();
             }
           });
+          return;
         }
-        
-      } else if (!newIsOpen) {
-        onClose?.(event);
-        setSearchValue('');
-        hoveredIndexRef.current = -1;
+        const selectedValue = getComparisonValue(selectedItem as any, getOptionLabel)?.toString() || '';
+        setIsInitialOpen(true)
+        setSearchValue(selectedValue);
+        requestAnimationFrame(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        });
       }
-    };
+    } else if (!newIsOpen) {
+      onClose?.(event);
+      hoveredIndexRef.current = -1;
+    }
+  };
 
   const onChangeHandler = (event: React.MouseEvent<HTMLElement>, item: T | null) => {
     event.preventDefault();
@@ -572,8 +580,10 @@ export const Dropdown = <T extends BaseOptions>({
       if (event.key === 'Enter' || event.key === 'ArrowDown') {
         event.preventDefault();
         event.stopPropagation();
-        setIsOpen(true);
-        setActiveIndex(0);
+        if (!error) {
+          setIsOpen(true);
+          setActiveIndex(0);
+        }
       }
       return;
     }
@@ -792,7 +802,7 @@ export const Dropdown = <T extends BaseOptions>({
             {getComparisonValue(selectedItem as any, getOptionLabel)}
           </span>
         )}
-        {isOpen && enableAutocomplete && (
+        {enableAutocomplete && (isOpen || (error && searchValue && !selectedItem && !multiple)) && (
               <input
                 ref={inputRef}
                 type="text"
@@ -826,14 +836,19 @@ export const Dropdown = <T extends BaseOptions>({
                 data-test-id={`${testId}-dropdown-search-input`}
               />
         )}
+        {!isOpen && !error && searchValue && !selectedItem && !multiple && (
+          <span data-test-id={`${testId}-dropdown-current-value`}>
+            {searchValue}
+          </span>
+        )}
         {!multiple && !selectedItem && !searchValue && !(isOpen && enableAutocomplete) && (
-            <span data-test-id={`${testId}-dropdown-placeholder`}>
-              {placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value')}
-            </span>
-          )}
-          {multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (
-            <span data-test-id={`${testId}-dropdown-placeholder`}>{placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values')}</span>
-          )}
+          <span data-test-id={`${testId}-dropdown-placeholder`}>
+            {placeholder ?? label ?? (lng === 'ru' ? 'Выберите значение' : 'Select value')}
+          </span>
+        )}
+        {multiple && selectedItems.length === 0 && !searchValue && !(isOpen && enableAutocomplete) && (
+          <span data-test-id={`${testId}-dropdown-placeholder`}>{placeholder ?? label ?? (lng === 'ru' ? 'Выберите значения' : 'Select values')}</span>
+        )}
       </div>
   );
 
@@ -949,6 +964,12 @@ export const Dropdown = <T extends BaseOptions>({
   }, [onClose]);
 
   useEffect(() => {
+    if (error) {
+      setIsOpen(false);
+    }
+  }, [error]);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -959,6 +980,10 @@ export const Dropdown = <T extends BaseOptions>({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    setErrorInputHelperText(helperText);
+  }, [helperText]);
 
   useLayoutEffect(() => {
     if (containerRef.current) {
@@ -990,21 +1015,17 @@ export const Dropdown = <T extends BaseOptions>({
     }
   }, [value, defaultValue, multiple]);
 
-  useEffect(() => {
-    setErrorInput(error);
-  }, [error]);
-
-    useEffect(() => { 
-      const checkOverflow = () => {
-        if (!selectedItemRef.current) return;
-        const firstChild = selectedItemRef.current.firstElementChild as HTMLElement;
-        if (firstChild) {
-        const hasOverflow = firstChild.scrollWidth > selectedItemRef.current.clientWidth;
-        setShowSelectedTooltip(hasOverflow);
+  useEffect(() => { 
+    const checkOverflow = () => {
+      if (!selectedItemRef.current) return;
+      const firstChild = selectedItemRef.current.firstElementChild as HTMLElement;
+      if (firstChild) {
+      const hasOverflow = firstChild.scrollWidth > selectedItemRef.current.clientWidth;
+      setShowSelectedTooltip(hasOverflow);
       } else {
         setShowSelectedTooltip(isTextOverflowing(selectedItemRef.current));
       }
-  };
+    };
 
     checkOverflow();
     window.addEventListener('resize', checkOverflow);
@@ -1020,7 +1041,7 @@ export const Dropdown = <T extends BaseOptions>({
       next[key] = !!el && isTextOverflowing(el);
     });
     setShowChipTooltip(next);
-}, []);
+  }, []);
 
   useEffect(() => {
     if (!multiple) return;
@@ -1031,6 +1052,12 @@ export const Dropdown = <T extends BaseOptions>({
     return () => window.removeEventListener('resize', recalcChipTooltips);
   }, [multiple, selectedItems, limitTags, recalcChipTooltips]);
 
+  useEffect(() => {
+    setErrorInput(error);
+    if (!error && searchValue.trim().length > 0 && enableAutocomplete) {
+      setIsOpen(true);
+    }
+  }, [error, searchValue, enableAutocomplete]);
 
   return (
     <div
@@ -1080,7 +1107,7 @@ export const Dropdown = <T extends BaseOptions>({
         </div>
         {getDropdownMenu()}
       </div>
-      {errorInput && errorInputHelperText && (
+      {errorInput && (helperText || errorInputHelperText) && (
         <Typography variant="Caption" className={classNames(styles.helperText, styles[size])} testId={`${testId}-dropdown-error`}>
           {helperText ?? errorInputHelperText}
         </Typography>

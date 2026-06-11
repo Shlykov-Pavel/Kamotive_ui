@@ -244,7 +244,7 @@ export interface DropdownBaseProps<T> {
     onClose?: (event: any) => void;
     /** Возможность сброса значения */
     clearable?: boolean;
-    /** Включение автозаполнения */
+    /** Включение автозаполнения, при enableAutocomplete={true}, по умолчанию сохраняет введенные символы*/
     enableAutocomplete?: boolean;
     /** Функция для получения данных по поиску */
     onSearch?: (value: string) => void;
