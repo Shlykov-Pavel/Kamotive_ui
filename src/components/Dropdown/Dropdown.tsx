@@ -444,7 +444,7 @@ export const Dropdown = <T extends BaseOptions>({
   });
 
   const handleToggle = (event: React.MouseEvent<HTMLElement>) => {
-    if (error) return null
+    // if (error) return null
     event.preventDefault();
     event.stopPropagation();
     const newIsOpen = !isOpen;
