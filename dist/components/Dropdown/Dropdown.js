@@ -272,8 +272,6 @@ export const Dropdown = ({ options, id, label, placeholder, required = false, va
     });
     const handleToggle = (event) => {
         var _a;
-        if (error)
-            return null;
         event.preventDefault();
         event.stopPropagation();
         const newIsOpen = !isOpen;
