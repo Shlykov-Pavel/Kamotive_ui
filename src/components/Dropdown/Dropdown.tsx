@@ -371,6 +371,8 @@ export const Dropdown = <T extends BaseOptions>({
   const [containerWidth, setContainerWidth] = useState<number | undefined>(undefined);
   const [showSelectedTooltip, setShowSelectedTooltip] = useState(false);
   const [showChipTooltip, setShowChipTooltip] = useState<Record<string, boolean>>({});
+  const prevErrorRef = useRef(error);
+  const prevSearchValueRef = useRef('');
 
   const actualOptions = useMemo(() => {
     return (options?.map(opt => {
@@ -459,24 +461,22 @@ export const Dropdown = <T extends BaseOptions>({
           })
         : -1;
       setActiveIndex(initialIndex);
-      if(enableAutocomplete && onChange) {
-        if (searchValue) {
-          setIsInitialOpen(false);
-          requestAnimationFrame(() => {
-            if (inputRef.current) {
-              inputRef.current.focus();
-            }
-          });
-          return;
-        }
+
+      if (enableAutocomplete && onChange) {
         const selectedValue = getComparisonValue(selectedItem as any, getOptionLabel)?.toString() || '';
-        setIsInitialOpen(true)
-        setSearchValue(selectedValue);
-        requestAnimationFrame(() => {
-          if (inputRef.current) {
-            inputRef.current.focus();
-          }
-        });
+        if (error && selectedItem) {
+          setSearchValue(selectedValue);
+          setIsInitialOpen(true);
+          onSearch?.('');
+        } else if (searchValue) {
+          setIsInitialOpen(false);
+          requestAnimationFrame(() => inputRef.current?.focus());
+          return;
+        } else {
+          setIsInitialOpen(true);
+          setSearchValue(selectedValue);
+        }
+        requestAnimationFrame(() => inputRef.current?.focus());
       }
     } else if (!newIsOpen) {
       onClose?.(event);
@@ -1009,8 +1009,11 @@ export const Dropdown = <T extends BaseOptions>({
           ? (checkItem(defaultValue as any) as T)
           : null;
       setSelectedItem(startValue ?? null);
+      setSearchValue('');
+      setIsInitialOpen(false); 
     } else {
       setSelectedItem(null);
+      setSearchValue('');
     }
   }, [value, defaultValue, multiple]);
 
@@ -1053,9 +1056,24 @@ export const Dropdown = <T extends BaseOptions>({
 
   useEffect(() => {
     setErrorInput(error);
-    if (!error && searchValue.trim().length > 0 && enableAutocomplete) {
+    const errorJustCleared = prevErrorRef.current && !error;
+    const searchValueUnchanged = searchValue === prevSearchValueRef.current;
+
+    if (errorJustCleared && searchValueUnchanged && searchValue.trim().length > 0) {
+      setSearchValue('');
+      setIsOpen(false);
+    } else if (
+      !error &&
+      searchValue.trim().length > 0 &&
+      enableAutocomplete &&
+      searchValue !== prevSearchValueRef.current
+    ) {
       setIsOpen(true);
     }
+
+    prevErrorRef.current = error;
+    prevSearchValueRef.current = searchValue;
+
   }, [error, searchValue, enableAutocomplete]);
 
   return (
