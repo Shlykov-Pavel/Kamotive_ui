@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
 import { Meta } from '@storybook/react';
 import { Dropdown } from './Dropdown';
 import { IconAccount, IconAlarm, IconBell, IconBriefcase, IconCalendar } from '../../Icons';
@@ -9,6 +9,10 @@ export type BaseOptions = {
 };
 
 export type TOptions<T = {}> = BaseOptions & T;
+
+export interface DropdownHandle {
+  reset: () => void;
+}
 
 export interface IDropdownItem {
   disabled?: boolean;
@@ -72,22 +76,23 @@ export interface DropdownBaseProps<T> {
   onClose?: (event: any) => void;
   /** Возможность сброса значения */
   clearable?: boolean;
-  /** Включение автозаполнения, при enableAutocomplete={true}, по умолчанию сохраняет введенные символы */
+  /** Включение автозаполнения, при enableAutocomplete={true}, по умолчанию сохраняет введенные символы*/
   enableAutocomplete?: boolean;
+  renderOption?: (item: IDropdownItem) => ReactNode;
   /** Функция для получения данных по поиску */
   onSearch?: (value: string) => void;
   isSearchLoading?: boolean;
   /** Текст при отсутствии опций */
   noOptionsText?: string;
+  reset?: () => void;
   /** Язык */
   lng?: string;
   /** Множественный выбор */
   multiple?: boolean,
   /** Количество видимых значений при множественном выборе */
   limitTags?: number;
-  testId?:string;
+  testId?: string
 }
-
 export type DropdownProps<T> =
 
   | (DropdownBaseProps<T> & { 
@@ -357,18 +362,53 @@ DropdownMultiple.parameters = {
   controls: { disable: true },
 };
 
-// Dropdown с ошибкой
-export const DropdownWithError = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;
+
+export const DropdownWithError = (argTypes: DropdownProps<DefaultOption>): JSX.Element => {
+ const defaultOptions = [
+    { id: '1', name: 'name 1', description: 'описание 1' },
+    { id: '2', name: 'name 2', description: 'описание 2' },
+    { id: '3', name: 'name 3', description: 'описание 3' },
+    { id: '4', name: 'name 1', description: 'описание 4' },
+    { id: '5', name: 'name 2', description: 'описание 5' },
+    { id: '6', name: 'name 3', description: 'очень длиный текст, который не помещается в окно' },
+  ];
+  const [value, setValue] = useState<TOptions[]>([]);
+  const [error, setError] = useState<boolean>(argTypes.error ?? true);
+  const handleChange = (e: any, item: any) => {
+      setValue(item);
+      if (item) {
+            setError(false);
+          } else {
+            setError(true);
+          }
+    };
+    useEffect(() => {
+      if (argTypes.error) setValue([]);
+    }, [argTypes.error]);
+  return (
+    <Dropdown
+      {...argTypes}
+      value={value}
+      error={error}
+      onChange={handleChange}
+      helperText={'Необходимо выбрать значение'}
+    />
+  );
+};
+
 DropdownWithError.storyName = 'Dropdown c ошибкой';
 DropdownWithError.args = {
   isOpened: false,
   options: dropdownOptions,
   error: true,
   helperText: 'Необходимо выбрать значение',
+  required: true, // Добавляем, чтобы протестировать и поведение при сбросе
 };
+
 DropdownWithError.parameters = {
   controls: { disable: true },
 };
+
 
 // Dropdown с иконкой открытый
 export const DropdownOpenedDefault = (argTypes: DropdownProps<DefaultOption>): JSX.Element => <Dropdown {...argTypes} />;

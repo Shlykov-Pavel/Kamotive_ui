@@ -196,6 +196,10 @@ export type TOptions<T = {}> = BaseOptions & T;
 
 //Типы для dropdown
 
+export interface DropdownHandle {
+  reset: () => void;
+}
+
 export interface IDropdownItem {
   disabled?: boolean;
   children?: IDropdownItem[];
@@ -260,11 +264,13 @@ export interface DropdownBaseProps<T> {
   clearable?: boolean;
   /** Включение автозаполнения, при enableAutocomplete={true}, по умолчанию сохраняет введенные символы*/
   enableAutocomplete?: boolean;
+  renderOption?: (item: IDropdownItem) => ReactNode;
   /** Функция для получения данных по поиску */
   onSearch?: (value: string) => void;
   isSearchLoading?: boolean;
   /** Текст при отсутствии опций */
   noOptionsText?: string;
+  reset?: () => void;
   /** Язык */
   lng?: string;
   /** Множественный выбор */
